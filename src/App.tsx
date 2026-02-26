@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import HeroScrollVideo from '../components/ui/scroll-animated-video'
-import { ShaderAnimation } from '../components/ui/shader-animation'
+import { EtherealShadow } from '../components/ui/ethereal-shadow'
 import { GlareCard } from '../components/ui/glare-card'
 import {
   Menu,
@@ -653,8 +653,13 @@ export default function App() {
           smoothScroll={false}
           initialBoxSize={400}
           headerBackground={
-            <div style={{ position: 'absolute', inset: 0, mixBlendMode: 'screen', opacity: 0.18 }}>
-              <ShaderAnimation />
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.22 }}>
+              <EtherealShadow
+                color='rgba(37, 99, 235, 1)'
+                animation={{ scale: 45, speed: 22 }}
+                noise={{ opacity: 0.35, scale: 1 }}
+                sizing='fill'
+              />
             </div>
           }
         />
