@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import '@google/model-viewer'
 
 interface ModelViewerProps {
@@ -17,11 +17,20 @@ declare global {
           alt?: string
           'camera-controls'?: boolean | string
           'auto-rotate'?: boolean | string
+          'auto-rotate-delay'?: string
+          'rotation-per-second'?: string
           'shadow-intensity'?: string
           'environment-image'?: string
+          'interaction-prompt'?: string
+          'interaction-prompt-threshold'?: string
           loading?: string
           reveal?: string
           'ar'?: boolean | string
+          'touch-action'?: string
+          'camera-orbit'?: string
+          'min-camera-orbit'?: string
+          'max-camera-orbit'?: string
+          'field-of-view'?: string
           style?: React.CSSProperties
         },
         HTMLElement
@@ -32,26 +41,75 @@ declare global {
 
 export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [loaded, setLoaded] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
-    // model-viewer registers as a custom element — just need the import above
-  }, [])
+    const el = containerRef.current?.querySelector('model-viewer')
+    if (!el) return
+
+    const onLoad = () => setLoaded(true)
+    const onError = () => setError(true)
+
+    el.addEventListener('load', onLoad)
+    el.addEventListener('error', onError)
+
+    return () => {
+      el.removeEventListener('load', onLoad)
+      el.removeEventListener('error', onError)
+    }
+  }, [src])
 
   return (
-    <div ref={containerRef} className='relative w-full aspect-square bg-gray-50 rounded-2xl overflow-hidden'>
+    <div ref={containerRef} className='relative w-full aspect-square bg-gray-50 rounded-2xl'>
       <model-viewer
         src={src}
         poster={poster}
         alt={alt}
         camera-controls=''
         auto-rotate=''
-        shadow-intensity='1'
+        auto-rotate-delay='1000'
+        rotation-per-second='30deg'
+        shadow-intensity='0.5'
+        interaction-prompt='auto'
+        interaction-prompt-threshold='500'
+        camera-orbit='45deg 75deg 105%'
+        min-camera-orbit='auto auto auto'
+        max-camera-orbit='auto auto auto'
+        field-of-view='30deg'
         loading='eager'
-        style={{ width: '100%', height: '100%' }}
+        touch-action='pan-y'
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: '1rem',
+          outline: 'none',
+        }}
       />
-      <div className='absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded'>
-        3D — drag to rotate
-      </div>
+
+      {/* Loading state */}
+      {!loaded && !error && (
+        <div className='absolute inset-0 flex items-center justify-center bg-gray-50 rounded-2xl'>
+          <div className='text-center'>
+            <div className='w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mx-auto mb-2' />
+            <p className='text-xs text-gray-400'>Loading 3D model...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Error state */}
+      {error && (
+        <div className='absolute inset-0 flex items-center justify-center bg-gray-50 rounded-2xl'>
+          <p className='text-sm text-gray-500'>3D model could not be loaded</p>
+        </div>
+      )}
+
+      {/* Hint overlay — pointer-events-none so it doesn't block interaction */}
+      {loaded && (
+        <div className='absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded pointer-events-none'>
+          Drag to rotate · Scroll to zoom · Two fingers to pan
+        </div>
+      )}
     </div>
   )
 }
