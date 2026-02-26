@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
-import { ProductImageCard, type ProductImage } from '@/src/components/ui/product-image-card'
+import { Card } from '@/src/components/ui/card'
+import { AspectRatio } from '@/src/components/ui/aspect-ratio'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
 import TrustBadges from '@/src/components/TrustBadges'
 import CompareTable from '@/src/components/CompareTable'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react'
+import { cn } from '@/src/lib/utils'
 
 export default function ProductPage() {
   const { category, slug } = useParams<{ category: string; slug: string }>()
@@ -16,12 +18,14 @@ export default function ProductPage() {
   const [related, setRelated] = useState<CatalogProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [showHindi, setShowHindi] = useState(false)
+  const [activeImage, setActiveImage] = useState(0)
 
   const categoryInfo = getCategoryBySlug(category || '')
 
   useEffect(() => {
     if (!slug) return
     setLoading(true)
+    setActiveImage(0)
     fetchProduct(slug).then((data) => {
       setProduct(data)
       setLoading(false)
@@ -44,19 +48,43 @@ export default function ProductPage() {
     }
   }, [slug])
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (!product) return
+      const images = product.processed_photo_urls?.length > 0
+        ? product.processed_photo_urls
+        : product.raw_photo_urls || []
+      if (images.length <= 1) return
+      if (e.key === 'ArrowLeft') setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+      if (e.key === 'ArrowRight') setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [product])
+
   if (loading) {
     return (
       <div className='min-h-screen bg-white pt-24'>
         <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 animate-pulse'>
-            <div className='aspect-[4/5] bg-gray-100 rounded-3xl' />
-            <div className='space-y-4 pt-8'>
-              <div className='h-4 w-24 bg-gray-100 rounded' />
-              <div className='h-8 w-64 bg-gray-100 rounded' />
-              <div className='h-4 w-full bg-gray-100 rounded' />
-              <div className='h-4 w-3/4 bg-gray-100 rounded' />
+          <Card className='rounded-3xl border-gray-200 p-6 animate-pulse'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+              <div>
+                <div className='aspect-[4/5] bg-gray-100 rounded-2xl' />
+                <div className='flex gap-3 mt-4'>
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className='w-20 h-20 bg-gray-100 rounded-xl' />
+                  ))}
+                </div>
+              </div>
+              <div className='space-y-4 pt-4'>
+                <div className='h-4 w-24 bg-gray-100 rounded' />
+                <div className='h-8 w-64 bg-gray-100 rounded' />
+                <div className='h-4 w-full bg-gray-100 rounded' />
+                <div className='h-4 w-3/4 bg-gray-100 rounded' />
+              </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     )
@@ -77,26 +105,20 @@ export default function ProductPage() {
   }
 
   const productCategory = getCategoryByEnum(product.category || '')
-  const categorySlug = productCategory?.slug || 'executive-chairs'
-  const rawImages = product.processed_photo_urls?.length > 0
+  const images = product.processed_photo_urls?.length > 0
     ? product.processed_photo_urls
     : product.raw_photo_urls || []
-
-  // Map to ProductImage format for the card component
-  const cardImages: ProductImage[] = rawImages.map((url, i) => ({
-    src: url,
-    alt: `${product.name} — view ${i + 1}`,
-    thumbSrc: i === 0 && product.thumbnail_url ? product.thumbnail_url : undefined,
-  }))
-
   const metadata = product.metadata
   const features = metadata?.features || []
   const materials = metadata?.materials || []
 
+  const prevImage = () => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+  const nextImage = () => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+
   return (
     <div className='min-h-screen bg-white pt-20'>
       {/* Breadcrumb */}
-      <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-4 pb-2'>
+      <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-4 pb-4'>
         <nav className='flex items-center gap-1 text-sm text-gray-400'>
           <Link to='/' className='hover:text-gray-700'>Home</Link>
           <ChevronRight className='w-3 h-3' />
@@ -112,94 +134,150 @@ export default function ProductPage() {
         </nav>
       </div>
 
-      {/* Product detail — Hero section */}
-      <div className='max-w-7xl mx-auto px-6 lg:px-10 py-8'>
-        <div className='grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10'>
-          {/* Left — Product Image Card */}
-          <div>
-            <ProductImageCard
-              title={product.name || 'Product Details'}
-              backHref={`/products/${categorySlug}`}
-              images={cardImages}
-              className='max-w-none'
-            />
-          </div>
+      {/* ═══ Single unified product card ═══ */}
+      <div className='max-w-7xl mx-auto px-6 lg:px-10 pb-8'>
+        <Card className='rounded-3xl border-gray-200 bg-white p-6 lg:p-8 shadow-sm'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10'>
 
-          {/* Right — Product info */}
-          <div className='pt-2 lg:pt-6'>
-            {productCategory && (
-              <Link
-                to={`/products/${productCategory.slug}`}
-                className='text-xs font-semibold tracking-widest uppercase text-gray-400 hover:text-gray-600'
-              >
-                {productCategory.series} — {productCategory.label}
-              </Link>
-            )}
+            {/* ── LEFT: Images ── */}
+            <div>
+              {/* Main image */}
+              <div className='relative'>
+                <AspectRatio ratio={4 / 5}>
+                  <div className='h-full w-full overflow-hidden rounded-2xl bg-gray-50'>
+                    <img
+                      src={images[activeImage]}
+                      alt={`${product.name} — view ${activeImage + 1}`}
+                      className='h-full w-full rounded-2xl object-contain'
+                    />
+                  </div>
+                </AspectRatio>
 
-            <h1 className='font-display text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6'>
-              {product.name}
-            </h1>
-
-            {/* Description with language toggle */}
-            {(product.description || product.description_hindi) && (
-              <div className='mb-6'>
-                {product.description_hindi && (
-                  <div className='flex gap-2 mb-3'>
+                {/* Prev/Next controls */}
+                {images.length > 1 && (
+                  <div className='absolute bottom-3 right-3 flex gap-2'>
                     <button
-                      onClick={() => setShowHindi(false)}
-                      className={`text-xs px-3 py-1 rounded-full transition-colors ${
-                        !showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
-                      }`}
+                      onClick={prevImage}
+                      className='h-9 w-9 rounded-full bg-white/80 backdrop-blur border border-gray-200 flex items-center justify-center hover:bg-white transition-colors'
+                      aria-label='Previous image'
                     >
-                      English
+                      <ChevronLeft className='h-4 w-4 text-gray-700' />
                     </button>
                     <button
-                      onClick={() => setShowHindi(true)}
-                      className={`text-xs px-3 py-1 rounded-full transition-colors ${
-                        showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
-                      }`}
+                      onClick={nextImage}
+                      className='h-9 w-9 rounded-full bg-white/80 backdrop-blur border border-gray-200 flex items-center justify-center hover:bg-white transition-colors'
+                      aria-label='Next image'
                     >
-                      Hindi
+                      <ChevronRightIcon className='h-4 w-4 text-gray-700' />
                     </button>
                   </div>
                 )}
-                <p className='text-gray-600 leading-relaxed'>
-                  {showHindi ? product.description_hindi : product.description}
-                </p>
               </div>
-            )}
 
-            {/* Materials */}
-            {materials.length > 0 && (
-              <div className='mb-6'>
-                <p className='text-xs text-gray-400 uppercase tracking-wider mb-2'>Materials</p>
-                <div className='flex flex-wrap gap-2'>
-                  {materials.map((m, i) => (
-                    <span key={i} className='text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full'>
-                      {m}
-                    </span>
+              {/* Horizontal thumbnail strip */}
+              {images.length > 1 && (
+                <div className='flex gap-3 mt-4 overflow-x-auto pb-1'>
+                  {images.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveImage(i)}
+                      className={cn(
+                        'shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all',
+                        i === activeImage
+                          ? 'border-gray-900 shadow-md'
+                          : 'border-gray-200 hover:border-gray-400'
+                      )}
+                    >
+                      <img
+                        src={img}
+                        alt={`${product.name} thumbnail ${i + 1}`}
+                        className='w-full h-full object-cover'
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                      />
+                    </button>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Trust badges */}
-            <div className='border-t border-gray-100 pt-6 mb-8'>
-              <TrustBadges />
+              )}
             </div>
 
-            {/* CTA buttons */}
-            <div className='flex flex-col sm:flex-row gap-3'>
-              <WhatsAppButton productName={product.name || 'this product'} />
-              <a
-                href='tel:+919131438300'
-                className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-colors'
-              >
-                Call for Quote
-              </a>
+            {/* ── RIGHT: Product info ── */}
+            <div className='flex flex-col justify-between'>
+              <div>
+                {productCategory && (
+                  <Link
+                    to={`/products/${productCategory.slug}`}
+                    className='text-xs font-semibold tracking-widest uppercase text-gray-400 hover:text-gray-600'
+                  >
+                    {productCategory.series} — {productCategory.label}
+                  </Link>
+                )}
+
+                <h1 className='font-display text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6'>
+                  {product.name}
+                </h1>
+
+                {/* Description with language toggle */}
+                {(product.description || product.description_hindi) && (
+                  <div className='mb-6'>
+                    {product.description_hindi && (
+                      <div className='flex gap-2 mb-3'>
+                        <button
+                          onClick={() => setShowHindi(false)}
+                          className={`text-xs px-3 py-1 rounded-full transition-colors ${
+                            !showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                          }`}
+                        >
+                          English
+                        </button>
+                        <button
+                          onClick={() => setShowHindi(true)}
+                          className={`text-xs px-3 py-1 rounded-full transition-colors ${
+                            showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                          }`}
+                        >
+                          Hindi
+                        </button>
+                      </div>
+                    )}
+                    <p className='text-gray-600 leading-relaxed'>
+                      {showHindi ? product.description_hindi : product.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* Materials */}
+                {materials.length > 0 && (
+                  <div className='mb-6'>
+                    <p className='text-xs text-gray-400 uppercase tracking-wider mb-2'>Materials</p>
+                    <div className='flex flex-wrap gap-2'>
+                      {materials.map((m, i) => (
+                        <span key={i} className='text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full'>
+                          {m}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Trust badges */}
+                <div className='border-t border-gray-100 pt-6 mb-8'>
+                  <TrustBadges />
+                </div>
+              </div>
+
+              {/* CTA buttons — pinned to bottom */}
+              <div className='flex flex-col sm:flex-row gap-3'>
+                <WhatsAppButton productName={product.name || 'this product'} />
+                <a
+                  href='tel:+919131438300'
+                  className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-colors'
+                >
+                  Call for Quote
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Feature highlights section */}
