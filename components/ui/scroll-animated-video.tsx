@@ -492,6 +492,8 @@ export const HeroScrollVideo: React.FC<HeroScrollVideoProps> = ({
           color: var(--text);
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
           overflow-x: clip;
+          margin: 0;
+          padding: 0;
         }
 
         .hsv-container {
