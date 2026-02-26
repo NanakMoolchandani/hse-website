@@ -625,7 +625,7 @@ export default function App() {
       <div id='hero'>
         <HeroScrollVideo
           title='MVM Aasanam'
-          subtitle='Office & Cafeteria Furniture'
+          subtitle='Leading Pioneers in Office and Cafeteria Furniture'
           meta='Est. 1997 · Neemuch, MP'
           credits={null}
           mediaType='video'
