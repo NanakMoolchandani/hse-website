@@ -577,7 +577,7 @@ function LandingContent() {
               <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Furnishing</h4>
               <p className='text-xs text-gray-400 mb-3'>by Hari Shewa Enterprises</p>
               <p className='text-sm text-gray-500 leading-relaxed'>
-                Office & cafeteria furniture specialists serving corporates across Central India since 2009.
+                Office & cafeteria furniture specialists serving corporates across Central India since 1997.
               </p>
             </div>
             <div>
@@ -626,7 +626,7 @@ export default function App() {
         <HeroScrollVideo
           title='MVM Aasanam'
           subtitle='Office & Cafeteria Furniture'
-          meta='Est. 1994 · Neemuch, MP'
+          meta='Est. 1997 · Neemuch, MP'
           credits={null}
           mediaType='video'
           media='https://videos.pexels.com/video-files/6774539/6774539-hd_1920_1080_30fps.mp4'
