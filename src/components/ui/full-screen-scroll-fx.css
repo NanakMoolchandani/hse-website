@@ -47,8 +47,28 @@
 .fx-bgs {
   position: absolute;
   inset: 0;
-  background: var(--fx-stage-bg);
+  background: transparent;
   z-index: 1;
+}
+
+.fx-constant-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 120% 80% at 20% 80%, rgba(45, 35, 25, 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 60% at 80% 20%, rgba(30, 30, 40, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(20, 18, 16, 0.9) 0%, transparent 80%),
+    linear-gradient(165deg, #1a1714 0%, #0d0b09 35%, #111015 65%, #0a0908 100%);
+}
+
+.fx-constant-bg img {
+  position: absolute;
+  inset: -30px;
+  width: calc(100% + 60px);
+  height: calc(100% + 60px);
+  object-fit: cover;
+  filter: blur(20px) brightness(0.35) saturate(0.6);
 }
 
 .fx-bg {
@@ -59,12 +79,7 @@
 }
 
 .fx-bg-fill {
-  position: absolute;
-  inset: -20px;
-  width: calc(100% + 40px);
-  height: calc(100% + 40px);
-  object-fit: cover;
-  filter: blur(12px) brightness(0.55);
+  display: none;
 }
 
 .fx-bg-img {
@@ -74,8 +89,9 @@
   height: 100%;
   object-fit: contain;
   object-position: center center;
-  padding: 5vh 8vw;
+  padding: 4vh 6vw;
   z-index: 1;
+  filter: drop-shadow(0 8px 40px rgba(0, 0, 0, 0.4));
 }
 
 .fx-bg-overlay {

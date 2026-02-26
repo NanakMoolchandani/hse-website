@@ -48,6 +48,7 @@ export type FullScreenFXAPI = {
 
 export type FullScreenFXProps = {
   sections: Section[];
+  constantBackground?: string;
   className?: string;
   style?: CSSProperties;
 
@@ -83,6 +84,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
   (
     {
       sections,
+      constantBackground,
       className,
       style,
 
@@ -456,7 +458,12 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
         <div className="fx-scroll">
           <div className="fx-fixed-section" ref={fixedSectionRef}>
             <div className="fx-fixed" ref={fixedRef}>
-              {/* Backgrounds */}
+              {/* Constant background (same for all sections) */}
+              <div className="fx-constant-bg" aria-hidden="true">
+                {constantBackground && <img src={constantBackground} alt="" />}
+              </div>
+
+              {/* Per-section backgrounds */}
               <div className="fx-bgs" aria-hidden="true">
                 {sections.map((s, i) => (
                   <div
