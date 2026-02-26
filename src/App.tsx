@@ -14,58 +14,57 @@ import {
 
 const NAV_LINKS = [
   { label: 'Home', href: '#hero' },
-  { label: 'Craftsmanship', href: '#technology' },
-  { label: 'Collections', href: '#collections' },
-  { label: 'Seating', href: '#mvm-seating' },
+  { label: 'Why Us', href: '#technology' },
+  { label: 'Products', href: '#collections' },
   { label: 'Features', href: '#features' },
   { label: 'Contact', href: '#contact' },
 ]
 
 const STATS = [
-  { count: '25+', label: 'Years of Craftsmanship' },
-  { count: '1000+', label: 'Happy Customers' },
-  { count: '50+', label: 'Product Designs' },
-  { count: '24', label: 'Premium Finishes' },
+  { count: '500+', label: 'Corporates Served' },
+  { count: '10,000+', label: 'Chairs Delivered' },
+  { count: '50+', label: 'Active Designs' },
+  { count: '15+', label: 'Years in Business' },
 ]
 
-const CRAFTSMANSHIP = [
+const QUALITY_PILLARS = [
   {
-    title: 'Solid Wood Construction',
+    title: 'Ergonomic Engineering',
     description:
-      'Premium Sheesham and Teak wood sourced from sustainable forests. Each grain tells a unique story.',
+      'Every chair is designed around the human spine — lumbar support, adjustable armrests, and seat depth calibrated for all-day comfort.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
-        <path d='M24 4L4 14v20l20 10 20-10V14L24 4z' stroke='currentColor' strokeWidth='1.5' />
-        <path d='M4 14l20 10m0 0l20-10M24 24v20' stroke='currentColor' strokeWidth='1.5' />
+        <path d='M24 6v36M14 16c0-5.52 4.48-10 10-10s10 4.48 10 10' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
+        <path d='M10 32h28M14 42h20' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
       </svg>
     ),
   },
   {
-    title: 'Precision Joinery',
+    title: 'Heavy-Duty Frame',
     description:
-      'Mortise and tenon joints ensure generational durability. No nails, no shortcuts — just timeless craftsmanship.',
+      'MS powder-coated frames with nylon or aluminium base rated for commercial use. Built to withstand 8+ hours of daily office use, year after year.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
-        <circle cx='24' cy='24' r='20' stroke='currentColor' strokeWidth='1.5' />
-        <path d='M24 8v16l12 8' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
+        <rect x='8' y='8' width='32' height='32' rx='4' stroke='currentColor' strokeWidth='1.5' />
+        <path d='M16 24h16M24 16v16' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
       </svg>
     ),
   },
   {
-    title: 'Italian Finish',
+    title: 'Premium Upholstery',
     description:
-      'Multi-layer PU coating with hand-polished finish. Resistant to scratches, stains, and everyday wear.',
+      'Breathable mesh, high-density foam, and premium fabric/leatherette options. Certified for durability — resistant to wear, spills, and fading.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
-        <path d='M8 40h32M12 40V20l12-12 12 12v20' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
-        <rect x='20' y='28' width='8' height='12' stroke='currentColor' strokeWidth='1.5' />
+        <path d='M8 20c0-6.63 5.37-12 12-12h8c6.63 0 12 5.37 12 12v8c0 6.63-5.37 12-12 12h-8C13.37 40 8 34.63 8 28v-8z' stroke='currentColor' strokeWidth='1.5' />
+        <path d='M16 28c2.21 2.21 5.79 2.21 8 0s5.79-2.21 8 0' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
       </svg>
     ),
   },
   {
-    title: 'Quality Assured',
+    title: 'Quality Certified',
     description:
-      'Every piece undergoes 12-point quality inspection before leaving our workshop. Zero compromise policy.',
+      'All products go through multi-point QC before dispatch. We supply to leading corporates, hospitals, and institutions across Central India.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4z' stroke='currentColor' strokeWidth='1.5' />
@@ -77,33 +76,33 @@ const CRAFTSMANSHIP = [
 
 const COLLECTIONS = [
   {
-    name: 'Living Room',
-    count: '12 Products',
-    description: 'Sofas, coffee tables, TV units & storage solutions',
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
+    name: 'Executive Chairs',
+    count: 'High-Back Series',
+    description: 'Premium leather & fabric executive chairs for cabins and boardrooms',
+    image: 'https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=600&q=80',
   },
   {
-    name: 'Bedroom',
-    count: '10 Products',
-    description: 'Beds, wardrobes, dressers & nightstands',
-    image: 'https://images.unsplash.com/photo-1567016526105-22da7c13161a?w=600&q=80',
-  },
-  {
-    name: 'Dining',
-    count: '8 Products',
-    description: 'Tables, chairs, cabinets & bar units',
-    image: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&q=80',
-  },
-  {
-    name: 'Office & Study',
-    count: '6 Products',
-    description: 'Desks, bookshelves, filing cabinets & chairs',
+    name: 'Ergonomic Task Chairs',
+    count: 'Workstation Series',
+    description: 'All-day comfort with lumbar support, mesh back & full adjustability',
     image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80',
   },
   {
-    name: 'Custom Design',
-    count: 'Made to Order',
-    description: 'Your vision, our craft — fully bespoke furniture',
+    name: 'Cafeteria Furniture',
+    count: 'Canteen Series',
+    description: 'Durable cafeteria chairs & tables — stackable, easy to clean, bulk-ready',
+    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',
+  },
+  {
+    name: 'Conference & Meeting',
+    count: 'Boardroom Series',
+    description: 'Coordinated seating solutions for meeting rooms and training halls',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
+  },
+  {
+    name: 'Visitor & Reception',
+    count: 'Lobby Series',
+    description: 'Stylish visitor chairs, waiting area sofas & reception counters',
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
   },
 ]
@@ -111,89 +110,89 @@ const COLLECTIONS = [
 const FEATURES = [
   {
     number: '01',
-    title: 'Ergonomic Design',
+    title: 'Bulk & Project Supply',
     description:
-      'Every curve, angle, and dimension is optimized for human comfort. Our furniture adapts to you, not the other way around.',
+      'From 10 chairs to 10,000 — we handle large-scale corporate orders, fit-outs, and institutional supply with on-time delivery across Central India.',
   },
   {
     number: '02',
-    title: 'Modular Flexibility',
+    title: 'Custom Configurations',
     description:
-      'Reconfigure your space effortlessly. Our modular systems let you expand, rearrange, and personalize your setup.',
+      'Choose your fabric, colour, armrest type, base finish, and height range. We configure every order to match your office interior and brand.',
   },
   {
     number: '03',
-    title: 'Built to Last',
+    title: 'After-Sales Support',
     description:
-      "We don't build furniture for years — we build it for generations. Solid wood construction with lifetime structural warranty.",
+      'Dedicated support for repairs, spare parts, and replacements. We stand behind every product we supply — long after the invoice is paid.',
   },
   {
     number: '04',
-    title: 'Custom Finishing',
+    title: 'Competitive Pricing',
     description:
-      'Choose from 24 premium finishes — Walnut, Honey Oak, Mahogany, Espresso, and more. Your vision, our execution.',
+      'Direct from manufacturer to you — no middlemen. Get the best price on premium office and cafeteria furniture without compromising on quality.',
   },
 ]
 
 const TESTIMONIALS = [
   {
-    initials: 'RS',
-    name: 'Rajesh Sharma',
+    initials: 'PJ',
+    name: 'Prakash Jain',
     location: 'Neemuch, MP',
     quote:
-      'Excellent quality sofa set. The Sheesham wood finish is absolutely stunning. Worth every rupee. Delivery was on time and the team handled everything professionally.',
+      'Ordered 150 workstation chairs for our new office. MVM Furnishing delivered on time, quality was excellent, and the ergonomic support has made a real difference to our team.',
   },
   {
-    initials: 'VG',
-    name: 'Vinod Gupta',
+    initials: 'SK',
+    name: 'Suresh Kumar',
+    location: 'Indore, MP',
+    quote:
+      'We furnished our entire cafeteria — 80 chairs and 20 tables. Pricing was very competitive and the stackable chairs are extremely practical for our space. Highly recommended.',
+  },
+  {
+    initials: 'RV',
+    name: 'Ramesh Verma',
     location: 'Mandsaur, MP',
     quote:
-      "Got a complete bedroom set — king-size bed, wardrobe and dressing table. The craftsmanship is outstanding. We've been buying from HSE for 10 years now.",
-  },
-  {
-    initials: 'AM',
-    name: 'Anil Mehta',
-    location: 'Ratlam, MP',
-    quote:
-      'Custom dining table for our restaurant — 12-seater in Teak. HSE delivered exactly what we envisioned. The PU finish is scratch-resistant even after heavy daily use.',
+      'Got executive chairs for our boardroom and visitor chairs for reception. Premium quality, great finish. The team was helpful right from selection to installation.',
   },
 ]
 
 const SPECS = [
   {
-    heading: 'Materials',
+    heading: 'Chair Construction',
     rows: [
-      ['Primary Wood', 'Sheesham / Teak'],
-      ['Finish', 'Multi-layer PU Polish'],
-      ['Upholstery', 'Premium Fabric / Leather'],
-      ['Hardware', 'Stainless Steel / Brass'],
+      ['Frame', 'MS / Aluminium'],
+      ['Base', 'Nylon 5-Star / Aluminium'],
+      ['Gas Lift', 'Class 4 Hydraulic'],
+      ['Load Rating', 'Up to 150 kg'],
     ],
   },
   {
-    heading: 'Construction',
+    heading: 'Upholstery',
     rows: [
-      ['Joinery', 'Mortise & Tenon'],
-      ['Load Capacity', 'Up to 250 kg'],
-      ['Quality Checks', '12-Point Inspection'],
-      ['Warranty', '5-Year Structural'],
+      ['Fabric', 'Mesh / Fabric / Leatherette'],
+      ['Foam Density', 'High-Density PU Foam'],
+      ['Armrests', 'Fixed / 2D / 4D'],
+      ['Warranty', '1-Year on Mechanism'],
     ],
   },
   {
-    heading: 'Collections',
+    heading: 'Product Range',
     rows: [
-      ['Living Room', 'Sofas, Tables, Storage'],
-      ['Bedroom', 'Beds, Wardrobes, Dressers'],
-      ['Dining', 'Tables, Chairs, Cabinets'],
-      ['Custom', 'Made to Order'],
+      ['Executive', 'High-Back Chairs'],
+      ['Task', 'Mid-Back Ergonomic'],
+      ['Cafeteria', 'Stackable Chairs & Tables'],
+      ['Conference', 'Meeting Room Seating'],
     ],
   },
   {
-    heading: 'Delivery',
+    heading: 'Supply & Service',
     rows: [
-      ['Pan India', 'Available'],
-      ['Assembly', 'White Glove Service'],
-      ['Packaging', 'Multi-layer Protection'],
-      ['Tracking', 'Real-time Updates'],
+      ['Coverage', 'Central India'],
+      ['Min. Order', '10 Units'],
+      ['Lead Time', '7–15 Working Days'],
+      ['Installation', 'Available on Request'],
     ],
   },
 ]
@@ -311,21 +310,21 @@ function LandingContent() {
         </div>
       </section>
 
-      {/* Craftsmanship */}
+      {/* Why Us */}
       <section id='technology' className='py-20 md:py-28 bg-gray-50'>
         <div className='max-w-6xl mx-auto px-4'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-            Craftsmanship
+            Why MVM Furnishing
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-            Technology Meets<br />Tradition
+            Built for the<br />Modern Workplace
           </h2>
           <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-            Every piece is a testament to decades of woodworking mastery, where traditional
-            techniques meet modern precision.
+            Every chair we supply is engineered for productivity, comfort, and long-term commercial use —
+            not just aesthetics.
           </p>
           <div className='flex flex-wrap justify-center gap-6'>
-            {CRAFTSMANSHIP.map((c) => (
+            {QUALITY_PILLARS.map((c) => (
               <GlareCard key={c.title} className='flex flex-col items-start justify-start p-7'>
                 <div className='text-white/60 mb-5'>{c.icon}</div>
                 <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
@@ -336,18 +335,18 @@ function LandingContent() {
         </div>
       </section>
 
-      {/* Collections */}
+      {/* Products */}
       <section id='collections' className='py-20 md:py-28'>
         <div className='max-w-6xl mx-auto px-4'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-            Collections
+            Product Range
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-            Furniture for<br />Every Room
+            Seating for<br />Every Space
           </h2>
           <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-            From living rooms to bedrooms, dining spaces to offices — each collection designed
-            to transform your space with elegance.
+            From executive cabins to open workstations, conference rooms to cafeterias —
+            we have the right seating solution for every area of your office.
           </p>
           <div className='flex flex-wrap justify-center gap-6'>
             {COLLECTIONS.map((col) => (
@@ -375,10 +374,10 @@ function LandingContent() {
       <section id='features' className='py-20 md:py-28 bg-gray-900 text-white'>
         <div className='max-w-6xl mx-auto px-4'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-            Why MVM Aasanam
+            What Sets Us Apart
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-16'>
-            Designed for Living
+            Designed for Business
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16'>
             {FEATURES.map((f) => (
@@ -400,21 +399,21 @@ function LandingContent() {
       <section className='py-20 md:py-28'>
         <div className='max-w-6xl mx-auto px-4'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-            Our Process
+            How It Works
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-            From Workshop<br />to Your Home
+            From Enquiry<br />to Installation
           </h2>
           <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-            A seamless journey from the first conversation to final delivery, with meticulous
-            attention at every stage.
+            A simple, hassle-free process — whether you're furnishing a 10-seat office or
+            a 500-person facility.
           </p>
           <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
             {[
-              { n: '1', title: 'Consultation', desc: 'Share your requirements via WhatsApp, call, or visit. We understand your space, style, and budget.' },
-              { n: '2', title: 'Design & Quote', desc: 'Receive a detailed quotation with material options, dimensions, and finish samples.' },
-              { n: '3', title: 'Crafting', desc: 'Master artisans handcraft your furniture in our Neemuch workshop using traditional joinery techniques.' },
-              { n: '4', title: 'Delivery & Setup', desc: 'White-glove delivery with careful assembly and placement. Your satisfaction is our final quality check.' },
+              { n: '1', title: 'Share Requirements', desc: "Tell us your space, headcount, and budget via WhatsApp or call. We'll guide you to the right products." },
+              { n: '2', title: 'Get a Quote', desc: 'Receive an itemised quotation with product specs, fabric/colour options, and delivery timeline.' },
+              { n: '3', title: 'We Dispatch', desc: 'Orders are packed and dispatched from Neemuch within 7–15 working days with tracking updates.' },
+              { n: '4', title: 'Delivery & Setup', desc: 'We deliver pan Central India. Installation support available on request. Post-sale service included.' },
             ].map((step) => (
               <div key={step.n} className='relative'>
                 <div className='w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center text-lg font-bold mb-4'>
@@ -435,7 +434,7 @@ function LandingContent() {
             Testimonials
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-14'>
-            What Our Customers Say
+            Trusted by Corporates<br />Across the Region
           </h2>
           <div className='flex flex-wrap justify-center gap-6'>
             {TESTIMONIALS.map((t) => (
@@ -466,7 +465,7 @@ function LandingContent() {
             Specifications
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-14'>
-            The Details Matter
+            Built to Commercial<br />Standards
           </h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
             {SPECS.map((g) => (
@@ -495,10 +494,10 @@ function LandingContent() {
             Get in Touch
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
-            Ready to Transform<br />Your Space?
+            Ready to Furnish<br />Your Workspace?
           </h2>
           <p className='text-gray-400 text-lg mb-10 max-w-xl mx-auto'>
-            Contact us for custom orders, bulk inquiries, or to visit our showroom in Neemuch.
+            Share your requirements and get a quote within 24 hours. Bulk orders, custom configurations, and pan Central India delivery available.
           </p>
           <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mb-14'>
             <a
@@ -534,16 +533,16 @@ function LandingContent() {
         <div className='max-w-6xl mx-auto px-4'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-10'>
             <div>
-              <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Aasanam</h4>
+              <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Furnishing</h4>
               <p className='text-xs text-gray-400 mb-3'>by Hari Shewa Enterprises</p>
               <p className='text-sm text-gray-500 leading-relaxed'>
-                Premium handcrafted furniture since 2001. Quality you can trust, designs you'll love.
+                Office & cafeteria furniture specialists serving corporates across Central India since 2009.
               </p>
             </div>
             <div>
-              <h5 className='font-semibold text-gray-900 mb-3'>Collections</h5>
+              <h5 className='font-semibold text-gray-900 mb-3'>Products</h5>
               <div className='space-y-2'>
-                {['Living Room', 'Bedroom', 'Dining', 'Office & Study', 'Custom Design'].map((l) => (
+                {['Executive Chairs', 'Ergonomic Task Chairs', 'Cafeteria Furniture', 'Conference & Meeting', 'Visitor & Reception'].map((l) => (
                   <a key={l} href='#collections' className='block text-sm text-gray-500 hover:text-gray-900'>
                     {l}
                   </a>
@@ -568,7 +567,7 @@ function LandingContent() {
           </div>
           <div className='border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between gap-2 text-sm text-gray-400'>
             <p>© {new Date().getFullYear()} Hari Shewa Enterprises. All Rights Reserved.</p>
-            <p>Handcrafted with pride in Neemuch, Madhya Pradesh</p>
+            <p>Office & Cafeteria Furniture — Neemuch, Madhya Pradesh</p>
           </div>
         </div>
       </footer>
@@ -587,10 +586,10 @@ export default function App() {
           mediaType='image'
           mediaSrc='https://images.unsplash.com/photo-1752952952773-80378cefc23d?w=1200&q=85&fit=crop&crop=center&auto=format'
           bgImageSrc='https://images.unsplash.com/photo-1710905281966-c19083942790?w=1920&q=80&fit=crop&auto=format'
-          date='Premium Office Seating'
-          scrollToExpand='↓ Scroll to discover'
+          date='Office & Cafeteria Furniture'
+          scrollToExpand='↓ Scroll to explore'
           textBlend={false}
-          words={['Elegant', 'Comfortable', 'Ergonomic', 'Premium', 'Yours']}
+          words={['Ergonomic', 'Durable', 'Productive', 'Reliable', 'Yours']}
         >
           <LandingContent />
         </ScrollExpandMedia>
