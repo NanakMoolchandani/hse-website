@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
-import ImageGallery from '@/src/components/ImageGallery'
+import { ProductImageCard, type ProductImage } from '@/src/components/ui/product-image-card'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
@@ -26,14 +26,12 @@ export default function ProductPage() {
       setProduct(data)
       setLoading(false)
 
-      // Fetch related products from same category
       if (data?.category) {
         fetchProducts(data.category).then((all) => {
           setRelated(all.filter((p) => p.slug !== slug).slice(0, 4))
         })
       }
 
-      // Update page title and inject Schema.org
       if (data) {
         document.title = `${data.name} — MVM Aasanam`
         injectSchemaOrg(data)
@@ -41,7 +39,6 @@ export default function ProductPage() {
     })
 
     return () => {
-      // Cleanup Schema.org script on unmount
       const script = document.getElementById('schema-product')
       if (script) script.remove()
     }
@@ -52,7 +49,7 @@ export default function ProductPage() {
       <div className='min-h-screen bg-white pt-24'>
         <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 animate-pulse'>
-            <div className='aspect-[3/4] bg-gray-100 rounded-2xl' />
+            <div className='aspect-[4/5] bg-gray-100 rounded-3xl' />
             <div className='space-y-4 pt-8'>
               <div className='h-4 w-24 bg-gray-100 rounded' />
               <div className='h-8 w-64 bg-gray-100 rounded' />
@@ -80,9 +77,18 @@ export default function ProductPage() {
   }
 
   const productCategory = getCategoryByEnum(product.category || '')
-  const images = product.processed_photo_urls?.length > 0
+  const categorySlug = productCategory?.slug || 'executive-chairs'
+  const rawImages = product.processed_photo_urls?.length > 0
     ? product.processed_photo_urls
     : product.raw_photo_urls || []
+
+  // Map to ProductImage format for the card component
+  const cardImages: ProductImage[] = rawImages.map((url, i) => ({
+    src: url,
+    alt: `${product.name} — view ${i + 1}`,
+    thumbSrc: i === 0 && product.thumbnail_url ? product.thumbnail_url : undefined,
+  }))
+
   const metadata = product.metadata
   const features = metadata?.features || []
   const materials = metadata?.materials || []
@@ -108,17 +114,19 @@ export default function ProductPage() {
 
       {/* Product detail — Hero section */}
       <div className='max-w-7xl mx-auto px-6 lg:px-10 py-8'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
-          {/* Left — Image gallery */}
+        <div className='grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10'>
+          {/* Left — Product Image Card */}
           <div>
-            <ImageGallery
-              images={images}
-              alt={product.name || 'Product'}
+            <ProductImageCard
+              title={product.name || 'Product Details'}
+              backHref={`/products/${categorySlug}`}
+              images={cardImages}
+              className='max-w-none'
             />
           </div>
 
           {/* Right — Product info */}
-          <div className='pt-2'>
+          <div className='pt-2 lg:pt-6'>
             {productCategory && (
               <Link
                 to={`/products/${productCategory.slug}`}
@@ -239,7 +247,6 @@ export default function ProductPage() {
  * Inject Schema.org Product structured data for SEO.
  */
 function injectSchemaOrg(product: CatalogProduct) {
-  // Remove existing
   const existing = document.getElementById('schema-product')
   if (existing) existing.remove()
 
