@@ -226,8 +226,8 @@ function Navbar() {
         }`}
       >
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <a href='#hero' className={`text-lg font-bold tracking-tight font-display ${scrolled ? 'text-gray-900' : 'text-white'}`}>
-            HSE
+          <a href='#hero' className={`text-base font-bold tracking-tight font-sans ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+            Hari Shewa Enterprises
           </a>
           <div className='hidden md:flex items-center gap-8'>
             {NAV_LINKS.map((l) => (
@@ -389,7 +389,7 @@ function LandingContent() {
       <section id='features' className='py-20 md:py-28 bg-gray-900 text-white'>
         <div className='max-w-6xl mx-auto px-4'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-            Why HSE
+            Why MVM Aasanam
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-16'>
             Designed for Living
@@ -551,7 +551,8 @@ function LandingContent() {
         <div className='max-w-6xl mx-auto px-4'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-10'>
             <div>
-              <h4 className='text-2xl font-bold font-display text-gray-900 mb-3'>HSE</h4>
+              <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Aasanam</h4>
+              <p className='text-xs text-gray-400 mb-3'>by Hari Shewa Enterprises</p>
               <p className='text-sm text-gray-500 leading-relaxed'>
                 Premium handcrafted furniture since 2001. Quality you can trust, designs you'll love.
               </p>
@@ -601,12 +602,13 @@ export default function App() {
       <div id='hero'>
         <ScrollExpandMedia
           mediaType='image'
-          mediaSrc='https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1280&q=80'
-          bgImageSrc='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1920&q=80'
-          title='Hari Shewa'
-          date='Neemuch, Madhya Pradesh'
-          scrollToExpand='↓ Scroll to explore'
+          mediaSrc='/products/freedom/view-1.png'
+          bgImageSrc='/products/hero/freedom-alt.jpeg'
+          title='MVM Aasanam'
+          date='Premium Office Seating'
+          scrollToExpand='↓ Scroll to discover'
           textBlend={false}
+          words={['Elegant', 'Comfortable', 'Ergonomic', 'Premium', 'Yours']}
         >
           <LandingContent />
         </ScrollExpandMedia>
