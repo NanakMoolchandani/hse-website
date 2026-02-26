@@ -9,7 +9,7 @@ import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
 import TrustBadges from '@/src/components/TrustBadges'
 import CompareTable from '@/src/components/CompareTable'
-import { ChevronRight, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react'
+import { ChevronRight, ChevronLeft, ChevronRight as ChevronRightIcon, Share2, Check } from 'lucide-react'
 import { cn } from '@/src/lib/utils'
 
 export default function ProductPage() {
@@ -19,6 +19,7 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(true)
   const [showHindi, setShowHindi] = useState(false)
   const [activeImage, setActiveImage] = useState(0)
+  const [copied, setCopied] = useState(false)
 
   const categoryInfo = getCategoryBySlug(category || '')
 
@@ -71,9 +72,9 @@ export default function ProductPage() {
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
               <div>
                 <div className='aspect-[4/5] bg-gray-100 rounded-2xl' />
-                <div className='flex gap-3 mt-4'>
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className='w-20 h-20 bg-gray-100 rounded-xl' />
+                <div className='grid grid-cols-5 gap-2 mt-4'>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className='aspect-[4/5] bg-gray-100 rounded-xl' />
                   ))}
                 </div>
               </div>
@@ -148,7 +149,7 @@ export default function ProductPage() {
                     <img
                       src={images[activeImage]}
                       alt={`${product.name} — view ${activeImage + 1}`}
-                      className='h-full w-full rounded-2xl object-contain'
+                      className='h-full w-full rounded-2xl object-cover'
                     />
                   </div>
                 </AspectRatio>
@@ -174,15 +175,15 @@ export default function ProductPage() {
                 )}
               </div>
 
-              {/* Horizontal thumbnail strip */}
+              {/* Horizontal thumbnail strip — evenly spans main image width */}
               {images.length > 1 && (
-                <div className='flex gap-3 mt-4 overflow-x-auto pb-1'>
+                <div className='grid mt-4 gap-2' style={{ gridTemplateColumns: `repeat(${images.length}, 1fr)` }}>
                   {images.map((img, i) => (
                     <button
                       key={i}
                       onClick={() => setActiveImage(i)}
                       className={cn(
-                        'shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all',
+                        'w-full aspect-[4/5] rounded-xl overflow-hidden border-2 transition-all',
                         i === activeImage
                           ? 'border-gray-900 shadow-md'
                           : 'border-gray-200 hover:border-gray-400'
@@ -274,6 +275,25 @@ export default function ProductPage() {
                 >
                   Call for Quote
                 </a>
+                <button
+                  onClick={async () => {
+                    const url = window.location.href
+                    const text = `Check out ${product.name} from MVM Aasanam`
+                    if (navigator.share) {
+                      try {
+                        await navigator.share({ title: product.name || 'Product', text, url })
+                      } catch { /* user cancelled */ }
+                    } else {
+                      await navigator.clipboard.writeText(url)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    }
+                  }}
+                  className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-colors'
+                >
+                  {copied ? <Check className='w-4 h-4 text-green-600' /> : <Share2 className='w-4 h-4' />}
+                  {copied ? 'Link Copied!' : 'Share Product'}
+                </button>
               </div>
             </div>
           </div>
