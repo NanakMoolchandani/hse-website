@@ -127,8 +127,8 @@ export const GlareCard = ({
     >
       {fitContent ? (
         /* Content-driven height: overlays are absolute, content defines the size */
-        <div className='relative will-change-transform origin-center transition-transform duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] [transform:rotateY(var(--r-x))_rotateX(var(--r-y))] rounded-[var(--radius)] border border-slate-800 hover:[--opacity:0.6] hover:[--duration:200ms] hover:[--easing:linear] hover:filter-none overflow-hidden'>
-          <div className={cn('relative z-10 w-full bg-slate-950 mix-blend-soft-light [clip-path:inset(0_0_0_0_round_var(--radius))]', className)}>
+        <div className='h-full relative will-change-transform origin-center transition-transform duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] [transform:rotateY(var(--r-x))_rotateX(var(--r-y))] rounded-[var(--radius)] border border-slate-800 hover:[--opacity:0.6] hover:[--duration:200ms] hover:[--easing:linear] hover:filter-none overflow-hidden'>
+          <div className={cn('relative z-10 w-full h-full bg-slate-950 mix-blend-soft-light [clip-path:inset(0_0_0_0_round_var(--radius))]', className)}>
             {children}
           </div>
           <div className='absolute inset-0 mix-blend-soft-light [clip-path:inset(0_0_1px_0_round_var(--radius))] opacity-[var(--opacity)] transition-opacity transition-background duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] will-change-background [background:radial-gradient(farthest-corner_circle_at_var(--m-x)_var(--m-y),_rgba(255,255,255,0.8)_10%,_rgba(255,255,255,0.65)_20%,_rgba(255,255,255,0)_90%)]' />

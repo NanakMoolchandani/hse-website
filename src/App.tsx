@@ -349,9 +349,9 @@ function LandingContent() {
             Every chair we supply is engineered for productivity, comfort, and long-term commercial use.
             Not just aesthetics.
           </p>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 [grid-auto-rows:1fr] gap-6'>
             {QUALITY_PILLARS.map((c) => (
-              <GlareCard key={c.title} fitContent containerClassName='w-full' className='flex flex-col items-start justify-start p-7'>
+              <GlareCard key={c.title} fitContent containerClassName='w-full h-full' className='flex flex-col items-start justify-start p-7 h-full'>
                 <div className='text-white/60 mb-5'>{c.icon}</div>
                 <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
                 <p className='text-sm text-white/50 leading-relaxed'>{c.description}</p>
@@ -360,41 +360,6 @@ function LandingContent() {
           </div>
         </div>
       </section>
-
-      {/* GEM Supplier Badge */}
-      <div className='border-t border-gray-100 py-10'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-start gap-8'>
-          {/* GeM Official Logo — pinwheel + wordmark */}
-          <div className='shrink-0'>
-            <svg width="234" height="90" viewBox="0 0 260 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* 8 pinwheel blades, base blade points up — asymmetric to create clockwise spin */}
-              {/* M leftBase tipTop rightBase Z, each rotated 45° around center (50,50) */}
-              <path d="M43,44 L50,7 L57,37 Z" fill="#C8D400" transform="rotate(0,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#39A935" transform="rotate(45,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#00B0CA" transform="rotate(90,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#00AEEF" transform="rotate(135,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#003F8E" transform="rotate(180,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#2E3192" transform="rotate(225,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#E63329" transform="rotate(270,50,50)"/>
-              <path d="M43,44 L50,7 L57,37 Z" fill="#F7941D" transform="rotate(315,50,50)"/>
-              {/* Small GEM label badge (matches real logo) */}
-              <rect x="31" y="46" width="28" height="11" rx="2.5" fill="#4A2040"/>
-              <text x="45" y="54.5" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6.5" fill="white" textAnchor="middle">GEM</text>
-              {/* GeM wordmark */}
-              <text x="110" y="63" fontFamily="Arial Black,Arial,Helvetica,sans-serif" fontWeight="900" fontSize="42" fill="#231F20">GeM</text>
-              {/* Government */}
-              <text x="112" y="77" fontFamily="Arial,Helvetica,sans-serif" fontWeight="400" fontSize="13" fill="#58595B">Government</text>
-              {/* e Marketplace */}
-              <text x="112" y="92" fontFamily="Arial,Helvetica,sans-serif" fontWeight="700" fontSize="13" fill="#231F20">e Marketplace</text>
-            </svg>
-          </div>
-          {/* Vertical divider */}
-          <div className='hidden sm:block w-px h-14 bg-gray-200 shrink-0' />
-          <p className='text-sm text-gray-500 max-w-lg leading-relaxed'>
-            MVM Aasanam, owned by Hari Shewa Enterprises, is an empanelled vendor on GeM portal enabling seamless procurement for government offices, education and public institutions.
-          </p>
-        </div>
-      </div>
 
       {/* Products */}
       <section id='collections' className='py-20 md:py-28'>
