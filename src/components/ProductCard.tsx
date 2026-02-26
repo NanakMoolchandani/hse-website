@@ -12,7 +12,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const categorySlug = category?.slug || 'executive-chairs'
   const cardRef = useRef<HTMLAnchorElement>(null)
 
-  const image = product.thumbnail_url || product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0]
+  const image = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
   const featureCount = product.metadata?.features?.length || 0
 
   // Premium 3D tilt effect on mouse move
@@ -46,7 +46,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <img
             src={image}
             alt={product.name || 'Product'}
-            className='w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110'
+            className='w-full h-full object-contain transition-transform duration-500 group-hover:scale-110'
             loading='lazy'
           />
         ) : (
