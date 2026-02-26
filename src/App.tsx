@@ -609,8 +609,8 @@ export default function App() {
       <ScrollExpandMedia
         mediaType='video'
         mediaSrc='https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4'
-        posterSrc='https://images.unsplash.com/photo-_CFN6YFCbTQ?w=1920&q=90&fit=crop&auto=format'
-        bgImageSrc='https://images.unsplash.com/photo-_CFN6YFCbTQ?w=1920&q=90&fit=crop&auto=format'
+        posterSrc='https://images.pexels.com/photos/7539887/pexels-photo-7539887.jpeg?auto=compress&cs=tinysrgb&w=1920'
+        bgImageSrc='https://images.pexels.com/photos/7539887/pexels-photo-7539887.jpeg?auto=compress&cs=tinysrgb&w=1920'
         title='MVM Aasanam'
         date='Est. 1997 · Neemuch, MP'
         scrollToExpand='Scroll to explore'
