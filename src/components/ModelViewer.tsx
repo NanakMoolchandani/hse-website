@@ -20,17 +20,10 @@ declare global {
           'auto-rotate-delay'?: string
           'rotation-per-second'?: string
           'shadow-intensity'?: string
-          'environment-image'?: string
           'interaction-prompt'?: string
-          'interaction-prompt-threshold'?: string
           loading?: string
           reveal?: string
-          'ar'?: boolean | string
           'touch-action'?: string
-          'camera-orbit'?: string
-          'min-camera-orbit'?: string
-          'max-camera-orbit'?: string
-          'field-of-view'?: string
           style?: React.CSSProperties
         },
         HTMLElement
@@ -45,6 +38,9 @@ export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelView
   const [error, setError] = useState(false)
 
   useEffect(() => {
+    setLoaded(false)
+    setError(false)
+
     const el = containerRef.current?.querySelector('model-viewer')
     if (!el) return
 
@@ -62,21 +58,17 @@ export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelView
 
   return (
     <div ref={containerRef} className='relative w-full aspect-square bg-gray-50 rounded-2xl'>
+      {/* model-viewer with MINIMAL config — let it auto-frame the model */}
       <model-viewer
         src={src}
         poster={poster}
         alt={alt}
         camera-controls=''
         auto-rotate=''
-        auto-rotate-delay='1000'
+        auto-rotate-delay='500'
         rotation-per-second='30deg'
         shadow-intensity='0.5'
         interaction-prompt='auto'
-        interaction-prompt-threshold='500'
-        camera-orbit='45deg 75deg 105%'
-        min-camera-orbit='auto auto auto'
-        max-camera-orbit='auto auto auto'
-        field-of-view='30deg'
         loading='eager'
         touch-action='pan-y'
         style={{
@@ -84,13 +76,14 @@ export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelView
           height: '100%',
           borderRadius: '1rem',
           outline: 'none',
+          backgroundColor: '#f9fafb',
         }}
       />
 
-      {/* Loading state */}
+      {/* Loading spinner — must NOT have bg so it doesn't cover the model */}
       {!loaded && !error && (
-        <div className='absolute inset-0 flex items-center justify-center bg-gray-50 rounded-2xl'>
-          <div className='text-center'>
+        <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
+          <div className='text-center bg-gray-50/90 px-4 py-3 rounded-xl'>
             <div className='w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mx-auto mb-2' />
             <p className='text-xs text-gray-400'>Loading 3D model...</p>
           </div>
@@ -104,10 +97,10 @@ export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelView
         </div>
       )}
 
-      {/* Hint overlay — pointer-events-none so it doesn't block interaction */}
+      {/* Hint — pointer-events-none so it doesn't block drag */}
       {loaded && (
         <div className='absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded pointer-events-none'>
-          Drag to rotate · Scroll to zoom · Two fingers to pan
+          Drag to rotate · Scroll to zoom
         </div>
       )}
     </div>
