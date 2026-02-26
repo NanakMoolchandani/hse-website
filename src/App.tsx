@@ -363,31 +363,36 @@ function LandingContent() {
 
       {/* GEM Supplier Badge */}
       <div className='border-t border-gray-100 py-10'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-start justify-start gap-6'>
-          {/* GeM Official Logo SVG */}
+        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-start gap-8'>
+          {/* GeM Official Logo — pinwheel + wordmark */}
           <div className='shrink-0'>
-            <svg width="80" height="64" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Background badge */}
-              <rect width="120" height="96" rx="10" fill="#1a3e6e"/>
-              {/* Top star decoration */}
-              <path d="M60 6 L62.4 13.2 L70 13.2 L64 17.8 L66.4 25 L60 20.4 L53.6 25 L56 17.8 L50 13.2 L57.6 13.2 Z" fill="#f7941d"/>
-              {/* GeM text */}
-              <text x="60" y="56" fontFamily="Arial, sans-serif" fontWeight="800" fontSize="28" fill="white" textAnchor="middle" letterSpacing="1">GeM</text>
-              {/* Tagline */}
-              <text x="60" y="70" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="7.5" fill="#f7941d" textAnchor="middle" letterSpacing="0.5">GOVERNMENT e-MARKETPLACE</text>
-              {/* Bottom bar accent */}
-              <rect x="20" y="78" width="80" height="3" rx="1.5" fill="#f7941d"/>
-              {/* Ashoka Chakra simplified circles */}
-              <circle cx="25" cy="30" r="5" stroke="#f7941d" strokeWidth="1" fill="none" opacity="0.5"/>
-              <circle cx="95" cy="30" r="5" stroke="#f7941d" strokeWidth="1" fill="none" opacity="0.5"/>
+            <svg width="234" height="90" viewBox="0 0 260 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* 8 pinwheel blades, base blade points up — asymmetric to create clockwise spin */}
+              {/* M leftBase tipTop rightBase Z, each rotated 45° around center (50,50) */}
+              <path d="M43,44 L50,7 L57,37 Z" fill="#C8D400" transform="rotate(0,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#39A935" transform="rotate(45,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#00B0CA" transform="rotate(90,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#00AEEF" transform="rotate(135,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#003F8E" transform="rotate(180,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#2E3192" transform="rotate(225,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#E63329" transform="rotate(270,50,50)"/>
+              <path d="M43,44 L50,7 L57,37 Z" fill="#F7941D" transform="rotate(315,50,50)"/>
+              {/* Small GEM label badge (matches real logo) */}
+              <rect x="31" y="46" width="28" height="11" rx="2.5" fill="#4A2040"/>
+              <text x="45" y="54.5" fontFamily="Arial,sans-serif" fontWeight="700" fontSize="6.5" fill="white" textAnchor="middle">GEM</text>
+              {/* GeM wordmark */}
+              <text x="110" y="63" fontFamily="Arial Black,Arial,Helvetica,sans-serif" fontWeight="900" fontSize="42" fill="#231F20">GeM</text>
+              {/* Government */}
+              <text x="112" y="77" fontFamily="Arial,Helvetica,sans-serif" fontWeight="400" fontSize="13" fill="#58595B">Government</text>
+              {/* e Marketplace */}
+              <text x="112" y="92" fontFamily="Arial,Helvetica,sans-serif" fontWeight="700" fontSize="13" fill="#231F20">e Marketplace</text>
             </svg>
           </div>
-          <div>
-            <p className='text-base font-semibold text-gray-900'>Registered Supplier on Government e-Marketplace (GeM)</p>
-            <p className='text-sm text-gray-500 mt-1 max-w-2xl'>
-              MVM Aasanam, owned by Hari Shewa Enterprises, is an empanelled vendor on GeM portal enabling seamless procurement for government offices, education and public institutions.
-            </p>
-          </div>
+          {/* Vertical divider */}
+          <div className='hidden sm:block w-px h-14 bg-gray-200 shrink-0' />
+          <p className='text-sm text-gray-500 max-w-lg leading-relaxed'>
+            MVM Aasanam, owned by Hari Shewa Enterprises, is an empanelled vendor on GeM portal enabling seamless procurement for government offices, education and public institutions.
+          </p>
         </div>
       </div>
 
