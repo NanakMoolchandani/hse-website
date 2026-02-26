@@ -226,7 +226,7 @@ function Navbar() {
         }`}
       >
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <a href='#hero' className={`text-base font-bold tracking-tight font-sans ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+          <a href='#hero' className='text-base font-bold tracking-tight font-sans text-gray-900'>
             Hari Shewa Enterprises
           </a>
           <div className='hidden md:flex items-center gap-8'>
@@ -234,7 +234,7 @@ function Navbar() {
               <button
                 key={l.href}
                 onClick={() => scrollTo(l.href)}
-                className={`text-sm font-medium transition-colors hover:opacity-70 ${scrolled ? 'text-gray-700' : 'text-white/90'}`}
+                className='text-sm font-medium text-gray-700 transition-colors hover:opacity-70'
               >
                 {l.label}
               </button>
@@ -242,16 +242,12 @@ function Navbar() {
           </div>
           <a
             href='https://wa.me/919131438300'
-            className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
-              scrolled
-                ? 'bg-gray-900 text-white hover:bg-gray-700'
-                : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
-            }`}
+            className='hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full bg-gray-900 text-white hover:bg-gray-700 transition-all'
           >
             WhatsApp Us
           </a>
           <button
-            className={`md:hidden p-2 ${scrolled ? 'text-gray-900' : 'text-white'}`}
+            className='md:hidden p-2 text-gray-900'
             onClick={() => setOpen((o) => !o)}
           >
             {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
@@ -603,7 +599,7 @@ export default function App() {
         <ScrollExpandMedia
           mediaType='image'
           mediaSrc='https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=1200&q=85&fit=crop&auto=format'
-          bgImageSrc='https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80&fit=crop&auto=format'
+          bgImageSrc='https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80&fit=crop&auto=format'
           date='Premium Office Seating'
           scrollToExpand='↓ Scroll to discover'
           textBlend={false}

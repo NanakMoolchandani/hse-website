@@ -198,7 +198,7 @@ const ScrollExpandMedia = ({
               className='w-screen h-screen object-cover object-center'
               loading='eager'
             />
-            <div className='absolute inset-0 bg-black/30' />
+            <div className='absolute inset-0 bg-white/10' />
           </motion.div>
 
           <div className='container mx-auto flex flex-col items-center justify-start relative z-10'>
@@ -303,12 +303,12 @@ const ScrollExpandMedia = ({
                   style={{ opacity: hintOpacity }}
                 >
                   {date && (
-                    <p className='text-sm text-white/70 font-medium tracking-widest uppercase'>
+                    <p className='text-sm text-gray-600 font-medium tracking-widest uppercase'>
                       {date}
                     </p>
                   )}
                   {scrollToExpand && (
-                    <p className='text-white/50 text-xs tracking-widest uppercase mt-1'>
+                    <p className='text-gray-400 text-xs tracking-widest uppercase mt-1'>
                       {scrollToExpand}
                     </p>
                   )}
