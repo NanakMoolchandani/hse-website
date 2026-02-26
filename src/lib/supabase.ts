@@ -7,6 +7,23 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // ── Types ──────────────────────────────────────────────────────────
 
+export interface ProductFeature {
+  icon: string
+  label: string
+  detail: string
+}
+
+export interface ProductColor {
+  name: string
+  hex: string
+}
+
+export interface ProductMetadata {
+  features?: ProductFeature[]
+  materials?: string[]
+  colors?: ProductColor[]
+}
+
 export interface CatalogProduct {
   id: number
   name: string | null
@@ -19,6 +36,8 @@ export interface CatalogProduct {
   processed_photo_urls: string[]
   thumbnail_url: string | null
   model_url: string | null
+  lifestyle_photo_url: string | null
+  metadata: ProductMetadata | null
   sort_order: number
   is_featured: boolean
   created_at: string

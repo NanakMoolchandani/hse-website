@@ -5,6 +5,10 @@ import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
 import ImageGallery from '@/src/components/ImageGallery'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
+import FeatureHighlights from '@/src/components/FeatureHighlights'
+import ColorSwatches from '@/src/components/ColorSwatches'
+import TrustBadges from '@/src/components/TrustBadges'
+import CompareTable from '@/src/components/CompareTable'
 import { ChevronRight } from 'lucide-react'
 
 export default function ProductPage() {
@@ -29,7 +33,19 @@ export default function ProductPage() {
           setRelated(all.filter((p) => p.slug !== slug).slice(0, 4))
         })
       }
+
+      // Update page title and inject Schema.org
+      if (data) {
+        document.title = `${data.name} — MVM Aasanam`
+        injectSchemaOrg(data)
+      }
     })
+
+    return () => {
+      // Cleanup Schema.org script on unmount
+      const script = document.getElementById('schema-product')
+      if (script) script.remove()
+    }
   }, [slug])
 
   if (loading) {
@@ -68,6 +84,10 @@ export default function ProductPage() {
   const images = product.processed_photo_urls?.length > 0
     ? product.processed_photo_urls
     : product.raw_photo_urls || []
+  const metadata = product.metadata
+  const features = metadata?.features || []
+  const materials = metadata?.materials || []
+  const colors = metadata?.colors || []
 
   return (
     <div className='min-h-screen bg-white pt-20'>
@@ -88,15 +108,19 @@ export default function ProductPage() {
         </nav>
       </div>
 
-      {/* Product detail */}
+      {/* Product detail — Hero section */}
       <div className='max-w-7xl mx-auto px-6 lg:px-10 py-8'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
-          {/* Left — images */}
+          {/* Left — Image gallery with lifestyle + Ken Burns */}
           <div>
-            <ImageGallery images={images} alt={product.name || 'Product'} />
+            <ImageGallery
+              images={images}
+              alt={product.name || 'Product'}
+              lifestyleImage={product.lifestyle_photo_url}
+            />
           </div>
 
-          {/* Right — info */}
+          {/* Right — Product info */}
           <div className='pt-2'>
             {productCategory && (
               <Link
@@ -111,7 +135,7 @@ export default function ProductPage() {
               {product.name}
             </h1>
 
-            {/* Description */}
+            {/* Description with language toggle */}
             {(product.description || product.description_hindi) && (
               <div className='mb-6'>
                 {product.description_hindi && (
@@ -140,9 +164,16 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Features list */}
-            <div className='border-t border-gray-100 pt-6 mb-8'>
-              <div className='grid grid-cols-2 gap-4'>
+            {/* Color swatches & materials */}
+            {(colors.length > 0 || materials.length > 0) && (
+              <div className='mb-6'>
+                <ColorSwatches colors={colors} materials={materials} />
+              </div>
+            )}
+
+            {/* Product meta grid */}
+            <div className='border-t border-gray-100 pt-6 mb-6'>
+              <div className='grid grid-cols-3 gap-4'>
                 {productCategory && (
                   <div>
                     <p className='text-xs text-gray-400 uppercase tracking-wider'>Category</p>
@@ -160,7 +191,12 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* CTA */}
+            {/* Trust badges */}
+            <div className='mb-8'>
+              <TrustBadges />
+            </div>
+
+            {/* CTA buttons */}
             <div className='flex flex-col sm:flex-row gap-3'>
               <WhatsAppButton productName={product.name || 'this product'} />
               <a
@@ -174,7 +210,33 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* Related products */}
+      {/* Feature highlights section */}
+      {features.length > 0 && (
+        <div className='max-w-7xl mx-auto px-6 lg:px-10 py-12 border-t border-gray-100'>
+          <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-2'>
+            Key Features
+          </p>
+          <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+            What makes this product special
+          </h2>
+          <FeatureHighlights features={features} />
+        </div>
+      )}
+
+      {/* Compare with related products */}
+      {related.length > 0 && (
+        <div className='max-w-7xl mx-auto px-6 lg:px-10 py-12 border-t border-gray-100'>
+          <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-2'>
+            Compare
+          </p>
+          <h2 className='text-2xl font-bold text-gray-900 mb-6'>
+            How it compares
+          </h2>
+          <CompareTable current={product} related={related} />
+        </div>
+      )}
+
+      {/* Related products grid */}
       {related.length > 0 && (
         <div className='max-w-7xl mx-auto px-6 lg:px-10 py-16 border-t border-gray-100'>
           <h2 className='text-2xl font-bold text-gray-900 mb-8'>More in {productCategory?.label}</h2>
@@ -187,4 +249,50 @@ export default function ProductPage() {
       )}
     </div>
   )
+}
+
+/**
+ * Inject Schema.org Product structured data for SEO.
+ */
+function injectSchemaOrg(product: CatalogProduct) {
+  // Remove existing
+  const existing = document.getElementById('schema-product')
+  if (existing) existing.remove()
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: product.processed_photo_urls || [],
+    brand: {
+      '@type': 'Brand',
+      name: 'MVM Aasanam',
+    },
+    manufacturer: {
+      '@type': 'Organization',
+      name: 'Hari Shewa Enterprises',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Neemuch',
+        addressRegion: 'Madhya Pradesh',
+        addressCountry: 'IN',
+      },
+    },
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      priceCurrency: 'INR',
+      seller: {
+        '@type': 'Organization',
+        name: 'Hari Shewa Enterprises',
+      },
+    },
+  }
+
+  const script = document.createElement('script')
+  script.id = 'schema-product'
+  script.type = 'application/ld+json'
+  script.textContent = JSON.stringify(schema)
+  document.head.appendChild(script)
 }

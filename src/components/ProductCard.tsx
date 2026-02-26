@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import type { CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryByEnum } from '@/src/lib/categories'
@@ -9,20 +10,43 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const category = getCategoryByEnum(product.category || '')
   const categorySlug = category?.slug || 'executive-chairs'
+  const cardRef = useRef<HTMLAnchorElement>(null)
 
   const image = product.thumbnail_url || product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0]
+  const featureCount = product.metadata?.features?.length || 0
+
+  // Premium 3D tilt effect on mouse move
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const card = cardRef.current
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width
+    const y = (e.clientY - rect.top) / rect.height
+    const rotateX = (y - 0.5) * -8
+    const rotateY = (x - 0.5) * 8
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`
+  }
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current
+    if (card) card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)'
+  }
 
   return (
     <Link
+      ref={cardRef}
       to={`/products/${categorySlug}/${product.slug}`}
-      className='group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300'
+      className='group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-xl transition-all duration-300'
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ transition: 'transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease' }}
     >
-      <div className='aspect-square bg-gray-50 overflow-hidden'>
+      <div className='aspect-square bg-gray-50 overflow-hidden relative'>
         {image ? (
           <img
             src={image}
             alt={product.name || 'Product'}
-            className='w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105'
+            className='w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110'
             loading='lazy'
           />
         ) : (
@@ -32,6 +56,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </svg>
           </div>
         )}
+        {/* Subtle shine effect on hover */}
+        <div className='absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/0 group-hover:from-white/10 group-hover:via-white/5 group-hover:to-white/0 transition-all duration-500 pointer-events-none' />
       </div>
       <div className='p-4'>
         {category && (
@@ -42,6 +68,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         <h3 className='font-semibold text-gray-900 mt-0.5 group-hover:text-gray-700 transition-colors'>
           {product.name}
         </h3>
+        {featureCount > 0 && (
+          <span className='inline-flex items-center gap-1 text-xs text-gray-400 mt-1'>
+            {featureCount} features
+          </span>
+        )}
       </div>
     </Link>
   )
