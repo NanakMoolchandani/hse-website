@@ -602,7 +602,7 @@ export default function App() {
       <div id='hero'>
         <ScrollExpandMedia
           mediaType='image'
-          mediaSrc='https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=1200&q=85&fit=crop&auto=format'
+          mediaSrc='https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=1200&q=85&fit=crop&auto=format'
           bgImageSrc='https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80&fit=crop&auto=format'
           date='Premium Office Seating'
           scrollToExpand='↓ Scroll to discover'
