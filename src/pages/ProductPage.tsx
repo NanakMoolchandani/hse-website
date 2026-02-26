@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
 import ImageGallery from '@/src/components/ImageGallery'
-import ModelViewer from '@/src/components/ModelViewer'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import { ChevronRight } from 'lucide-react'
@@ -14,14 +13,12 @@ export default function ProductPage() {
   const [related, setRelated] = useState<CatalogProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [showHindi, setShowHindi] = useState(false)
-  const [view3D, setView3D] = useState(false)
 
   const categoryInfo = getCategoryBySlug(category || '')
 
   useEffect(() => {
     if (!slug) return
     setLoading(true)
-    setView3D(false)
     fetchProduct(slug).then((data) => {
       setProduct(data)
       setLoading(false)
@@ -94,39 +91,9 @@ export default function ProductPage() {
       {/* Product detail */}
       <div className='max-w-7xl mx-auto px-6 lg:px-10 py-8'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
-          {/* Left — images or 3D */}
+          {/* Left — images */}
           <div>
-            {view3D && product.model_url ? (
-              <ModelViewer
-                src={product.model_url}
-                poster={product.thumbnail_url || images[0]}
-                alt={product.name || 'Product 3D model'}
-              />
-            ) : (
-              <ImageGallery images={images} alt={product.name || 'Product'} />
-            )}
-
-            {/* View toggle */}
-            {product.model_url && images.length > 0 && (
-              <div className='flex gap-2 mt-3'>
-                <button
-                  onClick={() => setView3D(false)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    !view3D ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  Photos
-                </button>
-                <button
-                  onClick={() => setView3D(true)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    view3D ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  3D View
-                </button>
-              </div>
-            )}
+            <ImageGallery images={images} alt={product.name || 'Product'} />
           </div>
 
           {/* Right — info */}
@@ -180,12 +147,6 @@ export default function ProductPage() {
                   <div>
                     <p className='text-xs text-gray-400 uppercase tracking-wider'>Category</p>
                     <p className='text-sm font-medium text-gray-900 mt-0.5'>{productCategory.label}</p>
-                  </div>
-                )}
-                {product.model_url && (
-                  <div>
-                    <p className='text-xs text-gray-400 uppercase tracking-wider'>3D Model</p>
-                    <p className='text-sm font-medium text-blue-600 mt-0.5'>Available</p>
                   </div>
                 )}
                 <div>
