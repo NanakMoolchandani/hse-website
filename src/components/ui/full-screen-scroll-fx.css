@@ -54,6 +54,17 @@
 .fx-bg {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.fx-bg-fill {
+  position: absolute;
+  inset: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  object-fit: cover;
+  filter: blur(12px) brightness(0.55);
 }
 
 .fx-bg-img {
@@ -64,8 +75,7 @@
   object-fit: contain;
   object-position: center center;
   padding: 5vh 8vw;
-  opacity: 0;
-  will-change: transform, opacity;
+  z-index: 1;
 }
 
 .fx-bg-overlay {

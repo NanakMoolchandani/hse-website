@@ -127,7 +127,7 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
     const fixedRef = useRef<HTMLDivElement | null>(null);
     const fixedSectionRef = useRef<HTMLDivElement | null>(null);
 
-    const bgRefs = useRef<HTMLImageElement[]>([]);
+    const bgRefs = useRef<HTMLElement[]>([]);
     const wordRefs = useRef<HTMLSpanElement[][]>([]);
 
     const leftTrackRef = useRef<HTMLDivElement | null>(null);
@@ -459,17 +459,17 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
               {/* Backgrounds */}
               <div className="fx-bgs" aria-hidden="true">
                 {sections.map((s, i) => (
-                  <div className="fx-bg" key={s.id ?? i}>
+                  <div
+                    className="fx-bg"
+                    key={s.id ?? i}
+                    ref={(el) => el && (bgRefs.current[i] = el)}
+                  >
                     {s.renderBackground ? (
                       s.renderBackground(index === i, lastIndexRef.current === i)
                     ) : (
                       <>
-                        <img
-                          ref={(el) => el && (bgRefs.current[i] = el)}
-                          src={s.background}
-                          alt=""
-                          className="fx-bg-img"
-                        />
+                        <img src={s.background} alt="" className="fx-bg-fill" />
+                        <img src={s.background} alt="" className="fx-bg-img" />
                         <div className="fx-bg-overlay" />
                       </>
                     )}

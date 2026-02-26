@@ -110,7 +110,7 @@ export default function ProductPage() {
             text: 'rgba(255,255,255,0.9)',
             overlay: 'rgba(0,0,0,0)',
             pageBg: '#ffffff',
-            stageBg: 'radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0d0d0d 60%, #000000 100%)',
+            stageBg: '#0a0a0a',
           }}
           fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
         />
