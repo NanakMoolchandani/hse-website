@@ -325,7 +325,7 @@ function LandingContent() {
   return (
     <div className='bg-white'>
       {/* Stats Bar */}
-      <section className='border-b border-gray-100 py-10 md:py-14'>
+      <section className='border-y border-gray-100 py-10 md:py-14'>
         <div className='max-w-6xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-8'>
           {STATS.map((s) => (
             <div key={s.label} className='text-center'>
@@ -623,7 +623,7 @@ export default function App() {
   return (
     <div className='bg-white'>
       <Navbar />
-      <div id='hero' style={{ margin: 0, padding: 0, lineHeight: 0, fontSize: 0 }}>
+      <div id='hero'>
         <HeroScrollVideo
           title='MVM Aasanam'
           subtitle='Leading Pioneers in Office and Cafeteria Furniture'
