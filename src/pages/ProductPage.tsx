@@ -111,7 +111,6 @@ export default function ProductPage() {
     : product.raw_photo_urls || []
   const metadata = product.metadata
   const features = metadata?.features || []
-  const materials = metadata?.materials || []
 
   const prevImage = () => setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   const nextImage = () => setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))
@@ -246,32 +245,18 @@ export default function ProductPage() {
                   </div>
                 )}
 
-                {/* Materials */}
-                {materials.length > 0 && (
-                  <div className='mb-6'>
-                    <p className='text-xs text-gray-400 uppercase tracking-wider mb-2'>Materials</p>
-                    <div className='flex flex-wrap gap-2'>
-                      {materials.map((m, i) => (
-                        <span key={i} className='text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full'>
-                          {m}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Trust badges */}
                 <div className='border-t border-gray-100 pt-6 mb-8'>
                   <TrustBadges />
                 </div>
               </div>
 
-              {/* CTA buttons — pinned to bottom */}
-              <div className='flex flex-col sm:flex-row gap-3'>
-                <WhatsAppButton productName={product.name || 'this product'} />
+              {/* CTA buttons — always one row */}
+              <div className='flex flex-row gap-2'>
+                <WhatsAppButton productName={product.name || 'this product'} className='flex-1 text-sm px-4 py-2.5' />
                 <a
                   href='tel:+919131438300'
-                  className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-colors'
+                  className='flex-1 inline-flex items-center justify-center gap-1.5 border border-gray-200 text-gray-700 font-medium text-sm px-4 py-2.5 rounded-full hover:bg-gray-50 transition-colors'
                 >
                   Call for Quote
                 </a>
@@ -289,10 +274,10 @@ export default function ProductPage() {
                       setTimeout(() => setCopied(false), 2000)
                     }
                   }}
-                  className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-6 py-3 rounded-full hover:bg-gray-50 transition-colors'
+                  className='flex-1 inline-flex items-center justify-center gap-1.5 border border-gray-200 text-gray-700 font-medium text-sm px-4 py-2.5 rounded-full hover:bg-gray-50 transition-colors'
                 >
                   {copied ? <Check className='w-4 h-4 text-green-600' /> : <Share2 className='w-4 h-4' />}
-                  {copied ? 'Link Copied!' : 'Share Product'}
+                  {copied ? 'Copied!' : 'Share'}
                 </button>
               </div>
             </div>
