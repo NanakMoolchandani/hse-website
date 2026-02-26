@@ -614,8 +614,8 @@ export default function App() {
           meta='Est. 1997 · Neemuch, MP'
           credits={null}
           mediaType='video'
-          media='https://videos.pexels.com/video-files/6774539/6774539-hd_1920_1080_30fps.mp4'
-          poster='https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1920&q=90&fit=crop&auto=format'
+          media='https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4'
+          poster='https://images.unsplash.com/photo-_CFN6YFCbTQ?w=1920&q=90&fit=crop&auto=format'
           muted
           loop
           playsInline
