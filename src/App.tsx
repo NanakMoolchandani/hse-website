@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import ScrollExpandMedia from '../components/blocks/scroll-expansion-hero'
+import HeroScrollVideo from '../components/ui/scroll-animated-video'
 import { GlareCard } from '../components/ui/glare-card'
 import {
   Menu,
@@ -623,18 +623,52 @@ export default function App() {
     <div className='bg-white'>
       <Navbar />
       <div id='hero'>
-        <ScrollExpandMedia
-          mediaType='image'
-          mediaSrc='https://images.unsplash.com/photo-1752952952773-80378cefc23d?w=1200&q=85&fit=crop&crop=center&auto=format'
-          bgImageSrc='https://images.unsplash.com/photo-1710905281966-c19083942790?w=1920&q=80&fit=crop&auto=format'
-          date='Office & Cafeteria Furniture'
-          scrollToExpand='↓ Scroll to explore'
-          textBlend={false}
-          words={['Ergonomic', 'Durable', 'Productive', 'Reliable', 'Yours']}
-        >
-          <LandingContent />
-        </ScrollExpandMedia>
+        <HeroScrollVideo
+          title='MVM Aasanam'
+          subtitle='Office & Cafeteria Furniture'
+          meta='Est. 1994 · Neemuch, MP'
+          credits={null}
+          mediaType='video'
+          media='https://videos.pexels.com/video-files/6774539/6774539-hd_1920_1080_30fps.mp4'
+          poster='https://images.unsplash.com/photo-1752952952773-80378cefc23d?w=1200&q=85&fit=crop&crop=center&auto=format'
+          muted
+          loop
+          playsInline
+          overlay={{
+            caption: 'ISO 9001 & ISO 22000 CERTIFIED · NEEMUCH, MP',
+            heading: 'Where Comfort Meets Productivity',
+            paragraphs: [
+              '30+ years crafting premium office and cafeteria furniture for India\'s leading corporates.',
+            ],
+            extra: (
+              <a
+                href='https://wa.me/919131438300'
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: '#fff',
+                  color: '#111827',
+                  fontWeight: 700,
+                  fontSize: '15px',
+                  padding: '12px 28px',
+                  borderRadius: '999px',
+                  marginTop: '8px',
+                  textDecoration: 'none',
+                  letterSpacing: '0.01em',
+                }}
+              >
+                <MessageCircle size={18} />
+                Get a Free Quote
+              </a>
+            ),
+          }}
+          scrollHeightVh={280}
+          smoothScroll={false}
+          initialBoxSize={400}
+        />
       </div>
+      <LandingContent />
     </div>
   )
 }
