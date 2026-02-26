@@ -46,6 +46,8 @@ export type HeroScrollVideoProps = {
   smoothScroll?: boolean;
   lenisOptions?: Record<string, unknown>;
 
+  headerBackground?: ReactNode;
+
   className?: string;
   style?: CSSProperties;
 };
@@ -119,6 +121,8 @@ export const HeroScrollVideo: React.FC<HeroScrollVideoProps> = ({
 
   smoothScroll = true,
   lenisOptions,
+
+  headerBackground,
 
   className,
   style,
@@ -430,8 +434,13 @@ export const HeroScrollVideo: React.FC<HeroScrollVideoProps> = ({
       style={{ ...cssVars, ...style }}
     >
       {/* Headline/hero area */}
-      <div className="hsv-container" ref={headlineRef}>
-        <div className="hsv-headline">
+      <div className="hsv-container" ref={headlineRef} style={{ position: "relative" }}>
+        {headerBackground && (
+          <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}>
+            {headerBackground}
+          </div>
+        )}
+        <div className="hsv-headline" style={{ position: "relative", zIndex: 1 }}>
           <h1 className="hsv-title">{title}</h1>
           {subtitle ? <h2 className="hsv-subtitle">{subtitle}</h2> : null}
           {meta ? <div className="hsv-meta">{meta}</div> : null}
@@ -486,11 +495,13 @@ export const HeroScrollVideo: React.FC<HeroScrollVideoProps> = ({
         }
 
         .hsv-container {
+          position: relative;
           height: 100vh;
           display: grid;
           place-items: center;
           padding: clamp(16px, 3vw, 40px);
           perspective: 900px;
+          overflow: hidden;
         }
 
         .hsv-headline {

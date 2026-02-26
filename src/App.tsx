@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import HeroScrollVideo from '../components/ui/scroll-animated-video'
+import { ShaderAnimation } from '../components/ui/shader-animation'
 import { GlareCard } from '../components/ui/glare-card'
 import {
   Menu,
@@ -666,6 +667,11 @@ export default function App() {
           scrollHeightVh={280}
           smoothScroll={false}
           initialBoxSize={400}
+          headerBackground={
+            <div style={{ position: 'absolute', inset: 0, mixBlendMode: 'screen', opacity: 0.18 }}>
+              <ShaderAnimation />
+            </div>
+          }
         />
       </div>
       <LandingContent />
