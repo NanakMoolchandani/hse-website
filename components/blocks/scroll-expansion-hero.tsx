@@ -42,14 +42,14 @@ function getActiveWord(
   const idx = Math.min(Math.floor(normalized / segmentSize), words.length - 1);
   const segmentProgress = (normalized - idx * segmentSize) / segmentSize;
 
-  // Fade in 0→0.3, full 0.3→0.7, fade out 0.7→1
+  // Fade in 0→0.1, full 0.1→0.9, fade out 0.9→1
   let opacity = 0;
-  if (segmentProgress < 0.3) {
-    opacity = segmentProgress / 0.3;
-  } else if (segmentProgress < 0.7) {
+  if (segmentProgress < 0.1) {
+    opacity = segmentProgress / 0.1;
+  } else if (segmentProgress < 0.9) {
     opacity = 1;
   } else {
-    opacity = (1 - segmentProgress) / 0.3;
+    opacity = (1 - segmentProgress) / 0.1;
   }
 
   return { word: words[idx], opacity: Math.max(0, Math.min(1, opacity)) };
@@ -249,8 +249,8 @@ const ScrollExpandMedia = ({
                         className='w-full h-full object-cover'
                       />
                       <motion.div
-                        className='absolute inset-0 bg-black/30'
-                        animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
+                        className='absolute inset-0 bg-black/50'
+                        animate={{ opacity: 0.7 - scrollProgress * 0.4 }}
                         transition={{ duration: 0.2 }}
                       />
                     </div>

@@ -597,8 +597,9 @@ export default function App() {
       <Navbar />
       <div id='hero'>
         <ScrollExpandMedia
-          mediaType='image'
-          mediaSrc='https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=1200&q=85&fit=crop&auto=format'
+          mediaType='video'
+          mediaSrc='https://assets.mixkit.co/videos/42664/42664-1080.mp4'
+          posterSrc='https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=1200&q=85&fit=crop&auto=format'
           bgImageSrc='https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80&fit=crop&auto=format'
           date='Premium Office Seating'
           scrollToExpand='↓ Scroll to discover'
