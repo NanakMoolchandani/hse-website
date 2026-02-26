@@ -22,16 +22,16 @@ const NAV_LINKS = [
 
 const STATS = [
   { count: '500+', label: 'Corporates Served' },
-  { count: '10,000+', label: 'Chairs Delivered' },
-  { count: '50+', label: 'Active Designs' },
-  { count: '15+', label: 'Years in Business' },
+  { count: '50,000+', label: 'Chairs Delivered' },
+  { count: '30+', label: 'Years of Experience' },
+  { count: '300+', label: 'Active Designs' },
 ]
 
 const QUALITY_PILLARS = [
   {
     title: 'Ergonomic Engineering',
     description:
-      'Every chair is designed around the human spine — lumbar support, adjustable armrests, and seat depth calibrated for all-day comfort.',
+      'Every chair is designed around the human spine. Lumbar support, adjustable armrests, and seat depth are calibrated for all-day comfort in demanding work environments.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M24 6v36M14 16c0-5.52 4.48-10 10-10s10 4.48 10 10' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
@@ -42,7 +42,7 @@ const QUALITY_PILLARS = [
   {
     title: 'Heavy-Duty Frame',
     description:
-      'MS powder-coated frames with nylon or aluminium base rated for commercial use. Built to withstand 8+ hours of daily office use, year after year.',
+      'MS powder-coated frames with nylon or aluminium base rated for commercial use. Built to withstand 8 or more hours of daily office use, year after year.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <rect x='8' y='8' width='32' height='32' rx='4' stroke='currentColor' strokeWidth='1.5' />
@@ -53,7 +53,7 @@ const QUALITY_PILLARS = [
   {
     title: 'Premium Upholstery',
     description:
-      'Breathable mesh, high-density foam, and premium fabric/leatherette options. Certified for durability — resistant to wear, spills, and fading.',
+      'Breathable mesh, high-density foam, and premium fabric or leatherette options. Certified for durability and resistant to wear, spills, and fading.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M8 20c0-6.63 5.37-12 12-12h8c6.63 0 12 5.37 12 12v8c0 6.63-5.37 12-12 12h-8C13.37 40 8 34.63 8 28v-8z' stroke='currentColor' strokeWidth='1.5' />
@@ -62,13 +62,38 @@ const QUALITY_PILLARS = [
     ),
   },
   {
-    title: 'Quality Certified',
+    title: 'ISO 9001 & ISO 22000 Certified',
     description:
-      'All products go through multi-point QC before dispatch. We supply to leading corporates, hospitals, and institutions across Central India.',
+      'All products pass multi-point quality checks before dispatch. We are ISO 9001 and ISO 22000 certified, trusted by corporates, hospitals, and institutions across Central India.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4z' stroke='currentColor' strokeWidth='1.5' />
         <path d='M16 24l6 6 10-12' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
+      </svg>
+    ),
+  },
+  {
+    title: 'Custom Configurations',
+    description:
+      'Choose your fabric, colour, armrest type, base finish, and height range. Every order is configured to match your office interior and brand identity.',
+    icon: (
+      <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
+        <circle cx='24' cy='24' r='10' stroke='currentColor' strokeWidth='1.5' />
+        <circle cx='24' cy='24' r='3' stroke='currentColor' strokeWidth='1.5' />
+        <path d='M6 24h8M34 24h8M24 6v8M24 34v8' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
+      </svg>
+    ),
+  },
+  {
+    title: 'Fast & Reliable Delivery',
+    description:
+      'Orders dispatched from Neemuch within 7 to 15 working days. We handle large-scale fit-outs and institutional projects across Central India with on-time delivery.',
+    icon: (
+      <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
+        <path d='M6 14h24v20H6z' stroke='currentColor' strokeWidth='1.5' strokeLinejoin='round' />
+        <path d='M30 20h6l6 6v8h-12V20z' stroke='currentColor' strokeWidth='1.5' strokeLinejoin='round' />
+        <circle cx='14' cy='36' r='3' stroke='currentColor' strokeWidth='1.5' />
+        <circle cx='36' cy='36' r='3' stroke='currentColor' strokeWidth='1.5' />
       </svg>
     ),
   },
@@ -112,7 +137,7 @@ const FEATURES = [
     number: '01',
     title: 'Bulk & Project Supply',
     description:
-      'From 10 chairs to 10,000 — we handle large-scale corporate orders, fit-outs, and institutional supply with on-time delivery across Central India.',
+      'From 10 chairs to 10,000. We handle large-scale corporate orders, fit-outs, and institutional supply with on-time delivery across Central India.',
   },
   {
     number: '02',
@@ -311,21 +336,21 @@ function LandingContent() {
       </section>
 
       {/* Why Us */}
-      <section id='technology' className='py-20 md:py-28 bg-gray-50'>
+      <section id='technology' className='py-20 md:py-28'>
         <div className='max-w-6xl mx-auto px-4'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-            Why MVM Furnishing
+            Why MVM Aasanam
           </p>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
             Built for the<br />Modern Workplace
           </h2>
           <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-            Every chair we supply is engineered for productivity, comfort, and long-term commercial use —
-            not just aesthetics.
+            Every chair we supply is engineered for productivity, comfort, and long-term commercial use.
+            Not just aesthetics.
           </p>
-          <div className='flex flex-wrap justify-center gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {QUALITY_PILLARS.map((c) => (
-              <GlareCard key={c.title} className='flex flex-col items-start justify-start p-7'>
+              <GlareCard key={c.title} containerClassName='w-full' className='flex flex-col items-start justify-start p-7'>
                 <div className='text-white/60 mb-5'>{c.icon}</div>
                 <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
                 <p className='text-sm text-white/50 leading-relaxed'>{c.description}</p>
@@ -334,6 +359,22 @@ function LandingContent() {
           </div>
         </div>
       </section>
+
+      {/* GEM Supplier Badge */}
+      <div className='border-t border-gray-100 py-10'>
+        <div className='max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-6 text-center sm:text-left'>
+          <div className='w-14 h-14 rounded-xl bg-blue-700 text-white flex items-center justify-center text-sm font-bold tracking-wide shrink-0'>
+            GeM
+          </div>
+          <div>
+            <p className='text-base font-semibold text-gray-900'>Registered Supplier on Government e-Marketplace (GeM)</p>
+            <p className='text-sm text-gray-500 mt-0.5'>
+              MVM Furnishing is an empanelled vendor on the GeM portal — enabling seamless procurement for
+              government offices, PSUs, and public institutions.
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Products */}
       <section id='collections' className='py-20 md:py-28'>
