@@ -103,32 +103,32 @@ const QUALITY_PILLARS = [
 const COLLECTIONS = [
   {
     name: 'Executive Chairs',
-    count: 'High-Back Series',
-    description: 'Premium leather & fabric executive chairs for cabins and boardrooms',
-    image: 'https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=600&q=80',
+    count: 'Boss Series',
+    description: 'Premium leather executive chairs for cabins and boardrooms',
+    image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=600&q=80',
   },
   {
     name: 'Ergonomic Task Chairs',
-    count: 'Workstation Series',
-    description: 'All-day comfort with lumbar support, mesh back & full adjustability',
-    image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80',
+    count: 'Mesh Pro',
+    description: 'All-day comfort with lumbar support, breathable mesh back and full adjustability',
+    image: 'https://images.unsplash.com/photo-1497366754035-f200968a7db3?w=600&q=80',
   },
   {
     name: 'Cafeteria Furniture',
-    count: 'Canteen Series',
-    description: 'Durable cafeteria chairs & tables — stackable, easy to clean, bulk-ready',
+    count: 'Cafe Range',
+    description: 'Durable cafeteria chairs and tables. Stackable, easy to clean and bulk-ready',
     image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',
   },
   {
     name: 'Conference & Meeting',
-    count: 'Boardroom Series',
+    count: 'Board Room',
     description: 'Coordinated seating solutions for meeting rooms and training halls',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
   },
   {
     name: 'Visitor & Reception',
-    count: 'Lobby Series',
-    description: 'Stylish visitor chairs, waiting area sofas & reception counters',
+    count: 'Lobby Collection',
+    description: 'Stylish visitor chairs, waiting area sofas and reception counters',
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
   },
 ]
@@ -363,15 +363,29 @@ function LandingContent() {
 
       {/* GEM Supplier Badge */}
       <div className='border-t border-gray-100 py-10'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-center gap-6 text-center sm:text-left'>
-          <div className='w-14 h-14 rounded-xl bg-blue-700 text-white flex items-center justify-center text-sm font-bold tracking-wide shrink-0'>
-            GeM
+        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-start justify-start gap-6'>
+          {/* GeM Official Logo SVG */}
+          <div className='shrink-0'>
+            <svg width="80" height="64" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Background badge */}
+              <rect width="120" height="96" rx="10" fill="#1a3e6e"/>
+              {/* Top star decoration */}
+              <path d="M60 6 L62.4 13.2 L70 13.2 L64 17.8 L66.4 25 L60 20.4 L53.6 25 L56 17.8 L50 13.2 L57.6 13.2 Z" fill="#f7941d"/>
+              {/* GeM text */}
+              <text x="60" y="56" fontFamily="Arial, sans-serif" fontWeight="800" fontSize="28" fill="white" textAnchor="middle" letterSpacing="1">GeM</text>
+              {/* Tagline */}
+              <text x="60" y="70" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="7.5" fill="#f7941d" textAnchor="middle" letterSpacing="0.5">GOVERNMENT e-MARKETPLACE</text>
+              {/* Bottom bar accent */}
+              <rect x="20" y="78" width="80" height="3" rx="1.5" fill="#f7941d"/>
+              {/* Ashoka Chakra simplified circles */}
+              <circle cx="25" cy="30" r="5" stroke="#f7941d" strokeWidth="1" fill="none" opacity="0.5"/>
+              <circle cx="95" cy="30" r="5" stroke="#f7941d" strokeWidth="1" fill="none" opacity="0.5"/>
+            </svg>
           </div>
           <div>
             <p className='text-base font-semibold text-gray-900'>Registered Supplier on Government e-Marketplace (GeM)</p>
-            <p className='text-sm text-gray-500 mt-0.5'>
-              MVM Furnishing is an empanelled vendor on the GeM portal — enabling seamless procurement for
-              government offices, PSUs, and public institutions.
+            <p className='text-sm text-gray-500 mt-1 max-w-2xl'>
+              MVM Aasanam, owned by Hari Shewa Enterprises, is an empanelled vendor on GeM portal enabling seamless procurement for government offices, education and public institutions.
             </p>
           </div>
         </div>
@@ -387,12 +401,12 @@ function LandingContent() {
             Seating for<br />Every Space
           </h2>
           <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-            From executive cabins to open workstations, conference rooms to cafeterias —
+            From executive cabins to open workstations, conference rooms to cafeterias,
             we have the right seating solution for every area of your office.
           </p>
-          <div className='flex flex-wrap justify-center gap-6'>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
             {COLLECTIONS.map((col) => (
-              <GlareCard key={col.name} className='relative flex flex-col justify-end'>
+              <GlareCard key={col.name} containerClassName='w-full' className='relative flex flex-col justify-end'>
                 <img
                   src={col.image}
                   alt={col.name}
