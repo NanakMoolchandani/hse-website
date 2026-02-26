@@ -351,7 +351,7 @@ function LandingContent() {
           </p>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {QUALITY_PILLARS.map((c) => (
-              <GlareCard key={c.title} containerClassName='w-full' className='flex flex-col items-start justify-start p-7'>
+              <GlareCard key={c.title} fitContent containerClassName='w-full' className='flex flex-col items-start justify-start p-7'>
                 <div className='text-white/60 mb-5'>{c.icon}</div>
                 <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
                 <p className='text-sm text-white/50 leading-relaxed'>{c.description}</p>
