@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import '@google/model-viewer'
 
 interface ModelViewerProps {
   src: string
@@ -7,81 +6,66 @@ interface ModelViewerProps {
   alt?: string
 }
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement> & {
-          src?: string
-          poster?: string
-          alt?: string
-          'camera-controls'?: boolean | string
-          'auto-rotate'?: boolean | string
-          'auto-rotate-delay'?: string
-          'rotation-per-second'?: string
-          'shadow-intensity'?: string
-          'interaction-prompt'?: string
-          loading?: string
-          reveal?: string
-          'touch-action'?: string
-          style?: React.CSSProperties
-        },
-        HTMLElement
-      >
-    }
-  }
-}
-
+/**
+ * 3D Model Viewer using @google/model-viewer web component.
+ *
+ * Renders model-viewer via innerHTML to bypass React's attribute handling
+ * for custom elements (React can strip/mangle boolean attributes like camera-controls).
+ */
 export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [loaded, setLoaded] = useState(false)
-  const [error, setError] = useState(false)
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading')
 
   useEffect(() => {
-    setLoaded(false)
-    setError(false)
+    const container = containerRef.current
+    if (!container) return
 
-    const el = containerRef.current?.querySelector('model-viewer')
-    if (!el) return
+    setStatus('loading')
 
-    const onLoad = () => setLoaded(true)
-    const onError = () => setError(true)
+    // Dynamically import model-viewer to ensure it registers as a custom element
+    import('@google/model-viewer').then(() => {
+      // Clear previous content
+      container.innerHTML = ''
 
-    el.addEventListener('load', onLoad)
-    el.addEventListener('error', onError)
+      // Create model-viewer element directly via DOM (not React JSX)
+      const mv = document.createElement('model-viewer') as any
+      mv.setAttribute('src', src)
+      if (poster) mv.setAttribute('poster', poster)
+      mv.setAttribute('alt', alt)
+      mv.setAttribute('camera-controls', '')
+      mv.setAttribute('auto-rotate', '')
+      mv.setAttribute('auto-rotate-delay', '500')
+      mv.setAttribute('rotation-per-second', '30deg')
+      mv.setAttribute('shadow-intensity', '0.5')
+      mv.setAttribute('interaction-prompt', 'auto')
+      mv.setAttribute('loading', 'eager')
+      mv.setAttribute('touch-action', 'pan-y')
+      mv.style.width = '100%'
+      mv.style.height = '100%'
+      mv.style.borderRadius = '1rem'
+      mv.style.outline = 'none'
+      mv.style.backgroundColor = '#f9fafb'
+
+      mv.addEventListener('load', () => setStatus('loaded'))
+      mv.addEventListener('error', () => setStatus('error'))
+
+      container.appendChild(mv)
+    }).catch(() => {
+      setStatus('error')
+    })
 
     return () => {
-      el.removeEventListener('load', onLoad)
-      el.removeEventListener('error', onError)
+      if (container) container.innerHTML = ''
     }
-  }, [src])
+  }, [src, poster, alt])
 
   return (
-    <div ref={containerRef} className='relative w-full aspect-square bg-gray-50 rounded-2xl'>
-      {/* model-viewer with MINIMAL config — let it auto-frame the model */}
-      <model-viewer
-        src={src}
-        poster={poster}
-        alt={alt}
-        camera-controls=''
-        auto-rotate=''
-        auto-rotate-delay='500'
-        rotation-per-second='30deg'
-        shadow-intensity='0.5'
-        interaction-prompt='auto'
-        loading='eager'
-        touch-action='pan-y'
-        style={{
-          width: '100%',
-          height: '100%',
-          borderRadius: '1rem',
-          outline: 'none',
-          backgroundColor: '#f9fafb',
-        }}
-      />
+    <div className='relative w-full aspect-square bg-gray-50 rounded-2xl'>
+      {/* model-viewer gets injected here via DOM */}
+      <div ref={containerRef} className='w-full h-full rounded-2xl' />
 
-      {/* Loading spinner — must NOT have bg so it doesn't cover the model */}
-      {!loaded && !error && (
+      {/* Loading spinner */}
+      {status === 'loading' && (
         <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
           <div className='text-center bg-gray-50/90 px-4 py-3 rounded-xl'>
             <div className='w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mx-auto mb-2' />
@@ -91,14 +75,14 @@ export default function ModelViewer({ src, poster, alt = '3D Model' }: ModelView
       )}
 
       {/* Error state */}
-      {error && (
+      {status === 'error' && (
         <div className='absolute inset-0 flex items-center justify-center bg-gray-50 rounded-2xl'>
           <p className='text-sm text-gray-500'>3D model could not be loaded</p>
         </div>
       )}
 
-      {/* Hint — pointer-events-none so it doesn't block drag */}
-      {loaded && (
+      {/* Hint */}
+      {status === 'loaded' && (
         <div className='absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded pointer-events-none'>
           Drag to rotate · Scroll to zoom
         </div>
