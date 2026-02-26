@@ -6,7 +6,6 @@ import ImageGallery from '@/src/components/ImageGallery'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
-import ColorSwatches from '@/src/components/ColorSwatches'
 import TrustBadges from '@/src/components/TrustBadges'
 import CompareTable from '@/src/components/CompareTable'
 import { ChevronRight } from 'lucide-react'
@@ -53,7 +52,7 @@ export default function ProductPage() {
       <div className='min-h-screen bg-white pt-24'>
         <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 animate-pulse'>
-            <div className='aspect-square bg-gray-100 rounded-2xl' />
+            <div className='aspect-[3/4] bg-gray-100 rounded-2xl' />
             <div className='space-y-4 pt-8'>
               <div className='h-4 w-24 bg-gray-100 rounded' />
               <div className='h-8 w-64 bg-gray-100 rounded' />
@@ -87,7 +86,6 @@ export default function ProductPage() {
   const metadata = product.metadata
   const features = metadata?.features || []
   const materials = metadata?.materials || []
-  const colors = metadata?.colors || []
 
   return (
     <div className='min-h-screen bg-white pt-20'>
@@ -111,12 +109,11 @@ export default function ProductPage() {
       {/* Product detail — Hero section */}
       <div className='max-w-7xl mx-auto px-6 lg:px-10 py-8'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
-          {/* Left — Image gallery with lifestyle + Ken Burns */}
+          {/* Left — Image gallery */}
           <div>
             <ImageGallery
               images={images}
               alt={product.name || 'Product'}
-              lifestyleImage={product.lifestyle_photo_url}
             />
           </div>
 
@@ -164,35 +161,22 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* Color swatches & materials */}
-            {(colors.length > 0 || materials.length > 0) && (
+            {/* Materials */}
+            {materials.length > 0 && (
               <div className='mb-6'>
-                <ColorSwatches colors={colors} materials={materials} />
+                <p className='text-xs text-gray-400 uppercase tracking-wider mb-2'>Materials</p>
+                <div className='flex flex-wrap gap-2'>
+                  {materials.map((m, i) => (
+                    <span key={i} className='text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full'>
+                      {m}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 
-            {/* Product meta grid */}
-            <div className='border-t border-gray-100 pt-6 mb-6'>
-              <div className='grid grid-cols-3 gap-4'>
-                {productCategory && (
-                  <div>
-                    <p className='text-xs text-gray-400 uppercase tracking-wider'>Category</p>
-                    <p className='text-sm font-medium text-gray-900 mt-0.5'>{productCategory.label}</p>
-                  </div>
-                )}
-                <div>
-                  <p className='text-xs text-gray-400 uppercase tracking-wider'>Photos</p>
-                  <p className='text-sm font-medium text-gray-900 mt-0.5'>{images.length} angles</p>
-                </div>
-                <div>
-                  <p className='text-xs text-gray-400 uppercase tracking-wider'>Supply</p>
-                  <p className='text-sm font-medium text-gray-900 mt-0.5'>Pan Central India</p>
-                </div>
-              </div>
-            </div>
-
             {/* Trust badges */}
-            <div className='mb-8'>
+            <div className='border-t border-gray-100 pt-6 mb-8'>
               <TrustBadges />
             </div>
 
