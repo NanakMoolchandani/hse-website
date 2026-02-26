@@ -326,7 +326,7 @@ function LandingContent() {
     <div className='bg-white'>
       {/* Stats Bar */}
       <section className='border-y border-gray-100 py-10 md:py-14'>
-        <div className='max-w-6xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-8'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
           {STATS.map((s) => (
             <div key={s.label} className='text-center'>
               <p className='text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
@@ -338,7 +338,7 @@ function LandingContent() {
 
       {/* Why Us */}
       <section id='technology' className='py-20 md:py-28'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Why MVM Aasanam
           </p>
@@ -363,7 +363,7 @@ function LandingContent() {
 
       {/* GEM Supplier Badge */}
       <div className='border-t border-gray-100 py-10'>
-        <div className='max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-6 text-center sm:text-left'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-center gap-6 text-center sm:text-left'>
           <div className='w-14 h-14 rounded-xl bg-blue-700 text-white flex items-center justify-center text-sm font-bold tracking-wide shrink-0'>
             GeM
           </div>
@@ -379,7 +379,7 @@ function LandingContent() {
 
       {/* Products */}
       <section id='collections' className='py-20 md:py-28'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Product Range
           </p>
@@ -414,7 +414,7 @@ function LandingContent() {
 
       {/* Features */}
       <section id='features' className='py-20 md:py-28 bg-gray-900 text-white'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             What Sets Us Apart
           </p>
@@ -439,7 +439,7 @@ function LandingContent() {
 
       {/* Process */}
       <section className='py-20 md:py-28'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             How It Works
           </p>
@@ -471,7 +471,7 @@ function LandingContent() {
 
       {/* Testimonials */}
       <section className='py-20 md:py-28 bg-gray-50'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Testimonials
           </p>
@@ -502,7 +502,7 @@ function LandingContent() {
 
       {/* Specs */}
       <section className='py-20 md:py-28'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Specifications
           </p>
@@ -531,7 +531,7 @@ function LandingContent() {
 
       {/* Contact */}
       <section id='contact' className='py-20 md:py-28 bg-gray-900 text-white'>
-        <div className='max-w-4xl mx-auto px-4 text-center'>
+        <div className='max-w-4xl mx-auto px-6 lg:px-10 text-center'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Get in Touch
           </p>
@@ -572,7 +572,7 @@ function LandingContent() {
 
       {/* Footer */}
       <footer className='bg-white border-t border-gray-100 py-10'>
-        <div className='max-w-6xl mx-auto px-4'>
+        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-10'>
             <div>
               <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Furnishing</h4>
@@ -664,6 +664,7 @@ export default function App() {
               </a>
             ),
           }}
+          targetSize={{ widthVw: 100, heightVh: 95, borderRadius: 0 }}
           scrollHeightVh={280}
           smoothScroll={false}
           initialBoxSize={400}
