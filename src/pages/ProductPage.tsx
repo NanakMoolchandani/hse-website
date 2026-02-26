@@ -101,20 +101,16 @@ export default function ProductPage() {
         <FullScreenScrollFX
           sections={scrollSections}
           header={
-            <>
-              <span style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1.2rem)', letterSpacing: '0.2em', opacity: 0.6, fontWeight: 400 }}>
-                {productCategory?.series || 'MVM Aasanam'}
-              </span>
-            </>
+            <span>{productCategory?.label || 'MVM Aasanam'}</span>
           }
-          footer={<div>{productCategory?.label || ''}</div>}
+          footer={<div>MVM Aasanam</div>}
           showProgress
           durations={{ change: 0.7, snap: 800 }}
           colors={{
-            text: 'rgba(255,255,255,0.95)',
-            overlay: 'rgba(0,0,0,0.08)',
+            text: 'rgba(255,255,255,0.9)',
+            overlay: 'rgba(0,0,0,0)',
             pageBg: '#ffffff',
-            stageBg: '#111111',
+            stageBg: 'radial-gradient(ellipse at 50% 40%, #1a1a1a 0%, #0d0d0d 60%, #000000 100%)',
           }}
           fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
         />
