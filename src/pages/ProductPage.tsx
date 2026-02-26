@@ -60,12 +60,10 @@ export default function ProductPage() {
       id: `img-${i}`,
       background: img,
       leftLabel: VIEW_LABELS[i] || `View ${i + 1}`,
-      title: i === 0
-        ? product.name || 'Product'
-        : features[i - 1]?.label || productCategory?.label || 'Premium Quality',
+      title: product.name || 'Product',
       rightLabel: i === 0
         ? productCategory?.series || 'MVM Aasanam'
-        : features[i - 1]?.detail || 'Crafted with care',
+        : features[i - 1]?.label || productCategory?.label || 'Premium Quality',
     }))
   }, [product])
 
@@ -114,9 +112,9 @@ export default function ProductPage() {
           durations={{ change: 0.7, snap: 800 }}
           colors={{
             text: 'rgba(255,255,255,0.95)',
-            overlay: 'rgba(0,0,0,0.4)',
+            overlay: 'rgba(0,0,0,0.08)',
             pageBg: '#ffffff',
-            stageBg: '#0a0a0a',
+            stageBg: '#111111',
           }}
           fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
         />
