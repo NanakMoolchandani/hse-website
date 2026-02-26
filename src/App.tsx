@@ -630,7 +630,7 @@ export default function App() {
           credits={null}
           mediaType='video'
           media='https://videos.pexels.com/video-files/6774539/6774539-hd_1920_1080_30fps.mp4'
-          poster='https://images.unsplash.com/photo-1752952952773-80378cefc23d?w=1200&q=85&fit=crop&crop=center&auto=format'
+          poster='https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1920&q=90&fit=crop&auto=format'
           muted
           loop
           playsInline
