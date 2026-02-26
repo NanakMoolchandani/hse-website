@@ -604,7 +604,6 @@ export default function App() {
           mediaType='image'
           mediaSrc='https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=1200&q=85&fit=crop&auto=format'
           bgImageSrc='https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80&fit=crop&auto=format'
-          title='MVM Aasanam'
           date='Premium Office Seating'
           scrollToExpand='↓ Scroll to discover'
           textBlend={false}
