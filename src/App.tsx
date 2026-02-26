@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import HeroScrollVideo from '../components/ui/scroll-animated-video'
-import { EtherealShadow } from '../components/ui/ethereal-shadow'
+import ScrollExpandMedia from '../components/ui/scroll-expansion-hero'
 import { GlareCard } from '../components/ui/glare-card'
 import {
   Menu,
@@ -607,63 +606,62 @@ export default function App() {
   return (
     <div className='bg-white'>
       <Navbar />
-      <div id='hero'>
-        <HeroScrollVideo
-          title='MVM Aasanam'
-          subtitle='Leading Pioneers in Office and Cafeteria Furniture'
-          meta='Est. 1997 · Neemuch, MP'
-          credits={null}
-          mediaType='video'
-          media='https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4'
-          poster='https://images.unsplash.com/photo-_CFN6YFCbTQ?w=1920&q=90&fit=crop&auto=format'
-          muted
-          loop
-          playsInline
-          overlay={{
-            caption: 'ISO 9001 & ISO 22000 CERTIFIED · NEEMUCH, MP',
-            heading: 'Where Comfort Meets Productivity',
-            paragraphs: [
-              '30+ years crafting premium office and cafeteria furniture for India\'s leading corporates.',
-            ],
-            extra: (
-              <a
-                href='https://wa.me/919131438300'
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  background: '#fff',
-                  color: '#111827',
-                  fontWeight: 700,
-                  fontSize: '15px',
-                  padding: '12px 28px',
-                  borderRadius: '999px',
-                  marginTop: '8px',
-                  textDecoration: 'none',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                <MessageCircle size={18} />
-                Get a Free Quote
-              </a>
-            ),
-          }}
-          targetSize={{ widthVw: 100, heightVh: 95, borderRadius: 0 }}
-          scrollHeightVh={280}
-          smoothScroll={false}
-          initialBoxSize={400}
-          headerBackground={
-            <div style={{ position: 'absolute', inset: 0, opacity: 0.22 }}>
-              <EtherealShadow
-                color='rgba(37, 99, 235, 1)'
-                animation={{ scale: 45, speed: 22 }}
-                noise={{ opacity: 0.35, scale: 1 }}
-                sizing='fill'
-              />
-            </div>
-          }
-        />
-      </div>
+      <ScrollExpandMedia
+        mediaType='video'
+        mediaSrc='https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4'
+        posterSrc='https://images.unsplash.com/photo-_CFN6YFCbTQ?w=1920&q=90&fit=crop&auto=format'
+        bgImageSrc='https://images.unsplash.com/photo-_CFN6YFCbTQ?w=1920&q=90&fit=crop&auto=format'
+        title='MVM Aasanam'
+        date='Est. 1997 · Neemuch, MP'
+        scrollToExpand='Scroll to explore'
+        textBlend
+      >
+        {/* About MVM Aasanam — revealed after video fully expands */}
+        <div className='max-w-7xl mx-auto'>
+          {/* About heading + description */}
+          <div className='text-center mb-16'>
+            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
+              Our Story
+            </p>
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-6'>
+              About MVM Aasanam
+            </h2>
+            <p className='text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed'>
+              MVM Aasanam is the premium furniture brand of Hari Shewa Enterprises, founded in 1997 in Neemuch, Madhya Pradesh. For over 30 years, we have been engineering and supplying office and cafeteria furniture trusted by corporates, institutions, and government bodies across Central India.
+            </p>
+            <p className='text-gray-400 text-base max-w-xl mx-auto mt-4 leading-relaxed'>
+              ISO 9001 & ISO 22000 certified. Empanelled supplier on the Government e-Marketplace (GeM). Designed to perform.
+            </p>
+          </div>
+
+          {/* Stats grid */}
+          <div className='grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16'>
+            {STATS.map((s) => (
+              <div key={s.label} className='text-center'>
+                <p className='text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
+                <p className='text-sm text-gray-500 mt-1'>{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
+            <a
+              href='https://wa.me/919131438300'
+              className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-8 py-3 rounded-full hover:bg-gray-700 transition-colors'
+            >
+              <MessageCircle className='w-5 h-5' />
+              Get a Free Quote
+            </a>
+            <a
+              href='#collections'
+              className='inline-flex items-center gap-2 border border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-full hover:bg-gray-50 transition-colors'
+            >
+              View Products
+            </a>
+          </div>
+        </div>
+      </ScrollExpandMedia>
       <LandingContent />
     </div>
   )
