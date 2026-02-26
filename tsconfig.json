@@ -20,5 +20,5 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src", "components"]
+  "include": ["src", "components", "lib"]
 }

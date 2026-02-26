@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import ScrollExpandMedia from '../components/blocks/scroll-expansion-hero'
+import { GlareCard } from '../components/ui/glare-card'
 import {
   Menu,
   X,
-  ArrowUpRight,
   MapPin,
   Phone,
   MessageCircle,
@@ -324,16 +324,13 @@ function LandingContent() {
             Every piece is a testament to decades of woodworking mastery, where traditional
             techniques meet modern precision.
           </p>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+          <div className='flex flex-wrap justify-center gap-6'>
             {CRAFTSMANSHIP.map((c) => (
-              <div
-                key={c.title}
-                className='bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-all'
-              >
-                <div className='text-gray-700 mb-4'>{c.icon}</div>
-                <h3 className='font-semibold text-gray-900 mb-2'>{c.title}</h3>
-                <p className='text-sm text-gray-500 leading-relaxed'>{c.description}</p>
-              </div>
+              <GlareCard key={c.title} className='flex flex-col items-start justify-start p-7'>
+                <div className='text-white/60 mb-5'>{c.icon}</div>
+                <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
+                <p className='text-sm text-white/50 leading-relaxed'>{c.description}</p>
+              </GlareCard>
             ))}
           </div>
         </div>
@@ -352,30 +349,23 @@ function LandingContent() {
             From living rooms to bedrooms, dining spaces to offices — each collection designed
             to transform your space with elegance.
           </p>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className='flex flex-wrap justify-center gap-6'>
             {COLLECTIONS.map((col) => (
-              <a
-                key={col.name}
-                href='#contact'
-                className='group relative rounded-2xl overflow-hidden aspect-[4/3] block'
-              >
+              <GlareCard key={col.name} className='relative flex flex-col justify-end'>
                 <img
                   src={col.image}
                   alt={col.name}
-                  className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
+                  className='h-full w-full absolute inset-0 object-cover'
                 />
-                <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent' />
-                <div className='absolute bottom-0 left-0 right-0 p-5 text-white'>
+                <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
+                <div className='relative z-10 p-6'>
                   <span className='text-xs font-medium text-white/60 uppercase tracking-wider'>
                     {col.count}
                   </span>
-                  <h3 className='text-xl font-bold mt-0.5'>{col.name}</h3>
-                  <p className='text-sm text-white/70 mt-1'>{col.description}</p>
+                  <h3 className='text-xl font-bold text-white mt-0.5'>{col.name}</h3>
+                  <p className='text-sm text-white/60 mt-1'>{col.description}</p>
                 </div>
-                <div className='absolute top-4 right-4 w-8 h-8 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'>
-                  <ArrowUpRight className='w-4 h-4 text-white' />
-                </div>
-              </a>
+              </GlareCard>
             ))}
           </div>
         </div>
@@ -447,26 +437,23 @@ function LandingContent() {
           <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-14'>
             What Our Customers Say
           </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+          <div className='flex flex-wrap justify-center gap-6'>
             {TESTIMONIALS.map((t) => (
-              <div
-                key={t.name}
-                className='bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-all'
-              >
+              <GlareCard key={t.name} className='flex flex-col items-start justify-end p-8'>
                 <StarRow />
-                <blockquote className='text-gray-600 mt-4 mb-6 leading-relaxed text-sm'>
+                <blockquote className='text-white/75 mt-4 mb-6 leading-relaxed text-sm'>
                   "{t.quote}"
                 </blockquote>
                 <div className='flex items-center gap-3'>
-                  <div className='w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold'>
+                  <div className='w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center text-sm font-bold'>
                     {t.initials}
                   </div>
                   <div>
-                    <p className='font-semibold text-gray-900 text-sm'>{t.name}</p>
-                    <p className='text-xs text-gray-400'>{t.location}</p>
+                    <p className='font-semibold text-white text-sm'>{t.name}</p>
+                    <p className='text-xs text-white/40'>{t.location}</p>
                   </div>
                 </div>
-              </div>
+              </GlareCard>
             ))}
           </div>
         </div>
