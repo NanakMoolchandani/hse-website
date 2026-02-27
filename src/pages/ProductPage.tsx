@@ -84,7 +84,7 @@ export default function ProductPage() {
           <div
             style={{
               position: 'absolute',
-              left: 0,
+              left: '2rem',
               top: '15%',
               bottom: '15%',
               width: '3px',
@@ -98,7 +98,7 @@ export default function ProductPage() {
           <div
             style={{
               position: 'absolute',
-              left: 0,
+              left: '2rem',
               top: '10%',
               bottom: '10%',
               width: '6rem',
@@ -115,7 +115,7 @@ export default function ProductPage() {
           <div
             style={{
               position: 'absolute',
-              left: 0,
+              left: '2rem',
               top: 0,
               bottom: 0,
               width: '60%',
@@ -129,7 +129,7 @@ export default function ProductPage() {
           <div
             style={{
               position: 'absolute',
-              left: 0,
+              left: '2rem',
               top: '50%',
               transform: 'translate(-10%, -50%)',
               width: '16rem',

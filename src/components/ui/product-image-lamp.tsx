@@ -47,14 +47,15 @@ export function ProductImageLamp({
         className
       )}
     >
-      {/* 1. Vertical light bar — sharp bright edge on left */}
+      {/* 1. Vertical light bar — sharp bright edge, offset from left */}
       <motion.div
         initial={{ height: "0%", opacity: 0 }}
         whileInView={{ height: isCard ? "60%" : "70%", opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute left-0 top-1/2 z-30"
+        className="absolute top-1/2 z-30"
         style={{
+          left: isCard ? "0.75rem" : "1.5rem",
           width: "3px",
           background: `linear-gradient(to bottom, transparent, ${colorLight}, ${color}, ${colorLight}, transparent)`,
           transform: "translateY(-50%)",
@@ -68,8 +69,9 @@ export function ProductImageLamp({
         whileInView={{ opacity: 0.6, scaleY: 1 }}
         transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute left-0 top-1/2 z-10 pointer-events-none"
+        className="absolute top-1/2 z-10 pointer-events-none"
         style={{
+          left: isCard ? "0.75rem" : "1.5rem",
           width: isCard ? "4rem" : "6rem",
           height: isCard ? "70%" : "80%",
           transform: "translate(-30%, -50%)",
@@ -84,8 +86,9 @@ export function ProductImageLamp({
         whileInView={{ opacity: 1, scaleX: 1 }}
         transition={{ delay: 0.3, duration: 0.9, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute left-0 top-0 bottom-0 z-[5] pointer-events-none"
+        className="absolute top-0 bottom-0 z-[5] pointer-events-none"
         style={{
+          left: isCard ? "0.75rem" : "1.5rem",
           width: "70%",
           background: `linear-gradient(to right, ${color}22, ${color}08 40%, transparent 80%)`,
           transformOrigin: "left center",
@@ -100,7 +103,7 @@ export function ProductImageLamp({
         viewport={{ once: true }}
         className="absolute z-10 pointer-events-none"
         style={{
-          left: 0,
+          left: isCard ? "0.75rem" : "1.5rem",
           top: "50%",
           transform: "translate(-10%, -50%)",
           width: isCard ? "10rem" : "16rem",
@@ -118,7 +121,7 @@ export function ProductImageLamp({
         viewport={{ once: true }}
         className="absolute z-[5] pointer-events-none"
         style={{
-          left: 0,
+          left: isCard ? "0.75rem" : "1.5rem",
           top: "50%",
           width: isCard ? "60%" : "65%",
           height: "3px",
@@ -136,7 +139,7 @@ export function ProductImageLamp({
         viewport={{ once: true }}
         className="absolute z-[5] pointer-events-none"
         style={{
-          left: 0,
+          left: isCard ? "0.75rem" : "1.5rem",
           top: "50%",
           width: isCard ? "60%" : "65%",
           height: "3px",
@@ -170,8 +173,9 @@ export function ProductImageLamp({
 
       {/* Light spill — horizontal glow washing over the chair from left */}
       <div
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-[1] rounded-full opacity-15 blur-3xl pointer-events-none"
+        className="absolute top-1/2 -translate-y-1/2 z-[1] rounded-full opacity-15 blur-3xl pointer-events-none"
         style={{
+          left: isCard ? "0.75rem" : "1.5rem",
           background: `radial-gradient(ellipse at left, ${color}, transparent 70%)`,
           width: "80%",
           height: "60%",
