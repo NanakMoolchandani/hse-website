@@ -11,14 +11,17 @@ import { ChevronRight, Share2, Check } from 'lucide-react'
 
 const VIEW_LABELS = ['Front View', 'Side View', 'Rear View', 'Detail', 'Close Up']
 
-const CATEGORY_GLOW: Record<string, { color: string; colorLight: string }> = {
-  EXECUTIVE_CHAIRS: { color: '#f59e0b', colorLight: '#fbbf24' },
-  ERGONOMIC_TASK_CHAIRS: { color: '#06b6d4', colorLight: '#22d3ee' },
-  CAFETERIA_FURNITURE: { color: '#f97316', colorLight: '#fb923c' },
-  VISITOR_RECEPTION: { color: '#8b5cf6', colorLight: '#a78bfa' },
-  CONFERENCE_MEETING: { color: '#10b981', colorLight: '#34d399' },
+const CATEGORY_GLOW: Record<string, {
+  left: string; leftLight: string
+  right: string; rightLight: string
+}> = {
+  EXECUTIVE_CHAIRS:      { left: '#f59e0b', leftLight: '#fbbf24', right: '#8b5cf6', rightLight: '#a78bfa' },
+  ERGONOMIC_TASK_CHAIRS: { left: '#06b6d4', leftLight: '#22d3ee', right: '#f43f5e', rightLight: '#fb7185' },
+  CAFETERIA_FURNITURE:   { left: '#f97316', leftLight: '#fb923c', right: '#3b82f6', rightLight: '#60a5fa' },
+  VISITOR_RECEPTION:     { left: '#8b5cf6', leftLight: '#a78bfa', right: '#f59e0b', rightLight: '#fbbf24' },
+  CONFERENCE_MEETING:    { left: '#10b981', leftLight: '#34d399', right: '#f43f5e', rightLight: '#fb7185' },
 }
-const DEFAULT_GLOW = { color: '#06b6d4', colorLight: '#22d3ee' }
+const DEFAULT_GLOW = { left: '#06b6d4', leftLight: '#22d3ee', right: '#f43f5e', rightLight: '#fb7185' }
 
 export default function ProductPage() {
   const { category, slug } = useParams<{ category: string; slug: string }>()
@@ -63,7 +66,7 @@ export default function ProductPage() {
       : product.raw_photo_urls || []
     const features = product.metadata?.features || []
     const productCategory = getCategoryByEnum(product.category || '')
-    const { color, colorLight } = CATEGORY_GLOW[product.category || ''] || DEFAULT_GLOW
+    const glow = CATEGORY_GLOW[product.category || ''] || DEFAULT_GLOW
 
     return images.map((img, i) => ({
       id: `img-${i}`,
@@ -80,68 +83,17 @@ export default function ProductPage() {
           <img src={img} alt="" className="fx-bg-img" />
           <div className="fx-bg-overlay" />
 
-          {/* Full-height vertical light bar — uniform, solid color */}
-          <div
-            style={{
-              position: 'absolute',
-              left: '2rem',
-              top: 0,
-              bottom: 0,
-              width: '3px',
-              background: colorLight,
-              boxShadow: `0 0 18px 4px ${color}`,
-              zIndex: 30,
-              opacity: 0.6,
-            }}
-          />
+          {/* ——— LEFT LAMP ——— */}
+          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '3px', background: glow.leftLight, boxShadow: `0 0 18px 4px ${glow.left}`, zIndex: 30, opacity: 0.6 }} />
+          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '7rem', background: glow.left, filter: 'blur(28px)', opacity: 0.35, transform: 'translateX(-30%)', zIndex: 10, pointerEvents: 'none' as const }} />
+          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '45%', background: `linear-gradient(to right, ${glow.left}30, ${glow.left}12 40%, ${glow.left}04 70%, transparent)`, zIndex: 5, pointerEvents: 'none' as const, opacity: 0.3 }} />
+          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '40%', opacity: 0.08, background: `linear-gradient(to right, ${glow.left}, transparent 65%)`, filter: 'blur(30px)', zIndex: 1, pointerEvents: 'none' as const }} />
 
-          {/* Full-height glow bloom — uniform solid color + blur */}
-          <div
-            style={{
-              position: 'absolute',
-              left: '2rem',
-              top: 0,
-              bottom: 0,
-              width: '7rem',
-              background: color,
-              filter: 'blur(28px)',
-              opacity: 0.35,
-              transform: 'translateX(-30%)',
-              zIndex: 10,
-              pointerEvents: 'none',
-            }}
-          />
-
-          {/* Light wash — uniform full height, fades rightward to image area */}
-          <div
-            style={{
-              position: 'absolute',
-              left: '2rem',
-              top: 0,
-              bottom: 0,
-              width: '55%',
-              background: `linear-gradient(to right, ${color}30, ${color}12 40%, ${color}04 70%, transparent)`,
-              zIndex: 5,
-              pointerEvents: 'none',
-              opacity: 0.3,
-            }}
-          />
-
-          {/* Soft uniform side glow */}
-          <div
-            style={{
-              position: 'absolute',
-              left: '2rem',
-              top: 0,
-              bottom: 0,
-              width: '50%',
-              opacity: 0.08,
-              background: `linear-gradient(to right, ${color}, transparent 65%)`,
-              filter: 'blur(30px)',
-              zIndex: 1,
-              pointerEvents: 'none',
-            }}
-          />
+          {/* ——— RIGHT LAMP ——— */}
+          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '3px', background: glow.rightLight, boxShadow: `0 0 18px 4px ${glow.right}`, zIndex: 30, opacity: 0.6 }} />
+          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '7rem', background: glow.right, filter: 'blur(28px)', opacity: 0.35, transform: 'translateX(30%)', zIndex: 10, pointerEvents: 'none' as const }} />
+          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '45%', background: `linear-gradient(to left, ${glow.right}30, ${glow.right}12 40%, ${glow.right}04 70%, transparent)`, zIndex: 5, pointerEvents: 'none' as const, opacity: 0.3 }} />
+          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '40%', opacity: 0.08, background: `linear-gradient(to left, ${glow.right}, transparent 65%)`, filter: 'blur(30px)', zIndex: 1, pointerEvents: 'none' as const }} />
         </>
       ),
     }))
