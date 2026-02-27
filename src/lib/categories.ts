@@ -14,7 +14,7 @@ export const CATEGORIES: CategoryInfo[] = [
     label: 'Executive Chairs',
     series: 'Boss Series',
     description: 'Premium leather executive chairs for cabins and boardrooms',
-    image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1571624436279-b272aff752b5?w=600&q=80',
   },
   {
     slug: 'ergonomic-task-chairs',
@@ -22,7 +22,7 @@ export const CATEGORIES: CategoryInfo[] = [
     label: 'Ergonomic Task Chairs',
     series: 'Mesh Pro',
     description: 'All-day comfort with lumbar support, breathable mesh back and full adjustability',
-    image: 'https://images.unsplash.com/photo-1497366754035-f200968a7db3?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
   },
   {
     slug: 'cafeteria-furniture',
