@@ -245,14 +245,16 @@ const ScrollExpandMedia = ({
             </div>
 
             {/* Children section — fades in after full expansion */}
-            <motion.section
-              className='flex flex-col w-full px-6 py-16 md:px-10 lg:py-24'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showContent ? 1 : 0 }}
-              transition={{ duration: 0.7 }}
-            >
-              {children}
-            </motion.section>
+            {children && (
+              <motion.section
+                className='flex flex-col w-full px-6 py-16 md:px-10 lg:py-24'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: showContent ? 1 : 0 }}
+                transition={{ duration: 0.7 }}
+              >
+                {children}
+              </motion.section>
+            )}
           </div>
         </div>
       </section>

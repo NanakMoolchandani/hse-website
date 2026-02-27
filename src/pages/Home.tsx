@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero'
+import ChairExplosionSection from '@/src/components/ui/chair-explosion-section'
 import { GlareCard } from '@/components/ui/glare-card'
 import {
   MapPin,
@@ -171,30 +172,19 @@ export default function Home() {
     <>
       <ScrollExpandMedia
         mediaType='video'
-        mediaSrc='https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4'
-        posterSrc='https://images.pexels.com/photos/7539887/pexels-photo-7539887.jpeg?auto=compress&cs=tinysrgb&w=1920'
-        bgImageSrc='https://images.pexels.com/photos/7539887/pexels-photo-7539887.jpeg?auto=compress&cs=tinysrgb&w=1920'
+        mediaSrc='https://videos.pexels.com/video-files/8347237/8347237-hd_1920_1080_25fps.mp4'
+        posterSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
+        bgImageSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
         title='MVM Aasanam'
         date='Est. 1997 · Neemuch, MP'
         scrollToExpand='Scroll to explore'
         textBlend
-      >
-        <div className='max-w-7xl mx-auto'>
-          <div className='text-center mb-16'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-              Our Story
-            </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-6'>
-              About MVM Aasanam
-            </h2>
-            <p className='text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed'>
-              MVM Aasanam is the premium furniture brand of Hari Shewa Enterprises, founded in 1997 in Neemuch, Madhya Pradesh. For over 30 years, we have been engineering and supplying office and cafeteria furniture trusted by corporates, institutions, and government bodies across Central India.
-            </p>
-            <p className='text-gray-400 text-base max-w-xl mx-auto mt-4 leading-relaxed'>
-              ISO 9001 & ISO 22000 certified. Empanelled supplier on the Government e-Marketplace (GeM). Designed to perform.
-            </p>
-          </div>
-          <div className='grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16'>
+      />
+
+      <div className='bg-white'>
+        {/* Stats Bar */}
+        <section className='border-y border-gray-100 py-10 md:py-14'>
+          <div className='max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
             {STATS.map((s) => (
               <div key={s.label} className='text-center'>
                 <p className='text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
@@ -202,7 +192,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
+          <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mt-10'>
             <a
               href='https://wa.me/919131438300'
               className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-8 py-3 rounded-full hover:bg-gray-700 transition-colors'
@@ -217,22 +207,12 @@ export default function Home() {
               View Products
             </a>
           </div>
-        </div>
-      </ScrollExpandMedia>
+        </section>
+      </div>
+
+      <ChairExplosionSection />
 
       <div className='bg-white'>
-        {/* Stats Bar */}
-        <section className='border-y border-gray-100 py-10 md:py-14'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
-            {STATS.map((s) => (
-              <div key={s.label} className='text-center'>
-                <p className='text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
-                <p className='text-sm text-gray-500 mt-1'>{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Why Us */}
         <section id='technology' className='py-20 md:py-28'>
           <div className='max-w-7xl mx-auto px-6 lg:px-10'>
