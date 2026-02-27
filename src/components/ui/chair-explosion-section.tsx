@@ -94,7 +94,7 @@ export default function ChairExplosionSection() {
     // Create ScrollTrigger immediately so section stays pinned
     const frameObj = { frame: 0 }
 
-    gsap.to(frameObj, {
+    const tween = gsap.to(frameObj, {
       frame: TOTAL_FRAMES - 1,
       ease: 'none',
       scrollTrigger: {
@@ -117,9 +117,10 @@ export default function ChairExplosionSection() {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
-      ScrollTrigger.getAll().forEach((t) => {
-        if (t.trigger === section) t.kill()
-      })
+      tween.scrollTrigger?.kill()
+      tween.kill()
+      // Clear any remaining pinned styles
+      gsap.set(section, { clearProps: 'all' })
     }
   }, [])
 

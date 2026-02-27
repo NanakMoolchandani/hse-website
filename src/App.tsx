@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Menu, X, MessageCircle, ChevronDown } from 'lucide-react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CATEGORIES } from '@/src/lib/categories'
 import Home from '@/src/pages/Home'
 import CategoryPage from '@/src/pages/CategoryPage'
 import ProductPage from '@/src/pages/ProductPage'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -220,8 +226,28 @@ function Navbar() {
 export default function App() {
   const location = useLocation()
 
-  // Scroll to top on route change (unless it's a hash navigation)
+  // Kill all GSAP ScrollTriggers and reset scroll on route change
   useEffect(() => {
+    ScrollTrigger.getAll().forEach((t) => t.kill())
+    ScrollTrigger.clearScrollMemory()
+    ScrollTrigger.refresh()
+
+    // Clear any leftover inline styles from GSAP pins
+    document.querySelectorAll('[style*="position: fixed"], [style*="transform"]').forEach((el) => {
+      if (el.closest('[data-gsap-pinned]') || el.getAttribute('style')?.includes('pin-spacer')) {
+        gsap.set(el, { clearProps: 'all' })
+      }
+    })
+
+    // Remove any GSAP pin-spacer wrapper elements
+    document.querySelectorAll('.pin-spacer').forEach((spacer) => {
+      const child = spacer.firstElementChild
+      if (child) {
+        spacer.parentElement?.insertBefore(child, spacer)
+        spacer.remove()
+      }
+    })
+
     if (!location.hash) {
       window.scrollTo(0, 0)
     }
