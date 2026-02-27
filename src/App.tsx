@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Menu, X, MessageCircle, ChevronDown } from 'lucide-react'
 import { gsap } from 'gsap'
@@ -225,28 +225,25 @@ function Navbar() {
 
 export default function App() {
   const location = useLocation()
+  const prevPathRef = useRef(location.pathname)
 
-  // Kill all GSAP ScrollTriggers and reset scroll on route change
+  // Kill GSAP ScrollTriggers only when navigating AWAY (not on initial mount)
   useEffect(() => {
-    ScrollTrigger.getAll().forEach((t) => t.kill())
-    ScrollTrigger.clearScrollMemory()
-    ScrollTrigger.refresh()
+    if (prevPathRef.current !== location.pathname) {
+      prevPathRef.current = location.pathname
 
-    // Clear any leftover inline styles from GSAP pins
-    document.querySelectorAll('[style*="position: fixed"], [style*="transform"]').forEach((el) => {
-      if (el.closest('[data-gsap-pinned]') || el.getAttribute('style')?.includes('pin-spacer')) {
-        gsap.set(el, { clearProps: 'all' })
-      }
-    })
+      ScrollTrigger.getAll().forEach((t) => t.kill())
+      ScrollTrigger.clearScrollMemory()
 
-    // Remove any GSAP pin-spacer wrapper elements
-    document.querySelectorAll('.pin-spacer').forEach((spacer) => {
-      const child = spacer.firstElementChild
-      if (child) {
-        spacer.parentElement?.insertBefore(child, spacer)
-        spacer.remove()
-      }
-    })
+      // Remove any GSAP pin-spacer wrapper elements
+      document.querySelectorAll('.pin-spacer').forEach((spacer) => {
+        const child = spacer.firstElementChild
+        if (child) {
+          spacer.parentElement?.insertBefore(child, spacer)
+          spacer.remove()
+        }
+      })
+    }
 
     if (!location.hash) {
       window.scrollTo(0, 0)
