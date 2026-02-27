@@ -1,163 +1,142 @@
 'use client'
 
-import { useRef, useId, useEffect, type CSSProperties } from 'react'
-import { animate, useMotionValue, type AnimationPlaybackControls } from 'framer-motion'
+import { motion } from 'framer-motion'
+import type { CSSProperties } from 'react'
 
-function mapRange(
-  value: number,
-  fromLow: number,
-  fromHigh: number,
-  toLow: number,
-  toHigh: number
-): number {
-  if (fromLow === fromHigh) return toLow
-  return toLow + ((value - fromLow) / (fromHigh - fromLow)) * (toHigh - toLow)
+interface BlobConfig {
+  /** x position as % */
+  x: number
+  /** y position as % */
+  y: number
+  /** size in vw */
+  size: number
+  /** color */
+  color: string
+  /** animation duration in seconds */
+  duration: number
+  /** movement range in % */
+  range: number
+  /** delay in seconds */
+  delay: number
 }
 
 interface EtherealShadowProps {
-  /** CSS color for the shadow effect */
-  color?: string
-  /** Animation scale (0-100) and speed (0-100) */
-  animation?: { scale: number; speed: number }
-  /** Noise overlay opacity (0-1) */
-  noise?: { opacity: number }
+  /** Array of blob colors — defaults to moody grays/blues */
+  colors?: string[]
+  /** Overall animation speed multiplier (lower = slower, default 1) */
+  speed?: number
+  /** Blur amount in px (default 80) */
+  blur?: number
+  /** Whether to show noise grain overlay */
+  noise?: boolean
   style?: CSSProperties
   className?: string
 }
 
+const DEFAULT_BLOBS: BlobConfig[] = [
+  { x: 25, y: 30, size: 40, color: 'rgba(80, 80, 110, 0.6)', duration: 20, range: 15, delay: 0 },
+  { x: 70, y: 60, size: 35, color: 'rgba(60, 65, 90, 0.5)', duration: 25, range: 12, delay: 2 },
+  { x: 50, y: 20, size: 45, color: 'rgba(90, 85, 100, 0.4)', duration: 30, range: 18, delay: 4 },
+  { x: 30, y: 70, size: 30, color: 'rgba(70, 75, 95, 0.5)', duration: 22, range: 10, delay: 1 },
+  { x: 80, y: 25, size: 25, color: 'rgba(55, 60, 85, 0.45)', duration: 28, range: 14, delay: 3 },
+]
+
 export function EtherealShadow({
-  color = 'rgba(100, 100, 120, 1)',
-  animation,
-  noise,
+  colors,
+  speed = 1,
+  blur = 80,
+  noise = true,
   style,
   className,
 }: EtherealShadowProps) {
-  const rawId = useId()
-  const id = `ethereal-${rawId.replace(/:/g, '')}`
-  const animationEnabled = !!(animation && animation.scale > 0)
-  const feColorMatrixRef = useRef<SVGFEColorMatrixElement>(null)
-  const hueRotateMotionValue = useMotionValue(180)
-  const hueRotateAnimation = useRef<AnimationPlaybackControls | null>(null)
-
-  const displacementScale = animation ? mapRange(animation.scale, 1, 100, 20, 100) : 0
-  const animationDuration = animation ? mapRange(animation.speed, 1, 100, 1000, 50) : 1
-
-  useEffect(() => {
-    if (!feColorMatrixRef.current || !animationEnabled) return
-
-    hueRotateAnimation.current?.stop()
-    hueRotateMotionValue.set(0)
-    hueRotateAnimation.current = animate(hueRotateMotionValue, 360, {
-      duration: animationDuration / 25,
-      repeat: Infinity,
-      repeatType: 'loop',
-      repeatDelay: 0,
-      ease: 'linear',
-      delay: 0,
-      onUpdate: (value: number) => {
-        feColorMatrixRef.current?.setAttribute('values', String(value))
-      },
-    })
-
-    return () => { hueRotateAnimation.current?.stop() }
-  }, [animationEnabled, animationDuration, hueRotateMotionValue])
+  const blobs = colors
+    ? DEFAULT_BLOBS.map((b, i) => ({ ...b, color: colors[i % colors.length] }))
+    : DEFAULT_BLOBS
 
   return (
     <div
       className={className}
       style={{
-        overflow: 'hidden',
         position: 'relative',
         width: '100%',
         height: '100%',
+        overflow: 'hidden',
+        background: '#000',
         ...style,
       }}
     >
-      {/* SVG filter definition (zero-size, just defines the filter) */}
-      {animationEnabled && (
-        <svg style={{ position: 'absolute', width: 0, height: 0 }}>
-          <defs>
-            <filter id={id} colorInterpolationFilters="sRGB">
-              <feTurbulence
-                result="undulation"
-                numOctaves="2"
-                baseFrequency={`${mapRange(animation!.scale, 0, 100, 0.001, 0.0005)},${mapRange(animation!.scale, 0, 100, 0.004, 0.002)}`}
-                seed="0"
-                type="turbulence"
-              />
-              <feColorMatrix
-                ref={feColorMatrixRef}
-                in="undulation"
-                type="hueRotate"
-                values="180"
-              />
-              <feColorMatrix
-                in="dist"
-                result="circulation"
-                type="matrix"
-                values="4 0 0 0 1  4 0 0 0 1  4 0 0 0 1  1 0 0 0 0"
-              />
-              <feDisplacementMap
-                in="SourceGraphic"
-                in2="circulation"
-                scale={displacementScale}
-                result="dist"
-              />
-              <feDisplacementMap
-                in="dist"
-                in2="undulation"
-                scale={displacementScale}
-                result="output"
-              />
-            </filter>
-          </defs>
-        </svg>
-      )}
-
-      {/* Animated shadow blobs — pure CSS gradients, no external images */}
+      {/* Animated blobs layer */}
       <div
         style={{
           position: 'absolute',
-          inset: animationEnabled ? -displacementScale : 0,
-          filter: animationEnabled ? `url(#${id}) blur(4px)` : 'none',
+          inset: 0,
+          filter: `blur(${blur}px)`,
+          willChange: 'transform',
         }}
       >
-        {/* Central blob */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `radial-gradient(ellipse 80% 70% at 50% 50%, ${color}, transparent 70%)`,
-        }} />
-        {/* Upper-left accent */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `radial-gradient(ellipse 60% 50% at 25% 30%, ${color}, transparent 70%)`,
-          opacity: 0.7,
-        }} />
-        {/* Lower-right accent */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `radial-gradient(ellipse 55% 55% at 75% 65%, ${color}, transparent 70%)`,
-          opacity: 0.5,
-        }} />
-        {/* Bottom wash */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `radial-gradient(ellipse 90% 40% at 50% 90%, ${color}, transparent 70%)`,
-          opacity: 0.4,
-        }} />
+        {blobs.map((blob, i) => (
+          <motion.div
+            key={i}
+            initial={{
+              x: `${blob.x - blob.size / 2}vw`,
+              y: `${blob.y - blob.size / 2}vh`,
+            }}
+            animate={{
+              x: [
+                `${blob.x - blob.size / 2}vw`,
+                `${blob.x - blob.size / 2 + blob.range}vw`,
+                `${blob.x - blob.size / 2 - blob.range * 0.5}vw`,
+                `${blob.x - blob.size / 2 + blob.range * 0.3}vw`,
+                `${blob.x - blob.size / 2}vw`,
+              ],
+              y: [
+                `${blob.y - blob.size / 2}vh`,
+                `${blob.y - blob.size / 2 - blob.range * 0.7}vh`,
+                `${blob.y - blob.size / 2 + blob.range}vh`,
+                `${blob.y - blob.size / 2 - blob.range * 0.4}vh`,
+                `${blob.y - blob.size / 2}vh`,
+              ],
+              scale: [1, 1.1, 0.95, 1.05, 1],
+            }}
+            transition={{
+              duration: blob.duration / speed,
+              repeat: Infinity,
+              repeatType: 'loop',
+              ease: 'easeInOut',
+              delay: blob.delay / speed,
+            }}
+            style={{
+              position: 'absolute',
+              width: `${blob.size}vw`,
+              height: `${blob.size}vw`,
+              borderRadius: '50%',
+              background: `radial-gradient(circle, ${blob.color}, transparent 70%)`,
+            }}
+          />
+        ))}
       </div>
 
-      {/* Film grain / noise — inline SVG, no external deps */}
-      {noise && noise.opacity > 0 && (
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: noise.opacity * 0.25 }}>
-          <filter id={`${id}-noise`}>
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+      {/* Noise grain overlay */}
+      {noise && (
+        <svg
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            opacity: 0.08,
+          }}
+        >
+          <filter id="ethereal-noise-grain">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.75"
+              numOctaves="4"
+              stitchTiles="stitch"
+            />
           </filter>
-          <rect width="100%" height="100%" filter={`url(#${id}-noise)`} />
+          <rect width="100%" height="100%" filter="url(#ethereal-noise-grain)" />
         </svg>
       )}
     </div>

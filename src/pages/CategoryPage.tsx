@@ -40,13 +40,7 @@ export default function CategoryPage() {
     <div className='min-h-screen bg-black text-white relative'>
       {/* Ethereal animated background — fixed behind everything */}
       <div className='fixed inset-0 z-0'>
-        <EtherealShadow
-          color='rgba(100, 100, 120, 1)'
-          animation={{ scale: 60, speed: 15 }}
-          noise={{ opacity: 0.5 }}
-        />
-        {/* Darken overlay so text remains readable */}
-        <div className='absolute inset-0 bg-black/40' />
+        <EtherealShadow speed={0.5} blur={90} noise />
       </div>
 
       {/* Content layer */}
