@@ -80,30 +80,30 @@ export default function ProductPage() {
           <img src={img} alt="" className="fx-bg-img" />
           <div className="fx-bg-overlay" />
 
-          {/* Lamp glow — vertical light bar on the left */}
+          {/* Full-height vertical light bar */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
-              top: '15%',
-              bottom: '15%',
+              top: '3%',
+              bottom: '3%',
               width: '3px',
-              background: `linear-gradient(to bottom, transparent, ${colorLight}, ${color}, ${colorLight}, transparent)`,
-              boxShadow: `0 0 15px 3px ${color}`,
+              background: `linear-gradient(to bottom, ${colorLight}40, ${colorLight}, ${color}, ${colorLight}, ${colorLight}40)`,
+              boxShadow: `0 0 18px 4px ${color}`,
               zIndex: 30,
             }}
           />
 
-          {/* Lamp glow bloom */}
+          {/* Full-height glow bloom */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
-              top: '10%',
-              bottom: '10%',
-              width: '6rem',
-              background: `radial-gradient(ellipse at center, ${color}, transparent 70%)`,
-              filter: 'blur(20px)',
+              top: '2%',
+              bottom: '2%',
+              width: '7rem',
+              background: `linear-gradient(to bottom, ${color}00, ${color}, ${color}, ${color}00)`,
+              filter: 'blur(24px)',
               opacity: 0.5,
               transform: 'translateX(-30%)',
               zIndex: 10,
@@ -111,33 +111,52 @@ export default function ProductPage() {
             }}
           />
 
-          {/* Cone of light spreading rightward */}
+          {/* Full-height light wash spreading rightward */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
               top: 0,
               bottom: 0,
-              width: '60%',
-              background: `linear-gradient(to right, ${color}22, ${color}08 40%, transparent 80%)`,
+              width: '65%',
+              background: `linear-gradient(to right, ${color}28, ${color}10 35%, ${color}04 60%, transparent 90%)`,
               zIndex: 5,
               pointerEvents: 'none',
             }}
           />
 
-          {/* Bright hotspot near the bar */}
+          {/* Three even hotspots — top, center, bottom */}
+          {['15%', '50%', '85%'].map((top, idx) => (
+            <div
+              key={idx}
+              style={{
+                position: 'absolute',
+                left: '2rem',
+                top,
+                transform: 'translate(-10%, -50%)',
+                width: '14rem',
+                height: '14rem',
+                background: `radial-gradient(circle, ${color}, transparent 65%)`,
+                filter: 'blur(25px)',
+                opacity: 0.22,
+                zIndex: 10,
+                pointerEvents: 'none',
+              }}
+            />
+          ))}
+
+          {/* Full-height light spill */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
-              top: '50%',
-              transform: 'translate(-10%, -50%)',
-              width: '16rem',
-              height: '16rem',
-              background: `radial-gradient(circle, ${color}, transparent 60%)`,
-              filter: 'blur(30px)',
-              opacity: 0.3,
-              zIndex: 10,
+              top: 0,
+              bottom: 0,
+              width: '80%',
+              opacity: 0.1,
+              background: `linear-gradient(to right, ${color}, transparent 70%)`,
+              filter: 'blur(40px)',
+              zIndex: 1,
               pointerEvents: 'none',
             }}
           />

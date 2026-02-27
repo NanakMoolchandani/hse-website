@@ -1,10 +1,6 @@
 import { motion } from "framer-motion"
 import { cn } from "@/src/lib/utils"
 
-/**
- * Category → glow color mapping (CSS hex values).
- * Executive = warm gold, Ergonomic = cyan, Cafeteria = orange, Visitor = violet.
- */
 const CATEGORY_GLOW: Record<string, { color: string; colorLight: string }> = {
   EXECUTIVE_CHAIRS: { color: "#f59e0b", colorLight: "#fbbf24" },
   ERGONOMIC_TASK_CHAIRS: { color: "#06b6d4", colorLight: "#22d3ee" },
@@ -19,15 +15,10 @@ interface ProductImageLampProps {
   src: string
   alt: string
   category?: string
-  /** card = grid cards, detail = product page hero */
   variant?: "card" | "detail"
   className?: string
 }
 
-/**
- * Product image with a vertical lamp light on the LEFT side.
- * Light shines rightward onto the chair. Color matches product category.
- */
 export function ProductImageLamp({
   src,
   alt,
@@ -38,6 +29,7 @@ export function ProductImageLamp({
   const { color, colorLight } = CATEGORY_GLOW[category || ""] || DEFAULT_GLOW
 
   const isCard = variant === "card"
+  const barLeft = isCard ? "0.75rem" : "1.5rem"
 
   return (
     <div
@@ -47,109 +39,107 @@ export function ProductImageLamp({
         className
       )}
     >
-      {/* 1. Vertical light bar — sharp bright edge, offset from left */}
+      {/* 1. Vertical light bar — full height, solid bright edge */}
       <motion.div
-        initial={{ height: "0%", opacity: 0 }}
-        whileInView={{ height: isCard ? "60%" : "70%", opacity: 1 }}
+        initial={{ scaleY: 0, opacity: 0 }}
+        whileInView={{ scaleY: 1, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute top-1/2 z-30"
+        className="absolute z-30"
         style={{
-          left: isCard ? "0.75rem" : "1.5rem",
+          left: barLeft,
+          top: "4%",
+          bottom: "4%",
           width: "3px",
-          background: `linear-gradient(to bottom, transparent, ${colorLight}, ${color}, ${colorLight}, transparent)`,
-          transform: "translateY(-50%)",
-          boxShadow: `0 0 15px 3px ${color}`,
+          background: `linear-gradient(to bottom, ${colorLight}40, ${colorLight}, ${color}, ${colorLight}, ${colorLight}40)`,
+          boxShadow: `0 0 18px 4px ${color}`,
+          transformOrigin: "center center",
         }}
       />
 
-      {/* 2. Glow bloom — soft wide glow behind the bar */}
+      {/* 2. Glow bloom — full height, even spread behind the bar */}
       <motion.div
         initial={{ opacity: 0, scaleY: 0.3 }}
-        whileInView={{ opacity: 0.6, scaleY: 1 }}
+        whileInView={{ opacity: 0.55, scaleY: 1 }}
         transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute top-1/2 z-10 pointer-events-none"
+        className="absolute z-10 pointer-events-none"
         style={{
-          left: isCard ? "0.75rem" : "1.5rem",
-          width: isCard ? "4rem" : "6rem",
-          height: isCard ? "70%" : "80%",
-          transform: "translate(-30%, -50%)",
-          background: `radial-gradient(ellipse at center, ${color}, transparent 70%)`,
-          filter: "blur(20px)",
+          left: barLeft,
+          top: "2%",
+          bottom: "2%",
+          width: isCard ? "5rem" : "7rem",
+          transform: "translateX(-30%)",
+          background: `linear-gradient(to bottom, ${color}00, ${color}, ${color}, ${color}00)`,
+          filter: "blur(24px)",
         }}
       />
 
-      {/* 3. Cone of light — spreads rightward from bar onto the chair */}
+      {/* 3. Light wash — even spread rightward, full height */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
         whileInView={{ opacity: 1, scaleX: 1 }}
         transition={{ delay: 0.3, duration: 0.9, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute top-0 bottom-0 z-[5] pointer-events-none"
-        style={{
-          left: isCard ? "0.75rem" : "1.5rem",
-          width: "70%",
-          background: `linear-gradient(to right, ${color}22, ${color}08 40%, transparent 80%)`,
-          transformOrigin: "left center",
-        }}
-      />
-
-      {/* 4. Bright hotspot — concentrated light near the bar */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 0.35 }}
-        transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="absolute z-10 pointer-events-none"
-        style={{
-          left: isCard ? "0.75rem" : "1.5rem",
-          top: "50%",
-          transform: "translate(-10%, -50%)",
-          width: isCard ? "10rem" : "16rem",
-          height: isCard ? "10rem" : "16rem",
-          background: `radial-gradient(circle, ${color}, transparent 60%)`,
-          filter: "blur(30px)",
-        }}
-      />
-
-      {/* 5. Upper fan ray */}
-      <motion.div
-        initial={{ opacity: 0, rotate: 0 }}
-        whileInView={{ opacity: 0.15, rotate: -25 }}
-        transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-        viewport={{ once: true }}
         className="absolute z-[5] pointer-events-none"
         style={{
-          left: isCard ? "0.75rem" : "1.5rem",
-          top: "50%",
-          width: isCard ? "60%" : "65%",
-          height: "3px",
-          background: `linear-gradient(to right, ${colorLight}, transparent 80%)`,
+          left: barLeft,
+          top: 0,
+          bottom: 0,
+          width: "75%",
+          background: `linear-gradient(to right, ${color}28, ${color}10 35%, ${color}04 60%, transparent 90%)`,
           transformOrigin: "left center",
-          filter: "blur(4px)",
         }}
       />
 
-      {/* 6. Lower fan ray */}
-      <motion.div
-        initial={{ opacity: 0, rotate: 0 }}
-        whileInView={{ opacity: 0.15, rotate: 25 }}
-        transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="absolute z-[5] pointer-events-none"
-        style={{
-          left: isCard ? "0.75rem" : "1.5rem",
-          top: "50%",
-          width: isCard ? "60%" : "65%",
-          height: "3px",
-          background: `linear-gradient(to right, ${colorLight}, transparent 80%)`,
-          transformOrigin: "left center",
-          filter: "blur(4px)",
-        }}
-      />
+      {/* 4. Three even hotspots — top, center, bottom (equal glow spread) */}
+      {["15%", "50%", "85%"].map((top, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.25 }}
+          transition={{ delay: 0.3 + i * 0.1, duration: 0.7, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="absolute z-10 pointer-events-none"
+          style={{
+            left: barLeft,
+            top,
+            transform: "translate(-10%, -50%)",
+            width: isCard ? "8rem" : "14rem",
+            height: isCard ? "8rem" : "14rem",
+            background: `radial-gradient(circle, ${color}, transparent 65%)`,
+            filter: "blur(25px)",
+          }}
+        />
+      ))}
 
-      {/* Product image — centered, lit by the left lamp */}
+      {/* 5. Fan rays — top, center, bottom (even spread) */}
+      {[
+        { top: "20%", rotate: -15 },
+        { top: "50%", rotate: 0 },
+        { top: "80%", rotate: 15 },
+      ].map((ray, i) => (
+        <motion.div
+          key={`ray-${i}`}
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 0.12, scaleX: 1 }}
+          transition={{ delay: 0.4 + i * 0.08, duration: 0.7, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="absolute z-[5] pointer-events-none"
+          style={{
+            left: barLeft,
+            top: ray.top,
+            width: isCard ? "65%" : "70%",
+            height: "2px",
+            background: `linear-gradient(to right, ${colorLight}, transparent 85%)`,
+            transformOrigin: "left center",
+            transform: `rotate(${ray.rotate}deg)`,
+            filter: "blur(3px)",
+          }}
+        />
+      ))}
+
+      {/* Product image — centered */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -171,14 +161,17 @@ export function ProductImageLamp({
         />
       </motion.div>
 
-      {/* Light spill — horizontal glow washing over the chair from left */}
+      {/* Light spill — full height wash from left */}
       <div
-        className="absolute top-1/2 -translate-y-1/2 z-[1] rounded-full opacity-15 blur-3xl pointer-events-none"
+        className="absolute z-[1] pointer-events-none"
         style={{
-          left: isCard ? "0.75rem" : "1.5rem",
-          background: `radial-gradient(ellipse at left, ${color}, transparent 70%)`,
-          width: "80%",
-          height: "60%",
+          left: barLeft,
+          top: 0,
+          bottom: 0,
+          width: "85%",
+          opacity: 0.12,
+          background: `linear-gradient(to right, ${color}, transparent 70%)`,
+          filter: "blur(40px)",
         }}
       />
     </div>
