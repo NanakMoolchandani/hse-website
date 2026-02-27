@@ -11,6 +11,15 @@ import { ChevronRight, Share2, Check } from 'lucide-react'
 
 const VIEW_LABELS = ['Front View', 'Side View', 'Rear View', 'Detail', 'Close Up']
 
+const CATEGORY_GLOW: Record<string, { color: string; colorLight: string }> = {
+  EXECUTIVE_CHAIRS: { color: '#f59e0b', colorLight: '#fbbf24' },
+  ERGONOMIC_TASK_CHAIRS: { color: '#06b6d4', colorLight: '#22d3ee' },
+  CAFETERIA_FURNITURE: { color: '#f97316', colorLight: '#fb923c' },
+  VISITOR_RECEPTION: { color: '#8b5cf6', colorLight: '#a78bfa' },
+  CONFERENCE_MEETING: { color: '#10b981', colorLight: '#34d399' },
+}
+const DEFAULT_GLOW = { color: '#06b6d4', colorLight: '#22d3ee' }
+
 export default function ProductPage() {
   const { category, slug } = useParams<{ category: string; slug: string }>()
   const [product, setProduct] = useState<CatalogProduct | null>(null)
@@ -54,6 +63,7 @@ export default function ProductPage() {
       : product.raw_photo_urls || []
     const features = product.metadata?.features || []
     const productCategory = getCategoryByEnum(product.category || '')
+    const { color, colorLight } = CATEGORY_GLOW[product.category || ''] || DEFAULT_GLOW
 
     return images.map((img, i) => ({
       id: `img-${i}`,
@@ -63,6 +73,76 @@ export default function ProductPage() {
       rightLabel: i === 0
         ? productCategory?.series || 'MVM Aasanam'
         : features[i - 1]?.label || productCategory?.label || 'Premium Quality',
+      renderBackground: () => (
+        <>
+          {/* Product image backgrounds */}
+          <img src={img} alt="" className="fx-bg-fill" />
+          <img src={img} alt="" className="fx-bg-img" />
+          <div className="fx-bg-overlay" />
+
+          {/* Lamp glow — vertical light bar on the left */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: '15%',
+              bottom: '15%',
+              width: '3px',
+              background: `linear-gradient(to bottom, transparent, ${colorLight}, ${color}, ${colorLight}, transparent)`,
+              boxShadow: `0 0 15px 3px ${color}`,
+              zIndex: 30,
+            }}
+          />
+
+          {/* Lamp glow bloom */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: '10%',
+              bottom: '10%',
+              width: '6rem',
+              background: `radial-gradient(ellipse at center, ${color}, transparent 70%)`,
+              filter: 'blur(20px)',
+              opacity: 0.5,
+              transform: 'translateX(-30%)',
+              zIndex: 10,
+              pointerEvents: 'none',
+            }}
+          />
+
+          {/* Cone of light spreading rightward */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: '60%',
+              background: `linear-gradient(to right, ${color}22, ${color}08 40%, transparent 80%)`,
+              zIndex: 5,
+              pointerEvents: 'none',
+            }}
+          />
+
+          {/* Bright hotspot near the bar */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: '50%',
+              transform: 'translate(-10%, -50%)',
+              width: '16rem',
+              height: '16rem',
+              background: `radial-gradient(circle, ${color}, transparent 60%)`,
+              filter: 'blur(30px)',
+              opacity: 0.3,
+              zIndex: 10,
+              pointerEvents: 'none',
+            }}
+          />
+        </>
+      ),
     }))
   }, [product])
 

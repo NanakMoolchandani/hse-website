@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import type { CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryByEnum } from '@/src/lib/categories'
+import { ProductImageLamp } from '@/src/components/ui/product-image-lamp'
 
 interface ProductCardProps {
   product: CatalogProduct
@@ -36,29 +37,25 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Link
       ref={cardRef}
       to={`/products/${categorySlug}/${product.slug}`}
-      className='group block bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-xl transition-all duration-300'
+      className='group block bg-white rounded-2xl overflow-hidden border border-gray-800/20 hover:border-gray-600/30 hover:shadow-xl hover:shadow-black/20 transition-all duration-300'
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ transition: 'transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease' }}
     >
-      <div className='aspect-square bg-gray-50 overflow-hidden relative'>
-        {image ? (
-          <img
-            src={image}
-            alt={product.name || 'Product'}
-            className='w-full h-full object-contain transition-transform duration-500 group-hover:scale-110'
-            loading='lazy'
-          />
-        ) : (
-          <div className='w-full h-full flex items-center justify-center text-gray-300'>
-            <svg className='w-16 h-16' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
-            </svg>
-          </div>
-        )}
-        {/* Subtle shine effect on hover */}
-        <div className='absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/0 group-hover:from-white/10 group-hover:via-white/5 group-hover:to-white/0 transition-all duration-500 pointer-events-none' />
-      </div>
+      {image ? (
+        <ProductImageLamp
+          src={image}
+          alt={product.name || 'Product'}
+          category={product.category || ''}
+          variant='card'
+        />
+      ) : (
+        <div className='aspect-square bg-slate-950 overflow-hidden relative rounded-2xl flex items-center justify-center text-gray-500'>
+          <svg className='w-16 h-16' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
+          </svg>
+        </div>
+      )}
       <div className='p-4'>
         {category && (
           <span className='text-xs font-medium text-gray-400 uppercase tracking-wider'>
