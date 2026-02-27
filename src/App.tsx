@@ -7,6 +7,9 @@ import { CATEGORIES } from '@/src/lib/categories'
 import Home from '@/src/pages/Home'
 import CategoryPage from '@/src/pages/CategoryPage'
 import ProductPage from '@/src/pages/ProductPage'
+import About from '@/src/pages/About'
+import Privacy from '@/src/pages/Privacy'
+import Terms from '@/src/pages/Terms'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -16,7 +19,7 @@ if (typeof window !== 'undefined') {
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Why Us', href: '/#technology' },
+  { label: 'About', href: '/about' },
   { label: 'Products', href: null }, // dropdown
   { label: 'Features', href: '/#features' },
   { label: 'Contact', href: '/#contact' },
@@ -255,6 +258,9 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/privacy' element={<Privacy />} />
+        <Route path='/terms' element={<Terms />} />
         <Route path='/products/:category' element={<CategoryPage />} />
         <Route path='/products/:category/:slug' element={<ProductPage />} />
       </Routes>

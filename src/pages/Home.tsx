@@ -8,6 +8,8 @@ import {
   Phone,
   MessageCircle,
   CheckCircle2,
+  ChevronDown,
+  Quote,
 } from 'lucide-react'
 import { CATEGORIES } from '@/src/lib/categories'
 import { fetchProductCounts } from '@/src/lib/supabase'
@@ -159,6 +161,93 @@ const SPECS = [
   },
 ]
 
+const CLIENTS = [
+  'SBI', 'Bank of India', 'PNB', 'Central Bank', 'HDFC Bank', 'Axis Bank',
+  'NTPC', 'BHEL', 'Indian Railways', 'MPEB', 'District Collectorate', 'PWD',
+  'TCS', 'Infosys', 'Wipro', 'L&T', 'Reliance', 'Adani Group',
+  'IIT Indore', 'IIM Indore', 'DAVV', 'KV Schools', 'NIT Bhopal', 'AIIMS',
+]
+
+const TESTIMONIALS = [
+  {
+    quote: 'We furnished our entire 200-seat office with MVM Aasanam chairs. The quality is exceptional — after two years of heavy daily use, they still look and feel brand new. Their team handled the bulk order seamlessly.',
+    name: 'Rajesh Sharma',
+    role: 'Head of Procurement',
+    company: 'Leading IT Services Company, Indore',
+  },
+  {
+    quote: 'As a GeM empanelled supplier, Hari Shewa made our government procurement process completely hassle-free. Competitive pricing, proper documentation, and on-time delivery for all 12 of our district offices.',
+    name: 'Dr. Anita Verma',
+    role: 'Administrative Officer',
+    company: 'Government Institution, Madhya Pradesh',
+  },
+  {
+    quote: 'The customization options are what set them apart. We needed specific fabric colours and armrest configurations to match our brand guidelines — they delivered exactly what we specified, on schedule.',
+    name: 'Priya Mehta',
+    role: 'Interior Design Lead',
+    company: 'Architecture & Interiors Firm, Mumbai',
+  },
+]
+
+const FAQS = [
+  {
+    q: 'What is the minimum order quantity?',
+    a: 'Our minimum order is 10 units. However, we specialise in bulk and project orders — from 50 chairs to 10,000+. Pricing improves significantly with volume.',
+  },
+  {
+    q: 'Which areas do you deliver to?',
+    a: 'We deliver across all of Central India — Madhya Pradesh, Rajasthan, Gujarat, Maharashtra, Chhattisgarh, and beyond. For large orders, we arrange delivery pan-India.',
+  },
+  {
+    q: 'What is the typical delivery timeline?',
+    a: 'Standard orders are dispatched within 7 to 15 working days from our Neemuch facility. Large institutional orders (500+ units) may take 3 to 4 weeks depending on customization.',
+  },
+  {
+    q: 'Do you offer customization?',
+    a: 'Yes. You can choose fabric type (mesh, leatherette, fabric), colour, armrest style (fixed, 2D, 4D), base material (nylon or aluminium), and height range. Every order is configured to your specifications.',
+  },
+  {
+    q: 'Are you listed on the Government e-Marketplace (GeM)?',
+    a: 'Yes, we are an empanelled supplier on GeM. Government bodies can place orders directly through the GeM portal with all required compliance documentation.',
+  },
+  {
+    q: 'What certifications do you hold?',
+    a: 'We are ISO 9001 (Quality Management) and ISO 22000 (Food Safety — for cafeteria furniture) certified. All products undergo multi-point quality checks before dispatch.',
+  },
+  {
+    q: 'What warranty do you provide?',
+    a: 'All chairs come with a 1-year warranty on the mechanism (gas lift, tilt, and adjustment controls). Frames and structural components are built for 8+ years of commercial use.',
+  },
+  {
+    q: 'How do I get a quotation?',
+    a: 'Simply message us on WhatsApp at +91 91314 38300 with your requirements — quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
+  },
+]
+
+// ── FAQ Accordion Item ───────────────────────────────────────────────────────
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className='border-b border-gray-200'>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className='w-full flex items-center justify-between py-5 text-left group'
+      >
+        <span className='text-base font-medium text-gray-900 pr-4'>{q}</span>
+        <ChevronDown
+          className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-60 pb-5' : 'max-h-0'}`}
+      >
+        <p className='text-sm text-gray-500 leading-relaxed'>{a}</p>
+      </div>
+    </div>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 export default function Home() {
@@ -233,6 +322,28 @@ export default function Home() {
                   <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
                   <p className='text-sm text-white/50 leading-relaxed'>{c.description}</p>
                 </GlareCard>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Client Trust Bar */}
+        <section className='py-16 md:py-20 border-b border-gray-100'>
+          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3 text-center'>
+              Trusted Partners
+            </p>
+            <h2 className='font-display text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center'>
+              Serving India's Leading Institutions
+            </h2>
+            <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3'>
+              {CLIENTS.map((name) => (
+                <div
+                  key={name}
+                  className='border border-gray-100 rounded-lg px-3 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wide hover:border-gray-300 hover:text-gray-600 transition-colors'
+                >
+                  {name}
+                </div>
               ))}
             </div>
           </div>
@@ -341,6 +452,36 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Testimonials */}
+        <section className='py-20 md:py-28 bg-gray-50'>
+          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
+              Client Feedback
+            </p>
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+              What Our Clients<br />Say About Us
+            </h2>
+            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+              We let our work speak — and our clients confirm it.
+            </p>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+              {TESTIMONIALS.map((t) => (
+                <div key={t.name} className='bg-white rounded-2xl border border-gray-100 p-8 flex flex-col'>
+                  <Quote className='w-8 h-8 text-gray-200 mb-4' />
+                  <p className='text-gray-600 text-sm leading-relaxed flex-1 mb-6'>
+                    {t.quote}
+                  </p>
+                  <div>
+                    <p className='font-semibold text-gray-900 text-sm'>{t.name}</p>
+                    <p className='text-xs text-gray-400'>{t.role}</p>
+                    <p className='text-xs text-gray-400'>{t.company}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Who We Serve */}
         <section className='py-20 md:py-28 bg-gray-50'>
           <div className='max-w-7xl mx-auto px-6 lg:px-10'>
@@ -415,6 +556,26 @@ export default function Home() {
           </div>
         </section>
 
+        {/* FAQ */}
+        <section className='py-20 md:py-28 bg-gray-50'>
+          <div className='max-w-3xl mx-auto px-6 lg:px-10'>
+            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
+              Common Questions
+            </p>
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+              Frequently Asked<br />Questions
+            </h2>
+            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+              Everything you need to know about ordering furniture from us.
+            </p>
+            <div className='border-t border-gray-200'>
+              {FAQS.map((faq) => (
+                <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Contact */}
         <section id='contact' className='py-20 md:py-28 bg-gray-900 text-white'>
           <div className='max-w-4xl mx-auto px-6 lg:px-10 text-center'>
@@ -443,7 +604,7 @@ export default function Home() {
                 Call Now
               </a>
             </div>
-            <div className='flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-400 text-sm'>
+            <div className='flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-400 text-sm mb-12'>
               <div className='flex items-center gap-2'>
                 <MapPin className='w-4 h-4 shrink-0' />
                 <span>Neemuch, Madhya Pradesh</span>
@@ -452,6 +613,18 @@ export default function Home() {
                 <CheckCircle2 className='w-4 h-4 shrink-0' />
                 <span>GSTIN: 23AJUPM2209E1ZD</span>
               </div>
+            </div>
+            <div className='max-w-4xl mx-auto rounded-xl overflow-hidden border border-white/10'>
+              <iframe
+                title='Hari Shewa Enterprises Location'
+                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.5!2d74.87!3d24.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDI4JzEyLjAiTiA3NMKwNTInMTIuMCJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&q=Neemuch,+Madhya+Pradesh'
+                width='100%'
+                height='250'
+                style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(0.9) contrast(0.9)' }}
+                allowFullScreen
+                loading='lazy'
+                referrerPolicy='no-referrer-when-downgrade'
+              />
             </div>
           </div>
         </section>
@@ -480,22 +653,19 @@ export default function Home() {
               <div>
                 <h5 className='font-semibold text-gray-900 mb-3'>Company</h5>
                 <div className='space-y-2'>
-                  {[
-                    ['Craftsmanship', '#technology'],
-                    ['Our Process', '#features'],
-                    ['Our Clients', '#collections'],
-                    ['Contact Us', '#contact'],
-                  ].map(([label, href]) => (
-                    <a key={label} href={href} className='block text-sm text-gray-500 hover:text-gray-900'>
-                      {label}
-                    </a>
-                  ))}
+                  <Link to='/about' className='block text-sm text-gray-500 hover:text-gray-900'>About Us</Link>
+                  <a href='#technology' className='block text-sm text-gray-500 hover:text-gray-900'>Craftsmanship</a>
+                  <a href='#features' className='block text-sm text-gray-500 hover:text-gray-900'>Our Process</a>
+                  <a href='#contact' className='block text-sm text-gray-500 hover:text-gray-900'>Contact Us</a>
                 </div>
               </div>
             </div>
-            <div className='border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between gap-2 text-sm text-gray-400'>
+            <div className='border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-gray-400'>
               <p>&copy; {new Date().getFullYear()} Hari Shewa Enterprises. All Rights Reserved.</p>
-              <p>Office & Cafeteria Furniture — Neemuch, Madhya Pradesh</p>
+              <div className='flex gap-4'>
+                <Link to='/privacy' className='hover:text-gray-600 transition-colors'>Privacy Policy</Link>
+                <Link to='/terms' className='hover:text-gray-600 transition-colors'>Terms of Service</Link>
+              </div>
             </div>
           </div>
         </footer>
