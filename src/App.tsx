@@ -25,6 +25,9 @@ function Navbar() {
   const location = useLocation()
   const isHome = location.pathname === '/'
 
+  // Category pages have a dark background — navbar should be transparent/dark
+  const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname)
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll)
@@ -44,17 +47,29 @@ function Navbar() {
     }
   }
 
+  // Determine navbar styling based on context
+  const navBg = isCategoryPage
+    ? scrolled
+      ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
+      : 'bg-transparent'
+    : scrolled || !isHome
+      ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100'
+      : 'bg-transparent'
+
+  const textColor = isCategoryPage ? 'text-white' : 'text-gray-900'
+  const linkColor = isCategoryPage ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:opacity-70'
+  const dropdownBg = isCategoryPage
+    ? 'bg-gray-900/95 backdrop-blur-md border-white/10'
+    : 'bg-white border-gray-100'
+  const dropdownItemClass = isCategoryPage
+    ? 'text-gray-300 hover:bg-white/10 hover:text-white'
+    : 'text-gray-700 hover:bg-gray-50'
+
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled || !isHome
-            ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100'
-            : 'bg-transparent'
-        }`}
-      >
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <Link to='/' className='text-base font-bold tracking-tight font-sans text-gray-900'>
+          <Link to='/' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
             Hari Shewa Enterprises
           </Link>
           <div className='hidden md:flex items-center gap-8'>
@@ -63,7 +78,7 @@ function Navbar() {
                 <div key='products' className='relative'>
                   <button
                     onClick={() => setProductsOpen((o) => !o)}
-                    className='text-sm font-medium text-gray-700 transition-colors hover:opacity-70 inline-flex items-center gap-1'
+                    className={`text-sm font-medium transition-colors inline-flex items-center gap-1 ${linkColor}`}
                   >
                     Products
                     <ChevronDown className={`w-3 h-3 transition-transform ${productsOpen ? 'rotate-180' : ''}`} />
@@ -71,12 +86,12 @@ function Navbar() {
                   {productsOpen && (
                     <>
                       <div className='fixed inset-0 z-40' onClick={() => setProductsOpen(false)} />
-                      <div className='absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 py-2 w-56 z-50'>
+                      <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border py-2 w-56 z-50 ${dropdownBg}`}>
                         {CATEGORIES.map((cat) => (
                           <Link
                             key={cat.slug}
                             to={`/products/${cat.slug}`}
-                            className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50'
+                            className={`block px-4 py-2 text-sm ${dropdownItemClass}`}
                             onClick={() => setProductsOpen(false)}
                           >
                             {cat.label}
@@ -91,7 +106,7 @@ function Navbar() {
                   <button
                     key={l.href}
                     onClick={() => handleNavClick(l.href!)}
-                    className='text-sm font-medium text-gray-700 transition-colors hover:opacity-70'
+                    className={`text-sm font-medium transition-colors ${linkColor}`}
                   >
                     {l.label}
                   </button>
@@ -99,7 +114,7 @@ function Navbar() {
                   <Link
                     key={l.href}
                     to={l.href}
-                    className='text-sm font-medium text-gray-700 transition-colors hover:opacity-70'
+                    className={`text-sm font-medium transition-colors ${linkColor}`}
                   >
                     {l.label}
                   </Link>
@@ -108,7 +123,7 @@ function Navbar() {
                 <Link
                   key={l.href}
                   to={l.href!}
-                  className='text-sm font-medium text-gray-700 transition-colors hover:opacity-70'
+                  className={`text-sm font-medium transition-colors ${linkColor}`}
                 >
                   {l.label}
                 </Link>
@@ -117,12 +132,16 @@ function Navbar() {
           </div>
           <a
             href='https://wa.me/919131438300'
-            className='hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full bg-gray-900 text-white hover:bg-gray-700 transition-all'
+            className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
+              isCategoryPage
+                ? 'bg-white text-black hover:bg-gray-200'
+                : 'bg-gray-900 text-white hover:bg-gray-700'
+            }`}
           >
             WhatsApp Us
           </a>
           <button
-            className='md:hidden p-2 text-gray-900'
+            className={`md:hidden p-2 ${textColor}`}
             onClick={() => setOpen((o) => !o)}
           >
             {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
@@ -132,19 +151,29 @@ function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className='fixed inset-0 z-40 bg-white flex flex-col pt-16'>
+        <div className={`fixed inset-0 z-40 flex flex-col pt-16 ${
+          isCategoryPage ? 'bg-black' : 'bg-white'
+        }`}>
           <div className='flex flex-col px-6 py-8 gap-6'>
-            <Link to='/' className='text-left text-2xl font-semibold text-gray-900' onClick={() => setOpen(false)}>
+            <Link
+              to='/'
+              className={`text-left text-2xl font-semibold ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+              onClick={() => setOpen(false)}
+            >
               Home
             </Link>
             <div>
-              <p className='text-sm font-medium text-gray-400 uppercase tracking-wider mb-3'>Products</p>
+              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${
+                isCategoryPage ? 'text-gray-500' : 'text-gray-400'
+              }`}>Products</p>
               <div className='space-y-3 pl-2'>
                 {CATEGORIES.map((cat) => (
                   <Link
                     key={cat.slug}
                     to={`/products/${cat.slug}`}
-                    className='block text-lg font-medium text-gray-700'
+                    className={`block text-lg font-medium ${
+                      isCategoryPage ? 'text-gray-300' : 'text-gray-700'
+                    }`}
                     onClick={() => setOpen(false)}
                   >
                     {cat.label}
@@ -155,18 +184,26 @@ function Navbar() {
             {isHome ? (
               <button
                 onClick={() => handleNavClick('/#contact')}
-                className='text-left text-2xl font-semibold text-gray-900'
+                className={`text-left text-2xl font-semibold ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
               >
                 Contact
               </button>
             ) : (
-              <Link to='/#contact' className='text-left text-2xl font-semibold text-gray-900' onClick={() => setOpen(false)}>
+              <Link
+                to='/#contact'
+                className={`text-left text-2xl font-semibold ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+                onClick={() => setOpen(false)}
+              >
                 Contact
               </Link>
             )}
             <a
               href='https://wa.me/919131438300'
-              className='mt-4 inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full font-medium'
+              className={`mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium ${
+                isCategoryPage
+                  ? 'bg-white text-black'
+                  : 'bg-gray-900 text-white'
+              }`}
             >
               <MessageCircle className='w-4 h-4' />
               WhatsApp Us

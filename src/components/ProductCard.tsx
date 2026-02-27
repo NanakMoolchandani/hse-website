@@ -6,15 +6,18 @@ import { ProductImageLamp } from '@/src/components/ui/product-image-lamp'
 
 interface ProductCardProps {
   product: CatalogProduct
+  variant?: 'light' | 'dark'
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, variant = 'light' }: ProductCardProps) {
   const category = getCategoryByEnum(product.category || '')
   const categorySlug = category?.slug || 'executive-chairs'
   const cardRef = useRef<HTMLAnchorElement>(null)
 
   const image = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
   const featureCount = product.metadata?.features?.length || 0
+
+  const isDark = variant === 'dark'
 
   // Premium 3D tilt effect on mouse move
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -37,10 +40,14 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Link
       ref={cardRef}
       to={`/products/${categorySlug}/${product.slug}`}
-      className='group block bg-white rounded-2xl overflow-hidden border border-gray-800/20 hover:border-gray-600/30 hover:shadow-xl hover:shadow-black/20 transition-all duration-300'
+      className={`group block rounded-2xl overflow-hidden border transition-all duration-300 ${
+        isDark
+          ? 'bg-white/[0.03] border-white/[0.08] hover:border-white/20 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-white/5 backdrop-blur-sm'
+          : 'bg-white border-gray-800/20 hover:border-gray-600/30 hover:shadow-xl hover:shadow-black/20'
+      }`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ transition: 'transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease' }}
+      style={{ transition: 'transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease' }}
     >
       {image ? (
         <ProductImageLamp
@@ -58,15 +65,23 @@ export default function ProductCard({ product }: ProductCardProps) {
       )}
       <div className='p-4'>
         {category && (
-          <span className='text-xs font-medium text-gray-400 uppercase tracking-wider'>
+          <span className={`text-xs font-medium uppercase tracking-wider ${
+            isDark ? 'text-gray-500' : 'text-gray-400'
+          }`}>
             {category.series}
           </span>
         )}
-        <h3 className='font-semibold text-gray-900 mt-0.5 group-hover:text-gray-700 transition-colors'>
+        <h3 className={`font-semibold mt-0.5 transition-colors ${
+          isDark
+            ? 'text-gray-100 group-hover:text-white'
+            : 'text-gray-900 group-hover:text-gray-700'
+        }`}>
           {product.name}
         </h3>
         {featureCount > 0 && (
-          <span className='inline-flex items-center gap-1 text-xs text-gray-400 mt-1'>
+          <span className={`inline-flex items-center gap-1 text-xs mt-1 ${
+            isDark ? 'text-gray-500' : 'text-gray-400'
+          }`}>
             {featureCount} features
           </span>
         )}
