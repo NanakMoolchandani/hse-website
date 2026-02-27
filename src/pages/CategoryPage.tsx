@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { getCategoryBySlug, CATEGORIES } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import ProductCard from '@/src/components/ProductCard'
-import { EtherealShadow } from '@/src/components/ui/ethereal-shadow'
+import { BeamsBackground } from '@/src/components/ui/beams-background'
 import { ChevronRight } from 'lucide-react'
 
 export default function CategoryPage() {
@@ -37,14 +37,8 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className='min-h-screen bg-black text-white relative'>
-      {/* Ethereal animated background — fixed behind everything */}
-      <div className='fixed inset-0 z-0'>
-        <EtherealShadow speed={0.5} blur={90} noise />
-      </div>
-
-      {/* Content layer */}
-      <div className='relative z-10 pt-20'>
+    <BeamsBackground intensity='medium' className='min-h-screen text-white'>
+      <div className='pt-20'>
         {/* Breadcrumb */}
         <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-4 pb-2'>
           <nav className='flex items-center gap-1 text-sm text-gray-500'>
@@ -119,6 +113,6 @@ export default function CategoryPage() {
           )}
         </div>
       </div>
-    </div>
+    </BeamsBackground>
   )
 }
