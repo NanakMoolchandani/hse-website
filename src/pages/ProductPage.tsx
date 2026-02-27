@@ -80,82 +80,64 @@ export default function ProductPage() {
           <img src={img} alt="" className="fx-bg-img" />
           <div className="fx-bg-overlay" />
 
-          {/* Full-height vertical light bar */}
+          {/* Full-height vertical light bar — uniform, solid color */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
-              top: '3%',
-              bottom: '3%',
+              top: 0,
+              bottom: 0,
               width: '3px',
-              background: `linear-gradient(to bottom, ${colorLight}40, ${colorLight}, ${color}, ${colorLight}, ${colorLight}40)`,
+              background: colorLight,
               boxShadow: `0 0 18px 4px ${color}`,
               zIndex: 30,
+              opacity: 0.6,
             }}
           />
 
-          {/* Full-height glow bloom */}
+          {/* Full-height glow bloom — uniform solid color + blur */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
-              top: '2%',
-              bottom: '2%',
+              top: 0,
+              bottom: 0,
               width: '7rem',
-              background: `linear-gradient(to bottom, ${color}00, ${color}, ${color}, ${color}00)`,
-              filter: 'blur(24px)',
-              opacity: 0.5,
+              background: color,
+              filter: 'blur(28px)',
+              opacity: 0.35,
               transform: 'translateX(-30%)',
               zIndex: 10,
               pointerEvents: 'none',
             }}
           />
 
-          {/* Full-height light wash spreading rightward */}
+          {/* Light wash — uniform full height, fades rightward to image area */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
               top: 0,
               bottom: 0,
-              width: '65%',
-              background: `linear-gradient(to right, ${color}28, ${color}10 35%, ${color}04 60%, transparent 90%)`,
+              width: '55%',
+              background: `linear-gradient(to right, ${color}30, ${color}12 40%, ${color}04 70%, transparent)`,
               zIndex: 5,
               pointerEvents: 'none',
+              opacity: 0.3,
             }}
           />
 
-          {/* Three even hotspots — top, center, bottom */}
-          {['15%', '50%', '85%'].map((top, idx) => (
-            <div
-              key={idx}
-              style={{
-                position: 'absolute',
-                left: '2rem',
-                top,
-                transform: 'translate(-10%, -50%)',
-                width: '14rem',
-                height: '14rem',
-                background: `radial-gradient(circle, ${color}, transparent 65%)`,
-                filter: 'blur(25px)',
-                opacity: 0.22,
-                zIndex: 10,
-                pointerEvents: 'none',
-              }}
-            />
-          ))}
-
-          {/* Full-height light spill */}
+          {/* Soft uniform side glow */}
           <div
             style={{
               position: 'absolute',
               left: '2rem',
               top: 0,
               bottom: 0,
-              width: '80%',
-              opacity: 0.1,
-              background: `linear-gradient(to right, ${color}, transparent 70%)`,
-              filter: 'blur(40px)',
+              width: '50%',
+              opacity: 0.08,
+              background: `linear-gradient(to right, ${color}, transparent 65%)`,
+              filter: 'blur(30px)',
               zIndex: 1,
               pointerEvents: 'none',
             }}

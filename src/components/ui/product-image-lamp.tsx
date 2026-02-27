@@ -31,6 +31,11 @@ export function ProductImageLamp({
   const isCard = variant === "card"
   const barLeft = isCard ? "0.75rem" : "1.5rem"
 
+  // Image has p-4 (1rem) padding. Light wash should reach exactly to the image edge.
+  // Bar is at barLeft, image content starts ~1rem from each side → wash width = ~calc(100% - 2rem)
+  // But since wash starts from barLeft, we use a percentage that lands at the image boundary.
+  const washWidth = isCard ? "calc(100% - 1.75rem)" : "calc(100% - 2.5rem)"
+
   return (
     <div
       className={cn(
@@ -39,107 +44,75 @@ export function ProductImageLamp({
         className
       )}
     >
-      {/* 1. Vertical light bar — full height, solid bright edge */}
+      {/* 1. Vertical light bar — full height, uniform brightness, high beam → low beam */}
       <motion.div
         initial={{ scaleY: 0, opacity: 0 }}
-        whileInView={{ scaleY: 1, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
+        whileInView={{ scaleY: 1, opacity: [0, 1, 0.6] }}
+        transition={{ delay: 0.1, duration: 1.2, ease: "easeOut" }}
         viewport={{ once: true }}
         className="absolute z-30"
         style={{
           left: barLeft,
-          top: "4%",
-          bottom: "4%",
+          top: 0,
+          bottom: 0,
           width: "3px",
-          background: `linear-gradient(to bottom, ${colorLight}40, ${colorLight}, ${color}, ${colorLight}, ${colorLight}40)`,
+          background: colorLight,
           boxShadow: `0 0 18px 4px ${color}`,
           transformOrigin: "center center",
         }}
       />
 
-      {/* 2. Glow bloom — full height, even spread behind the bar */}
+      {/* 2. Glow bloom — full height, perfectly uniform (solid color + blur) */}
       <motion.div
-        initial={{ opacity: 0, scaleY: 0.3 }}
-        whileInView={{ opacity: 0.55, scaleY: 1 }}
-        transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+        initial={{ opacity: 0, scaleY: 0 }}
+        whileInView={{ opacity: [0, 0.7, 0.35], scaleY: 1 }}
+        transition={{ delay: 0.15, duration: 1.2, ease: "easeOut" }}
         viewport={{ once: true }}
         className="absolute z-10 pointer-events-none"
         style={{
           left: barLeft,
-          top: "2%",
-          bottom: "2%",
+          top: 0,
+          bottom: 0,
           width: isCard ? "5rem" : "7rem",
           transform: "translateX(-30%)",
-          background: `linear-gradient(to bottom, ${color}00, ${color}, ${color}, ${color}00)`,
-          filter: "blur(24px)",
+          background: color,
+          filter: "blur(28px)",
+          transformOrigin: "center center",
         }}
       />
 
-      {/* 3. Light wash — even spread rightward, full height */}
+      {/* 3. Light wash — uniform full height, fades rightward to the image edge */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
-        whileInView={{ opacity: 1, scaleX: 1 }}
-        transition={{ delay: 0.3, duration: 0.9, ease: "easeOut" }}
+        whileInView={{ opacity: [0, 0.6, 0.3], scaleX: 1 }}
+        transition={{ delay: 0.25, duration: 1.4, ease: "easeOut" }}
         viewport={{ once: true }}
         className="absolute z-[5] pointer-events-none"
         style={{
           left: barLeft,
           top: 0,
           bottom: 0,
-          width: "75%",
-          background: `linear-gradient(to right, ${color}28, ${color}10 35%, ${color}04 60%, transparent 90%)`,
+          width: washWidth,
+          background: `linear-gradient(to right, ${color}30, ${color}12 40%, ${color}04 70%, transparent)`,
           transformOrigin: "left center",
         }}
       />
 
-      {/* 4. Three even hotspots — top, center, bottom (equal glow spread) */}
-      {["15%", "50%", "85%"].map((top, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 0.25 }}
-          transition={{ delay: 0.3 + i * 0.1, duration: 0.7, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="absolute z-10 pointer-events-none"
-          style={{
-            left: barLeft,
-            top,
-            transform: "translate(-10%, -50%)",
-            width: isCard ? "8rem" : "14rem",
-            height: isCard ? "8rem" : "14rem",
-            background: `radial-gradient(circle, ${color}, transparent 65%)`,
-            filter: "blur(25px)",
-          }}
-        />
-      ))}
+      {/* 4. Soft uniform side glow — full height, constant intensity */}
+      <div
+        className="absolute z-[1] pointer-events-none"
+        style={{
+          left: barLeft,
+          top: 0,
+          bottom: 0,
+          width: washWidth,
+          opacity: 0.08,
+          background: `linear-gradient(to right, ${color}, transparent 65%)`,
+          filter: "blur(30px)",
+        }}
+      />
 
-      {/* 5. Fan rays — top, center, bottom (even spread) */}
-      {[
-        { top: "20%", rotate: -15 },
-        { top: "50%", rotate: 0 },
-        { top: "80%", rotate: 15 },
-      ].map((ray, i) => (
-        <motion.div
-          key={`ray-${i}`}
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 0.12, scaleX: 1 }}
-          transition={{ delay: 0.4 + i * 0.08, duration: 0.7, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="absolute z-[5] pointer-events-none"
-          style={{
-            left: barLeft,
-            top: ray.top,
-            width: isCard ? "65%" : "70%",
-            height: "2px",
-            background: `linear-gradient(to right, ${colorLight}, transparent 85%)`,
-            transformOrigin: "left center",
-            transform: `rotate(${ray.rotate}deg)`,
-            filter: "blur(3px)",
-          }}
-        />
-      ))}
-
-      {/* Product image — centered */}
+      {/* Product image — centered, lit by the left lamp */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -160,20 +133,6 @@ export function ProductImageLamp({
           }}
         />
       </motion.div>
-
-      {/* Light spill — full height wash from left */}
-      <div
-        className="absolute z-[1] pointer-events-none"
-        style={{
-          left: barLeft,
-          top: 0,
-          bottom: 0,
-          width: "85%",
-          opacity: 0.12,
-          background: `linear-gradient(to right, ${color}, transparent 70%)`,
-          filter: "blur(40px)",
-        }}
-      />
     </div>
   )
 }
