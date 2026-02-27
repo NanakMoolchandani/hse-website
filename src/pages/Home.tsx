@@ -119,30 +119,6 @@ const FEATURES = [
   },
 ]
 
-const TESTIMONIALS = [
-  {
-    initials: 'PJ',
-    name: 'Prakash Jain',
-    location: 'Neemuch, MP',
-    quote:
-      'Ordered 150 workstation chairs for our new office. MVM Furnishing delivered on time, quality was excellent, and the ergonomic support has made a real difference to our team.',
-  },
-  {
-    initials: 'SK',
-    name: 'Suresh Kumar',
-    location: 'Indore, MP',
-    quote:
-      'We furnished our entire cafeteria — 80 chairs and 20 tables. Pricing was very competitive and the stackable chairs are extremely practical for our space. Highly recommended.',
-  },
-  {
-    initials: 'RV',
-    name: 'Ramesh Verma',
-    location: 'Mandsaur, MP',
-    quote:
-      'Got executive chairs for our boardroom and visitor chairs for reception. Premium quality, great finish. The team was helpful right from selection to installation.',
-  },
-]
-
 const SPECS = [
   {
     heading: 'Chair Construction',
@@ -181,20 +157,6 @@ const SPECS = [
     ],
   },
 ]
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-function StarRow() {
-  return (
-    <div className='flex gap-0.5'>
-      {[1, 2, 3, 4, 5].map((i) => (
-        <svg key={i} className='w-4 h-4 fill-amber-400' viewBox='0 0 16 16'>
-          <path d='M8 0l2.47 4.94L16 5.82l-4 3.86.94 5.46L8 12.54l-4.94 2.6.94-5.46-4-3.86 5.53-.88L8 0z' />
-        </svg>
-      ))}
-    </div>
-  )
-}
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -309,29 +271,32 @@ export default function Home() {
               From executive cabins to open workstations, conference rooms to cafeterias,
               we have the right seating solution for every area of your office.
             </p>
-            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
               {CATEGORIES.map((cat) => {
                 const count = productCounts[cat.enum] || 0
                 return (
-                  <Link key={cat.slug} to={`/products/${cat.slug}`}>
-                    <GlareCard containerClassName='w-full' className='relative flex flex-col justify-end'>
+                  <Link key={cat.slug} to={`/products/${cat.slug}`} className='group block'>
+                    <div className='relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-100'>
                       <img
                         src={cat.image}
                         alt={cat.label}
-                        className='h-full w-full absolute inset-0 object-cover'
+                        className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
                       />
-                      <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
-                      <div className='relative z-10 p-6'>
-                        <span className='text-xs font-medium text-white/60 uppercase tracking-wider'>
+                      <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
+                      <div className='absolute bottom-0 left-0 right-0 p-8'>
+                        <span className='text-xs font-semibold text-white/50 uppercase tracking-widest'>
                           {cat.series}
                         </span>
-                        <h3 className='text-xl font-bold text-white mt-0.5'>{cat.label}</h3>
-                        <p className='text-sm text-white/60 mt-1'>{cat.description}</p>
+                        <h3 className='text-2xl md:text-3xl font-bold text-white mt-1'>{cat.label}</h3>
+                        <p className='text-sm text-white/60 mt-2 max-w-sm'>{cat.description}</p>
                         {count > 0 && (
-                          <p className='text-xs text-white/40 mt-2'>{count} products</p>
+                          <p className='text-xs text-white/40 mt-3'>{count} products</p>
                         )}
+                        <span className='inline-block mt-4 text-sm font-medium text-white border-b border-white/30 pb-0.5 group-hover:border-white transition-colors'>
+                          View Collection →
+                        </span>
                       </div>
-                    </GlareCard>
+                    </div>
                   </Link>
                 )
               })}
@@ -396,32 +361,41 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials */}
+        {/* Who We Serve */}
         <section className='py-20 md:py-28 bg-gray-50'>
           <div className='max-w-7xl mx-auto px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-              Testimonials
+              Our Clientele
             </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-14'>
-              Trusted by Corporates<br />Across the Region
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+              Trusted Across<br />Industries
             </h2>
-            <div className='flex flex-wrap justify-center gap-6'>
-              {TESTIMONIALS.map((t) => (
-                <GlareCard key={t.name} className='flex flex-col items-start justify-end p-8'>
-                  <StarRow />
-                  <blockquote className='text-white/75 mt-4 mb-6 leading-relaxed text-sm'>
-                    "{t.quote}"
-                  </blockquote>
-                  <div className='flex items-center gap-3'>
-                    <div className='w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center text-sm font-bold'>
-                      {t.initials}
-                    </div>
-                    <div>
-                      <p className='font-semibold text-white text-sm'>{t.name}</p>
-                      <p className='text-xs text-white/40'>{t.location}</p>
-                    </div>
-                  </div>
-                </GlareCard>
+            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+              From corporate offices to government institutions, we supply furniture to organisations
+              that demand quality, durability, and value at scale.
+            </p>
+            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6'>
+              {[
+                { label: 'Corporate Offices', icon: '🏢', desc: 'IT parks, co-working spaces, MNCs' },
+                { label: 'Government Bodies', icon: '🏛️', desc: 'GeM empanelled supplier' },
+                { label: 'Hospitals & Clinics', icon: '🏥', desc: 'OPDs, waiting areas, admin offices' },
+                { label: 'Educational Institutes', icon: '🎓', desc: 'Schools, colleges, training centres' },
+                { label: 'Banks & Finance', icon: '🏦', desc: 'Branch offices, regional HQs' },
+                { label: 'Hotels & Hospitality', icon: '🏨', desc: 'Conference halls, business centres' },
+              ].map((client) => (
+                <div key={client.label} className='text-center p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow'>
+                  <div className='text-3xl mb-3'>{client.icon}</div>
+                  <h4 className='font-semibold text-gray-900 text-sm mb-1'>{client.label}</h4>
+                  <p className='text-xs text-gray-400'>{client.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className='mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-4'>
+              {['ISO 9001 Certified', 'ISO 22000 Certified', 'GeM Empanelled', 'GST Registered', '30+ Years Experience'].map((badge) => (
+                <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
+                  <CheckCircle2 className='w-4 h-4 text-green-500 shrink-0' />
+                  <span>{badge}</span>
+                </div>
               ))}
             </div>
           </div>
@@ -433,23 +407,28 @@ export default function Home() {
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               Specifications
             </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-14'>
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
               Built to Commercial<br />Standards
             </h2>
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
+            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+              Every product meets rigorous quality benchmarks. Here's what goes into our furniture.
+            </p>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
               {SPECS.map((g) => (
-                <div key={g.heading}>
-                  <h4 className='font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200'>
-                    {g.heading}
-                  </h4>
-                  <div className='space-y-3'>
-                    {g.rows.map(([label, value]) => (
-                      <div key={label} className='flex justify-between gap-2'>
-                        <span className='text-sm text-gray-500'>{label}</span>
-                        <span className='text-sm font-medium text-gray-900 text-right'>{value}</span>
-                      </div>
-                    ))}
+                <div key={g.heading} className='rounded-2xl border border-gray-200 overflow-hidden'>
+                  <div className='bg-gray-900 px-6 py-4'>
+                    <h4 className='font-bold text-white text-sm tracking-wide uppercase'>{g.heading}</h4>
                   </div>
+                  <table className='w-full'>
+                    <tbody>
+                      {g.rows.map(([label, value], idx) => (
+                        <tr key={label} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className='px-6 py-4 text-sm text-gray-500 w-1/2'>{label}</td>
+                          <td className='px-6 py-4 text-sm font-semibold text-gray-900 text-right'>{value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               ))}
             </div>
@@ -502,7 +481,7 @@ export default function Home() {
           <div className='max-w-7xl mx-auto px-6 lg:px-10'>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-10'>
               <div>
-                <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Furnishing</h4>
+                <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Aasanam</h4>
                 <p className='text-xs text-gray-400 mb-3'>by Hari Shewa Enterprises</p>
                 <p className='text-sm text-gray-500 leading-relaxed'>
                   Office & cafeteria furniture specialists serving corporates across Central India since 1997.
@@ -524,7 +503,7 @@ export default function Home() {
                   {[
                     ['Craftsmanship', '#technology'],
                     ['Our Process', '#features'],
-                    ['Testimonials', '#collections'],
+                    ['Our Clients', '#collections'],
                     ['Contact Us', '#contact'],
                   ].map(([label, href]) => (
                     <a key={label} href={href} className='block text-sm text-gray-500 hover:text-gray-900'>
