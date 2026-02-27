@@ -7,7 +7,6 @@ import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
 import TrustBadges from '@/src/components/TrustBadges'
-import CompareTable from '@/src/components/CompareTable'
 import { ChevronRight, Share2, Check } from 'lucide-react'
 
 const VIEW_LABELS = ['Front View', 'Side View', 'Rear View', 'Detail', 'Close Up']
@@ -230,19 +229,6 @@ export default function ProductPage() {
               What makes this product special
             </h2>
             <FeatureHighlights features={features} />
-          </div>
-        )}
-
-        {/* Compare */}
-        {related.length > 0 && (
-          <div className='max-w-7xl mx-auto px-6 lg:px-10 py-12 border-t border-gray-100'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-2'>
-              Compare
-            </p>
-            <h2 className='text-2xl font-bold text-gray-900 mb-6'>
-              How it compares
-            </h2>
-            <CompareTable current={product} related={related} />
           </div>
         )}
 
