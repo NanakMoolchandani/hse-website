@@ -9,7 +9,6 @@ const CATEGORY_GLOW: Record<string, {
   ERGONOMIC_TASK_CHAIRS: { left: "#06b6d4", leftLight: "#22d3ee", right: "#f43f5e", rightLight: "#fb7185" },
   CAFETERIA_FURNITURE:   { left: "#f97316", leftLight: "#fb923c", right: "#3b82f6", rightLight: "#60a5fa" },
   VISITOR_RECEPTION:     { left: "#8b5cf6", leftLight: "#a78bfa", right: "#f59e0b", rightLight: "#fbbf24" },
-  CONFERENCE_MEETING:    { left: "#10b981", leftLight: "#34d399", right: "#f43f5e", rightLight: "#fb7185" },
 }
 
 const DEFAULT_GLOW = { left: "#06b6d4", leftLight: "#22d3ee", right: "#f43f5e", rightLight: "#fb7185" }

@@ -168,7 +168,7 @@ const SPECS = [
       ['Executive', 'High-Back Chairs'],
       ['Task', 'Mid-Back Ergonomic'],
       ['Cafeteria', 'Stackable Chairs & Tables'],
-      ['Conference', 'Meeting Room Seating'],
+      ['Visitor', 'Reception & Waiting Area'],
     ],
   },
   {

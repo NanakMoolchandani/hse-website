@@ -33,14 +33,6 @@ export const CATEGORIES: CategoryInfo[] = [
     image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',
   },
   {
-    slug: 'conference-and-meeting',
-    enum: 'CONFERENCE_MEETING',
-    label: 'Conference & Meeting',
-    series: 'Board Room',
-    description: 'Coordinated seating solutions for meeting rooms and training halls',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
-  },
-  {
     slug: 'visitor-and-reception',
     enum: 'VISITOR_RECEPTION',
     label: 'Visitor & Reception',
