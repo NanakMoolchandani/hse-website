@@ -41,10 +41,9 @@ export default function CategoryPage() {
       {/* Ethereal animated background — fixed behind everything */}
       <div className='fixed inset-0 z-0'>
         <EtherealShadow
-          color='rgba(60, 60, 70, 1)'
+          color='rgba(100, 100, 120, 1)'
           animation={{ scale: 60, speed: 15 }}
-          noise={{ opacity: 0.4, scale: 1.2 }}
-          sizing='fill'
+          noise={{ opacity: 0.5 }}
         />
         {/* Darken overlay so text remains readable */}
         <div className='absolute inset-0 bg-black/40' />
