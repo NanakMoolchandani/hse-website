@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero'
 import ChairExplosionSection from '@/src/components/ui/chair-explosion-section'
 import WaveBackground from '@/src/components/ui/wave-background'
@@ -9,11 +10,11 @@ import {
   CheckCircle2,
   ChevronDown,
 } from 'lucide-react'
-import { CATEGORIES } from '@/src/lib/categories'
+import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
 import ScrollTestimonials, { type Testimonial } from '@/src/components/ui/scroll-testimonials'
 import Footer from '@/src/components/Footer'
-import { fetchProductCounts } from '@/src/lib/supabase'
+import { fetchProductCounts, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -275,9 +276,11 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function Home() {
   const [productCounts, setProductCounts] = useState<Record<string, number>>({})
+  const [products, setProducts] = useState<CatalogProduct[]>([])
 
   useEffect(() => {
     fetchProductCounts().then(setProductCounts)
+    fetchProducts().then(setProducts)
   }, [])
 
   return (
@@ -441,6 +444,61 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Product Showcase — scrolling marquee */}
+        {products.length > 0 && (
+          <section className='relative py-16 md:py-20 bg-gray-800 overflow-hidden'>
+            <WaveBackground />
+            <div className='relative z-10'>
+              <div className='text-center mb-10'>
+                <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
+                  Our Products
+                </p>
+                <h2 className='font-display text-3xl md:text-4xl font-bold text-white'>
+                  Explore Our Collection
+                </h2>
+              </div>
+              <div className='relative'>
+                <div className='absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-800 to-transparent z-10 pointer-events-none' />
+                <div className='absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-800 to-transparent z-10 pointer-events-none' />
+                <div className='flex animate-marquee-slow'>
+                  {[...products, ...products].map((product, i) => {
+                    const cat = getCategoryByEnum(product.category || '')
+                    const catSlug = cat?.slug || 'executive-chairs'
+                    const image = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
+                    return (
+                      <Link
+                        key={`${product.id}-${i}`}
+                        to={`/products/${catSlug}/${product.slug}`}
+                        className='shrink-0 w-48 mx-3 group'
+                      >
+                        <div className='aspect-square rounded-xl overflow-hidden bg-gray-900/50 border border-white/10 group-hover:border-indigo-500/30 transition-all duration-300'>
+                          {image ? (
+                            <img
+                              src={image}
+                              alt={product.name || 'Product'}
+                              className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+                              loading='lazy'
+                            />
+                          ) : (
+                            <div className='w-full h-full flex items-center justify-center text-gray-600'>
+                              <svg className='w-12 h-12' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        <p className='mt-2 text-sm text-white/80 text-center font-medium truncate group-hover:text-white transition-colors'>
+                          {product.name}
+                        </p>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Process */}
         <section className='py-20 md:py-28'>
