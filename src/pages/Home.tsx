@@ -302,9 +302,8 @@ export default function Home() {
         </section>
       ) : (
         <ScrollExpandMedia
-          mediaType='video'
-          mediaSrc='https://videos.pexels.com/video-files/8347237/8347237-hd_1920_1080_25fps.mp4'
-          posterSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
+          mediaType='image'
+          mediaSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
           bgImageSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
           title='MVM Aasanam'
           date='Est. 1997 · Neemuch, MP'
