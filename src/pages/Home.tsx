@@ -475,8 +475,8 @@ export default function Home() {
                 </h2>
               </div>
               <div className='relative'>
-                <div className='absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-800 to-transparent z-10 pointer-events-none' />
-                <div className='absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-800 to-transparent z-10 pointer-events-none' />
+                <div className='absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-gray-800 to-transparent z-10 pointer-events-none' />
+                <div className='absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-gray-800 to-transparent z-10 pointer-events-none' />
                 <div className='flex animate-marquee-slow'>
                   {[...products, ...products].map((product, i) => {
                     const cat = getCategoryByEnum(product.category || '')
@@ -602,7 +602,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <div className='mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-4'>
+            <div className='mt-14 flex flex-wrap items-center justify-center gap-x-4 md:gap-x-10 gap-y-4'>
               {['ISO 9001', 'ISO 14001', 'ISO 45001', 'BIFMA', 'BIS / ISI Mark', 'GeM Empanelled', 'ZED Certified', 'NSIC', 'GREENGUARD'].map((badge) => (
                 <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
                   <CheckCircle2 className='w-4 h-4 text-green-500 shrink-0' />

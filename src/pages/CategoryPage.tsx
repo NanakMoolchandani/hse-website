@@ -57,7 +57,7 @@ export default function CategoryPage() {
           <h1 className='font-display text-3xl md:text-6xl font-bold text-white mb-3 tracking-tight'>
             {categoryInfo.label}
           </h1>
-          <p className='text-gray-400 text-lg max-w-xl'>
+          <p className='text-gray-400 text-base md:text-lg max-w-xl'>
             {categoryInfo.description}
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function CategoryPage() {
         {/* Product grid */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-20'>
           {loading ? (
-            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5'>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div key={i} className='animate-pulse'>
                   <div className='aspect-square bg-white/5 rounded-2xl' />
@@ -106,7 +106,7 @@ export default function CategoryPage() {
               <p className='text-gray-500'>Products in this category will appear here once published.</p>
             </div>
           ) : (
-            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5'>
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} variant='dark' />
               ))}

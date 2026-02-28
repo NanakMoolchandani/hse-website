@@ -271,17 +271,19 @@ export function CardStack<T extends CardStackItem>({
 
       {showDots && (
         <div className='mt-6 flex items-center justify-center gap-3'>
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center gap-0'>
             {items.map((it, idx) => (
               <button
                 key={it.id}
                 onClick={() => setActive(idx)}
-                className={cn(
-                  'h-2.5 w-2.5 sm:h-2 sm:w-2 rounded-full transition',
-                  idx === active ? 'bg-white' : 'bg-white/30 hover:bg-white/50',
-                )}
+                className='p-2 group'
                 aria-label={`Go to ${it.title}`}
-              />
+              >
+                <span className={cn(
+                  'block h-2.5 w-2.5 sm:h-2 sm:w-2 rounded-full transition',
+                  idx === active ? 'bg-white' : 'bg-white/30 group-hover:bg-white/50',
+                )} />
+              </button>
             ))}
           </div>
           {activeItem.href && (

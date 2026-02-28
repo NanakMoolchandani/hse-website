@@ -183,7 +183,7 @@ function Navbar() {
           <div className='flex flex-col px-6 py-8 gap-6'>
             <Link
               to='/'
-              className={`text-left text-2xl font-semibold ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+              className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
               onClick={() => setOpen(false)}
             >
               Home
@@ -192,12 +192,12 @@ function Navbar() {
               <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${
                 isCategoryPage ? 'text-gray-500' : 'text-gray-400'
               }`}>Products</p>
-              <div className='space-y-3 pl-2'>
+              <div className='space-y-1 pl-2'>
                 {CATEGORIES.map((cat) => (
                   <Link
                     key={cat.slug}
                     to={`/products/${cat.slug}`}
-                    className={`block text-lg font-medium ${
+                    className={`block text-lg font-medium py-1.5 ${
                       isCategoryPage ? 'text-gray-300' : 'text-gray-700'
                     }`}
                     onClick={() => setOpen(false)}
@@ -210,14 +210,14 @@ function Navbar() {
             {isHome ? (
               <button
                 onClick={() => handleNavClick('/#contact')}
-                className={`text-left text-2xl font-semibold ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+                className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
               >
                 Contact
               </button>
             ) : (
               <Link
                 to='/#contact'
-                className={`text-left text-2xl font-semibold ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+                className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
                 onClick={() => setOpen(false)}
               >
                 Contact

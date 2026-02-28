@@ -3,7 +3,7 @@ import Footer from '@/src/components/Footer'
 export default function Privacy() {
   return (
     <div className='bg-white min-h-screen flex flex-col'>
-      <div className='max-w-3xl mx-auto px-6 lg:px-10 pt-28 pb-20 md:pt-36 md:pb-28 flex-1'>
+      <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 pt-28 pb-20 md:pt-36 md:pb-28 flex-1'>
         <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
           Legal
         </p>

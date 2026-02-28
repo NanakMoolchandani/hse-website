@@ -267,7 +267,7 @@ export default function ProductPage() {
 
         {/* Related products */}
         {related.length > 0 && (
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-16 border-t border-gray-100'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 md:py-16 border-t border-gray-100'>
             <h2 className='text-2xl font-bold text-gray-900 mb-8'>More in {productCategory?.label}</h2>
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
               {related.map((p) => (

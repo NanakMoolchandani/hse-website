@@ -30,7 +30,7 @@ export default function About() {
           <h1 className='font-display text-3xl md:text-6xl font-bold mb-6'>
             About MVM<br />Aasanam
           </h1>
-          <p className='text-gray-400 text-lg max-w-2xl leading-relaxed'>
+          <p className='text-gray-400 text-base md:text-lg max-w-2xl leading-relaxed'>
             MVM Aasanam is the premium furniture brand of Hari Shewa Enterprises,
             headquartered in Neemuch, Madhya Pradesh. For nearly three decades, we have
             designed, manufactured, and supplied commercial grade office and cafeteria
