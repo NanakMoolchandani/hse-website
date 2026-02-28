@@ -34,7 +34,7 @@ export default function Terms() {
               <li><strong>"Goods"</strong> means the furniture products manufactured, supplied, or sold by the Company, classified under HSN Code 9403.</li>
               <li><strong>"Order"</strong> means a confirmed request from the Buyer for the supply of Goods, accepted by the Company.</li>
               <li><strong>"Quotation"</strong> means a formal price estimate issued by the Company in response to a Buyer's enquiry.</li>
-              <li><strong>"Website"</strong> means mvmaasanam.com and any associated subdomains.</li>
+              <li><strong>"Website"</strong> means mvm-furniture.com and any associated subdomains.</li>
             </ul>
           </section>
 

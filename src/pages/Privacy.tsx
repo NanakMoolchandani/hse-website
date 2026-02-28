@@ -21,7 +21,7 @@ export default function Privacy() {
               This Privacy Policy explains how <strong>Hari Shewa Enterprises</strong> ("Company", "we", "us", "our"),
               operating under the brand name <strong>MVM Aasanam</strong>, collects, uses, stores, and protects
               your personal data. This policy applies to all interactions with us, including but not limited to our
-              website (mvmaasanam.com), WhatsApp, telephone, email, and any other communication channels.
+              website (mvm-furniture.com), WhatsApp, telephone, email, and any other communication channels.
             </p>
             <p className='mt-3'>
               Hari Shewa Enterprises is the Data Fiduciary as defined under the Digital Personal Data Protection
