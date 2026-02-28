@@ -145,38 +145,15 @@ export default function ChairExplosionSection() {
                 Hari Shewa Enterprises
               </span>
               , headquartered in Neemuch, Madhya Pradesh. For over three decades,
-              we have designed, manufactured, and supplied commercial-grade office
+              we have designed, manufactured, and supplied commercial grade office
               and cafeteria furniture trusted by corporates, government bodies, and
               institutions across Central India.
             </p>
             <p className='text-gray-400 text-sm leading-relaxed mb-8'>
-              From executive boardrooms to 500-seat cafeterias, every product is
+              From executive boardrooms to 500 seat cafeterias, every product is
               engineered for ergonomic comfort and built to endure years of
-              daily commercial use. We are{' '}
-              <span className='text-gray-200'>ISO 9001 &amp; ISO 22000 certified</span>{' '}
-              and an empanelled supplier on the{' '}
-              <span className='text-gray-200'>Government e-Marketplace (GeM)</span>.
+              daily commercial use.
             </p>
-            <div className='flex items-center gap-6'>
-              <div className='flex items-center gap-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-green-500' />
-                <span className='text-xs text-gray-500 uppercase tracking-widest'>
-                  ISO 9001
-                </span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-green-500' />
-                <span className='text-xs text-gray-500 uppercase tracking-widest'>
-                  ISO 22000
-                </span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <div className='w-1.5 h-1.5 rounded-full bg-green-500' />
-                <span className='text-xs text-gray-500 uppercase tracking-widest'>
-                  GeM
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
