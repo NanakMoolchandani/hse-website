@@ -40,7 +40,12 @@ export default function ChairExplosionSection() {
       ctx.fillStyle = '#000'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      const imgAspect = img.naturalWidth / img.naturalHeight
+      // Crop bottom 6% of source to remove Veo watermark
+      const cropRatio = 0.94
+      const srcW = img.naturalWidth
+      const srcH = Math.round(img.naturalHeight * cropRatio)
+
+      const imgAspect = srcW / srcH
       const canvasAspect = canvas.width / canvas.height
 
       let drawW: number, drawH: number, drawX: number, drawY: number
@@ -57,7 +62,7 @@ export default function ChairExplosionSection() {
         drawY = (canvas.height - drawH) / 2
       }
 
-      ctx.drawImage(img, drawX, drawY, drawW, drawH)
+      ctx.drawImage(img, 0, 0, srcW, srcH, drawX, drawY, drawW, drawH)
     }
 
     function resizeCanvas() {
