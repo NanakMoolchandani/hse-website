@@ -8,10 +8,10 @@ import {
   MessageCircle,
   CheckCircle2,
   ChevronDown,
-  Quote,
 } from 'lucide-react'
 import { CATEGORIES } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
+import ScrollTestimonials, { type Testimonial } from '@/src/components/ui/scroll-testimonials'
 import Footer from '@/src/components/Footer'
 import { fetchProductCounts } from '@/src/lib/supabase'
 
@@ -182,24 +182,33 @@ const CLIENTS = [
   { name: 'AIIMS', logo: '/logos/aiims.svg' },
 ]
 
-const TESTIMONIALS = [
+const TESTIMONIALS: Testimonial[] = [
   {
-    quote: 'We furnished our entire 200 seat office with MVM Aasanam chairs. The quality is exceptional. After two years of heavy daily use, they still look and feel brand new. Their team handled the bulk order seamlessly.',
+    quote: 'We furnished our entire 200 seat office with MVM Aasanam chairs. The quality is exceptional.',
+    detail: 'After two years of heavy daily use across three floors, every single chair still looks and feels brand new. The lumbar support holds up perfectly even with 10+ hour workdays. Their team handled the entire bulk order from measurement to delivery seamlessly, and even sent a technician for on site assembly. We have since placed two more orders for our Bhopal and Raipur branches.',
     name: 'Rajesh Sharma',
     role: 'Head of Procurement',
     company: 'Leading IT Services Company, Indore',
+    stat: '200+',
+    statLabel: 'chairs delivered in a single order',
   },
   {
-    quote: 'As a GeM empanelled supplier, Hari Shewa made our government procurement process completely hassle free. Competitive pricing, proper documentation, and on time delivery for all 12 of our district offices.',
+    quote: 'As a GeM empanelled supplier, Hari Shewa made our government procurement process completely hassle free.',
+    detail: 'Competitive pricing with full GST compliance, proper documentation for every single unit, and on time delivery for all 12 of our district offices across Madhya Pradesh. The entire process from GeM order placement to final installation took under 3 weeks. Their invoice and challan documentation was audit ready from day one, which saved us weeks of back and forth during our annual inspection.',
     name: 'Dr. Anita Verma',
     role: 'Administrative Officer',
     company: 'Government Institution, Madhya Pradesh',
+    stat: '12',
+    statLabel: 'district offices furnished on time',
   },
   {
-    quote: 'The customization options are what set them apart. We needed specific fabric colours and armrest configurations to match our brand guidelines. They delivered exactly what we specified, on schedule.',
+    quote: 'The customization options are what set them apart from every other supplier we evaluated.',
+    detail: 'We needed specific fabric colours, armrest configurations, and base finishes to match our client\'s brand guidelines for a new 15,000 sq ft corporate office. MVM Aasanam delivered exactly what we specified, on schedule, with consistent quality across 300+ units. They even produced fabric samples in advance so we could get client approval before full production. That level of attention to detail is rare in this price range.',
     name: 'Priya Mehta',
     role: 'Interior Design Lead',
     company: 'Architecture & Interiors Firm, Mumbai',
+    stat: '300+',
+    statLabel: 'custom units with zero defects',
   },
 ]
 
@@ -465,35 +474,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className='py-20 md:py-28 bg-gray-50'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-              Client Feedback
-            </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-              What Our Clients<br />Say About Us
-            </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              We let our work speak, and our clients confirm it.
-            </p>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {TESTIMONIALS.map((t) => (
-                <div key={t.name} className='bg-white rounded-2xl border border-gray-100 p-8 flex flex-col'>
-                  <Quote className='w-8 h-8 text-gray-200 mb-4' />
-                  <p className='text-gray-600 text-sm leading-relaxed flex-1 mb-6'>
-                    {t.quote}
-                  </p>
-                  <div>
-                    <p className='font-semibold text-gray-900 text-sm'>{t.name}</p>
-                    <p className='text-xs text-gray-400'>{t.role}</p>
-                    <p className='text-xs text-gray-400'>{t.company}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Testimonials — scroll-driven, one at a time */}
+        <ScrollTestimonials items={TESTIMONIALS} />
 
         {/* Who We Serve */}
         <section className='py-20 md:py-28 bg-gray-50'>
