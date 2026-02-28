@@ -162,23 +162,9 @@ const SPECS = [
 ]
 
 const CLIENTS = [
-  { name: 'SBI', logo: 'https://logo.clearbit.com/sbi.co.in' },
-  { name: 'Bank of India', logo: 'https://logo.clearbit.com/bankofindia.co.in' },
-  { name: 'PNB', logo: 'https://logo.clearbit.com/pnbindia.in' },
-  { name: 'Central Bank', logo: 'https://logo.clearbit.com/centralbankofindia.co.in' },
-  { name: 'HDFC Bank', logo: 'https://logo.clearbit.com/hdfcbank.com' },
-  { name: 'Axis Bank', logo: 'https://logo.clearbit.com/axisbank.com' },
-  { name: 'NTPC', logo: 'https://logo.clearbit.com/ntpc.co.in' },
-  { name: 'BHEL', logo: 'https://logo.clearbit.com/bhel.com' },
-  { name: 'Indian Railways', logo: 'https://logo.clearbit.com/indianrailways.gov.in' },
-  { name: 'TCS', logo: 'https://logo.clearbit.com/tcs.com' },
-  { name: 'Infosys', logo: 'https://logo.clearbit.com/infosys.com' },
-  { name: 'Wipro', logo: 'https://logo.clearbit.com/wipro.com' },
-  { name: 'L&T', logo: 'https://logo.clearbit.com/larsentoubro.com' },
-  { name: 'Reliance', logo: 'https://logo.clearbit.com/ril.com' },
-  { name: 'IIT Indore', logo: 'https://logo.clearbit.com/iiti.ac.in' },
-  { name: 'IIM Indore', logo: 'https://logo.clearbit.com/iimidr.ac.in' },
-  { name: 'AIIMS', logo: 'https://logo.clearbit.com/aiims.edu' },
+  'SBI', 'Bank of India', 'PNB', 'Central Bank', 'HDFC Bank', 'Axis Bank',
+  'NTPC', 'BHEL', 'Indian Railways', 'TCS', 'Infosys', 'Wipro',
+  'L&T', 'Reliance', 'IIT Indore', 'IIM Indore', 'AIIMS',
 ]
 
 const TESTIMONIALS = [
@@ -340,31 +326,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Client Trust Bar — scrolling logos */}
+        {/* Client Trust Bar — scrolling marquee */}
         <section className='py-14 md:py-18 border-b border-gray-100 overflow-hidden'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-8 text-center'>
             Trusted by India's Leading Institutions
           </p>
           <div className='relative'>
-            {/* Fade edges */}
-            <div className='absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none' />
-            <div className='absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none' />
-            {/* Scrolling track */}
+            <div className='absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none' />
+            <div className='absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none' />
             <div className='flex animate-marquee'>
-              {[...CLIENTS, ...CLIENTS].map((c, i) => (
-                <div
-                  key={`${c.name}-${i}`}
-                  className='flex items-center gap-3 shrink-0 px-8'
-                >
-                  <img
-                    src={c.logo}
-                    alt={c.name}
-                    className='h-8 w-8 object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300'
-                    loading='lazy'
-                  />
-                  <span className='text-sm font-medium text-gray-400 whitespace-nowrap'>
-                    {c.name}
+              {[...CLIENTS, ...CLIENTS].map((name, i) => (
+                <div key={`${name}-${i}`} className='shrink-0 flex items-center px-6'>
+                  <span className='text-base font-semibold text-gray-300 whitespace-nowrap tracking-wide uppercase'>
+                    {name}
                   </span>
+                  <span className='ml-12 text-gray-200 select-none'>•</span>
                 </div>
               ))}
             </div>
