@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react'
 
-export default function WaveBackground({ className = '' }: { className?: string }) {
+type Variant = 'indigo' | 'warm'
+
+interface Props {
+  className?: string
+  variant?: Variant
+}
+
+export default function WaveBackground({ className = '', variant = 'indigo' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -13,9 +20,12 @@ export default function WaveBackground({ className = '' }: { className?: string 
     let time = 0
     let animId: number
 
-    const waveData = Array.from({ length: 14 }).map(() => ({
-      value: Math.random() * 0.5 + 0.15,
-      targetValue: Math.random() * 0.5 + 0.15,
+    const isWarm = variant === 'warm'
+    const waveCount = isWarm ? 14 : 6
+
+    const waveData = Array.from({ length: waveCount }).map(() => ({
+      value: Math.random() * (isWarm ? 0.5 : 0.4) + (isWarm ? 0.15 : 0.1),
+      targetValue: Math.random() * (isWarm ? 0.5 : 0.4) + (isWarm ? 0.15 : 0.1),
       speed: Math.random() * 0.015 + 0.008,
     }))
 
@@ -28,29 +38,55 @@ export default function WaveBackground({ className = '' }: { className?: string 
 
     function updateWaveData() {
       waveData.forEach((data) => {
-        if (Math.random() < 0.01) data.targetValue = Math.random() * 0.6 + 0.15
+        if (Math.random() < (isWarm ? 0.01 : 0.008)) {
+          data.targetValue = Math.random() * (isWarm ? 0.6 : 0.5) + (isWarm ? 0.15 : 0.1)
+        }
         data.value += (data.targetValue - data.value) * data.speed
       })
     }
 
-    function draw() {
-      if (!canvas || !ctx) return
-      const w = canvas.offsetWidth
-      const h = canvas.offsetHeight
+    function drawIndigo(w: number, h: number) {
+      waveData.forEach((data, i) => {
+        const freq = data.value * 6
+        ctx!.beginPath()
+        for (let x = 0; x < w; x++) {
+          const nx = (x / w) * 2 - 1
+          const px = nx + i * 0.05 + freq * 0.03
+          const py =
+            Math.sin(px * 8 + time) *
+            Math.cos(px * 2.5) *
+            freq *
+            0.08 *
+            ((i + 1) / waveCount)
+          const y = (py + 1) * h / 2
+          x === 0 ? ctx!.moveTo(x, y) : ctx!.lineTo(x, y)
+        }
 
-      ctx.clearRect(0, 0, w, h)
+        const intensity = Math.min(1, freq * 0.35)
+        const r = Math.round(79 + intensity * 80)
+        const g = Math.round(70 + intensity * 100)
+        const b = 229
 
+        ctx!.lineWidth = 0.8 + i * 0.2
+        ctx!.strokeStyle = `rgba(${r},${g},${b},0.25)`
+        ctx!.shadowColor = `rgba(${r},${g},${b},0.3)`
+        ctx!.shadowBlur = 4
+        ctx!.stroke()
+        ctx!.shadowBlur = 0
+      })
+    }
+
+    function drawWarm(w: number, h: number) {
       waveData.forEach((data, i) => {
         const freq = data.value * 6
 
-        // Use a gradient stroke: white on left → red on right
-        const grad = ctx.createLinearGradient(0, 0, w, 0)
-        grad.addColorStop(0, `rgba(255, 255, 255, 0.4)`)
-        grad.addColorStop(0.4, `rgba(255, 200, 180, 0.35)`)
-        grad.addColorStop(0.7, `rgba(220, 80, 60, 0.3)`)
-        grad.addColorStop(1, `rgba(180, 30, 20, 0.25)`)
+        const grad = ctx!.createLinearGradient(0, 0, w, 0)
+        grad.addColorStop(0, 'rgba(255, 255, 255, 0.4)')
+        grad.addColorStop(0.4, 'rgba(255, 200, 180, 0.35)')
+        grad.addColorStop(0.7, 'rgba(220, 80, 60, 0.3)')
+        grad.addColorStop(1, 'rgba(180, 30, 20, 0.25)')
 
-        ctx.beginPath()
+        ctx!.beginPath()
         for (let x = 0; x < w; x++) {
           const nx = (x / w) * 2 - 1
           const px = nx + i * 0.04 + freq * 0.03
@@ -59,24 +95,31 @@ export default function WaveBackground({ className = '' }: { className?: string 
             Math.cos(px * 2.5 + time * 0.3) *
             freq *
             0.1 *
-            ((i + 1) / waveData.length)
+            ((i + 1) / waveCount)
           const y = (py + 1) * h / 2
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+          x === 0 ? ctx!.moveTo(x, y) : ctx!.lineTo(x, y)
         }
 
-        ctx.lineWidth = 1 + i * 0.15
-        ctx.strokeStyle = grad
+        ctx!.lineWidth = 1 + i * 0.15
+        ctx!.strokeStyle = grad
 
-        // Glow: white on left side, red on right
-        const glowProgress = i / waveData.length
+        const glowProgress = i / waveCount
         const glowR = Math.round(255 - glowProgress * 75)
         const glowG = Math.round(255 - glowProgress * 200)
         const glowB = Math.round(255 - glowProgress * 220)
-        ctx.shadowColor = `rgba(${glowR},${glowG},${glowB},0.3)`
-        ctx.shadowBlur = 6
-        ctx.stroke()
-        ctx.shadowBlur = 0
+        ctx!.shadowColor = `rgba(${glowR},${glowG},${glowB},0.3)`
+        ctx!.shadowBlur = 6
+        ctx!.stroke()
+        ctx!.shadowBlur = 0
       })
+    }
+
+    function draw() {
+      if (!canvas || !ctx) return
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      ctx.clearRect(0, 0, w, h)
+      isWarm ? drawWarm(w, h) : drawIndigo(w, h)
     }
 
     function animate() {
@@ -95,7 +138,7 @@ export default function WaveBackground({ className = '' }: { className?: string 
       cancelAnimationFrame(animId)
       observer.disconnect()
     }
-  }, [])
+  }, [variant])
 
   return (
     <canvas

@@ -448,7 +448,7 @@ export default function Home() {
         {/* Product Showcase — scrolling marquee */}
         {products.length > 0 && (
           <section className='relative py-16 md:py-20 bg-gray-800 overflow-hidden'>
-            <WaveBackground />
+            <WaveBackground variant='warm' />
             <div className='relative z-10'>
               <div className='text-center mb-10'>
                 <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
