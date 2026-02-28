@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero'
 import ChairExplosionSection from '@/src/components/ui/chair-explosion-section'
-import { GlareCard } from '@/components/ui/glare-card'
+import WaveBackground from '@/src/components/ui/wave-background'
 import {
   MapPin,
   Phone,
@@ -59,12 +59,12 @@ const QUALITY_PILLARS = [
     ),
   },
   {
-    title: 'ISO 9001 Certified',
+    title: 'Tested for Endurance',
     description:
-      'All products pass multi point quality checks before dispatch. We are ISO 9001 certified for Quality Management, trusted by corporates, hospitals, and institutions across Central India.',
+      'Every product passes multi point quality checks before dispatch. Load tested, weld inspected, and fabric stress verified. Trusted by corporates, hospitals, and institutions across Central India.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
-        <path d='M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4z' stroke='currentColor' strokeWidth='1.5' />
+        <path d='M24 4L6 12v12c0 11 8 18 18 22 10-4 18-11 18-22V12L24 4z' stroke='currentColor' strokeWidth='1.5' strokeLinejoin='round' />
         <path d='M16 24l6 6 10-12' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
       </svg>
     ),
@@ -317,25 +317,28 @@ export default function Home() {
 
       <div className='bg-white'>
         {/* Why Us */}
-        <section id='technology' className='py-20 md:py-28'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
+        <section id='technology' className='relative py-20 md:py-28 bg-gray-950 overflow-hidden'>
+          <WaveBackground />
+          <div className='relative z-10 max-w-7xl mx-auto px-6 lg:px-10'>
+            <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
               Why MVM Aasanam
             </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-4'>
               Built for the<br />Modern Workplace
             </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              Every chair we supply is engineered for productivity, comfort, and long-term commercial use.
+            <p className='text-white/50 max-w-xl mb-14 text-lg'>
+              Every chair we supply is engineered for productivity, comfort, and long term commercial use.
               Not just aesthetics.
             </p>
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 [grid-auto-rows:1fr] gap-6'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 [grid-auto-rows:1fr] gap-5'>
               {QUALITY_PILLARS.map((c) => (
-                <GlareCard key={c.title} fitContent containerClassName='w-full h-full' className='flex flex-col items-start justify-start p-7 h-full'>
-                  <div className='text-white/60 mb-5'>{c.icon}</div>
+                <div key={c.title} className='glass-card flex flex-col p-6 h-full'>
+                  <div className='glass-card-icon w-16 h-16 flex items-center justify-center mb-5'>
+                    <div className='relative z-10 text-indigo-300'>{c.icon}</div>
+                  </div>
                   <h3 className='font-semibold text-white mb-2'>{c.title}</h3>
-                  <p className='text-sm text-white/50 leading-relaxed'>{c.description}</p>
-                </GlareCard>
+                  <p className='text-sm text-white/45 leading-relaxed'>{c.description}</p>
+                </div>
               ))}
             </div>
           </div>
