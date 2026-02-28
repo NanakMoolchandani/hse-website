@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero'
 import ChairExplosionSection from '@/src/components/ui/chair-explosion-section'
 import WaveBackground from '@/src/components/ui/wave-background'
@@ -12,6 +11,7 @@ import {
   Quote,
 } from 'lucide-react'
 import { CATEGORIES } from '@/src/lib/categories'
+import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
 import Footer from '@/src/components/Footer'
 import { fetchProductCounts } from '@/src/lib/supabase'
 
@@ -366,49 +366,45 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Products — now with router links */}
-        <section id='collections' className='py-20 md:py-28'>
+        {/* Products — card stack carousel */}
+        <section id='collections' className='relative py-20 md:py-28 bg-gray-950 overflow-hidden'>
           <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-              Product Range
-            </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-              Seating for<br />Every Space
-            </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              From executive cabins to open workstations, conference rooms to cafeterias,
-              we have the right seating solution for every area of your office.
-            </p>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-              {CATEGORIES.map((cat) => {
-                const count = productCounts[cat.enum] || 0
-                return (
-                  <Link key={cat.slug} to={`/products/${cat.slug}`} className='group block'>
-                    <div className='relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-100'>
-                      <img
-                        src={cat.image}
-                        alt={cat.label}
-                        className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
-                      />
-                      <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
-                      <div className='absolute bottom-0 left-0 right-0 p-8'>
-                        <span className='text-xs font-semibold text-white/50 uppercase tracking-widest'>
-                          {cat.series}
-                        </span>
-                        <h3 className='text-2xl md:text-3xl font-bold text-white mt-1'>{cat.label}</h3>
-                        <p className='text-sm text-white/60 mt-2 max-w-sm'>{cat.description}</p>
-                        {count > 0 && (
-                          <p className='text-xs text-white/40 mt-3'>{count} products</p>
-                        )}
-                        <span className='inline-block mt-4 text-sm font-medium text-white border-b border-white/30 pb-0.5 group-hover:border-white transition-colors'>
-                          View Collection →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
+            <div className='text-center mb-12'>
+              <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
+                Product Range
+              </p>
+              <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-4'>
+                Seating for Every Space
+              </h2>
+              <p className='text-white/50 max-w-xl mx-auto text-lg'>
+                From executive cabins to open workstations, conference rooms to cafeterias,
+                we have the right seating solution for every area of your office.
+              </p>
             </div>
+            <CardStack
+              items={CATEGORIES.map((cat) => {
+                const count = productCounts[cat.enum] || 0
+                return {
+                  id: cat.slug,
+                  title: cat.label,
+                  description: cat.description,
+                  imageSrc: cat.image,
+                  href: `/products/${cat.slug}`,
+                  tag: cat.series,
+                  ctaLabel: count > 0 ? `${count} products · View Collection →` : 'View Collection →',
+                } satisfies CardStackItem
+              })}
+              initialIndex={0}
+              cardWidth={560}
+              cardHeight={360}
+              overlap={0.5}
+              spreadDeg={40}
+              autoAdvance
+              intervalMs={3000}
+              pauseOnHover
+              showDots
+              loop
+            />
           </div>
         </section>
 
