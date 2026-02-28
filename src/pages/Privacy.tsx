@@ -40,7 +40,7 @@ export default function Privacy() {
             <ul className='list-disc pl-6 space-y-2 mt-3'>
               <li>Respond to enquiries and provide quotations</li>
               <li>Process and fulfil orders</li>
-              <li>Communicate about order status, delivery, and after-sales support</li>
+              <li>Communicate about order status, delivery, and after sales support</li>
               <li>Improve our products and services</li>
               <li>Comply with legal and tax obligations (GST, invoicing)</li>
             </ul>
@@ -86,7 +86,7 @@ export default function Privacy() {
 
           <section>
             <h2 className='text-lg font-semibold text-gray-900 mb-3'>8. Contact Us</h2>
-            <p>For any privacy-related questions or requests:</p>
+            <p>For any privacy related questions or requests:</p>
             <ul className='list-none space-y-1 mt-3'>
               <li><strong>Hari Shewa Enterprises</strong></li>
               <li>Neemuch, Madhya Pradesh, India</li>

@@ -27,7 +27,7 @@ const QUALITY_PILLARS = [
   {
     title: 'Ergonomic Engineering',
     description:
-      'Every chair is designed around the human spine. Lumbar support, adjustable armrests, and seat depth are calibrated for all-day comfort in demanding work environments.',
+      'Every chair is designed around the human spine. Lumbar support, adjustable armrests, and seat depth are calibrated for all day comfort in demanding work environments.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M24 6v36M14 16c0-5.52 4.48-10 10-10s10 4.48 10 10' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' />
@@ -36,9 +36,9 @@ const QUALITY_PILLARS = [
     ),
   },
   {
-    title: 'Heavy-Duty Frame',
+    title: 'Heavy Duty Frame',
     description:
-      'MS powder-coated frames with nylon or aluminium base rated for commercial use. Built to withstand 8 or more hours of daily office use, year after year.',
+      'MS powder coated frames with nylon or aluminium base rated for commercial use. Built to withstand 8 or more hours of daily office use, year after year.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <rect x='8' y='8' width='32' height='32' rx='4' stroke='currentColor' strokeWidth='1.5' />
@@ -49,7 +49,7 @@ const QUALITY_PILLARS = [
   {
     title: 'Premium Upholstery',
     description:
-      'Breathable mesh, high-density foam, and premium fabric or leatherette options. Certified for durability and resistant to wear, spills, and fading.',
+      'Breathable mesh, high density foam, and premium fabric or leatherette options. Certified for durability and resistant to wear, spills, and fading.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M8 20c0-6.63 5.37-12 12-12h8c6.63 0 12 5.37 12 12v8c0 6.63-5.37 12-12 12h-8C13.37 40 8 34.63 8 28v-8z' stroke='currentColor' strokeWidth='1.5' />
@@ -58,9 +58,9 @@ const QUALITY_PILLARS = [
     ),
   },
   {
-    title: 'ISO 9001 & ISO 22000 Certified',
+    title: 'ISO 9001 Certified',
     description:
-      'All products pass multi-point quality checks before dispatch. We are ISO 9001 and ISO 22000 certified, trusted by corporates, hospitals, and institutions across Central India.',
+      'All products pass multi point quality checks before dispatch. We are ISO 9001 certified for Quality Management, trusted by corporates, hospitals, and institutions across Central India.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4z' stroke='currentColor' strokeWidth='1.5' />
@@ -83,7 +83,7 @@ const QUALITY_PILLARS = [
   {
     title: 'Fast & Reliable Delivery',
     description:
-      'Orders dispatched from Neemuch within 7 to 15 working days. We handle large-scale fit-outs and institutional projects across Central India with on-time delivery.',
+      'Orders dispatched from Neemuch within 7 to 15 working days. We handle large scale fit outs and institutional projects across Central India with on time delivery.',
     icon: (
       <svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-10 h-10'>
         <path d='M6 14h24v20H6z' stroke='currentColor' strokeWidth='1.5' strokeLinejoin='round' />
@@ -100,7 +100,7 @@ const FEATURES = [
     number: '01',
     title: 'Bulk & Project Supply',
     description:
-      'From 10 chairs to 10,000. We handle large-scale corporate orders, fit-outs, and institutional supply with on-time delivery across Central India.',
+      'From 10 chairs to 10,000. We handle large scale corporate orders, fit outs, and institutional supply with on time delivery across Central India.',
   },
   {
     number: '02',
@@ -110,15 +110,15 @@ const FEATURES = [
   },
   {
     number: '03',
-    title: 'After-Sales Support',
+    title: 'After Sales Support',
     description:
-      'Dedicated support for repairs, spare parts, and replacements. We stand behind every product we supply — long after the invoice is paid.',
+      'Dedicated support for repairs, spare parts, and replacements. We stand behind every product we supply, long after the invoice is paid.',
   },
   {
     number: '04',
     title: 'Competitive Pricing',
     description:
-      'Direct from manufacturer to you — no middlemen. Get the best price on premium office and cafeteria furniture without compromising on quality.',
+      'Direct from manufacturer to you, no middlemen. Get the best price on premium office and cafeteria furniture without compromising on quality.',
   },
 ]
 
@@ -127,7 +127,7 @@ const SPECS = [
     heading: 'Chair Construction',
     rows: [
       ['Frame', 'MS / Aluminium'],
-      ['Base', 'Nylon 5-Star / Aluminium'],
+      ['Base', 'Nylon 5 Star / Aluminium'],
       ['Gas Lift', 'Class 4 Hydraulic'],
       ['Load Rating', 'Up to 150 kg'],
     ],
@@ -136,16 +136,16 @@ const SPECS = [
     heading: 'Upholstery',
     rows: [
       ['Fabric', 'Mesh / Fabric / Leatherette'],
-      ['Foam Density', 'High-Density PU Foam'],
+      ['Foam Density', 'High Density PU Foam'],
       ['Armrests', 'Fixed / 2D / 4D'],
-      ['Warranty', '1-Year on Mechanism'],
+      ['Warranty', '1 Year on Mechanism'],
     ],
   },
   {
     heading: 'Product Range',
     rows: [
-      ['Executive', 'High-Back Chairs'],
-      ['Task', 'Mid-Back Ergonomic'],
+      ['Executive', 'High Back Chairs'],
+      ['Task', 'Mid Back Ergonomic'],
       ['Cafeteria', 'Stackable Chairs & Tables'],
       ['Visitor', 'Reception & Waiting Area'],
     ],
@@ -155,7 +155,7 @@ const SPECS = [
     rows: [
       ['Coverage', 'Central India'],
       ['Min. Order', '10 Units'],
-      ['Lead Time', '7–15 Working Days'],
+      ['Lead Time', '7 to 15 Working Days'],
       ['Installation', 'Available on Request'],
     ],
   },
@@ -183,19 +183,19 @@ const CLIENTS = [
 
 const TESTIMONIALS = [
   {
-    quote: 'We furnished our entire 200-seat office with MVM Aasanam chairs. The quality is exceptional — after two years of heavy daily use, they still look and feel brand new. Their team handled the bulk order seamlessly.',
+    quote: 'We furnished our entire 200 seat office with MVM Aasanam chairs. The quality is exceptional. After two years of heavy daily use, they still look and feel brand new. Their team handled the bulk order seamlessly.',
     name: 'Rajesh Sharma',
     role: 'Head of Procurement',
     company: 'Leading IT Services Company, Indore',
   },
   {
-    quote: 'As a GeM empanelled supplier, Hari Shewa made our government procurement process completely hassle-free. Competitive pricing, proper documentation, and on-time delivery for all 12 of our district offices.',
+    quote: 'As a GeM empanelled supplier, Hari Shewa made our government procurement process completely hassle free. Competitive pricing, proper documentation, and on time delivery for all 12 of our district offices.',
     name: 'Dr. Anita Verma',
     role: 'Administrative Officer',
     company: 'Government Institution, Madhya Pradesh',
   },
   {
-    quote: 'The customization options are what set them apart. We needed specific fabric colours and armrest configurations to match our brand guidelines — they delivered exactly what we specified, on schedule.',
+    quote: 'The customization options are what set them apart. We needed specific fabric colours and armrest configurations to match our brand guidelines. They delivered exactly what we specified, on schedule.',
     name: 'Priya Mehta',
     role: 'Interior Design Lead',
     company: 'Architecture & Interiors Firm, Mumbai',
@@ -205,11 +205,11 @@ const TESTIMONIALS = [
 const FAQS = [
   {
     q: 'What is the minimum order quantity?',
-    a: 'Our minimum order is 10 units. However, we specialise in bulk and project orders — from 50 chairs to 10,000+. Pricing improves significantly with volume.',
+    a: 'Our minimum order is 10 units. However, we specialise in bulk and project orders, from 50 chairs to 10,000+. Pricing improves significantly with volume.',
   },
   {
     q: 'Which areas do you deliver to?',
-    a: 'We deliver across all of Central India — Madhya Pradesh, Rajasthan, Gujarat, Maharashtra, Chhattisgarh, and beyond. For large orders, we arrange delivery pan-India.',
+    a: 'We deliver across all of Central India including Madhya Pradesh, Rajasthan, Gujarat, Maharashtra, Chhattisgarh, and beyond. For large orders, we arrange delivery pan India.',
   },
   {
     q: 'What is the typical delivery timeline?',
@@ -220,20 +220,20 @@ const FAQS = [
     a: 'Yes. You can choose fabric type (mesh, leatherette, fabric), colour, armrest style (fixed, 2D, 4D), base material (nylon or aluminium), and height range. Every order is configured to your specifications.',
   },
   {
-    q: 'Are you listed on the Government e-Marketplace (GeM)?',
+    q: 'Are you listed on the Government e Marketplace (GeM)?',
     a: 'Yes, we are an empanelled supplier on GeM. Government bodies can place orders directly through the GeM portal with all required compliance documentation.',
   },
   {
     q: 'What certifications do you hold?',
-    a: 'We are ISO 9001 (Quality Management) and ISO 22000 (Food Safety — for cafeteria furniture) certified. All products undergo multi-point quality checks before dispatch.',
+    a: 'We hold ISO 9001 (Quality Management), ISO 14001 (Environmental Management), and ISO 45001 (Occupational Health and Safety) certifications. We are also BIFMA certified and GeM empanelled. All products undergo multi point quality checks before dispatch.',
   },
   {
     q: 'What warranty do you provide?',
-    a: 'All chairs come with a 1-year warranty on the mechanism (gas lift, tilt, and adjustment controls). Frames and structural components are built for 8+ years of commercial use.',
+    a: 'All chairs come with a 1 year warranty on the mechanism (gas lift, tilt, and adjustment controls). Frames and structural components are built for 8+ years of commercial use.',
   },
   {
     q: 'How do I get a quotation?',
-    a: 'Simply message us on WhatsApp at +91 91314 38300 with your requirements — quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
+    a: 'Simply message us on WhatsApp at +91 91314 38300 with your requirements including quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
   },
 ]
 
@@ -443,15 +443,15 @@ export default function Home() {
               From Enquiry<br />to Installation
             </h2>
             <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              A simple, hassle-free process — whether you're furnishing a 10-seat office or
-              a 500-person facility.
+              A simple, hassle free process whether you're furnishing a 10 seat office or
+              a 500 person facility.
             </p>
             <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
               {[
                 { n: '1', title: 'Share Requirements', desc: "Tell us your space, headcount, and budget via WhatsApp or call. We'll guide you to the right products." },
                 { n: '2', title: 'Get a Quote', desc: 'Receive an itemised quotation with product specs, fabric/colour options, and delivery timeline.' },
-                { n: '3', title: 'We Dispatch', desc: 'Orders are packed and dispatched from Neemuch within 7–15 working days with tracking updates.' },
-                { n: '4', title: 'Delivery & Setup', desc: 'We deliver pan Central India. Installation support available on request. Post-sale service included.' },
+                { n: '3', title: 'We Dispatch', desc: 'Orders are packed and dispatched from Neemuch within 7 to 15 working days with tracking updates.' },
+                { n: '4', title: 'Delivery & Setup', desc: 'We deliver pan Central India. Installation support available on request. Post sale service included.' },
               ].map((step) => (
                 <div key={step.n} className='relative'>
                   <div className='w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center text-lg font-bold mb-4'>
@@ -475,7 +475,7 @@ export default function Home() {
               What Our Clients<br />Say About Us
             </h2>
             <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              We let our work speak — and our clients confirm it.
+              We let our work speak, and our clients confirm it.
             </p>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {TESTIMONIALS.map((t) => (

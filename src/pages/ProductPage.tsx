@@ -46,7 +46,7 @@ export default function ProductPage() {
       }
 
       if (data) {
-        document.title = `${data.name} — MVM Aasanam`
+        document.title = `${data.name} | MVM Aasanam`
         injectSchemaOrg(data)
       }
     })
@@ -176,7 +176,7 @@ export default function ProductPage() {
                   to={`/products/${productCategory.slug}`}
                   className='text-xs font-semibold tracking-widest uppercase text-gray-400 hover:text-gray-600'
                 >
-                  {productCategory.series} — {productCategory.label}
+                  {productCategory.series} | {productCategory.label}
                 </Link>
               )}
 

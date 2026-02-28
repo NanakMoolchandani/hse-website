@@ -64,17 +64,17 @@ export default function Terms() {
           <section>
             <h2 className='text-lg font-semibold text-gray-900 mb-3'>6. Warranty & Returns</h2>
             <ul className='list-disc pl-6 space-y-2'>
-              <li>All chairs come with a 1-year warranty on the mechanism (gas lift, tilt, adjustment controls).</li>
+              <li>All chairs come with a 1 year warranty on the mechanism (gas lift, tilt, adjustment controls).</li>
               <li>Structural defects identified within the warranty period will be repaired or replaced at no cost.</li>
               <li>Warranty does not cover damage caused by misuse, unauthorised modifications, or normal wear and tear.</li>
-              <li>Custom-configured products are non-returnable unless defective.</li>
+              <li>Custom configured products are non returnable unless defective.</li>
             </ul>
           </section>
 
           <section>
             <h2 className='text-lg font-semibold text-gray-900 mb-3'>7. Intellectual Property</h2>
             <p>
-              All content on this website — including text, images, logos, and design — is the property
+              All content on this website, including text, images, logos, and design, is the property
               of Hari Shewa Enterprises. You may not reproduce, distribute, or use any content without
               our prior written consent.
             </p>
