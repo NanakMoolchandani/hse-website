@@ -221,7 +221,7 @@
   color: var(--fx-text);
   font-weight: 700;
   letter-spacing: -0.01em;
-  font-size: clamp(1.4rem, 4vw, 3rem);
+  font-size: clamp(1.2rem, 4vw, 3rem);
   opacity: 0.3;
 }
 
@@ -253,7 +253,7 @@
 }
 
 .fx-progress {
-  width: 200px;
+  width: min(200px, 60vw);
   height: 2px;
   margin: 1rem auto 0;
   background: rgba(245, 245, 245, 0.28);
@@ -294,7 +294,7 @@
     grid-template-columns: 1fr;
     row-gap: 1vh;
     place-items: end center;
-    padding-bottom: 10vh;
+    padding-bottom: 8vh;
   }
 
   .fx-left,

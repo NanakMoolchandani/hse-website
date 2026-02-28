@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { cn } from '@/src/lib/utils'
 import { animate } from 'motion/react'
 
@@ -28,6 +28,9 @@ const GlowingEffect = memo(
     borderWidth = 1,
     disabled = true,
   }: GlowingEffectProps) => {
+    const [isMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
+    if (isMobile) return null
+
     const containerRef = useRef<HTMLDivElement>(null)
     const lastPosition = useRef({ x: 0, y: 0 })
     const animationFrameRef = useRef<number>(0)

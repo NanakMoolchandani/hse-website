@@ -47,7 +47,8 @@ export function BeamsBackground({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const beamsRef = useRef<Beam[]>([])
   const animationFrameRef = useRef<number>(0)
-  const MINIMUM_BEAMS = 20
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const MINIMUM_BEAMS = isMobile ? 8 : 20
 
   const opacityMap = {
     subtle: 0.7,
@@ -133,8 +134,16 @@ export function BeamsBackground({
       ctx.restore()
     }
 
+    let frameCount = 0
     function animate() {
       if (!canvas || !ctx) return
+
+      frameCount++
+      // Skip every other frame on mobile to save battery
+      if (isMobile && frameCount % 2 !== 0) {
+        animationFrameRef.current = requestAnimationFrame(animate)
+        return
+      }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.filter = 'blur(35px)'

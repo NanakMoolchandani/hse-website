@@ -82,9 +82,30 @@ export function CardStack<T extends CardStackItem>({
 }: CardStackProps<T>) {
   const reduceMotion = useReducedMotion()
   const len = items.length
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const [containerWidth, setContainerWidth] = React.useState(0)
 
   const [active, setActive] = React.useState(() => wrapIndex(initialIndex, len))
   const [hovering, setHovering] = React.useState(false)
+
+  // Track container width for responsive card sizing
+  React.useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const ro = new ResizeObserver(([entry]) => {
+      if (entry) setContainerWidth(entry.contentRect.width)
+    })
+    ro.observe(el)
+    setContainerWidth(el.clientWidth)
+    return () => ro.disconnect()
+  }, [])
+
+  // Scale cards to fit container on mobile
+  const responsiveScale = containerWidth > 0 && containerWidth < cardWidth
+    ? Math.min(1, (containerWidth * 0.85) / cardWidth)
+    : 1
+  const effectiveWidth = Math.round(cardWidth * responsiveScale)
+  const effectiveHeight = Math.round(cardHeight * responsiveScale)
 
   React.useEffect(() => {
     setActive((a) => wrapIndex(a, len))
@@ -96,7 +117,7 @@ export function CardStack<T extends CardStackItem>({
   }, [active])
 
   const maxOffset = Math.max(0, Math.floor(maxVisible / 2))
-  const cardSpacing = Math.max(10, Math.round(cardWidth * (1 - overlap)))
+  const cardSpacing = Math.max(10, Math.round(effectiveWidth * (1 - overlap)))
   const stepDeg = maxOffset > 0 ? spreadDeg / maxOffset : 0
 
   const canGoPrev = loop || active > 0
@@ -134,13 +155,14 @@ export function CardStack<T extends CardStackItem>({
 
   return (
     <div
+      ref={containerRef}
       className={cn('w-full', className)}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
       <div
         className='relative w-full'
-        style={{ height: Math.max(380, cardHeight + 80) }}
+        style={{ height: Math.max(280, effectiveHeight + 80) }}
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
@@ -166,7 +188,7 @@ export function CardStack<T extends CardStackItem>({
               const rotateZ = off * stepDeg
               const x = off * cardSpacing
               const y = abs * 10
-              const z = -abs * depthPx
+              const z = -abs * depthPx * responsiveScale
               const isActive = off === 0
               const scale = isActive ? activeScale : inactiveScale
               const lift = isActive ? -activeLiftPx : 0
@@ -185,7 +207,7 @@ export function CardStack<T extends CardStackItem>({
                       if (reduceMotion) return
                       const travel = info.offset.x
                       const v = info.velocity.x
-                      const threshold = Math.min(160, cardWidth * 0.22)
+                      const threshold = Math.min(160, effectiveWidth * 0.22)
                       if (travel > threshold || v > 650) prev()
                       else if (travel < -threshold || v < -650) next()
                     },
@@ -201,8 +223,8 @@ export function CardStack<T extends CardStackItem>({
                     isActive ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer',
                   )}
                   style={{
-                    width: cardWidth,
-                    height: cardHeight,
+                    width: effectiveWidth,
+                    height: effectiveHeight,
                     zIndex,
                     transformStyle: 'preserve-3d',
                   }}
@@ -255,7 +277,7 @@ export function CardStack<T extends CardStackItem>({
                 key={it.id}
                 onClick={() => setActive(idx)}
                 className={cn(
-                  'h-2 w-2 rounded-full transition',
+                  'h-2.5 w-2.5 sm:h-2 sm:w-2 rounded-full transition',
                   idx === active ? 'bg-white' : 'bg-white/30 hover:bg-white/50',
                 )}
                 aria-label={`Go to ${it.title}`}

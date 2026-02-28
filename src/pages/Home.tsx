@@ -289,10 +289,10 @@ export default function Home() {
       <div className='bg-white'>
         {/* Stats Bar */}
         <section className='border-y border-gray-100 py-10 md:py-14'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
             {STATS.map((s) => (
               <div key={s.label} className='text-center'>
-                <p className='text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
+                <p className='text-2xl sm:text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
                 <p className='text-sm text-gray-500 mt-1'>{s.label}</p>
               </div>
             ))}
@@ -319,16 +319,16 @@ export default function Home() {
 
       <div className='bg-white'>
         {/* Why Us */}
-        <section id='technology' className='relative py-20 md:py-28 bg-gray-950 overflow-hidden'>
+        <section id='technology' className='relative py-12 md:py-28 bg-gray-950 overflow-hidden'>
           <WaveBackground />
-          <div className='relative z-10 max-w-7xl mx-auto px-6 lg:px-10'>
+          <div className='relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
               Why MVM Aasanam
             </p>
             <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-4'>
               Built for the<br />Modern Workplace
             </h2>
-            <p className='text-white/50 max-w-xl mb-14 text-lg'>
+            <p className='text-white/50 max-w-xl mb-8 md:mb-14 text-lg'>
               Every chair we supply is engineered for productivity, comfort, and long term commercial use.
               Not just aesthetics.
             </p>
@@ -370,7 +370,7 @@ export default function Home() {
 
         {/* Products — card stack carousel */}
         <section id='collections' className='relative py-20 md:py-28 bg-gray-950 overflow-hidden'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <div className='text-center mb-12'>
               <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
                 Product Range
@@ -411,15 +411,15 @@ export default function Home() {
         </section>
 
         {/* Features */}
-        <section id='features' className='py-20 md:py-28 bg-gray-900 text-white'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+        <section id='features' className='py-12 md:py-28 bg-gray-900 text-white'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               What Sets Us Apart
             </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold mb-16'>
+            <h2 className='font-display text-3xl md:text-5xl font-bold mb-8 md:mb-16'>
               Designed for Business
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16'>
               {FEATURES.map((f) => (
                 <div key={f.number} className='flex gap-6'>
                   <span className='text-4xl font-bold text-gray-700 font-display shrink-0 leading-none'>
@@ -491,19 +491,19 @@ export default function Home() {
         )}
 
         {/* Process */}
-        <section className='py-20 md:py-28'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+        <section className='py-12 md:py-28'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               How It Works
             </p>
             <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
               From Enquiry<br />to Installation
             </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+            <p className='text-gray-500 max-w-xl mb-8 md:mb-14 text-lg'>
               A simple, hassle free process whether you're furnishing a 10 seat office or
               a 500 person facility.
             </p>
-            <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8'>
               {[
                 { n: '1', title: 'Share Requirements', desc: "Tell us your space, headcount, and budget via WhatsApp or call. We'll guide you to the right products." },
                 { n: '2', title: 'Get a Quote', desc: 'Receive an itemised quotation with product specs, fabric/colour options, and delivery timeline.' },
@@ -526,15 +526,15 @@ export default function Home() {
         <ScrollTestimonials items={TESTIMONIALS} />
 
         {/* Who We Serve — glowing bento grid */}
-        <section className='py-20 md:py-28 bg-white'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+        <section className='py-12 md:py-28 bg-white'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               Our Clientele
             </p>
             <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
               Trusted Across<br />Industries
             </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+            <p className='text-gray-500 max-w-xl mb-8 md:mb-14 text-lg'>
               From corporate offices to government institutions, we supply furniture to organisations
               that demand quality, durability, and value at scale.
             </p>
@@ -547,7 +547,7 @@ export default function Home() {
                 { label: 'Banks & Finance', Icon: Banknote, desc: 'Branch offices, regional HQs', area: 'md:[grid-area:2/9/3/13]' },
                 { label: 'Hotels & Hospitality', Icon: Hotel, desc: 'Conference halls, business centres', area: 'md:[grid-area:3/1/4/13]' },
               ] as const).map((client) => (
-                <li key={client.label} className={`min-h-[14rem] list-none ${client.area}`}>
+                <li key={client.label} className={`min-h-0 md:min-h-[14rem] list-none ${client.area}`}>
                   <div className='relative h-full rounded-[1.25rem] border-[0.75px] border-gray-200 p-2 md:rounded-[1.5rem] md:p-3'>
                     <GlowingEffect
                       spread={40}
@@ -588,9 +588,9 @@ export default function Home() {
         </section>
 
         {/* FAQ */}
-        <section className='py-20 md:py-28 bg-gray-50'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-            <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14'>
+        <section className='py-12 md:py-28 bg-gray-50'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+            <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8 md:mb-14'>
               <div>
                 <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
                   Common Questions
@@ -604,7 +604,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-0 gap-y-8 lg:gap-x-16 lg:gap-y-12'>
               {/* Business FAQs */}
               <div>
                 <div className='flex items-center gap-3 mb-6'>
@@ -639,8 +639,8 @@ export default function Home() {
         </section>
 
         {/* Contact */}
-        <section id='contact' className='py-20 md:py-28 bg-gray-900 text-white'>
-          <div className='max-w-4xl mx-auto px-6 lg:px-10 text-center'>
+        <section id='contact' className='py-12 md:py-28 bg-gray-900 text-white'>
+          <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-10 text-center'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               Get in Touch
             </p>

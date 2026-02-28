@@ -19,9 +19,11 @@ export default function WaveBackground({ className = '', variant = 'indigo' }: P
 
     let time = 0
     let animId: number
+    let frameCount = 0
 
     const isWarm = variant === 'warm'
-    const waveCount = 6
+    const isMobile = window.innerWidth < 768
+    const waveCount = isMobile ? 3 : 6
 
     const waveData = Array.from({ length: waveCount }).map(() => ({
       value: Math.random() * (isWarm ? 0.5 : 0.4) + (isWarm ? 0.15 : 0.1),
@@ -130,6 +132,12 @@ export default function WaveBackground({ className = '', variant = 'indigo' }: P
     }
 
     function animate() {
+      frameCount++
+      // Skip every other frame on mobile to save battery
+      if (isMobile && frameCount % 2 !== 0) {
+        animId = requestAnimationFrame(animate)
+        return
+      }
       time += isWarm ? 0.006 : 0.015
       updateWaveData()
       draw()

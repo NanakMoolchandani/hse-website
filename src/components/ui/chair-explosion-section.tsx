@@ -129,14 +129,14 @@ export default function ChairExplosionSection() {
       ref={sectionRef}
       className='relative w-full min-h-screen bg-black overflow-hidden'
     >
-      <div className='flex flex-col lg:flex-row items-center h-screen'>
+      <div className='flex flex-col-reverse lg:flex-row items-center h-screen'>
         {/* Left — About text (narrower) */}
-        <div className='w-full lg:w-[35%] flex items-center justify-center px-8 md:px-12 lg:px-14 py-16 lg:py-0'>
+        <div className='w-full lg:w-[35%] flex items-center justify-center px-6 md:px-12 lg:px-14 py-10 lg:py-0'>
           <div className='max-w-md'>
             <p className='text-xs font-semibold tracking-[0.25em] uppercase text-gray-500 mb-4'>
               Est. 1997 &middot; Neemuch, MP
             </p>
-            <h2 className='font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>
+            <h2 className='font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>
               About MVM<br />Aasanam
             </h2>
             <p className='text-gray-300 text-base leading-relaxed mb-5'>
@@ -158,7 +158,7 @@ export default function ChairExplosionSection() {
         </div>
 
         {/* Right — Chair explosion canvas (wider) */}
-        <div className='w-full lg:w-[65%] h-[50vh] lg:h-full relative'>
+        <div className='w-full lg:w-[65%] h-[60vh] lg:h-full relative'>
           <canvas
             ref={canvasRef}
             className='absolute inset-0 w-full h-full'

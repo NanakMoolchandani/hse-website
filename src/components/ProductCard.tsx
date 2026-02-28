@@ -18,6 +18,7 @@ export default function ProductCard({ product, variant = 'light' }: ProductCardP
   const featureCount = product.metadata?.features?.length || 0
 
   const isDark = variant === 'dark'
+  const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
 
   // Premium 3D tilt effect on mouse move
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -45,8 +46,8 @@ export default function ProductCard({ product, variant = 'light' }: ProductCardP
           ? 'bg-white/[0.03] border-white/[0.08] hover:border-white/20 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-white/5 backdrop-blur-sm'
           : 'bg-white border-gray-800/20 hover:border-gray-600/30 hover:shadow-xl hover:shadow-black/20'
       }`}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={isTouchDevice ? undefined : handleMouseMove}
+      onMouseLeave={isTouchDevice ? undefined : handleMouseLeave}
       style={{ transition: 'transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease' }}
     >
       {image ? (

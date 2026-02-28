@@ -58,7 +58,7 @@ export default function ScrollTestimonials({ items }: Props) {
     <section
       ref={sectionRef}
       className='relative bg-gray-950'
-      style={{ height: `${items.length * 100}vh` }}
+      style={{ height: `${items.length * 80}vh` }}
     >
       <div className='sticky top-0 h-screen flex items-center overflow-hidden'>
         {/* Subtle background accents */}
@@ -68,13 +68,13 @@ export default function ScrollTestimonials({ items }: Props) {
         </div>
 
         <div className='relative z-10 max-w-5xl mx-auto px-6 lg:px-10 w-full'>
-          <div className='grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20 items-center'>
+          <div className='grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-6 lg:gap-20 items-center'>
             {/* Left: Section heading + progress */}
             <div>
               <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
                 Client Feedback
               </p>
-              <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-4'>
+              <h2 className='font-display text-2xl md:text-4xl font-bold text-white mb-4'>
                 What Our Clients Say About Us
               </h2>
               <p className='text-white/40 text-base mb-10'>
@@ -107,7 +107,7 @@ export default function ScrollTestimonials({ items }: Props) {
             </div>
 
             {/* Right: Testimonial card */}
-            <div className='relative min-h-[420px]'>
+            <div className='relative min-h-0 lg:min-h-[420px]'>
               <AnimatePresence mode='popLayout'>
                 <motion.div
                   key={activeIndex}
@@ -118,7 +118,7 @@ export default function ScrollTestimonials({ items }: Props) {
                     duration: 0.6,
                     ease: [0.25, 0.46, 0.45, 0.94],
                   }}
-                  className='glass-card p-8 md:p-10 flex flex-col h-full'
+                  className='glass-card p-5 md:p-10 flex flex-col h-full'
                 >
                   <Quote className='w-10 h-10 text-indigo-400/30 mb-6' />
 

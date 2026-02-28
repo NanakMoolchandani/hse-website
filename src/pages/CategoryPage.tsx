@@ -26,7 +26,7 @@ export default function CategoryPage() {
   if (!categoryInfo) {
     return (
       <div className='min-h-screen bg-black pt-24'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 text-center'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 text-center'>
           <h1 className='text-3xl font-bold text-white mb-4'>Category not found</h1>
           <p className='text-gray-400 mb-8'>The category you're looking for doesn't exist.</p>
           <Link to='/' className='text-white font-medium hover:underline'>
@@ -41,7 +41,7 @@ export default function CategoryPage() {
     <BeamsBackground intensity='medium' className='min-h-screen text-white flex flex-col'>
       <div className='pt-20 flex-1'>
         {/* Breadcrumb */}
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-4 pb-2'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-4 pb-2'>
           <nav className='flex items-center gap-1 text-sm text-gray-500'>
             <Link to='/' className='hover:text-gray-300 transition-colors'>Home</Link>
             <ChevronRight className='w-3 h-3' />
@@ -50,11 +50,11 @@ export default function CategoryPage() {
         </div>
 
         {/* Header */}
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 py-8'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2'>
             {categoryInfo.series}
           </p>
-          <h1 className='font-display text-4xl md:text-6xl font-bold text-white mb-3 tracking-tight'>
+          <h1 className='font-display text-3xl md:text-6xl font-bold text-white mb-3 tracking-tight'>
             {categoryInfo.label}
           </h1>
           <p className='text-gray-400 text-lg max-w-xl'>
@@ -63,7 +63,7 @@ export default function CategoryPage() {
         </div>
 
         {/* Category tabs */}
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 pb-8'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-8'>
           <div className='flex gap-2 overflow-x-auto pb-2'>
             {CATEGORIES.map((cat) => (
               <Link
@@ -82,7 +82,7 @@ export default function CategoryPage() {
         </div>
 
         {/* Product grid */}
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 pb-20'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-20'>
           {loading ? (
             <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (

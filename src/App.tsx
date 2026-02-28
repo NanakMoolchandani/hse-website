@@ -150,7 +150,7 @@ function Navbar() {
             WhatsApp Us
           </a>
           <button
-            className={`md:hidden p-2 ${textColor}`}
+            className={`md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center ${textColor}`}
             onClick={() => setOpen((o) => !o)}
           >
             {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}

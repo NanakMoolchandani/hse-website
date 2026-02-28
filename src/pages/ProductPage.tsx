@@ -112,7 +112,7 @@ export default function ProductPage() {
   if (!product) {
     return (
       <div className='min-h-screen bg-white pt-24'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 text-center'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 text-center'>
           <h1 className='text-3xl font-bold text-gray-900 mb-4'>Product not found</h1>
           <p className='text-gray-500 mb-8'>The product you're looking for doesn't exist or has been removed.</p>
           <Link to='/' className='text-gray-900 font-medium hover:underline'>
@@ -151,8 +151,8 @@ export default function ProductPage() {
       {/* Detail Section */}
       <div className='bg-white flex-1 flex flex-col'>
         {/* Breadcrumb */}
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-12 pb-4'>
-          <nav className='flex items-center gap-1 text-sm text-gray-400'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 pb-4'>
+          <nav className='flex items-center gap-1.5 text-sm text-gray-400'>
             <Link to='/' className='hover:text-gray-700'>Home</Link>
             <ChevronRight className='w-3 h-3' />
             {categoryInfo && (
@@ -168,7 +168,7 @@ export default function ProductPage() {
         </div>
 
         {/* Product info */}
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 pb-8'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-8'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16'>
             {/* Left: Product name + description */}
             <div>
@@ -181,7 +181,7 @@ export default function ProductPage() {
                 </Link>
               )}
 
-              <h1 className='font-display text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mt-3 mb-8 leading-tight'>
+              <h1 className='font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mt-3 mb-8 leading-tight'>
                 {product.name}
               </h1>
 
@@ -220,7 +220,7 @@ export default function ProductPage() {
                 <TrustBadges />
               </div>
 
-              <div className='flex flex-row gap-2'>
+              <div className='flex flex-col sm:flex-row gap-2'>
                 <WhatsAppButton productName={product.name || 'this product'} className='flex-1 text-sm px-4 py-2.5' />
                 <a
                   href='tel:+919131438300'
@@ -254,7 +254,7 @@ export default function ProductPage() {
 
         {/* Feature highlights */}
         {features.length > 0 && (
-          <div className='max-w-7xl mx-auto px-6 lg:px-10 py-12 border-t border-gray-100'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 border-t border-gray-100'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-2'>
               Key Features
             </p>
@@ -267,7 +267,7 @@ export default function ProductPage() {
 
         {/* Related products */}
         {related.length > 0 && (
-          <div className='max-w-7xl mx-auto px-6 lg:px-10 py-16 border-t border-gray-100'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-16 border-t border-gray-100'>
             <h2 className='text-2xl font-bold text-gray-900 mb-8'>More in {productCategory?.label}</h2>
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
               {related.map((p) => (

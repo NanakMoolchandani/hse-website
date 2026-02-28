@@ -23,11 +23,11 @@ export default function About() {
     <div className='bg-white min-h-screen flex flex-col'>
       {/* Hero */}
       <section className='bg-gray-900 text-white pt-28 pb-20 md:pt-36 md:pb-28'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Our Story
           </p>
-          <h1 className='font-display text-4xl md:text-6xl font-bold mb-6'>
+          <h1 className='font-display text-3xl md:text-6xl font-bold mb-6'>
             About MVM<br />Aasanam
           </h1>
           <p className='text-gray-400 text-lg max-w-2xl leading-relaxed'>
@@ -42,10 +42,10 @@ export default function About() {
 
       {/* Stats */}
       <section className='border-b border-gray-100 py-10 md:py-14'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8'>
           {STATS.map((s) => (
             <div key={s.label} className='text-center'>
-              <p className='text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
+              <p className='text-2xl sm:text-4xl font-bold text-gray-900 font-display'>{s.count}</p>
               <p className='text-sm text-gray-500 mt-1'>{s.label}</p>
             </div>
           ))}
@@ -53,9 +53,9 @@ export default function About() {
       </section>
 
       {/* What We Do */}
-      <section className='py-20 md:py-28'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-16'>
+      <section className='py-12 md:py-28'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16'>
             <div>
               <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
                 What We Do
@@ -98,8 +98,8 @@ export default function About() {
       </section>
 
       {/* Timeline */}
-      <section className='py-20 md:py-28 bg-gray-50'>
-        <div className='max-w-3xl mx-auto px-6 lg:px-10'>
+      <section className='py-12 md:py-28 bg-gray-50'>
+        <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Our Journey
           </p>
@@ -128,8 +128,8 @@ export default function About() {
       </section>
 
       {/* Certifications */}
-      <section className='py-20 md:py-28'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+      <section className='py-12 md:py-28'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
             Certifications & Compliance
           </p>
@@ -196,7 +196,7 @@ export default function About() {
                 color: 'bg-emerald-50 text-emerald-700',
               },
             ].map((cert) => (
-              <div key={cert.title} className='rounded-2xl border border-gray-200 p-8 hover:shadow-md transition-shadow'>
+              <div key={cert.title} className='rounded-2xl border border-gray-200 p-5 sm:p-8 hover:shadow-md transition-shadow'>
                 <div className={`inline-block text-xs font-bold tracking-wide uppercase px-3 py-1 rounded-full mb-4 ${cert.color}`}>
                   {cert.title}
                 </div>
@@ -217,8 +217,8 @@ export default function About() {
       </section>
 
       {/* Contact CTA */}
-      <section className='py-20 md:py-28 bg-gray-900 text-white'>
-        <div className='max-w-4xl mx-auto px-6 lg:px-10 text-center'>
+      <section className='py-12 md:py-28 bg-gray-900 text-white'>
+        <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-10 text-center'>
           <h2 className='font-display text-3xl md:text-5xl font-bold mb-4'>
             Let's Work Together
           </h2>
