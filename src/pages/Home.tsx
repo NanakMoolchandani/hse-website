@@ -9,6 +9,8 @@ import {
   MessageCircle,
   CheckCircle2,
   ChevronDown,
+  Briefcase,
+  Armchair,
 } from 'lucide-react'
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
@@ -213,7 +215,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ]
 
-const FAQS = [
+const BUSINESS_FAQS = [
   {
     q: 'What is the minimum order quantity?',
     a: 'Our minimum order is 10 units. However, we specialise in bulk and project orders, from 50 chairs to 10,000+. Pricing improves significantly with volume.',
@@ -227,24 +229,43 @@ const FAQS = [
     a: 'Standard orders are dispatched within 7 to 15 working days from our Neemuch facility. Large institutional orders (500+ units) may take 3 to 4 weeks depending on customization.',
   },
   {
-    q: 'Do you offer customization?',
-    a: 'Yes. You can choose fabric type (mesh, leatherette, fabric), colour, armrest style (fixed, 2D, 4D), base material (nylon or aluminium), and height range. Every order is configured to your specifications.',
-  },
-  {
     q: 'Are you listed on the Government e Marketplace (GeM)?',
     a: 'Yes, we are an empanelled supplier on GeM. Government bodies can place orders directly through the GeM portal with all required compliance documentation.',
   },
   {
-    q: 'What certifications do you hold?',
-    a: 'We hold ISO 9001 (Quality Management), ISO 14001 (Environmental Management), and ISO 45001 (Occupational Health and Safety) certifications. We are also BIFMA certified and GeM empanelled. All products undergo multi point quality checks before dispatch.',
+    q: 'How do I get a quotation?',
+    a: 'Simply message us on WhatsApp at +91 91314 38300 with your requirements including quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
+  },
+  {
+    q: 'What payment methods do you accept?',
+    a: 'We accept bank transfers (NEFT/RTGS), UPI, cheques, and demand drafts. For institutional orders, we offer flexible payment terms including advance plus balance on delivery.',
+  },
+]
+
+const PRODUCT_FAQS = [
+  {
+    q: 'Do you offer customization?',
+    a: 'Yes. You can choose fabric type (mesh, leatherette, fabric), colour, armrest style (fixed, 2D, 4D), base material (nylon or aluminium), and height range. Every order is configured to your specifications.',
   },
   {
     q: 'What warranty do you provide?',
     a: 'All chairs come with a 1 year warranty on the mechanism (gas lift, tilt, and adjustment controls). Frames and structural components are built for 8+ years of commercial use.',
   },
   {
-    q: 'How do I get a quotation?',
-    a: 'Simply message us on WhatsApp at +91 91314 38300 with your requirements including quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
+    q: 'What certifications do you hold?',
+    a: 'We hold ISO 9001 (Quality Management), ISO 14001 (Environmental Management), and ISO 45001 (Occupational Health and Safety) certifications. We are also BIFMA certified and GeM empanelled. All products undergo multi point quality checks before dispatch.',
+  },
+  {
+    q: 'What materials are used in your chairs?',
+    a: 'We use high density moulded foam, cold rolled steel frames, class 4 gas lifts, and commercial grade mesh or leatherette upholstery. Every component is sourced for durability in high use environments.',
+  },
+  {
+    q: 'Can I order replacement parts?',
+    a: 'Yes. We stock all components including gas lifts, castors, armrests, and mechanisms. Replacement parts can be ordered directly through WhatsApp and shipped within 3 to 5 working days.',
+  },
+  {
+    q: 'What weight capacity do your chairs support?',
+    a: 'Our standard chairs support up to 120 kg. Heavy duty models in the Executive and Ergonomic ranges are rated for 150 kg with reinforced bases and mechanisms.',
   },
 ]
 
@@ -611,20 +632,51 @@ export default function Home() {
 
         {/* FAQ */}
         <section className='py-20 md:py-28 bg-gray-50'>
-          <div className='max-w-3xl mx-auto px-6 lg:px-10'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-              Common Questions
-            </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-              Frequently Asked<br />Questions
-            </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              Everything you need to know about ordering furniture from us.
-            </p>
-            <div className='border-t border-gray-200'>
-              {FAQS.map((faq) => (
-                <FaqItem key={faq.q} q={faq.q} a={faq.a} />
-              ))}
+          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
+            <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14'>
+              <div>
+                <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
+                  Common Questions
+                </p>
+                <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+                  Frequently Asked<br />Questions
+                </h2>
+                <p className='text-gray-500 max-w-xl text-lg'>
+                  Everything you need to know about ordering furniture from us.
+                </p>
+              </div>
+            </div>
+
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12'>
+              {/* Business FAQs */}
+              <div>
+                <div className='flex items-center gap-3 mb-6'>
+                  <span className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-sm font-semibold text-indigo-700'>
+                    <Briefcase className='w-4 h-4' />
+                    Business
+                  </span>
+                </div>
+                <div className='border-t border-gray-200'>
+                  {BUSINESS_FAQS.map((faq) => (
+                    <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Product FAQs */}
+              <div>
+                <div className='flex items-center gap-3 mb-6'>
+                  <span className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-sm font-semibold text-amber-700'>
+                    <Armchair className='w-4 h-4' />
+                    Product
+                  </span>
+                </div>
+                <div className='border-t border-gray-200'>
+                  {PRODUCT_FAQS.map((faq) => (
+                    <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
