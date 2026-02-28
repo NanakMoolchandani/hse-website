@@ -21,7 +21,7 @@ export default function WaveBackground({ className = '', variant = 'indigo' }: P
     let animId: number
 
     const isWarm = variant === 'warm'
-    const waveCount = isWarm ? 14 : 6
+    const waveCount = 6
 
     const waveData = Array.from({ length: waveCount }).map(() => ({
       value: Math.random() * (isWarm ? 0.5 : 0.4) + (isWarm ? 0.15 : 0.1),
@@ -77,26 +77,33 @@ export default function WaveBackground({ className = '', variant = 'indigo' }: P
     }
 
     function drawWarm(w: number, h: number) {
+      // Centre band: waves only occupy middle 40% of height
+      const bandTop = h * 0.3
+      const bandHeight = h * 0.4
+
       waveData.forEach((data, i) => {
         const freq = data.value * 6
 
+        // Purple on left → red on right
         const grad = ctx!.createLinearGradient(0, 0, w, 0)
-        grad.addColorStop(0, 'rgba(255, 255, 255, 0.4)')
-        grad.addColorStop(0.4, 'rgba(255, 200, 180, 0.35)')
-        grad.addColorStop(0.7, 'rgba(220, 80, 60, 0.3)')
-        grad.addColorStop(1, 'rgba(180, 30, 20, 0.25)')
+        grad.addColorStop(0, 'rgba(139, 92, 246, 0.4)')
+        grad.addColorStop(0.3, 'rgba(168, 85, 200, 0.35)')
+        grad.addColorStop(0.6, 'rgba(220, 80, 80, 0.3)')
+        grad.addColorStop(1, 'rgba(200, 30, 30, 0.3)')
 
         ctx!.beginPath()
         for (let x = 0; x < w; x++) {
           const nx = (x / w) * 2 - 1
           const px = nx + i * 0.04 + freq * 0.03
+          // Negative time makes waves flow left-to-right (opposite of chair marquee)
           const py =
-            Math.sin(px * 8 + time + i * 0.7) *
-            Math.cos(px * 2.5 + time * 0.3) *
+            Math.sin(px * 8 - time + i * 0.7) *
+            Math.cos(px * 2.5 - time * 0.3) *
             freq *
-            0.1 *
+            0.06 *
             ((i + 1) / waveCount)
-          const y = (py + 1) * h / 2
+          // Map into centre band instead of full height
+          const y = bandTop + (py + 1) * bandHeight / 2
           x === 0 ? ctx!.moveTo(x, y) : ctx!.lineTo(x, y)
         }
 
@@ -104,9 +111,9 @@ export default function WaveBackground({ className = '', variant = 'indigo' }: P
         ctx!.strokeStyle = grad
 
         const glowProgress = i / waveCount
-        const glowR = Math.round(255 - glowProgress * 75)
-        const glowG = Math.round(255 - glowProgress * 200)
-        const glowB = Math.round(255 - glowProgress * 220)
+        const glowR = Math.round(139 + glowProgress * 61)
+        const glowG = Math.round(92 - glowProgress * 62)
+        const glowB = Math.round(246 - glowProgress * 216)
         ctx!.shadowColor = `rgba(${glowR},${glowG},${glowB},0.3)`
         ctx!.shadowBlur = 6
         ctx!.stroke()
@@ -123,7 +130,7 @@ export default function WaveBackground({ className = '', variant = 'indigo' }: P
     }
 
     function animate() {
-      time += 0.015
+      time += isWarm ? 0.006 : 0.015
       updateWaveData()
       draw()
       animId = requestAnimationFrame(animate)
