@@ -642,6 +642,18 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Footer */}
+        <footer className='bg-gray-950 border-t border-white/10 py-8'>
+          <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500'>
+            <p>&copy; {new Date().getFullYear()} Hari Shewa Enterprises. All Rights Reserved.</p>
+            <div className='flex gap-6'>
+              <Link to='/about' className='hover:text-gray-300 transition-colors'>About</Link>
+              <Link to='/privacy' className='hover:text-gray-300 transition-colors'>Privacy Policy</Link>
+              <Link to='/terms' className='hover:text-gray-300 transition-colors'>Terms of Service</Link>
+            </div>
+          </div>
+        </footer>
+
       </div>
     </>
   )
