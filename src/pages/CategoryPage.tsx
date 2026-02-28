@@ -38,8 +38,8 @@ export default function CategoryPage() {
   }
 
   return (
-    <BeamsBackground intensity='medium' className='min-h-screen text-white'>
-      <div className='pt-20'>
+    <BeamsBackground intensity='medium' className='min-h-screen text-white flex flex-col'>
+      <div className='pt-20 flex-1'>
         {/* Breadcrumb */}
         <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-4 pb-2'>
           <nav className='flex items-center gap-1 text-sm text-gray-500'>

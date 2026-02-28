@@ -127,7 +127,7 @@ export default function ProductPage() {
   const features = product.metadata?.features || []
 
   return (
-    <div className='min-h-screen bg-white'>
+    <div className='min-h-screen bg-white flex flex-col'>
       {/* Full-Screen Scroll Hero */}
       {scrollSections.length > 0 && (
         <FullScreenScrollFX
@@ -149,7 +149,7 @@ export default function ProductPage() {
       )}
 
       {/* Detail Section */}
-      <div className='bg-white'>
+      <div className='bg-white flex-1 flex flex-col'>
         {/* Breadcrumb */}
         <div className='max-w-7xl mx-auto px-6 lg:px-10 pt-12 pb-4'>
           <nav className='flex items-center gap-1 text-sm text-gray-400'>

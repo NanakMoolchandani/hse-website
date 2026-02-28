@@ -167,7 +167,7 @@ export function BeamsBackground({
   return (
     <div
       className={cn(
-        'relative w-full overflow-hidden bg-neutral-950',
+        'relative w-full overflow-hidden bg-neutral-950 flex flex-col',
         className
       )}
     >
@@ -193,7 +193,7 @@ export function BeamsBackground({
       />
 
       {/* Content on top of beams */}
-      <div className='relative z-10'>
+      <div className='relative z-10 flex flex-col flex-1 min-h-0'>
         {children}
       </div>
     </div>

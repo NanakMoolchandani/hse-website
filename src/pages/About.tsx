@@ -20,7 +20,7 @@ const MILESTONES = [
 
 export default function About() {
   return (
-    <div className='bg-white'>
+    <div className='bg-white min-h-screen flex flex-col'>
       {/* Hero */}
       <section className='bg-gray-900 text-white pt-28 pb-20 md:pt-36 md:pb-28'>
         <div className='max-w-7xl mx-auto px-6 lg:px-10'>
