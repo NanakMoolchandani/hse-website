@@ -133,44 +133,6 @@ const FEATURES = [
   },
 ]
 
-const SPECS = [
-  {
-    heading: 'Chair Construction',
-    rows: [
-      ['Frame', 'MS / Aluminium'],
-      ['Base', 'Nylon 5 Star / Aluminium'],
-      ['Gas Lift', 'Class 4 Hydraulic'],
-      ['Load Rating', 'Up to 150 kg'],
-    ],
-  },
-  {
-    heading: 'Upholstery',
-    rows: [
-      ['Fabric', 'Mesh / Fabric / Leatherette'],
-      ['Foam Density', 'High Density PU Foam'],
-      ['Armrests', 'Fixed / 2D / 4D'],
-      ['Warranty', '1 Year on Mechanism'],
-    ],
-  },
-  {
-    heading: 'Product Range',
-    rows: [
-      ['Executive', 'High Back Chairs'],
-      ['Task', 'Mid Back Ergonomic'],
-      ['Cafeteria', 'Stackable Chairs & Tables'],
-      ['Visitor', 'Reception & Waiting Area'],
-    ],
-  },
-  {
-    heading: 'Supply & Service',
-    rows: [
-      ['Coverage', 'Central India'],
-      ['Min. Order', '10 Units'],
-      ['Lead Time', '7 to 15 Working Days'],
-      ['Installation', 'Available on Request'],
-    ],
-  },
-]
 
 const CLIENTS = [
   { name: 'SBI', logo: '/logos/sbi.svg' },
@@ -619,40 +581,6 @@ export default function Home() {
                 <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
                   <CheckCircle2 className='w-4 h-4 text-green-500 shrink-0' />
                   <span>{badge}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Specs */}
-        <section className='py-20 md:py-28'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
-              Specifications
-            </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-              Built to Commercial<br />Standards
-            </h2>
-            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
-              Every product meets rigorous quality benchmarks. Here's what goes into our furniture.
-            </p>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-              {SPECS.map((g) => (
-                <div key={g.heading} className='rounded-2xl border border-gray-200 overflow-hidden'>
-                  <div className='bg-gray-900 px-6 py-4'>
-                    <h4 className='font-bold text-white text-sm tracking-wide uppercase'>{g.heading}</h4>
-                  </div>
-                  <table className='w-full'>
-                    <tbody>
-                      {g.rows.map(([label, value], idx) => (
-                        <tr key={label} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                          <td className='px-6 py-4 text-sm text-gray-500 w-1/2'>{label}</td>
-                          <td className='px-6 py-4 text-sm font-semibold text-gray-900 text-right'>{value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
                 </div>
               ))}
             </div>

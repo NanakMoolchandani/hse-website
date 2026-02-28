@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Quote } from 'lucide-react'
 
@@ -19,35 +19,38 @@ interface Props {
 export default function ScrollTestimonials({ items }: Props) {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const lastIndexRef = useRef(0)
 
-  useEffect(() => {
+  const handleScroll = useCallback(() => {
     const section = sectionRef.current
     if (!section) return
 
-    const handleScroll = () => {
-      const rect = section.getBoundingClientRect()
-      const sectionHeight = section.offsetHeight
-      const viewportH = window.innerHeight
+    const rect = section.getBoundingClientRect()
+    const sectionHeight = section.offsetHeight
+    const viewportH = window.innerHeight
 
-      // How far the section top has scrolled past viewport top
-      const scrolled = -rect.top
-      // Total scrollable distance within this section
-      const scrollable = sectionHeight - viewportH
+    const scrolled = -rect.top
+    const scrollable = sectionHeight - viewportH
 
-      if (scrollable <= 0) return
+    if (scrollable <= 0) return
 
-      const progress = Math.max(0, Math.min(1, scrolled / scrollable))
-      const idx = Math.min(
-        items.length - 1,
-        Math.floor(progress * items.length),
-      )
+    const progress = Math.max(0, Math.min(1, scrolled / scrollable))
+    const idx = Math.min(
+      items.length - 1,
+      Math.floor(progress * items.length),
+    )
+
+    if (idx !== lastIndexRef.current) {
+      lastIndexRef.current = idx
       setActiveIndex(idx)
     }
+  }, [items.length])
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [items.length])
+  }, [handleScroll])
 
   const current = items[activeIndex]
 
@@ -83,7 +86,7 @@ export default function ScrollTestimonials({ items }: Props) {
                 {items.map((_, i) => (
                   <div
                     key={i}
-                    className='relative h-1 rounded-full overflow-hidden transition-all duration-500'
+                    className='relative h-1 rounded-full overflow-hidden transition-all duration-700 ease-out'
                     style={{ width: i === activeIndex ? 48 : 16 }}
                   >
                     <div className='absolute inset-0 bg-white/10 rounded-full' />
@@ -91,7 +94,7 @@ export default function ScrollTestimonials({ items }: Props) {
                       className='absolute inset-0 bg-indigo-400 rounded-full'
                       initial={false}
                       animate={{ scaleX: i === activeIndex ? 1 : 0 }}
-                      transition={{ duration: 0.5, ease: 'easeInOut' }}
+                      transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                       style={{ transformOrigin: 'left' }}
                     />
                   </div>
@@ -105,19 +108,22 @@ export default function ScrollTestimonials({ items }: Props) {
 
             {/* Right: Testimonial card */}
             <div className='relative min-h-[420px]'>
-              <AnimatePresence mode='wait'>
+              <AnimatePresence mode='popLayout'>
                 <motion.div
                   key={activeIndex}
-                  initial={{ opacity: 0, y: 60, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -40, scale: 0.97 }}
-                  transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                  initial={{ opacity: 0, y: 30, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+                  transition={{
+                    duration: 0.6,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
                   className='glass-card p-8 md:p-10 flex flex-col h-full'
                 >
                   <Quote className='w-10 h-10 text-indigo-400/30 mb-6' />
 
                   <blockquote className='text-white text-lg md:text-xl font-medium leading-relaxed mb-6'>
-                    "{current.quote}"
+                    &ldquo;{current.quote}&rdquo;
                   </blockquote>
 
                   <p className='text-white/40 text-sm leading-relaxed flex-1 mb-8'>
