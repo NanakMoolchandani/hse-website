@@ -267,24 +267,51 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function Home() {
   const [productCounts, setProductCounts] = useState<Record<string, number>>({})
   const [products, setProducts] = useState<CatalogProduct[]>([])
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
 
   useEffect(() => {
     fetchProductCounts().then(setProductCounts)
     fetchProducts().then(setProducts)
   }, [])
 
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   return (
     <>
-      <ScrollExpandMedia
-        mediaType='video'
-        mediaSrc='https://videos.pexels.com/video-files/8347237/8347237-hd_1920_1080_25fps.mp4'
-        posterSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
-        bgImageSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
-        title='MVM Aasanam'
-        date='Est. 1997 · Neemuch, MP'
-        scrollToExpand='Scroll to explore'
-        textBlend
-      />
+      {isMobile ? (
+        <section className='relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden'>
+          <img
+            src='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
+            alt='MVM Aasanam hero'
+            className='absolute inset-0 w-full h-full object-cover'
+          />
+          <div className='absolute inset-0 bg-black/40' />
+          <div className='relative z-10 text-center px-6'>
+            <h1 className='text-5xl font-bold text-white font-display tracking-tight'>
+              MVM Aasanam
+            </h1>
+            <p className='text-white/70 text-sm font-medium tracking-widest uppercase mt-3'>
+              Est. 1997 · Neemuch, MP
+            </p>
+            <ChevronDown className='w-6 h-6 text-white/50 mx-auto mt-8 animate-bounce' />
+          </div>
+        </section>
+      ) : (
+        <ScrollExpandMedia
+          mediaType='video'
+          mediaSrc='https://videos.pexels.com/video-files/8347237/8347237-hd_1920_1080_25fps.mp4'
+          posterSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
+          bgImageSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
+          title='MVM Aasanam'
+          date='Est. 1997 · Neemuch, MP'
+          scrollToExpand='Scroll to explore'
+          textBlend
+        />
+      )}
 
       <div className='bg-white'>
         {/* Stats Bar */}

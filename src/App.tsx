@@ -31,6 +31,8 @@ function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastScrollY = useRef(0)
   const location = useLocation()
   const isHome = location.pathname === '/'
 
@@ -38,8 +40,18 @@ function Navbar() {
   const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', onScroll)
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 60)
+      // Hide on scroll down, show on scroll up (only after scrolling past navbar)
+      if (y > 80) {
+        setHidden(y > lastScrollY.current && y - lastScrollY.current > 5)
+      } else {
+        setHidden(false)
+      }
+      lastScrollY.current = y
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -76,7 +88,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
           <Link to='/' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
             Hari Shewa Enterprises
