@@ -104,3 +104,10 @@
   border: 1px solid rgba(99, 102, 241, 0.25);
   backdrop-filter: blur(8px);
 }
+
+/* ── Glowing effect bento cards ──────────────────────── */
+
+.glow {
+  position: absolute;
+  inset: 0;
+}

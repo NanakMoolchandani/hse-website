@@ -11,7 +11,12 @@ import {
   ChevronDown,
   Briefcase,
   Armchair,
+  Package,
+  Palette,
+  Headset,
+  BadgePercent,
 } from 'lucide-react'
+import { GlowingEffect } from '@/src/components/ui/glowing-effect'
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
 import ScrollTestimonials, { type Testimonial } from '@/src/components/ui/scroll-testimonials'
@@ -101,28 +106,32 @@ const QUALITY_PILLARS = [
 
 const FEATURES = [
   {
-    number: '01',
+    icon: Package,
     title: 'Bulk & Project Supply',
     description:
       'From 10 chairs to 10,000. We handle large scale corporate orders, fit outs, and institutional supply with on time delivery across Central India.',
+    area: 'md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/7]',
   },
   {
-    number: '02',
+    icon: Palette,
     title: 'Custom Configurations',
     description:
       'Choose your fabric, colour, armrest type, base finish, and height range. We configure every order to match your office interior and brand.',
+    area: 'md:[grid-area:1/7/2/13] xl:[grid-area:1/7/2/13]',
   },
   {
-    number: '03',
+    icon: Headset,
     title: 'After Sales Support',
     description:
       'Dedicated support for repairs, spare parts, and replacements. We stand behind every product we supply, long after the invoice is paid.',
+    area: 'md:[grid-area:2/1/3/7] xl:[grid-area:2/1/3/8]',
   },
   {
-    number: '04',
+    icon: BadgePercent,
     title: 'Competitive Pricing',
     description:
       'Direct from manufacturer to you, no middlemen. Get the best price on premium office and cafeteria furniture without compromising on quality.',
+    area: 'md:[grid-area:2/7/3/13] xl:[grid-area:2/8/3/13]',
   },
 ]
 
@@ -441,28 +450,55 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features */}
-        <section id='features' className='py-20 md:py-28 bg-gray-900 text-white'>
+        {/* Features — glowing bento grid */}
+        <section id='features' className='py-20 md:py-28 bg-white'>
           <div className='max-w-7xl mx-auto px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               What Sets Us Apart
             </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold mb-16'>
+            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
               Designed for Business
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16'>
-              {FEATURES.map((f) => (
-                <div key={f.number} className='flex gap-6'>
-                  <span className='text-4xl font-bold text-gray-700 font-display shrink-0 leading-none'>
-                    {f.number}
-                  </span>
-                  <div>
-                    <h3 className='text-xl font-semibold mb-2'>{f.title}</h3>
-                    <p className='text-gray-400 leading-relaxed'>{f.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className='text-gray-500 max-w-xl mb-14 text-lg'>
+              Everything we do is built around making bulk furniture procurement simple, reliable, and cost effective.
+            </p>
+            <ul className='grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-2 lg:gap-4'>
+              {FEATURES.map((f, idx) => {
+                const Icon = f.icon
+                return (
+                  <li key={f.title} className={`min-h-[14rem] list-none ${f.area}`}>
+                    <div
+                      className='relative h-full rounded-[1.25rem] border-[0.75px] border-gray-200 p-2 md:rounded-[1.5rem] md:p-3'
+                      style={{ animationDelay: `${idx * 120}ms` }}
+                    >
+                      <GlowingEffect
+                        spread={40}
+                        glow
+                        disabled={false}
+                        proximity={64}
+                        inactiveZone={0.01}
+                        borderWidth={3}
+                      />
+                      <div className='relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl border-[0.75px] border-gray-100 bg-white p-6 shadow-sm md:p-6'>
+                        <div className='relative flex flex-1 flex-col justify-between gap-3'>
+                          <div className='w-fit rounded-lg border-[0.75px] border-gray-200 bg-gray-50 p-2'>
+                            <Icon className='h-4 w-4 text-gray-700' />
+                          </div>
+                          <div className='space-y-3'>
+                            <h3 className='pt-0.5 text-xl leading-[1.375rem] font-semibold tracking-[-0.04em] md:text-2xl md:leading-[1.875rem] text-gray-900'>
+                              {f.title}
+                            </h3>
+                            <p className='text-sm leading-[1.125rem] md:text-base md:leading-[1.375rem] text-gray-500'>
+                              {f.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
           </div>
         </section>
 
