@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CheckCircle2, MessageCircle, Phone, MapPin } from 'lucide-react'
+import Footer from '@/src/components/Footer'
 
 const STATS = [
   { count: '500+', label: 'Corporates Served' },
@@ -247,16 +248,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className='bg-white border-t border-gray-100 py-8'>
-        <div className='max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row justify-between gap-4 text-sm text-gray-400'>
-          <p>&copy; {new Date().getFullYear()} Hari Shewa Enterprises. All Rights Reserved.</p>
-          <div className='flex gap-4'>
-            <Link to='/privacy' className='hover:text-gray-600 transition-colors'>Privacy Policy</Link>
-            <Link to='/terms' className='hover:text-gray-600 transition-colors'>Terms of Service</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Footer from '@/src/components/Footer'
 
 export default function Terms() {
   return (
@@ -239,12 +239,7 @@ export default function Terms() {
         </div>
       </div>
 
-      <footer className='bg-white border-t border-gray-100 py-8'>
-        <div className='max-w-3xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row justify-between gap-4 text-sm text-gray-400'>
-          <Link to='/' className='hover:text-gray-600 transition-colors'>&larr; Back to Home</Link>
-          <Link to='/privacy' className='hover:text-gray-600 transition-colors'>Privacy Policy</Link>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

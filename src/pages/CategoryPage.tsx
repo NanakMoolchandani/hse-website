@@ -5,6 +5,7 @@ import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import ProductCard from '@/src/components/ProductCard'
 import { BeamsBackground } from '@/src/components/ui/beams-background'
 import { ChevronRight } from 'lucide-react'
+import Footer from '@/src/components/Footer'
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>()
@@ -112,6 +113,8 @@ export default function CategoryPage() {
             </div>
           )}
         </div>
+
+        <Footer variant='dark' />
       </div>
     </BeamsBackground>
   )

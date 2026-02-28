@@ -8,6 +8,7 @@ import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
 import TrustBadges from '@/src/components/TrustBadges'
 import { ChevronRight, Share2, Check } from 'lucide-react'
+import Footer from '@/src/components/Footer'
 
 const VIEW_LABELS = ['Front View', 'Side View', 'Rear View', 'Detail', 'Close Up']
 
@@ -275,6 +276,8 @@ export default function ProductPage() {
             </div>
           </div>
         )}
+
+        <Footer />
       </div>
     </div>
   )
