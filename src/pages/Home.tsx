@@ -525,7 +525,7 @@ export default function Home() {
               ))}
             </div>
             <div className='mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-4'>
-              {['ISO 9001 Certified', 'ISO 22000 Certified', 'GeM Empanelled', 'GST Registered', '30+ Years Experience'].map((badge) => (
+              {['ISO 9001', 'ISO 14001', 'ISO 45001', 'BIFMA', 'BIS / ISI Mark', 'GeM Empanelled', 'ZED Certified', 'NSIC', 'GREENGUARD'].map((badge) => (
                 <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
                   <CheckCircle2 className='w-4 h-4 text-green-500 shrink-0' />
                   <span>{badge}</span>
