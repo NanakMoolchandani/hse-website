@@ -27,10 +27,6 @@
   animation: marquee 60s linear infinite;
 }
 
-.animate-marquee-slow:hover {
-  animation-play-state: paused;
-}
-
 /* ── Glass feature cards ─────────────────────────────── */
 
 @keyframes float {
