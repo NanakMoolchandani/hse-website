@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80" fill="none">
+  <circle cx="30" cy="40" r="22" fill="#d42027"/>
+  <path d="M20 40 L40 40 M30 28 L30 52" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="30" cy="40" r="6" fill="#fff"/>
+  <text x="60" y="34" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#d42027">INDIAN</text>
+  <text x="60" y="52" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#1a237e">RAILWAYS</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" fill="none">
+  <circle cx="30" cy="40" r="20" fill="#1a4c8f"/>
+  <circle cx="30" cy="40" r="12" fill="#fff"/>
+  <circle cx="30" cy="40" r="8" fill="#1a4c8f"/>
+  <text x="60" y="36" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#1a4c8f">STATE BANK</text>
+  <text x="60" y="54" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#1a4c8f">OF INDIA</text>
+</svg>

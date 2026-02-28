@@ -162,9 +162,23 @@ const SPECS = [
 ]
 
 const CLIENTS = [
-  'SBI', 'Bank of India', 'PNB', 'Central Bank', 'HDFC Bank', 'Axis Bank',
-  'NTPC', 'BHEL', 'Indian Railways', 'TCS', 'Infosys', 'Wipro',
-  'L&T', 'Reliance', 'IIT Indore', 'IIM Indore', 'AIIMS',
+  { name: 'SBI', logo: '/logos/sbi.svg' },
+  { name: 'Bank of India', logo: '/logos/boi.svg' },
+  { name: 'PNB', logo: '/logos/pnb.svg' },
+  { name: 'Central Bank', logo: '/logos/central-bank.svg' },
+  { name: 'HDFC Bank', logo: '/logos/hdfc.svg' },
+  { name: 'Axis Bank', logo: '/logos/axis.svg' },
+  { name: 'NTPC', logo: '/logos/ntpc.svg' },
+  { name: 'BHEL', logo: '/logos/bhel.svg' },
+  { name: 'Indian Railways', logo: '/logos/indian-railways.svg' },
+  { name: 'TCS', logo: '/logos/tcs.svg' },
+  { name: 'Infosys', logo: '/logos/infosys.svg' },
+  { name: 'Wipro', logo: '/logos/wipro.svg' },
+  { name: 'L&T', logo: '/logos/lt.svg' },
+  { name: 'Reliance', logo: '/logos/reliance.svg' },
+  { name: 'IIT Indore', logo: '/logos/iit-indore.svg' },
+  { name: 'IIM Indore', logo: '/logos/iim-indore.svg' },
+  { name: 'AIIMS', logo: '/logos/aiims.svg' },
 ]
 
 const TESTIMONIALS = [
@@ -335,12 +349,13 @@ export default function Home() {
             <div className='absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none' />
             <div className='absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none' />
             <div className='flex animate-marquee'>
-              {[...CLIENTS, ...CLIENTS].map((name, i) => (
-                <div key={`${name}-${i}`} className='shrink-0 flex items-center px-6'>
-                  <span className='text-base font-semibold text-gray-300 whitespace-nowrap tracking-wide uppercase'>
-                    {name}
-                  </span>
-                  <span className='ml-12 text-gray-200 select-none'>•</span>
+              {[...CLIENTS, ...CLIENTS].map((client, i) => (
+                <div key={`${client.name}-${i}`} className='shrink-0 flex items-center px-8'>
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className='h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity'
+                  />
                 </div>
               ))}
             </div>
@@ -627,46 +642,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className='bg-white border-t border-gray-100 py-10'>
-          <div className='max-w-7xl mx-auto px-6 lg:px-10'>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mb-10'>
-              <div>
-                <h4 className='text-lg font-bold text-gray-900 mb-1'>MVM Aasanam</h4>
-                <p className='text-xs text-gray-400 mb-3'>by Hari Shewa Enterprises</p>
-                <p className='text-sm text-gray-500 leading-relaxed'>
-                  Office & cafeteria furniture specialists serving corporates across Central India since 1997.
-                </p>
-              </div>
-              <div>
-                <h5 className='font-semibold text-gray-900 mb-3'>Products</h5>
-                <div className='space-y-2'>
-                  {CATEGORIES.map((cat) => (
-                    <Link key={cat.slug} to={`/products/${cat.slug}`} className='block text-sm text-gray-500 hover:text-gray-900'>
-                      {cat.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h5 className='font-semibold text-gray-900 mb-3'>Company</h5>
-                <div className='space-y-2'>
-                  <Link to='/about' className='block text-sm text-gray-500 hover:text-gray-900'>About Us</Link>
-                  <a href='#technology' className='block text-sm text-gray-500 hover:text-gray-900'>Craftsmanship</a>
-                  <a href='#features' className='block text-sm text-gray-500 hover:text-gray-900'>Our Process</a>
-                  <a href='#contact' className='block text-sm text-gray-500 hover:text-gray-900'>Contact Us</a>
-                </div>
-              </div>
-            </div>
-            <div className='border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-gray-400'>
-              <p>&copy; {new Date().getFullYear()} Hari Shewa Enterprises. All Rights Reserved.</p>
-              <div className='flex gap-4'>
-                <Link to='/privacy' className='hover:text-gray-600 transition-colors'>Privacy Policy</Link>
-                <Link to='/terms' className='hover:text-gray-600 transition-colors'>Terms of Service</Link>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
     </>
   )

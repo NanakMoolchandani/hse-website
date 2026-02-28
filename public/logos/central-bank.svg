@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80" fill="none">
+  <rect x="8" y="22" width="36" height="36" rx="4" fill="#c8102e"/>
+  <path d="M26 30 L16 50 L36 50 Z" fill="#fff"/>
+  <text x="52" y="34" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#c8102e">CENTRAL BANK</text>
+  <text x="52" y="52" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#1a237e">OF INDIA</text>
+</svg>

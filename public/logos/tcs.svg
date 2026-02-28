@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 80" fill="none">
+  <text x="12" y="52" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#1a1a1a">TCS</text>
+  <rect x="12" y="56" width="80" height="3" rx="1.5" fill="#e21836"/>
+  <text x="100" y="42" font-family="Arial, sans-serif" font-size="9" font-weight="600" fill="#666">TATA</text>
+  <text x="100" y="52" font-family="Arial, sans-serif" font-size="8" font-weight="400" fill="#666">Consultancy</text>
+</svg>
