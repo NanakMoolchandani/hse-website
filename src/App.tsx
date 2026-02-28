@@ -43,13 +43,18 @@ function Navbar() {
     const onScroll = () => {
       const y = window.scrollY
       setScrolled(y > 60)
-      // Hide on scroll down, show on scroll up (only after scrolling past navbar)
-      if (y > 80) {
-        setHidden(y > lastScrollY.current && y - lastScrollY.current > 5)
-      } else {
-        setHidden(false)
+      const delta = y - lastScrollY.current
+      // Only change hidden state on meaningful scroll (ignore tiny jitter)
+      if (Math.abs(delta) > 5) {
+        if (y > 80 && delta > 0) {
+          setHidden(true)   // scrolling down → hide
+        } else if (delta < 0) {
+          setHidden(false)  // scrolling up → show
+        }
+        lastScrollY.current = y
       }
-      lastScrollY.current = y
+      // Always show at top of page
+      if (y <= 80) setHidden(false)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
