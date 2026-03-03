@@ -21,6 +21,10 @@ interface ProductImageLampProps {
   className?: string
 }
 
+/**
+ * Product image with dual vertical lamp lights.
+ * Desktop: full glow effects. Mobile: clean dark bg, centered image, no effects.
+ */
 export function ProductImageLamp({
   src,
   alt,
@@ -38,12 +42,12 @@ export function ProductImageLamp({
   return (
     <div
       className={cn(
-        "relative flex items-center overflow-hidden bg-slate-950 w-full",
+        "relative flex items-center justify-center overflow-hidden bg-slate-950 w-full",
         isCard ? "aspect-square rounded-2xl" : "h-[500px] rounded-xl",
         className
       )}
     >
-      {/* ——— LEFT LAMP ——— */}
+      {/* ——— LEFT LAMP (desktop only) ——— */}
 
       {/* Left light bar */}
       <motion.div
@@ -51,7 +55,7 @@ export function ProductImageLamp({
         whileInView={{ scaleY: 1, opacity: [0, 1, 0.6] }}
         transition={{ delay: 0.1, duration: 1.2, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute z-30"
+        className="absolute z-30 hidden md:block"
         style={{
           left: barOffset,
           top: 0,
@@ -69,7 +73,7 @@ export function ProductImageLamp({
         whileInView={{ opacity: [0, 0.7, 0.35], scaleY: 1 }}
         transition={{ delay: 0.15, duration: 1.2, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute z-10 pointer-events-none"
+        className="absolute z-10 pointer-events-none hidden md:block"
         style={{
           left: barOffset,
           top: 0,
@@ -82,13 +86,13 @@ export function ProductImageLamp({
         }}
       />
 
-      {/* Left light wash — fades rightward to center */}
+      {/* Left light wash */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
         whileInView={{ opacity: [0, 0.6, 0.3], scaleX: 1 }}
         transition={{ delay: 0.25, duration: 1.4, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute z-[5] pointer-events-none"
+        className="absolute z-[5] pointer-events-none hidden md:block"
         style={{
           left: barOffset,
           top: 0,
@@ -101,7 +105,7 @@ export function ProductImageLamp({
 
       {/* Left soft glow */}
       <div
-        className="absolute z-[1] pointer-events-none"
+        className="absolute z-[1] pointer-events-none hidden md:block"
         style={{
           left: barOffset,
           top: 0,
@@ -113,7 +117,7 @@ export function ProductImageLamp({
         }}
       />
 
-      {/* ——— RIGHT LAMP ——— */}
+      {/* ——— RIGHT LAMP (desktop only) ——— */}
 
       {/* Right light bar */}
       <motion.div
@@ -121,7 +125,7 @@ export function ProductImageLamp({
         whileInView={{ scaleY: 1, opacity: [0, 1, 0.6] }}
         transition={{ delay: 0.2, duration: 1.2, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute z-30"
+        className="absolute z-30 hidden md:block"
         style={{
           right: barOffset,
           top: 0,
@@ -139,7 +143,7 @@ export function ProductImageLamp({
         whileInView={{ opacity: [0, 0.7, 0.35], scaleY: 1 }}
         transition={{ delay: 0.25, duration: 1.2, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute z-10 pointer-events-none"
+        className="absolute z-10 pointer-events-none hidden md:block"
         style={{
           right: barOffset,
           top: 0,
@@ -152,13 +156,13 @@ export function ProductImageLamp({
         }}
       />
 
-      {/* Right light wash — fades leftward to center */}
+      {/* Right light wash */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
         whileInView={{ opacity: [0, 0.6, 0.3], scaleX: 1 }}
         transition={{ delay: 0.35, duration: 1.4, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="absolute z-[5] pointer-events-none"
+        className="absolute z-[5] pointer-events-none hidden md:block"
         style={{
           right: barOffset,
           top: 0,
@@ -171,7 +175,7 @@ export function ProductImageLamp({
 
       {/* Right soft glow */}
       <div
-        className="absolute z-[1] pointer-events-none"
+        className="absolute z-[1] pointer-events-none hidden md:block"
         style={{
           right: barOffset,
           top: 0,
@@ -195,7 +199,7 @@ export function ProductImageLamp({
           src={src}
           alt={alt}
           className={cn(
-            "object-contain max-w-full max-h-full",
+            "object-contain max-w-full max-h-full product-lamp-image",
             isCard ? "transition-transform duration-500 group-hover:scale-110" : ""
           )}
           loading="lazy"

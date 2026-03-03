@@ -105,6 +105,34 @@
   backdrop-filter: blur(8px);
 }
 
+/* ── Mobile: clean product images, no effects ────────── */
+
+@media (max-width: 767px) {
+  /* Remove colored glow on product images */
+  .product-lamp-image {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) !important;
+  }
+
+  /* Hide beam canvas animation on mobile */
+  .beams-canvas {
+    display: none !important;
+  }
+
+  /* Hide beam backdrop overlay on mobile */
+  .beams-overlay {
+    display: none !important;
+  }
+}
+
+/* Hide scrollbar on thumbnail strips */
+.thumbnail-scroll::-webkit-scrollbar {
+  display: none;
+}
+.thumbnail-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ── Glowing effect bento cards ──────────────────────── */
 
 .glow {

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
 import { FullScreenScrollFX } from '@/src/components/ui/full-screen-scroll-fx'
+import ImageGallery from '@/src/components/ImageGallery'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
@@ -30,8 +31,18 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(true)
   const [showHindi, setShowHindi] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const categoryInfo = getCategoryBySlug(category || '')
+
+  // Detect mobile for conditional rendering
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   useEffect(() => {
     if (!slug) return
@@ -126,26 +137,38 @@ export default function ProductPage() {
   const productCategory = getCategoryByEnum(product.category || '')
   const features = product.metadata?.features || []
 
+  const productImages = product.processed_photo_urls?.length > 0
+    ? product.processed_photo_urls
+    : product.raw_photo_urls || []
+
   return (
     <div className='min-h-screen bg-white flex flex-col'>
-      {/* Full-Screen Scroll Hero */}
-      {scrollSections.length > 0 && (
-        <FullScreenScrollFX
-          sections={scrollSections}
-          header={
-            <span>{productCategory?.label || 'MVM Aasanam'}</span>
-          }
-          footer={<div>MVM Aasanam</div>}
-          showProgress
-          durations={{ change: 0.7, snap: 800 }}
-          colors={{
-            text: 'rgba(255,255,255,0.9)',
-            overlay: 'rgba(0,0,0,0)',
-            pageBg: '#ffffff',
-            stageBg: '#0a0a0a',
-          }}
-          fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
-        />
+      {/* Mobile: Simple swipeable gallery | Desktop: Full-screen scroll hero */}
+      {isMobile ? (
+        productImages.length > 0 && (
+          <div className='pt-20 px-4 pb-4'>
+            <ImageGallery images={productImages} alt={product.name || 'Product'} />
+          </div>
+        )
+      ) : (
+        scrollSections.length > 0 && (
+          <FullScreenScrollFX
+            sections={scrollSections}
+            header={
+              <span>{productCategory?.label || 'MVM Aasanam'}</span>
+            }
+            footer={<div>MVM Aasanam</div>}
+            showProgress
+            durations={{ change: 0.7, snap: 800 }}
+            colors={{
+              text: 'rgba(255,255,255,0.9)',
+              overlay: 'rgba(0,0,0,0)',
+              pageBg: '#ffffff',
+              stageBg: '#0a0a0a',
+            }}
+            fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
+          />
+        )
       )}
 
       {/* Detail Section */}

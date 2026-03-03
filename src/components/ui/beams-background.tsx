@@ -182,12 +182,12 @@ export function BeamsBackground({
     >
       <canvas
         ref={canvasRef}
-        className='fixed inset-0 z-0'
+        className='fixed inset-0 z-0 beams-canvas'
         style={{ filter: 'blur(15px)' }}
       />
 
       <motion.div
-        className='fixed inset-0 z-[1] bg-neutral-950/5'
+        className='fixed inset-0 z-[1] bg-neutral-950/5 beams-overlay'
         animate={{
           opacity: [0.05, 0.15, 0.05],
         }}
