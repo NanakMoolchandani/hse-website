@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Menu, X, MessageCircle, ChevronDown } from 'lucide-react'
+import { Menu, X, MessageCircle, ChevronDown, FileDown } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CATEGORIES } from '@/src/lib/categories'
@@ -112,17 +112,38 @@ function Navbar() {
                   {productsOpen && (
                     <>
                       <div className='fixed inset-0 z-40' onClick={() => setProductsOpen(false)} />
-                      <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border py-2 w-56 z-50 ${dropdownBg}`}>
-                        {CATEGORIES.map((cat) => (
-                          <Link
-                            key={cat.slug}
-                            to={`/products/${cat.slug}`}
-                            className={`block px-4 py-2 text-sm ${dropdownItemClass}`}
-                            onClick={() => setProductsOpen(false)}
-                          >
-                            {cat.label}
-                          </Link>
-                        ))}
+                      <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border z-50 ${dropdownBg}`}>
+                        <div className='flex'>
+                          {/* Categories */}
+                          <div className='py-2 w-52'>
+                            {CATEGORIES.map((cat) => (
+                              <Link
+                                key={cat.slug}
+                                to={`/products/${cat.slug}`}
+                                className={`block px-4 py-2 text-sm ${dropdownItemClass}`}
+                                onClick={() => setProductsOpen(false)}
+                              >
+                                {cat.label}
+                              </Link>
+                            ))}
+                          </div>
+                          {/* Documents */}
+                          <div className={`py-2 w-48 border-l ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`}>
+                            <p className={`px-4 py-1 text-[10px] font-semibold tracking-widest uppercase ${isCategoryPage ? 'text-gray-500' : 'text-gray-400'}`}>
+                              Documents
+                            </p>
+                            <a
+                              href='https://opevspupyfulsibrognn.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              className={`flex items-center gap-2 px-4 py-2 text-sm ${dropdownItemClass}`}
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              <FileDown className='w-3.5 h-3.5' />
+                              Product Catalog
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </>
                   )}
@@ -206,6 +227,23 @@ function Navbar() {
                   </Link>
                 ))}
               </div>
+            </div>
+            <div>
+              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${
+                isCategoryPage ? 'text-gray-500' : 'text-gray-400'
+              }`}>Documents</p>
+              <a
+                href='https://opevspupyfulsibrognn.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
+                target='_blank'
+                rel='noopener noreferrer'
+                className={`flex items-center gap-2 text-lg font-medium py-1.5 pl-2 ${
+                  isCategoryPage ? 'text-gray-300' : 'text-gray-700'
+                }`}
+                onClick={() => setOpen(false)}
+              >
+                <FileDown className='w-4 h-4' />
+                Product Catalog PDF
+              </a>
             </div>
             {isHome ? (
               <button
