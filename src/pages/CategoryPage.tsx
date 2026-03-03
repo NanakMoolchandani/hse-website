@@ -4,7 +4,7 @@ import { getCategoryBySlug, CATEGORIES } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import ProductCard from '@/src/components/ProductCard'
 import { BeamsBackground } from '@/src/components/ui/beams-background'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, FileDown } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 
 export default function CategoryPage() {
@@ -51,15 +51,33 @@ export default function CategoryPage() {
 
         {/* Header */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8'>
-          <p className='text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2'>
-            {categoryInfo.series}
-          </p>
-          <h1 className='font-display text-3xl md:text-6xl font-bold text-white mb-3 tracking-tight'>
-            {categoryInfo.label}
-          </h1>
-          <p className='text-gray-400 text-base md:text-lg max-w-xl'>
-            {categoryInfo.description}
-          </p>
+          <div className='flex flex-col md:flex-row md:items-start md:justify-between gap-6'>
+            <div>
+              <p className='text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2'>
+                {categoryInfo.series}
+              </p>
+              <h1 className='font-display text-3xl md:text-6xl font-bold text-white mb-3 tracking-tight'>
+                {categoryInfo.label}
+              </h1>
+              <p className='text-gray-400 text-base md:text-lg max-w-xl'>
+                {categoryInfo.description}
+              </p>
+            </div>
+
+            {/* Documents */}
+            <div className='shrink-0 md:mt-2'>
+              <p className='text-[10px] font-semibold tracking-widest uppercase text-gray-500 mb-2'>Documents</p>
+              <a
+                href='https://opevspupyfulsibrognn.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-all'
+              >
+                <FileDown className='w-4 h-4' />
+                Product Catalog PDF
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Category tabs */}
