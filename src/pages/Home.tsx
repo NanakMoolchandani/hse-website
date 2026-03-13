@@ -464,7 +464,6 @@ export default function Home() {
         {/* Product Showcase — scrolling marquee */}
         {products.length > 0 && (
           <section className='relative py-16 md:py-20 bg-gray-800 overflow-hidden'>
-            <WaveBackground variant='warm' />
             <div className='relative z-10'>
               <div className='text-center mb-10'>
                 <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
@@ -489,12 +488,12 @@ export default function Home() {
                         to={`/products/${catSlug}/${product.slug}`}
                         className='shrink-0 w-48 mx-3 group'
                       >
-                        <div className='aspect-square rounded-xl overflow-hidden bg-gray-900/50 border border-white/10 group-hover:border-indigo-500/30 transition-all duration-300'>
+                        <div className='aspect-[3/4] rounded-xl overflow-hidden bg-gray-900 border border-white/10 group-hover:border-indigo-500/30 transition-all duration-300 flex items-center justify-center'>
                           {image ? (
                             <img
                               src={image}
                               alt={product.name || 'Product'}
-                              className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
+                              className='w-full h-full object-contain group-hover:scale-105 transition-transform duration-300'
                               loading='lazy'
                             />
                           ) : (

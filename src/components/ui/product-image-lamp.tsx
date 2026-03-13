@@ -43,7 +43,7 @@ export function ProductImageLamp({
     <div
       className={cn(
         "relative flex items-center justify-center overflow-hidden bg-slate-950 w-full",
-        isCard ? "aspect-square rounded-2xl" : "h-[500px] rounded-xl",
+        isCard ? "aspect-[3/4] rounded-2xl" : "h-[500px] rounded-xl",
         className
       )}
     >

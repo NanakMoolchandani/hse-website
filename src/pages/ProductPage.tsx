@@ -85,8 +85,17 @@ export default function ProductPage() {
     return images.map((img, i) => ({
       id: `img-${i}`,
       background: img,
-      leftLabel: VIEW_LABELS[i] || `View ${i + 1}`,
-      title: product.name || 'Product',
+      leftLabel: (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {i === 0 && (
+            <span style={{ opacity: 1, fontSize: '1.05em', letterSpacing: '0.06em', fontWeight: 700, color: 'rgba(255,255,255,0.95)' }}>
+              {product.name?.toUpperCase()}
+            </span>
+          )}
+          <span>{VIEW_LABELS[i] || `View ${i + 1}`}</span>
+        </div>
+      ),
+      title: '',
       rightLabel: i === 0
         ? productCategory?.series || 'MVM Aasanam'
         : features[i - 1]?.label || productCategory?.label || 'Premium Quality',
@@ -98,16 +107,14 @@ export default function ProductPage() {
           <div className="fx-bg-overlay" />
 
           {/* ——— LEFT LAMP ——— */}
-          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '3px', background: glow.leftLight, boxShadow: `0 0 18px 4px ${glow.left}`, zIndex: 30, opacity: 0.6 }} />
-          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '7rem', background: glow.left, filter: 'blur(28px)', opacity: 0.35, transform: 'translateX(-30%)', zIndex: 10, pointerEvents: 'none' as const }} />
-          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '45%', background: `linear-gradient(to right, ${glow.left}30, ${glow.left}12 40%, ${glow.left}04 70%, transparent)`, zIndex: 5, pointerEvents: 'none' as const, opacity: 0.3 }} />
-          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '40%', opacity: 0.08, background: `linear-gradient(to right, ${glow.left}, transparent 65%)`, filter: 'blur(30px)', zIndex: 1, pointerEvents: 'none' as const }} />
+          <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '3px', background: glow.leftLight, boxShadow: `0 0 24px 6px ${glow.left}`, zIndex: 30, opacity: 0.9 }} />
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '12rem', background: glow.left, filter: 'blur(40px)', opacity: 0.55, zIndex: 10, pointerEvents: 'none' as const }} />
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '40%', background: `linear-gradient(to right, ${glow.left}55, ${glow.left}22 50%, transparent)`, zIndex: 5, pointerEvents: 'none' as const }} />
 
           {/* ——— RIGHT LAMP ——— */}
-          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '3px', background: glow.rightLight, boxShadow: `0 0 18px 4px ${glow.right}`, zIndex: 30, opacity: 0.6 }} />
-          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '7rem', background: glow.right, filter: 'blur(28px)', opacity: 0.35, transform: 'translateX(30%)', zIndex: 10, pointerEvents: 'none' as const }} />
-          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '45%', background: `linear-gradient(to left, ${glow.right}30, ${glow.right}12 40%, ${glow.right}04 70%, transparent)`, zIndex: 5, pointerEvents: 'none' as const, opacity: 0.3 }} />
-          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '40%', opacity: 0.08, background: `linear-gradient(to left, ${glow.right}, transparent 65%)`, filter: 'blur(30px)', zIndex: 1, pointerEvents: 'none' as const }} />
+          <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '3px', background: glow.rightLight, boxShadow: `0 0 24px 6px ${glow.right}`, zIndex: 30, opacity: 0.9 }} />
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '12rem', background: glow.right, filter: 'blur(40px)', opacity: 0.55, zIndex: 10, pointerEvents: 'none' as const }} />
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '40%', background: `linear-gradient(to left, ${glow.right}55, ${glow.right}22 50%, transparent)`, zIndex: 5, pointerEvents: 'none' as const }} />
         </>
       ),
     }))
