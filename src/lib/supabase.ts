@@ -93,7 +93,7 @@ export function getOptimizedImageUrl(url: string, width: number = 600, quality: 
   // Supabase image transform via render endpoint
   const transformed = url.replace('/object/public/', '/render/image/public/')
   const separator = transformed.includes('?') ? '&' : '?'
-  return `${transformed}${separator}width=${width}&quality=${quality}`
+  return `${transformed}${separator}width=${width}&quality=${quality}&resize=contain`
 }
 
 export async function fetchProductCounts(): Promise<Record<string, number>> {
