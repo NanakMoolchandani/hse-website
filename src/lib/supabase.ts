@@ -84,6 +84,18 @@ export async function fetchProduct(slug: string): Promise<CatalogProduct | null>
   return data
 }
 
+/**
+ * Get optimized image URL from Supabase storage with transforms.
+ * Appends width/quality params for faster loading.
+ */
+export function getOptimizedImageUrl(url: string, width: number = 600, quality: number = 75): string {
+  if (!url || !url.includes('supabase.co/storage')) return url
+  // Supabase image transform via render endpoint
+  const transformed = url.replace('/object/public/', '/render/image/public/')
+  const separator = transformed.includes('?') ? '&' : '?'
+  return `${transformed}${separator}width=${width}&quality=${quality}`
+}
+
 export async function fetchProductCounts(): Promise<Record<string, number>> {
   const { data, error } = await supabase
     .from('catalog_products')

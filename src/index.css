@@ -24,7 +24,27 @@
 }
 
 .animate-marquee-slow {
-  animation: marquee 60s linear infinite;
+  animation: marquee 25s linear infinite;
+}
+
+/* Pause marquee on hover to let user scroll */
+.marquee-container:hover .animate-marquee,
+.marquee-container:hover .animate-marquee-slow {
+  animation-play-state: paused;
+}
+
+/* Make marquee scrollable by user */
+.marquee-scrollable {
+  overflow-x: auto;
+  cursor: grab;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.marquee-scrollable::-webkit-scrollbar {
+  display: none;
+}
+.marquee-scrollable:active {
+  cursor: grabbing;
 }
 
 /* ── Glass feature cards ─────────────────────────────── */
@@ -131,6 +151,12 @@
 .thumbnail-scroll {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ── Dark select dropdowns ──────────────────────────── */
+select option {
+  background: #1a1a2e;
+  color: #d1d5db;
 }
 
 /* ── Glowing effect bento cards ──────────────────────── */

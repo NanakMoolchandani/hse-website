@@ -1,27 +1,88 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getCategoryBySlug, CATEGORIES } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import ProductCard from '@/src/components/ProductCard'
 import { BeamsBackground } from '@/src/components/ui/beams-background'
-import { ChevronRight, FileDown } from 'lucide-react'
+import { ChevronRight, FileDown, Search, SlidersHorizontal, ArrowUpDown, X, Grid2x2, Grid3x3 } from 'lucide-react'
 import Footer from '@/src/components/Footer'
+
+type SortOption = 'default' | 'name-asc' | 'name-desc' | 'newest' | 'featured'
+type GridSize = 'compact' | 'normal'
 
 export default function CategoryPage() {
   const { category } = useParams<{ category: string }>()
   const [products, setProducts] = useState<CatalogProduct[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState<SortOption>('default')
+  const [gridSize, setGridSize] = useState<GridSize>('normal')
+  const [showFilters, setShowFilters] = useState(false)
+  const [featureFilter, setFeatureFilter] = useState<string | null>(null)
 
   const categoryInfo = getCategoryBySlug(category || '')
 
   useEffect(() => {
     if (!categoryInfo) return
     setLoading(true)
+    setSearch('')
+    setFeatureFilter(null)
+    setSortBy('default')
     fetchProducts(categoryInfo.enum).then((data) => {
       setProducts(data)
       setLoading(false)
     })
   }, [categoryInfo?.enum])
+
+  // Extract unique feature labels for filter chips
+  const availableFeatures = useMemo(() => {
+    const features = new Set<string>()
+    products.forEach((p) => {
+      p.metadata?.features?.forEach((f) => features.add(f.label))
+    })
+    return Array.from(features).sort()
+  }, [products])
+
+  // Filtered and sorted products
+  const filteredProducts = useMemo(() => {
+    let result = [...products]
+
+    // Search filter
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter((p) =>
+        (p.name?.toLowerCase().includes(q)) ||
+        (p.description?.toLowerCase().includes(q))
+      )
+    }
+
+    // Feature filter
+    if (featureFilter) {
+      result = result.filter((p) =>
+        p.metadata?.features?.some((f) => f.label === featureFilter)
+      )
+    }
+
+    // Sort
+    switch (sortBy) {
+      case 'name-asc':
+        result.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+        break
+      case 'name-desc':
+        result.sort((a, b) => (b.name || '').localeCompare(a.name || ''))
+        break
+      case 'newest':
+        result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        break
+      case 'featured':
+        result.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0))
+        break
+    }
+
+    return result
+  }, [products, search, sortBy, featureFilter])
+
+  const activeFilterCount = (search.trim() ? 1 : 0) + (featureFilter ? 1 : 0) + (sortBy !== 'default' ? 1 : 0)
 
   if (!categoryInfo) {
     return (
@@ -99,6 +160,125 @@ export default function CategoryPage() {
           </div>
         </div>
 
+        {/* Filter bar */}
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-4'>
+          <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3'>
+            {/* Search */}
+            <div className='relative flex-1 max-w-sm'>
+              <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500' />
+              <input
+                type='text'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder='Search products...'
+                className='w-full pl-9 pr-8 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/25 focus:bg-white/8 transition-all'
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch('')}
+                  className='absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300'
+                >
+                  <X className='w-3.5 h-3.5' />
+                </button>
+              )}
+            </div>
+
+            <div className='flex items-center gap-2'>
+              {/* Sort dropdown */}
+              <div className='relative'>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className='appearance-none pl-8 pr-8 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-gray-300 focus:outline-none focus:border-white/25 cursor-pointer hover:bg-white/8 transition-all'
+                >
+                  <option value='default'>Default Order</option>
+                  <option value='name-asc'>Name: A to Z</option>
+                  <option value='name-desc'>Name: Z to A</option>
+                  <option value='newest'>Newest First</option>
+                  <option value='featured'>Featured First</option>
+                </select>
+                <ArrowUpDown className='absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none' />
+              </div>
+
+              {/* Feature filter toggle */}
+              {availableFeatures.length > 0 && (
+                <button
+                  onClick={() => setShowFilters((o) => !o)}
+                  className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                    showFilters || featureFilter
+                      ? 'bg-white/10 border-white/20 text-white'
+                      : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/8 hover:text-gray-300'
+                  }`}
+                >
+                  <SlidersHorizontal className='w-3.5 h-3.5' />
+                  Filters
+                  {activeFilterCount > 0 && (
+                    <span className='ml-1 w-5 h-5 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center'>
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+              )}
+
+              {/* Grid size toggle */}
+              <div className='hidden md:flex items-center border border-white/10 rounded-xl overflow-hidden'>
+                <button
+                  onClick={() => setGridSize('normal')}
+                  className={`p-2.5 transition-colors ${gridSize === 'normal' ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                  title='Normal grid'
+                >
+                  <Grid2x2 className='w-4 h-4' />
+                </button>
+                <button
+                  onClick={() => setGridSize('compact')}
+                  className={`p-2.5 transition-colors ${gridSize === 'compact' ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                  title='Compact grid'
+                >
+                  <Grid3x3 className='w-4 h-4' />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature chips */}
+          {showFilters && availableFeatures.length > 0 && (
+            <div className='flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/5'>
+              <button
+                onClick={() => setFeatureFilter(null)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                  !featureFilter
+                    ? 'bg-white text-black border-white'
+                    : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10'
+                }`}
+              >
+                All
+              </button>
+              {availableFeatures.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFeatureFilter(featureFilter === f ? null : f)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                    featureFilter === f
+                      ? 'bg-white text-black border-white'
+                      : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Results count */}
+          {!loading && products.length > 0 && (
+            <div className='mt-3 text-xs text-gray-500'>
+              {filteredProducts.length === products.length
+                ? `${products.length} products`
+                : `${filteredProducts.length} of ${products.length} products`}
+            </div>
+          )}
+        </div>
+
         {/* Product grid */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-20'>
           {loading ? (
@@ -113,19 +293,35 @@ export default function CategoryPage() {
                 </div>
               ))}
             </div>
-          ) : products.length === 0 ? (
+          ) : filteredProducts.length === 0 ? (
             <div className='text-center py-20'>
               <div className='w-20 h-20 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center'>
-                <svg className='w-10 h-10 text-gray-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' />
-                </svg>
+                <Search className='w-10 h-10 text-gray-600' />
               </div>
-              <h3 className='text-lg font-semibold text-white mb-2'>No products yet</h3>
-              <p className='text-gray-500'>Products in this category will appear here once published.</p>
+              <h3 className='text-lg font-semibold text-white mb-2'>
+                {products.length === 0 ? 'No products yet' : 'No matching products'}
+              </h3>
+              <p className='text-gray-500'>
+                {products.length === 0
+                  ? 'Products in this category will appear here once published.'
+                  : 'Try adjusting your search or filters.'}
+              </p>
+              {(search || featureFilter) && (
+                <button
+                  onClick={() => { setSearch(''); setFeatureFilter(null); setSortBy('default') }}
+                  className='mt-4 text-sm text-indigo-400 hover:text-indigo-300 font-medium'
+                >
+                  Clear all filters
+                </button>
+              )}
             </div>
           ) : (
-            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5'>
-              {products.map((product) => (
+            <div className={`grid gap-3 sm:gap-5 ${
+              gridSize === 'compact'
+                ? 'grid-cols-2 md:grid-cols-4 lg:grid-cols-5'
+                : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+            }`}>
+              {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} variant='dark' />
               ))}
             </div>

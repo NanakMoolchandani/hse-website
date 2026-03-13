@@ -23,7 +23,7 @@ import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
 import ScrollTestimonials, { type Testimonial } from '@/src/components/ui/scroll-testimonials'
 import Footer from '@/src/components/Footer'
-import { fetchProductCounts, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProductCounts, fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -203,7 +203,7 @@ const BUSINESS_FAQS = [
   },
   {
     q: 'How do I get a quotation?',
-    a: 'Simply message us on WhatsApp at +91 91314 38300 with your requirements including quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
+    a: 'Simply message us on WhatsApp at +91 99815 16171 with your requirements including quantity, product type, and any customization needs. You will receive an itemised quotation within 24 hours.',
   },
   {
     q: 'What payment methods do you accept?',
@@ -325,7 +325,7 @@ export default function Home() {
           </div>
           <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mt-10'>
             <a
-              href='https://wa.me/919131438300'
+              href='https://wa.me/919981516171'
               className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-8 py-3 rounded-full hover:bg-gray-700 transition-colors'
             >
               <MessageCircle className='w-5 h-5' />
@@ -474,14 +474,15 @@ export default function Home() {
                   Explore Our Collection
                 </h2>
               </div>
-              <div className='relative'>
+              <div className='relative marquee-container'>
                 <div className='absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-gray-800 to-transparent z-10 pointer-events-none' />
                 <div className='absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-gray-800 to-transparent z-10 pointer-events-none' />
-                <div className='flex animate-marquee-slow'>
+                <div className='flex animate-marquee-slow marquee-scrollable'>
                   {[...products, ...products].map((product, i) => {
                     const cat = getCategoryByEnum(product.category || '')
                     const catSlug = cat?.slug || 'executive-chairs'
-                    const image = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
+                    const rawImg = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
+                    const image = rawImg ? getOptimizedImageUrl(rawImg, 250, 70) : null
                     return (
                       <Link
                         key={`${product.id}-${i}`}
@@ -552,15 +553,15 @@ export default function Home() {
         <ScrollTestimonials items={TESTIMONIALS} />
 
         {/* Who We Serve — glowing bento grid */}
-        <section className='py-12 md:py-28 bg-white'>
+        <section className='py-10 md:py-16 bg-white'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               Our Clientele
             </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-              Trusted Across<br />Industries
+            <h2 className='font-display text-3xl md:text-4xl font-bold text-gray-900 mb-3'>
+              Trusted Across Industries
             </h2>
-            <p className='text-gray-500 max-w-xl mb-8 md:mb-14 text-lg'>
+            <p className='text-gray-500 max-w-xl mb-6 md:mb-10 text-base'>
               From corporate offices to government institutions, we supply furniture to organisations
               that demand quality, durability, and value at scale.
             </p>
@@ -573,7 +574,7 @@ export default function Home() {
                 { label: 'Banks & Finance', Icon: Banknote, desc: 'Branch offices, regional HQs', area: 'md:[grid-area:2/9/3/13]' },
                 { label: 'Hotels & Hospitality', Icon: Hotel, desc: 'Conference halls, business centres', area: 'md:[grid-area:3/1/4/13]' },
               ] as const).map((client) => (
-                <li key={client.label} className={`min-h-0 md:min-h-[14rem] list-none ${client.area}`}>
+                <li key={client.label} className={`min-h-0 md:min-h-[11rem] list-none ${client.area}`}>
                   <div className='relative h-full rounded-[1.25rem] border-[0.75px] border-gray-200 p-2 md:rounded-[1.5rem] md:p-3'>
                     <GlowingEffect
                       spread={40}
@@ -602,7 +603,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <div className='mt-14 flex flex-wrap items-center justify-center gap-x-4 md:gap-x-10 gap-y-4'>
+            <div className='mt-8 flex flex-wrap items-center justify-center gap-x-4 md:gap-x-10 gap-y-3'>
               {['ISO 9001', 'ISO 14001', 'ISO 45001', 'BIFMA', 'BIS / ISI Mark', 'GeM Empanelled', 'ZED Certified', 'NSIC', 'GREENGUARD'].map((badge) => (
                 <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
                   <CheckCircle2 className='w-4 h-4 text-green-500 shrink-0' />
@@ -678,14 +679,14 @@ export default function Home() {
             </p>
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mb-14'>
               <a
-                href='https://wa.me/919131438300'
+                href='https://wa.me/919981516171'
                 className='inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors'
               >
                 <MessageCircle className='w-5 h-5' />
                 WhatsApp Us
               </a>
               <a
-                href='tel:+919131438300'
+                href='tel:+919981516171'
                 className='inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10 transition-colors'
               >
                 <Phone className='w-5 h-5' />

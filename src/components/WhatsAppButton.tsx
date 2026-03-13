@@ -7,7 +7,7 @@ interface WhatsAppButtonProps {
 
 export default function WhatsAppButton({ productName, className = '' }: WhatsAppButtonProps) {
   const message = `Hi, I'm interested in ${productName}. Can you share details and pricing?`
-  const url = `https://wa.me/919131438300?text=${encodeURIComponent(message)}`
+  const url = `https://wa.me/919981516171?text=${encodeURIComponent(message)}`
 
   return (
     <a

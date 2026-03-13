@@ -1,14 +1,15 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
-import { FullScreenScrollFX } from '@/src/components/ui/full-screen-scroll-fx'
+import { FullScreenScrollFX, type FullScreenFXAPI } from '@/src/components/ui/full-screen-scroll-fx'
 import ImageGallery from '@/src/components/ImageGallery'
 import ProductCard from '@/src/components/ProductCard'
 import WhatsAppButton from '@/src/components/WhatsAppButton'
 import FeatureHighlights from '@/src/components/FeatureHighlights'
 import TrustBadges from '@/src/components/TrustBadges'
-import { ChevronRight, Share2, Check } from 'lucide-react'
+import ColorSwatches from '@/src/components/ColorSwatches'
+import { ChevronRight, ChevronLeft, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 
 const VIEW_LABELS = ['Front View', 'Side View', 'Rear View', 'Detail', 'Close Up']
@@ -32,6 +33,8 @@ export default function ProductPage() {
   const [showHindi, setShowHindi] = useState(false)
   const [copied, setCopied] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [scrollIndex, setScrollIndex] = useState(0)
+  const fxApiRef = useRef<FullScreenFXAPI>(null)
 
   const categoryInfo = getCategoryBySlug(category || '')
 
@@ -152,22 +155,49 @@ export default function ProductPage() {
         )
       ) : (
         scrollSections.length > 0 && (
-          <FullScreenScrollFX
-            sections={scrollSections}
-            header={
-              <span>{productCategory?.label || 'MVM Aasanam'}</span>
-            }
-            footer={<div>MVM Aasanam</div>}
-            showProgress
-            durations={{ change: 0.7, snap: 800 }}
-            colors={{
-              text: 'rgba(255,255,255,0.9)',
-              overlay: 'rgba(0,0,0,0)',
-              pageBg: '#ffffff',
-              stageBg: '#0a0a0a',
-            }}
-            fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
-          />
+          <div className='relative'>
+            <FullScreenScrollFX
+              sections={scrollSections}
+              header={
+                <span>{productCategory?.label || 'MVM Aasanam'}</span>
+              }
+              footer={<div>MVM Aasanam</div>}
+              showProgress
+              durations={{ change: 0.7, snap: 800 }}
+              colors={{
+                text: 'rgba(255,255,255,0.9)',
+                overlay: 'rgba(0,0,0,0)',
+                pageBg: '#ffffff',
+                stageBg: '#0a0a0a',
+              }}
+              fontFamily='"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
+              apiRef={fxApiRef}
+              onIndexChange={setScrollIndex}
+            />
+            {/* Navigation arrows overlay */}
+            {scrollSections.length > 1 && (
+              <>
+                {scrollIndex > 0 && (
+                  <button
+                    onClick={() => fxApiRef.current?.prev()}
+                    className='fixed left-6 top-1/2 -translate-y-1/2 z-[60] flex items-center justify-center w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all group'
+                    aria-label='Previous image'
+                  >
+                    <ChevronLeft className='w-6 h-6 group-hover:-translate-x-0.5 transition-transform' />
+                  </button>
+                )}
+                {scrollIndex < scrollSections.length - 1 && (
+                  <button
+                    onClick={() => fxApiRef.current?.next()}
+                    className='fixed right-6 top-1/2 -translate-y-1/2 z-[60] flex items-center justify-center w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white hover:bg-black/50 transition-all group'
+                    aria-label='Next image'
+                  >
+                    <ChevronRight className='w-6 h-6 group-hover:translate-x-0.5 transition-transform' />
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         )
       )}
 
@@ -246,7 +276,7 @@ export default function ProductPage() {
               <div className='flex flex-col sm:flex-row gap-2'>
                 <WhatsAppButton productName={product.name || 'this product'} className='flex-1 text-sm px-4 py-2.5' />
                 <a
-                  href='tel:+919131438300'
+                  href='tel:+919981516171'
                   className='flex-1 inline-flex items-center justify-center gap-1.5 border border-gray-200 text-gray-700 font-medium text-sm px-4 py-2.5 rounded-full hover:bg-gray-50 transition-colors'
                 >
                   Call for Quote
@@ -274,6 +304,17 @@ export default function ProductPage() {
             </div>
           </div>
         </div>
+
+        {/* Color swatches for Executive Chairs */}
+        {product.category === 'EXECUTIVE_CHAIRS' && (
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 border-t border-gray-100'>
+            <ColorSwatches
+              isExecutiveChair
+              colors={product.metadata?.colors}
+              materials={product.metadata?.materials}
+            />
+          </div>
+        )}
 
         {/* Feature highlights */}
         {features.length > 0 && (

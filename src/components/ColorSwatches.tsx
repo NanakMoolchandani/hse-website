@@ -1,17 +1,240 @@
+import { useState } from 'react'
 import type { ProductColor } from '@/src/lib/supabase'
 
-interface ColorSwatchesProps {
-  colors: ProductColor[]
-  materials: string[]
+// Cloth (Kapda) colors with fabric-like texture
+const CLOTH_COLORS = [
+  { name: 'Royal Blue', hex: '#1a3a6b' },
+  { name: 'Charcoal Grey', hex: '#3d3d3d' },
+  { name: 'Maroon', hex: '#6b1a2a' },
+  { name: 'Forest Green', hex: '#1a4d2e' },
+  { name: 'Navy Black', hex: '#1a1a2e' },
+  { name: 'Burgundy', hex: '#4a0e1e' },
+  { name: 'Coffee Brown', hex: '#3e2723' },
+  { name: 'Steel Grey', hex: '#5c6370' },
+]
+
+// Leatherette colors with leather-like texture
+const LEATHERETTE_COLORS = [
+  { name: 'Jet Black', hex: '#1a1a1a' },
+  { name: 'Dark Brown', hex: '#3e2213' },
+  { name: 'Tan', hex: '#8b6914' },
+  { name: 'Cream', hex: '#d4c5a9' },
+  { name: 'Oxblood', hex: '#4a0000' },
+  { name: 'Walnut', hex: '#5c3317' },
+  { name: 'Slate', hex: '#4a4a4a' },
+  { name: 'White', hex: '#f0ede6' },
+]
+
+function SwatchCircle({
+  color,
+  isActive,
+  onClick,
+  texture,
+}: {
+  color: { name: string; hex: string }
+  isActive: boolean
+  onClick: () => void
+  texture: 'cloth' | 'leather'
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`group relative flex flex-col items-center gap-1.5 transition-all duration-200 ${
+        isActive ? 'scale-110' : 'hover:scale-105'
+      }`}
+      title={color.name}
+    >
+      <div
+        className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden transition-all duration-200 ${
+          isActive
+            ? 'ring-2 ring-offset-2 ring-gray-900 ring-offset-white shadow-lg'
+            : 'ring-1 ring-gray-200 hover:ring-gray-400'
+        }`}
+      >
+        <div className='absolute inset-0' style={{ backgroundColor: color.hex }} />
+
+        {texture === 'cloth' ? (
+          <div
+            className='absolute inset-0 opacity-30'
+            style={{
+              backgroundImage: `
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.08) 1px, rgba(255,255,255,0.08) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255,255,255,0.08) 1px, rgba(255,255,255,0.08) 2px)
+              `,
+              backgroundSize: '3px 3px',
+            }}
+          />
+        ) : (
+          <div
+            className='absolute inset-0'
+            style={{
+              backgroundImage: `
+                radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 40% 80%, rgba(0,0,0,0.12) 0%, transparent 40%)
+              `,
+            }}
+          />
+        )}
+
+        <div
+          className='absolute inset-0'
+          style={{
+            background: texture === 'leather'
+              ? 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 40%, rgba(0,0,0,0.1) 100%)'
+              : 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 50%)',
+          }}
+        />
+      </div>
+
+      <span
+        className={`text-[10px] md:text-xs font-medium whitespace-nowrap transition-opacity duration-200 ${
+          isActive ? 'opacity-100 text-gray-900' : 'opacity-0 group-hover:opacity-100 text-gray-500'
+        }`}
+      >
+        {color.name}
+      </span>
+    </button>
+  )
 }
 
-export default function ColorSwatches({ colors, materials }: ColorSwatchesProps) {
-  if (colors.length === 0 && materials.length === 0) return null
+interface ColorSwatchesProps {
+  colors?: ProductColor[]
+  materials?: string[]
+  isExecutiveChair?: boolean
+}
+
+export default function ColorSwatches({ colors, materials, isExecutiveChair }: ColorSwatchesProps) {
+  const [activeCloth, setActiveCloth] = useState(0)
+  const [activeLeather, setActiveLeather] = useState(0)
+
+  // Executive chairs get the premium cloth/leatherette display
+  if (isExecutiveChair) {
+    return (
+      <div>
+        <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-2'>
+          Available Finishes
+        </p>
+        <h2 className='text-2xl font-bold text-gray-900 mb-8'>
+          Choose Your Material &amp; Colour
+        </h2>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12'>
+          {/* Cloth (Kapda) */}
+          <div>
+            <div className='flex items-center gap-2 mb-5'>
+              <div className='w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center'>
+                <svg className='w-4 h-4 text-gray-600' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.5'>
+                  <path d='M4 4h16v16H4z' strokeLinejoin='round' />
+                  <path d='M4 12h16M12 4v16' />
+                  <path d='M4 8h16M4 16h16M8 4v16M16 4v16' opacity='0.3' />
+                </svg>
+              </div>
+              <div>
+                <h3 className='font-semibold text-gray-900 text-base'>Cloth</h3>
+                <p className='text-xs text-gray-400'>Breathable fabric upholstery</p>
+              </div>
+            </div>
+
+            <div
+              className='relative h-16 md:h-20 rounded-xl mb-5 overflow-hidden transition-colors duration-300'
+              style={{ backgroundColor: CLOTH_COLORS[activeCloth].hex }}
+            >
+              <div
+                className='absolute inset-0 opacity-20'
+                style={{
+                  backgroundImage: `
+                    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px),
+                    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)
+                  `,
+                  backgroundSize: '6px 6px',
+                }}
+              />
+              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent' />
+              <div className='absolute bottom-3 left-4 text-white/80 text-sm font-medium'>
+                {CLOTH_COLORS[activeCloth].name}
+              </div>
+            </div>
+
+            <div className='flex flex-wrap gap-3 md:gap-4'>
+              {CLOTH_COLORS.map((color, i) => (
+                <SwatchCircle
+                  key={color.name}
+                  color={color}
+                  isActive={i === activeCloth}
+                  onClick={() => setActiveCloth(i)}
+                  texture='cloth'
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Leatherette */}
+          <div>
+            <div className='flex items-center gap-2 mb-5'>
+              <div className='w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center'>
+                <svg className='w-4 h-4 text-gray-600' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.5'>
+                  <path d='M4 6c0-1.1.9-2 2-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z' />
+                  <path d='M7 8c1 2 3 3 5 3s4-1 5-3' opacity='0.4' />
+                  <path d='M7 14c1 2 3 3 5 3s4-1 5-3' opacity='0.25' />
+                </svg>
+              </div>
+              <div>
+                <h3 className='font-semibold text-gray-900 text-base'>Leatherette</h3>
+                <p className='text-xs text-gray-400'>Premium synthetic leather finish</p>
+              </div>
+            </div>
+
+            <div
+              className='relative h-16 md:h-20 rounded-xl mb-5 overflow-hidden transition-colors duration-300'
+              style={{ backgroundColor: LEATHERETTE_COLORS[activeLeather].hex }}
+            >
+              <div
+                className='absolute inset-0'
+                style={{
+                  backgroundImage: `
+                    radial-gradient(ellipse at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                    radial-gradient(ellipse at 70% 60%, rgba(0,0,0,0.08) 0%, transparent 50%)
+                  `,
+                }}
+              />
+              <div className='absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10' />
+              <div className={`absolute bottom-3 left-4 text-sm font-medium ${
+                LEATHERETTE_COLORS[activeLeather].hex === '#f0ede6' || LEATHERETTE_COLORS[activeLeather].hex === '#d4c5a9'
+                  ? 'text-gray-800/80'
+                  : 'text-white/80'
+              }`}>
+                {LEATHERETTE_COLORS[activeLeather].name}
+              </div>
+            </div>
+
+            <div className='flex flex-wrap gap-3 md:gap-4'>
+              {LEATHERETTE_COLORS.map((color, i) => (
+                <SwatchCircle
+                  key={color.name}
+                  color={color}
+                  isActive={i === activeLeather}
+                  onClick={() => setActiveLeather(i)}
+                  texture='leather'
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className='mt-6 text-sm text-gray-400 text-center'>
+          Custom colours available on request. Contact us on WhatsApp for fabric and colour samples.
+        </p>
+      </div>
+    )
+  }
+
+  // Fallback: simple color/material display for non-executive products
+  if ((!colors || colors.length === 0) && (!materials || materials.length === 0)) return null
 
   return (
     <div className='space-y-4'>
-      {/* Color swatches */}
-      {colors.length > 0 && (
+      {colors && colors.length > 0 && (
         <div>
           <p className='text-xs text-gray-400 uppercase tracking-wider mb-2'>Colors</p>
           <div className='flex gap-3'>
@@ -29,8 +252,7 @@ export default function ColorSwatches({ colors, materials }: ColorSwatchesProps)
         </div>
       )}
 
-      {/* Material tags */}
-      {materials.length > 0 && (
+      {materials && materials.length > 0 && (
         <div>
           <p className='text-xs text-gray-400 uppercase tracking-wider mb-2'>Materials</p>
           <div className='flex flex-wrap gap-2'>

@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Menu, X, MessageCircle, ChevronDown, FileDown } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CATEGORIES } from '@/src/lib/categories'
+import { Navigate } from 'react-router-dom'
 import Home from '@/src/pages/Home'
 import CategoryPage from '@/src/pages/CategoryPage'
 import ProductPage from '@/src/pages/ProductPage'
@@ -18,11 +19,11 @@ if (typeof window !== 'undefined') {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
-  { label: 'Home', href: '/' },
+  { label: 'Home', href: '/home' },
   { label: 'About', href: '/about' },
   { label: 'Products', href: null }, // dropdown
-  { label: 'Features', href: '/#features' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Features', href: '/home#features' },
+  { label: 'Contact', href: '/home#contact' },
 ]
 
 // ── Navbar ────────────────────────────────────────────────────────────────────
@@ -34,7 +35,7 @@ function Navbar() {
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
   const location = useLocation()
-  const isHome = location.pathname === '/'
+  const isHome = location.pathname === '/home'
 
   // Category pages have a dark background — navbar should be transparent/dark
   const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname)
@@ -67,8 +68,9 @@ function Navbar() {
 
   const handleNavClick = (href: string) => {
     setOpen(false)
-    if (href.startsWith('/#') && isHome) {
-      const target = document.querySelector(href.substring(1))
+    if (href.includes('#') && isHome) {
+      const hash = href.substring(href.indexOf('#'))
+      const target = document.querySelector(hash)
       if (target) target.scrollIntoView({ behavior: 'smooth' })
     }
   }
@@ -95,7 +97,7 @@ function Navbar() {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <Link to='/' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
+          <Link to='/products/executive-chairs' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
             Hari Shewa Enterprises
           </Link>
           <div className='hidden md:flex items-center gap-8'>
@@ -148,7 +150,7 @@ function Navbar() {
                     </>
                   )}
                 </div>
-              ) : l.href.startsWith('/#') ? (
+              ) : l.href.includes('#') ? (
                 isHome ? (
                   <button
                     key={l.href}
@@ -178,7 +180,7 @@ function Navbar() {
             )}
           </div>
           <a
-            href='https://wa.me/919131438300'
+            href='https://wa.me/919981516171'
             className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
               isCategoryPage
                 ? 'bg-white text-black hover:bg-gray-200'
@@ -203,7 +205,7 @@ function Navbar() {
         }`}>
           <div className='flex flex-col px-6 py-8 gap-6'>
             <Link
-              to='/'
+              to='/home'
               className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
               onClick={() => setOpen(false)}
             >
@@ -247,14 +249,14 @@ function Navbar() {
             </div>
             {isHome ? (
               <button
-                onClick={() => handleNavClick('/#contact')}
+                onClick={() => handleNavClick('/home#contact')}
                 className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
               >
                 Contact
               </button>
             ) : (
               <Link
-                to='/#contact'
+                to='/home#contact'
                 className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
                 onClick={() => setOpen(false)}
               >
@@ -262,7 +264,7 @@ function Navbar() {
               </Link>
             )}
             <a
-              href='https://wa.me/919131438300'
+              href='https://wa.me/919981516171'
               className={`mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium ${
                 isCategoryPage
                   ? 'bg-white text-black'
@@ -283,13 +285,10 @@ function Navbar() {
 
 export default function App() {
   const location = useLocation()
-  const prevPathRef = useRef(location.pathname)
 
-  // Kill GSAP ScrollTriggers only when navigating AWAY (not on initial mount)
-  useEffect(() => {
-    if (prevPathRef.current !== location.pathname) {
-      prevPathRef.current = location.pathname
-
+  // Kill GSAP ScrollTriggers BEFORE new page sets up its own (useLayoutEffect cleanup)
+  useLayoutEffect(() => {
+    return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill())
       ScrollTrigger.clearScrollMemory()
 
@@ -302,7 +301,10 @@ export default function App() {
         }
       })
     }
+  }, [location.pathname])
 
+  // Scroll to top on route change
+  useEffect(() => {
     if (!location.hash) {
       window.scrollTo(0, 0)
     }
@@ -312,7 +314,8 @@ export default function App() {
     <div className='bg-white'>
       <Navbar />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Navigate to='/products/executive-chairs' replace />} />
+        <Route path='/home' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />

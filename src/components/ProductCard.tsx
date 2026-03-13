@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import type { CatalogProduct } from '@/src/lib/supabase'
+import { type CatalogProduct, getOptimizedImageUrl } from '@/src/lib/supabase'
 import { getCategoryByEnum } from '@/src/lib/categories'
 import { ProductImageLamp } from '@/src/components/ui/product-image-lamp'
 
@@ -14,7 +14,8 @@ export default function ProductCard({ product, variant = 'light' }: ProductCardP
   const categorySlug = category?.slug || 'executive-chairs'
   const cardRef = useRef<HTMLAnchorElement>(null)
 
-  const image = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
+  const rawImage = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
+  const image = rawImage ? getOptimizedImageUrl(rawImage, 400, 70) : null
   const featureCount = product.metadata?.features?.length || 0
 
   const isDark = variant === 'dark'
