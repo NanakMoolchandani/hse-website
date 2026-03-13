@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ProductColor } from '@/src/lib/supabase'
 
-// Cloth (Kapda) colors with fabric-like texture
+// Cloth (Kapda) colors with fabric-like texture — 30 colors
 const CLOTH_COLORS = [
   { name: 'Royal Blue', hex: '#1a3a6b' },
   { name: 'Charcoal Grey', hex: '#3d3d3d' },
@@ -23,9 +23,19 @@ const CLOTH_COLORS = [
   { name: 'Dark Teal', hex: '#1a3d3d' },
   { name: 'Wine Red', hex: '#5c1a2a' },
   { name: 'Graphite', hex: '#2e2e2e' },
+  { name: 'Black', hex: '#111111' },
+  { name: 'Beige', hex: '#c4a882' },
+  { name: 'Cobalt Blue', hex: '#1e3d8f' },
+  { name: 'Dark Olive', hex: '#3d3d1a' },
+  { name: 'Jade Green', hex: '#1a5a3a' },
+  { name: 'Light Grey', hex: '#909090' },
+  { name: 'Dark Maroon', hex: '#3d0d1a' },
+  { name: 'Chocolate Brown', hex: '#4a2010' },
+  { name: 'Teal Green', hex: '#1a5a4a' },
+  { name: 'Peacock Blue', hex: '#1a4a5e' },
 ]
 
-// Leatherette colors with leather-like texture
+// Leatherette colors with leather-like texture — 30 colors
 const LEATHERETTE_COLORS = [
   { name: 'Jet Black', hex: '#1a1a1a' },
   { name: 'Dark Brown', hex: '#3e2213' },
@@ -47,6 +57,16 @@ const LEATHERETTE_COLORS = [
   { name: 'Ivory', hex: '#e8dfc8' },
   { name: 'Forest Green', hex: '#1a3d2e' },
   { name: 'Midnight Blue', hex: '#1a1a3e' },
+  { name: 'Espresso', hex: '#2c1005' },
+  { name: 'Sandy Beige', hex: '#c9a878' },
+  { name: 'Cognac', hex: '#9b4e1a' },
+  { name: 'British Green', hex: '#1e3d2a' },
+  { name: 'Cherry Red', hex: '#6b0a0a' },
+  { name: 'Parchment', hex: '#e8d5b0' },
+  { name: 'Steel Blue', hex: '#2a3f6e' },
+  { name: 'Tobacco', hex: '#7a4a20' },
+  { name: 'Mahogany', hex: '#5c1e0a' },
+  { name: 'Platinum', hex: '#9a9a9a' },
 ]
 
 function SwatchCircle({
@@ -69,7 +89,7 @@ function SwatchCircle({
       title={color.name}
     >
       <div
-        className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden transition-all duration-200 ${
+        className={`relative w-9 h-9 rounded-full overflow-hidden transition-all duration-200 ${
           isActive
             ? 'ring-2 ring-offset-2 ring-gray-900 ring-offset-white shadow-lg'
             : 'ring-1 ring-gray-200 hover:ring-gray-400'
@@ -180,7 +200,7 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
               </div>
             </div>
 
-            <div className='flex flex-wrap gap-3 md:gap-4'>
+            <div className='grid grid-cols-10 gap-2'>
               {CLOTH_COLORS.map((color, i) => (
                 <SwatchCircle
                   key={color.name}
@@ -232,7 +252,7 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
               </div>
             </div>
 
-            <div className='flex flex-wrap gap-3 md:gap-4'>
+            <div className='grid grid-cols-10 gap-2'>
               {LEATHERETTE_COLORS.map((color, i) => (
                 <SwatchCircle
                   key={color.name}
