@@ -11,18 +11,42 @@ const CLOTH_COLORS = [
   { name: 'Burgundy', hex: '#4a0e1e' },
   { name: 'Coffee Brown', hex: '#3e2723' },
   { name: 'Steel Grey', hex: '#5c6370' },
+  { name: 'Sky Blue', hex: '#1a6b9a' },
+  { name: 'Teal', hex: '#005a5e' },
+  { name: 'Olive Green', hex: '#4a5226' },
+  { name: 'Mustard', hex: '#b5860d' },
+  { name: 'Rust Orange', hex: '#8b3a1a' },
+  { name: 'Purple', hex: '#4a1a6b' },
+  { name: 'Rose Pink', hex: '#8b2252' },
+  { name: 'Camel', hex: '#8b6530' },
+  { name: 'Slate Blue', hex: '#2e3f6e' },
+  { name: 'Dark Teal', hex: '#1a3d3d' },
+  { name: 'Wine Red', hex: '#5c1a2a' },
+  { name: 'Graphite', hex: '#2e2e2e' },
 ]
 
 // Leatherette colors with leather-like texture
 const LEATHERETTE_COLORS = [
   { name: 'Jet Black', hex: '#1a1a1a' },
   { name: 'Dark Brown', hex: '#3e2213' },
-  { name: 'Tan', hex: '#8b6914' },
+  { name: 'Tan', hex: '#9b6e2e' },
   { name: 'Cream', hex: '#d4c5a9' },
   { name: 'Oxblood', hex: '#4a0000' },
   { name: 'Walnut', hex: '#5c3317' },
   { name: 'Slate', hex: '#4a4a4a' },
-  { name: 'White', hex: '#f0ede6' },
+  { name: 'Off White', hex: '#f0ede6' },
+  { name: 'Caramel', hex: '#a05c28' },
+  { name: 'Chocolate', hex: '#3d1c02' },
+  { name: 'Burgundy Wine', hex: '#6b0f1a' },
+  { name: 'Saddle Brown', hex: '#7a3d1a' },
+  { name: 'Navy', hex: '#1a1a4a' },
+  { name: 'Mocha', hex: '#6b4226' },
+  { name: 'Taupe', hex: '#8c7b6e' },
+  { name: 'Vintage Brown', hex: '#6b3a1e' },
+  { name: 'Gunmetal', hex: '#2e3336' },
+  { name: 'Ivory', hex: '#e8dfc8' },
+  { name: 'Forest Green', hex: '#1a3d2e' },
+  { name: 'Midnight Blue', hex: '#1a1a3e' },
 ]
 
 function SwatchCircle({
@@ -200,7 +224,7 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
               />
               <div className='absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10' />
               <div className={`absolute bottom-3 left-4 text-sm font-medium ${
-                LEATHERETTE_COLORS[activeLeather].hex === '#f0ede6' || LEATHERETTE_COLORS[activeLeather].hex === '#d4c5a9'
+                ['#f0ede6', '#d4c5a9', '#e8dfc8', '#e8e0d0'].includes(LEATHERETTE_COLORS[activeLeather].hex)
                   ? 'text-gray-800/80'
                   : 'text-white/80'
               }`}>

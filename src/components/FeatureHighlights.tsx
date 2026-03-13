@@ -50,7 +50,7 @@ export default function FeatureHighlights({ features }: FeatureHighlightsProps) 
                 <p className='text-sm font-semibold text-gray-900 group-hover:text-white transition-colors'>
                   {feature.label}
                 </p>
-                <p className='text-xs text-gray-500 group-hover:text-gray-400 mt-0.5 leading-relaxed transition-colors'>
+                <p className='hidden sm:block text-xs text-gray-500 group-hover:text-gray-400 mt-0.5 leading-relaxed transition-colors'>
                   {feature.detail}
                 </p>
               </div>

@@ -227,10 +227,10 @@ export default function ProductPage() {
           </nav>
         </div>
 
-        {/* Product info */}
+        {/* Product info — name + CTAs */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-8'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16'>
-            {/* Left: Product name + description */}
+            {/* Left: Product name only */}
             <div>
               {productCategory && (
                 <Link
@@ -241,37 +241,9 @@ export default function ProductPage() {
                 </Link>
               )}
 
-              <h1 className='font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mt-3 mb-8 leading-tight'>
+              <h1 className='font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mt-3 leading-tight'>
                 {product.name}
               </h1>
-
-              {(product.description || product.description_hindi) && (
-                <div className='mb-8'>
-                  {product.description_hindi && (
-                    <div className='flex gap-2 mb-3'>
-                      <button
-                        onClick={() => setShowHindi(false)}
-                        className={`text-xs px-3 py-1 rounded-full transition-colors ${
-                          !showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        English
-                      </button>
-                      <button
-                        onClick={() => setShowHindi(true)}
-                        className={`text-xs px-3 py-1 rounded-full transition-colors ${
-                          showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        Hindi
-                      </button>
-                    </div>
-                  )}
-                  <p className='text-gray-600 leading-relaxed text-lg'>
-                    {showHindi ? product.description_hindi : product.description}
-                  </p>
-                </div>
-              )}
             </div>
 
             {/* Right: Trust badges + CTAs */}
@@ -312,7 +284,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Color swatches for Executive Chairs */}
+        {/* Color swatches — immediately after name, before description */}
         {product.category === 'EXECUTIVE_CHAIRS' && (
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 border-t border-gray-100'>
             <ColorSwatches
@@ -320,6 +292,35 @@ export default function ProductPage() {
               colors={product.metadata?.colors}
               materials={product.metadata?.materials}
             />
+          </div>
+        )}
+
+        {/* Description — after colors */}
+        {(product.description || product.description_hindi) && (
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 border-t border-gray-100'>
+            {product.description_hindi && (
+              <div className='flex gap-2 mb-3'>
+                <button
+                  onClick={() => setShowHindi(false)}
+                  className={`text-xs px-3 py-1 rounded-full transition-colors ${
+                    !showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => setShowHindi(true)}
+                  className={`text-xs px-3 py-1 rounded-full transition-colors ${
+                    showHindi ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  Hindi
+                </button>
+              </div>
+            )}
+            <p className='text-gray-600 leading-relaxed text-lg max-w-3xl'>
+              {showHindi ? product.description_hindi : product.description}
+            </p>
           </div>
         )}
 
