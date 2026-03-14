@@ -23,6 +23,7 @@ import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
 import ScrollTestimonials, { type Testimonial } from '@/src/components/ui/scroll-testimonials'
 import Footer from '@/src/components/Footer'
+import SEO, { LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA, createFAQSchema } from '@/src/components/SEO'
 import { fetchProductCounts, fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -280,8 +281,17 @@ export default function Home() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
+  const allFaqs = [...BUSINESS_FAQS, ...PRODUCT_FAQS]
+
   return (
     <>
+      <SEO
+        title="Office Furniture Manufacturer in Neemuch, Madhya Pradesh"
+        description="MVM Aasanam by Hari Shewa Enterprises — Leading office furniture manufacturer & wholesale supplier in Neemuch, MP. Executive chairs, ergonomic task chairs, cafeteria furniture. ISO certified, GeM empanelled. 30+ years, 50,000+ chairs delivered. Factory-direct pricing."
+        canonical="/home"
+        keywords="office furniture manufacturer Neemuch, office chair wholesale Madhya Pradesh, furniture supplier MP, executive chairs manufacturer India, cafeteria furniture wholesale, GeM empanelled furniture supplier, office furniture Neemuch Mandsaur Ujjain Indore, commercial furniture manufacturer Central India, ऑफिस फर्नीचर नीमच, कुर्सी थोक विक्रेता मध्य प्रदेश, फर्नीचर निर्माता नीमच"
+        jsonLd={[LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA, createFAQSchema(allFaqs)]}
+      />
       {isMobile ? (
         <section className='relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden'>
           <img

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mvm-furniture.com/sitemap.xml
+
+# Hari Shewa Enterprises — MVM Aasanam
+# Office & Cafeteria Furniture Manufacturer
+# Neemuch, Madhya Pradesh, India

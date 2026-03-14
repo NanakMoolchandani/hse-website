@@ -6,6 +6,7 @@ import ProductCard from '@/src/components/ProductCard'
 import { BeamsBackground } from '@/src/components/ui/beams-background'
 import { ChevronRight, FileDown, Search, SlidersHorizontal, ArrowUpDown, X, Grid2x2, Grid3x3 } from 'lucide-react'
 import Footer from '@/src/components/Footer'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 
 type SortOption = 'default' | 'name-asc' | 'name-desc' | 'newest' | 'featured'
 type GridSize = 'compact' | 'normal'
@@ -98,8 +99,25 @@ export default function CategoryPage() {
     )
   }
 
+  const categoryKeywords: Record<string, string> = {
+    'executive-chairs': 'executive chairs manufacturer, boss chairs wholesale, leather office chairs Neemuch, premium office chairs MP, executive seating supplier India',
+    'ergonomic-task-chairs': 'ergonomic chairs manufacturer, mesh office chairs wholesale, task chairs Neemuch, computer chairs supplier MP, ergonomic seating India',
+    'cafeteria-furniture': 'cafeteria furniture manufacturer, canteen chairs wholesale, cafeteria tables supplier Neemuch, commercial dining furniture MP, stackable chairs India',
+    'visitor-and-reception': 'visitor chairs manufacturer, reception furniture wholesale, waiting area chairs Neemuch, lobby furniture supplier MP, guest chairs India',
+  }
+
   return (
     <BeamsBackground intensity='medium' className='min-h-screen text-white flex flex-col'>
+      <SEO
+        title={`${categoryInfo.label} — Office Furniture Manufacturer Neemuch`}
+        description={`${categoryInfo.description}. Premium ${categoryInfo.label.toLowerCase()} by MVM Aasanam (Hari Shewa Enterprises), Neemuch, Madhya Pradesh. Factory-direct pricing, bulk orders, pan-India delivery. ISO certified, GeM empanelled.`}
+        canonical={`/products/${category}`}
+        keywords={categoryKeywords[category || ''] || `${categoryInfo.label} manufacturer Neemuch, office furniture wholesale Madhya Pradesh`}
+        jsonLd={createBreadcrumbSchema([
+          { name: 'Home', url: '/home' },
+          { name: categoryInfo.label, url: `/products/${category}` },
+        ])}
+      />
       <div className='pt-20 flex-1'>
         {/* Breadcrumb */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-4 pb-2'>
@@ -129,7 +147,7 @@ export default function CategoryPage() {
             <div className='shrink-0 md:mt-2'>
               <p className='text-[10px] font-semibold tracking-widest uppercase text-gray-500 mb-2'>Documents</p>
               <a
-                href='https://opevspupyfulsibrognn.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
+                href='https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-all'

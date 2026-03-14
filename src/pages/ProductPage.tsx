@@ -11,6 +11,7 @@ import TrustBadges from '@/src/components/TrustBadges'
 import ColorSwatches from '@/src/components/ColorSwatches'
 import { ChevronRight, ChevronLeft, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
+import SEO, { createProductSchema, createBreadcrumbSchema } from '@/src/components/SEO'
 
 const VIEW_LABELS = ['Front View', 'Side View', 'Rear View', 'Detail', 'Close Up']
 
@@ -60,16 +61,7 @@ export default function ProductPage() {
         })
       }
 
-      if (data) {
-        document.title = `${data.name} | MVM Aasanam`
-        injectSchemaOrg(data)
-      }
     })
-
-    return () => {
-      const script = document.getElementById('schema-product')
-      if (script) script.remove()
-    }
   }, [slug])
 
   // Build scroll sections from product images
@@ -151,8 +143,26 @@ export default function ProductPage() {
     ? product.processed_photo_urls
     : product.raw_photo_urls || []
 
+  const ogImage = product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || undefined
+
   return (
     <div className='min-h-screen bg-white flex flex-col'>
+      <SEO
+        title={`${product.name} — ${productCategory?.label || 'Office Furniture'} | Neemuch`}
+        description={`${product.name} by MVM Aasanam (Hari Shewa Enterprises). ${product.description?.slice(0, 140) || `Premium ${productCategory?.label?.toLowerCase() || 'office furniture'} from Neemuch, Madhya Pradesh.`} Factory-direct pricing. ISO certified.`}
+        canonical={`/products/${category}/${slug}`}
+        ogImage={ogImage}
+        ogType="product"
+        keywords={`${product.name}, ${productCategory?.label || 'office furniture'} manufacturer Neemuch, ${productCategory?.label || 'furniture'} wholesale MP`}
+        jsonLd={[
+          createProductSchema(product),
+          createBreadcrumbSchema([
+            { name: 'Home', url: '/home' },
+            { name: productCategory?.label || 'Products', url: `/products/${category}` },
+            { name: product.name || 'Product', url: `/products/${category}/${slug}` },
+          ]),
+        ]}
+      />
       {/* Mobile: Simple swipeable gallery | Desktop: Full-screen scroll hero */}
       {isMobile ? (
         productImages.length > 0 && (
@@ -355,44 +365,3 @@ export default function ProductPage() {
   )
 }
 
-function injectSchemaOrg(product: CatalogProduct) {
-  const existing = document.getElementById('schema-product')
-  if (existing) existing.remove()
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: product.description,
-    image: product.processed_photo_urls || [],
-    brand: {
-      '@type': 'Brand',
-      name: 'MVM Aasanam',
-    },
-    manufacturer: {
-      '@type': 'Organization',
-      name: 'Hari Shewa Enterprises',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Neemuch',
-        addressRegion: 'Madhya Pradesh',
-        addressCountry: 'IN',
-      },
-    },
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      priceCurrency: 'INR',
-      seller: {
-        '@type': 'Organization',
-        name: 'Hari Shewa Enterprises',
-      },
-    },
-  }
-
-  const script = document.createElement('script')
-  script.id = 'schema-product'
-  script.type = 'application/ld+json'
-  script.textContent = JSON.stringify(schema)
-  document.head.appendChild(script)
-}

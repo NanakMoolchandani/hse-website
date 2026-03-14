@@ -135,7 +135,7 @@ function Navbar() {
                               Documents
                             </p>
                             <a
-                              href='https://opevspupyfulsibrognn.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
+                              href='https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
                               target='_blank'
                               rel='noopener noreferrer'
                               className={`flex items-center gap-2 px-4 py-2 text-sm ${dropdownItemClass}`}
@@ -235,7 +235,7 @@ function Navbar() {
                 isCategoryPage ? 'text-gray-500' : 'text-gray-400'
               }`}>Documents</p>
               <a
-                href='https://opevspupyfulsibrognn.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
+                href='https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
                 target='_blank'
                 rel='noopener noreferrer'
                 className={`flex items-center gap-2 text-lg font-medium py-1.5 pl-2 ${
