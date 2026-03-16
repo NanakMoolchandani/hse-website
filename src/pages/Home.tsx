@@ -9,6 +9,7 @@ import {
   MessageCircle,
   CheckCircle2,
   ChevronDown,
+  ChevronRight,
   Briefcase,
   Armchair,
   Building2,
@@ -525,6 +526,81 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* Nilkamal — Authorized Wholesale Dealer */}
+        <section className='py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+            <div className='flex flex-col lg:flex-row items-center gap-10 lg:gap-16'>
+              {/* Left — Text */}
+              <div className='flex-1 text-center lg:text-left'>
+                <div className='inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 mb-5'>
+                  <span className='w-1.5 h-1.5 rounded-full bg-blue-500' />
+                  <span className='text-xs font-semibold text-blue-700 tracking-wide uppercase'>Authorized Wholesale Dealer</span>
+                </div>
+                <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+                  We Are Nilkamal<br />Wholesale Dealers
+                </h2>
+                <p className='text-gray-500 text-lg mb-6 max-w-lg leading-relaxed'>
+                  Hari Shewa Enterprises is the <span className='text-gray-900 font-semibold'>Authorized Wholesale Dealer</span> of Nilkamal — India's #1 moulded furniture brand. Get the complete range of Nilkamal chairs, tables, storage cabinets, and more at best wholesale prices.
+                </p>
+                <div className='flex flex-wrap gap-3 mb-8 justify-center lg:justify-start'>
+                  {['Chairs', 'Storage & Cabinets', 'Tables', 'Office Furniture', 'Outdoor', 'Mattresses'].map((tag) => (
+                    <span key={tag} className='text-sm px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200'>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className='flex flex-col sm:flex-row gap-3 justify-center lg:justify-start'>
+                  <Link
+                    to='/nilkamal'
+                    className='inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-7 py-3 rounded-full hover:bg-gray-700 transition-colors'
+                  >
+                    View Nilkamal Products
+                    <ChevronRight className='w-4 h-4' />
+                  </Link>
+                  <a
+                    href='https://wa.me/919981516171?text=Hi%2C%20I%27m%20interested%20in%20Nilkamal%20products.'
+                    className='inline-flex items-center justify-center gap-2 border border-gray-300 text-gray-700 font-semibold px-7 py-3 rounded-full hover:bg-gray-50 transition-colors'
+                  >
+                    <MessageCircle className='w-4 h-4' />
+                    Enquire Now
+                  </a>
+                </div>
+              </div>
+              {/* Right — Product Grid Preview */}
+              <div className='flex-1 w-full max-w-md lg:max-w-lg'>
+                <div className='grid grid-cols-2 gap-3'>
+                  {[
+                    { name: 'Plastic Chairs', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/CHR_2135_-_Bright_Red.jpg?v=1711020988&width=400', bg: 'bg-red-50' },
+                    { name: 'Freedom Cabinets', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/Freedom_Big_1_-_Weathered_Brown___Biscuit.jpg?v=1711005489&width=400', bg: 'bg-amber-50' },
+                    { name: 'Office Chairs', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/Libra_High_Back_-_Black.jpg?v=1711018234&width=400', bg: 'bg-blue-50' },
+                    { name: 'Outdoor Furniture', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/Goa_Sofa_3_1_1_Set.jpg?v=1711019876&width=400', bg: 'bg-teal-50' },
+                  ].map((item) => (
+                    <Link
+                      key={item.name}
+                      to='/nilkamal'
+                      className={`group rounded-2xl ${item.bg} p-4 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300`}
+                    >
+                      <div className='aspect-square rounded-xl overflow-hidden bg-white/50 mb-3 flex items-center justify-center'>
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          className='w-full h-full object-contain group-hover:scale-105 transition-transform duration-300'
+                          loading='lazy'
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                          }}
+                        />
+                      </div>
+                      <p className='text-sm font-medium text-gray-700 text-center'>{item.name}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Process */}
         <section className='py-12 md:py-28'>

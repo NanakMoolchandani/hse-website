@@ -9,6 +9,7 @@ import Home from '@/src/pages/Home'
 import CategoryPage from '@/src/pages/CategoryPage'
 import ProductPage from '@/src/pages/ProductPage'
 import About from '@/src/pages/About'
+import Nilkamal from '@/src/pages/Nilkamal'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
 
@@ -37,8 +38,8 @@ function Navbar() {
   const location = useLocation()
   const isHome = location.pathname === '/home'
 
-  // Category pages have a dark background — navbar should be transparent/dark
-  const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname)
+  // Category pages and Nilkamal page have a dark background — navbar should be transparent/dark
+  const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname === '/nilkamal'
 
   useEffect(() => {
     const onScroll = () => {
@@ -128,6 +129,17 @@ function Navbar() {
                                 {cat.label}
                               </Link>
                             ))}
+                            <div className={`mx-3 my-1 border-t ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`} />
+                            <Link
+                              to='/nilkamal'
+                              className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              Nilkamal Range
+                              <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                                Dealer
+                              </span>
+                            </Link>
                           </div>
                           {/* Documents */}
                           <div className={`py-2 w-48 border-l ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`}>
@@ -228,6 +240,18 @@ function Navbar() {
                     {cat.label}
                   </Link>
                 ))}
+                <Link
+                  to='/nilkamal'
+                  className={`flex items-center gap-2 text-lg font-medium py-1.5 ${
+                    isCategoryPage ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                  onClick={() => setOpen(false)}
+                >
+                  Nilkamal Range
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                    Dealer
+                  </span>
+                </Link>
               </div>
             </div>
             <div>
@@ -317,6 +341,7 @@ export default function App() {
         <Route path='/' element={<Navigate to='/products/executive-chairs' replace />} />
         <Route path='/home' element={<Home />} />
         <Route path='/about' element={<About />} />
+        <Route path='/nilkamal' element={<Nilkamal />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
         <Route path='/products/:category' element={<CategoryPage />} />
