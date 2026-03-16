@@ -11,6 +11,7 @@ import ProductPage from '@/src/pages/ProductPage'
 import About from '@/src/pages/About'
 import Nilkamal from '@/src/pages/Nilkamal'
 import NilkamalCollection from '@/src/pages/NilkamalCollection'
+import NilkamalProductPage from '@/src/pages/NilkamalProduct'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
 
@@ -344,6 +345,7 @@ export default function App() {
         <Route path='/about' element={<About />} />
         <Route path='/nilkamal' element={<Nilkamal />} />
         <Route path='/nilkamal/:collection' element={<NilkamalCollection />} />
+        <Route path='/nilkamal/:collection/:handle' element={<NilkamalProductPage />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
         <Route path='/products/:category' element={<CategoryPage />} />

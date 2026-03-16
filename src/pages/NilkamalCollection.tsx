@@ -8,6 +8,7 @@ import {
   getNilkamalCollection,
   cleanProductTitle,
   nilkamalImageUrl,
+  extractColorTags,
   NILKAMAL_COLLECTIONS,
   type NilkamalProduct,
 } from '@/src/lib/nilkamal'
@@ -138,7 +139,7 @@ export default function NilkamalCollection() {
               </p>
               <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6'>
                 {filtered.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} collection={collection!} />
                 ))}
               </div>
             </>
@@ -190,23 +191,18 @@ export default function NilkamalCollection() {
 
 // ── Product Card ─────────────────────────────────────────────────────────────
 
-function ProductCard({ product }: { product: NilkamalProduct }) {
+function ProductCard({ product, collection }: { product: NilkamalProduct; collection: string }) {
   const title = cleanProductTitle(product.title)
   const image = product.images[0]
   const imgSrc = image ? nilkamalImageUrl(image.src, 500) : null
   const isAvailable = product.variants.some((v) => v.available)
-
-  // Extract useful tags (colors, series)
-  const colorTags = product.tags.filter((t) =>
-    /^(red|blue|green|yellow|brown|black|white|grey|gray|pink|orange|purple|beige|cream|ivory|walnut|teak|wenge|mahogany|oak|cherry|maple|natural|biscuit|weathered)/i.test(t),
-  )
-
-  const whatsappText = encodeURIComponent(
-    `Hi, I'm interested in the ${product.title}. Please share wholesale pricing and availability.`,
-  )
+  const colorTags = extractColorTags(product.tags)
 
   return (
-    <div className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'>
+    <Link
+      to={`/nilkamal/${collection}/${product.handle}`}
+      className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
+    >
       {/* Image */}
       <div className='aspect-square bg-white/[0.02] overflow-hidden relative'>
         {imgSrc ? (
@@ -216,7 +212,6 @@ function ProductCard({ product }: { product: NilkamalProduct }) {
             className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
             loading='lazy'
             onError={(e) => {
-              // Fallback: try original src without resize
               const target = e.target as HTMLImageElement
               if (target.src !== product.images[0]?.src) {
                 target.src = product.images[0]?.src
@@ -237,20 +232,16 @@ function ProductCard({ product }: { product: NilkamalProduct }) {
 
       {/* Info */}
       <div className='p-4'>
-        <h3 className='text-sm font-medium text-white leading-snug mb-2 line-clamp-2'>{title}</h3>
+        <h3 className='text-sm font-medium text-white leading-snug mb-2 line-clamp-2 group-hover:text-blue-300 transition-colors'>{title}</h3>
         {colorTags.length > 0 && (
-          <p className='text-xs text-gray-500 mb-3 truncate'>
+          <p className='text-xs text-gray-500 mb-2 truncate'>
             {colorTags.slice(0, 3).join(', ')}
           </p>
         )}
-        <a
-          href={`https://wa.me/919981516171?text=${whatsappText}`}
-          className='inline-flex items-center gap-1.5 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors'
-        >
-          <MessageCircle className='w-3.5 h-3.5' />
-          Enquire for Price
-        </a>
+        <span className='text-xs font-medium text-blue-400 group-hover:text-blue-300 transition-colors'>
+          View Details →
+        </span>
       </div>
-    </div>
+    </Link>
   )
 }

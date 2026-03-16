@@ -204,13 +204,11 @@ export default function Nilkamal() {
                           const title = cleanProductTitle(product.title)
                           const image = product.images[0]
                           const imgSrc = image ? nilkamalImageUrl(image.src, 400) : null
-                          const whatsappText = encodeURIComponent(
-                            `Hi, I'm interested in the ${product.title}. Please share wholesale pricing.`,
-                          )
 
                           return (
-                            <div
+                            <Link
                               key={product.id}
+                              to={`/nilkamal/${col.handle}/${product.handle}`}
                               className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
                             >
                               <div className='aspect-square bg-white/[0.02] overflow-hidden'>
@@ -234,18 +232,14 @@ export default function Nilkamal() {
                                 )}
                               </div>
                               <div className='p-3'>
-                                <h4 className='text-xs font-medium text-white leading-snug line-clamp-2 mb-1.5'>
+                                <h4 className='text-xs font-medium text-white leading-snug line-clamp-2 mb-1.5 group-hover:text-blue-300 transition-colors'>
                                   {title}
                                 </h4>
-                                <a
-                                  href={`https://wa.me/919981516171?text=${whatsappText}`}
-                                  className='inline-flex items-center gap-1 text-[11px] font-medium text-blue-400 hover:text-blue-300 transition-colors'
-                                >
-                                  <MessageCircle className='w-3 h-3' />
-                                  Enquire
-                                </a>
+                                <span className='text-[11px] font-medium text-blue-400 group-hover:text-blue-300 transition-colors'>
+                                  View Details →
+                                </span>
                               </div>
-                            </div>
+                            </Link>
                           )
                         })}
                       </div>

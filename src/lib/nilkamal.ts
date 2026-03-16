@@ -36,15 +36,6 @@ export interface NilkamalProduct {
   updated_at: string
 }
 
-export interface NilkamalCollection {
-  id: number
-  handle: string
-  title: string
-  body_html: string | null
-  published_at: string
-  image: { src: string } | null
-}
-
 // ── Collections we display ───────────────────────────────────────────────────
 
 export interface NilkamalCategory {
@@ -113,6 +104,13 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
     accent: 'text-purple-600',
   },
   {
+    handle: 'recliners',
+    label: 'Recliners',
+    description: 'Single and multi-seater recliners with manual and powered mechanisms. Ultimate relaxation seating.',
+    color: 'from-rose-500/10 to-transparent',
+    accent: 'text-rose-600',
+  },
+  {
     handle: 'beds',
     label: 'Beds & Bedroom',
     description: 'Single, double, queen, and king-size beds in metal, wood, and upholstered finishes. Complete bedroom furniture solutions.',
@@ -132,6 +130,34 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
     description: 'Dedicated shoe storage — cabinets, racks, and organisers to keep your entryway tidy.',
     color: 'from-orange-500/10 to-transparent',
     accent: 'text-orange-600',
+  },
+  {
+    handle: 'tv-units',
+    label: 'TV Units',
+    description: 'Entertainment centres and TV stands in modern finishes. Cable management and ample storage included.',
+    color: 'from-slate-500/10 to-transparent',
+    accent: 'text-slate-500',
+  },
+  {
+    handle: 'book-cases',
+    label: 'Bookcases & Shelves',
+    description: 'Open shelving units, bookcases, and display cabinets. Versatile storage for books, decor, and collectibles.',
+    color: 'from-amber-500/10 to-transparent',
+    accent: 'text-amber-700',
+  },
+  {
+    handle: 'centre-tables',
+    label: 'Centre Tables',
+    description: 'Living room centre tables and coffee tables in glass, wood, and composite finishes.',
+    color: 'from-stone-500/10 to-transparent',
+    accent: 'text-stone-600',
+  },
+  {
+    handle: 'dressing-tables',
+    label: 'Dressing Tables',
+    description: 'Bedroom dressing tables with mirrors and storage drawers. Elegant designs for everyday grooming.',
+    color: 'from-fuchsia-500/10 to-transparent',
+    accent: 'text-fuchsia-600',
   },
   {
     handle: 'kids-furniture',
@@ -160,44 +186,52 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
 
 /** Shopify CDN image resize — append size param for optimized loading */
 export function nilkamalImageUrl(src: string, width: number = 600): string {
-  // Shopify CDN supports _WIDTHx suffix or ?width= param
   if (src.includes('cdn.shopify.com')) {
     return src.replace(/(\.\w+)\?/, `_${width}x$1?`)
   }
   return src
 }
 
-/** Fetch products for a specific collection */
-export async function fetchNilkamalCollection(
-  handle: string,
-  limit: number = 250,
-): Promise<NilkamalProduct[]> {
-  try {
-    const res = await fetch(`${BASE}/collections/${handle}/products.json?limit=${limit}`)
-    if (!res.ok) return []
-    const data = await res.json()
-    return data.products || []
-  } catch {
-    console.error(`Failed to fetch Nilkamal collection: ${handle}`)
-    return []
-  }
-}
-
-/** Fetch all products (paginated) */
-export async function fetchAllNilkamalProducts(): Promise<NilkamalProduct[]> {
+/** Fetch products for a specific collection (with pagination to get past Shopify's 30/page cap) */
+export async function fetchNilkamalCollection(handle: string): Promise<NilkamalProduct[]> {
   const allProducts: NilkamalProduct[] = []
-  for (let page = 1; page <= 5; page++) {
+  const seenIds = new Set<number>()
+
+  for (let page = 1; page <= 10; page++) {
     try {
-      const res = await fetch(`${BASE}/products.json?limit=250&page=${page}`)
+      const res = await fetch(`${BASE}/collections/${handle}/products.json?limit=250&page=${page}`)
       if (!res.ok) break
       const data = await res.json()
-      if (!data.products || data.products.length === 0) break
-      allProducts.push(...data.products)
+      const products: NilkamalProduct[] = data.products || []
+      if (products.length === 0) break
+
+      for (const p of products) {
+        if (!seenIds.has(p.id)) {
+          seenIds.add(p.id)
+          allProducts.push(p)
+        }
+      }
+
+      // If we got fewer than 30, no more pages
+      if (products.length < 30) break
     } catch {
       break
     }
   }
+
   return allProducts
+}
+
+/** Fetch a single product by handle */
+export async function fetchNilkamalProduct(handle: string): Promise<NilkamalProduct | null> {
+  try {
+    const res = await fetch(`${BASE}/products/${handle}.json`)
+    if (!res.ok) return null
+    const data = await res.json()
+    return data.product || null
+  } catch {
+    return null
+  }
 }
 
 /** Get Nilkamal collection info by handle */
@@ -209,6 +243,27 @@ export function getNilkamalCollection(handle: string): NilkamalCategory | undefi
 export function cleanProductTitle(title: string): string {
   return title
     .replace(/^Nilkamal\s+/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/** Extract color names from product tags */
+export function extractColorTags(tags: string[]): string[] {
+  return tags.filter((t) =>
+    /^(red|blue|green|yellow|brown|black|white|grey|gray|pink|orange|purple|beige|cream|ivory|walnut|teak|wenge|mahogany|oak|cherry|maple|natural|biscuit|weathered|bright|dark|light)/i.test(t),
+  )
+}
+
+/** Strip HTML tags from body_html */
+export function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
     .replace(/\s+/g, ' ')
     .trim()
 }
