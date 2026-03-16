@@ -10,6 +10,7 @@ import CategoryPage from '@/src/pages/CategoryPage'
 import ProductPage from '@/src/pages/ProductPage'
 import About from '@/src/pages/About'
 import Nilkamal from '@/src/pages/Nilkamal'
+import NilkamalCollection from '@/src/pages/NilkamalCollection'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
 
@@ -39,7 +40,7 @@ function Navbar() {
   const isHome = location.pathname === '/home'
 
   // Category pages and Nilkamal page have a dark background — navbar should be transparent/dark
-  const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname === '/nilkamal'
+  const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname.startsWith('/nilkamal')
 
   useEffect(() => {
     const onScroll = () => {
@@ -342,6 +343,7 @@ export default function App() {
         <Route path='/home' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/nilkamal' element={<Nilkamal />} />
+        <Route path='/nilkamal/:collection' element={<NilkamalCollection />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
         <Route path='/products/:category' element={<CategoryPage />} />
