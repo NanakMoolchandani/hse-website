@@ -5,6 +5,7 @@ import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
+import { FABRIC_COLORS, LEATHERETTE_COLORS, isCushionedChair } from '@/src/lib/customization-colors'
 
 export default function MVMProduct() {
   const { collection, slug } = useParams<{ collection: string; slug: string }>()
@@ -213,6 +214,49 @@ export default function MVMProduct() {
                       </span>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Colour Customisation — only for cushioned chairs */}
+              {isCushionedChair(product.category || '', materials, features) && (
+                <div className='mb-6'>
+                  <p className='text-xs font-semibold tracking-wider uppercase text-amber-400 mb-3'>
+                    Colour Customisation
+                  </p>
+
+                  {/* Fabric */}
+                  <p className='text-[10px] font-semibold tracking-wider uppercase text-gray-500 mb-2'>
+                    Fabric Options
+                  </p>
+                  <div className='flex flex-wrap gap-1.5 mb-4'>
+                    {FABRIC_COLORS.map((c) => (
+                      <span
+                        key={c.name}
+                        title={c.name}
+                        className='w-6 h-6 rounded-full border border-white/15 hover:scale-125 transition-transform cursor-default'
+                        style={{ backgroundColor: c.hex }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Leatherette */}
+                  <p className='text-[10px] font-semibold tracking-wider uppercase text-gray-500 mb-2'>
+                    Leatherette Options
+                  </p>
+                  <div className='flex flex-wrap gap-1.5 mb-3'>
+                    {LEATHERETTE_COLORS.map((c) => (
+                      <span
+                        key={c.name}
+                        title={c.name}
+                        className='w-6 h-6 rounded-full border border-white/15 hover:scale-125 transition-transform cursor-default'
+                        style={{ backgroundColor: c.hex }}
+                      />
+                    ))}
+                  </div>
+
+                  <p className='text-xs text-amber-400/70 italic'>
+                    Customisation available as per customer's requirement. Contact us for specific colour samples.
+                  </p>
                 </div>
               )}
 
