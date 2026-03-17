@@ -6,8 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CATEGORIES } from '@/src/lib/categories'
 import { Navigate } from 'react-router-dom'
 import Home from '@/src/pages/Home'
-import CategoryPage from '@/src/pages/CategoryPage'
-import ProductPage from '@/src/pages/ProductPage'
 import About from '@/src/pages/About'
 import Nilkamal from '@/src/pages/Nilkamal'
 import NilkamalCollection from '@/src/pages/NilkamalCollection'
@@ -50,7 +48,7 @@ function Navbar() {
   const isHome = location.pathname === '/home'
 
   // Category pages and Nilkamal page have a dark background — navbar should be transparent/dark
-  const isDarkPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname.startsWith('/nilkamal') || location.pathname.startsWith('/supreme') || location.pathname.startsWith('/seatex') || location.pathname.startsWith('/mvm')
+  const isDarkPage = location.pathname.startsWith('/nilkamal') || location.pathname.startsWith('/supreme') || location.pathname.startsWith('/seatex') || location.pathname.startsWith('/mvm')
   const isCategoryPage = isDarkPage
 
   useEffect(() => {
@@ -110,7 +108,7 @@ function Navbar() {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <Link to='/products/executive-chairs' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
+          <Link to='/mvm' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
             Hari Shewa Enterprises
           </Link>
           <div className='hidden md:flex items-center gap-8'>
@@ -134,7 +132,7 @@ function Navbar() {
                             {CATEGORIES.map((cat) => (
                               <Link
                                 key={cat.slug}
-                                to={`/products/${cat.slug}`}
+                                to={`/mvm/${cat.slug}`}
                                 className={`block px-4 py-2 text-sm ${dropdownItemClass}`}
                                 onClick={() => setProductsOpen(false)}
                               >
@@ -260,7 +258,7 @@ function Navbar() {
                 {CATEGORIES.map((cat) => (
                   <Link
                     key={cat.slug}
-                    to={`/products/${cat.slug}`}
+                    to={`/mvm/${cat.slug}`}
                     className={`block text-lg font-medium py-1.5 ${
                       isCategoryPage ? 'text-gray-300' : 'text-gray-700'
                     }`}
@@ -386,7 +384,7 @@ export default function App() {
     <div className='bg-white'>
       <Navbar />
       <Routes>
-        <Route path='/' element={<Navigate to='/products/executive-chairs' replace />} />
+        <Route path='/' element={<Navigate to='/mvm' replace />} />
         <Route path='/home' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/nilkamal' element={<Nilkamal />} />
@@ -403,8 +401,9 @@ export default function App() {
         <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
-        <Route path='/products/:category' element={<CategoryPage />} />
-        <Route path='/products/:category/:slug' element={<ProductPage />} />
+        {/* Redirect old /products/ URLs to /mvm/ */}
+        <Route path='/products/:category' element={<Navigate to='/mvm' replace />} />
+        <Route path='/products/:category/:slug' element={<Navigate to='/mvm' replace />} />
       </Routes>
     </div>
   )

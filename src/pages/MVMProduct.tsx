@@ -4,7 +4,7 @@ import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Che
 import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
-import { fetchProduct, fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
 export default function MVMProduct() {
   const { collection, slug } = useParams<{ collection: string; slug: string }>()
@@ -115,10 +115,10 @@ export default function MVMProduct() {
             {/* Left — Image Gallery */}
             <div className='flex-1 max-w-2xl'>
               {/* Main Image */}
-              <div className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4'>
+              <div className='relative aspect-square rounded-2xl bg-white/[0.03] overflow-hidden mb-4'>
                 {images.length > 0 ? (
                   <img
-                    src={getOptimizedImageUrl(images[activeImage], 1000)}
+                    src={images[activeImage]}
                     alt={`${product.name} — Image ${activeImage + 1}`}
                     className='w-full h-full object-contain p-6'
                   />
@@ -164,7 +164,7 @@ export default function MVMProduct() {
                       }`}
                     >
                       <img
-                        src={getOptimizedImageUrl(img, 100)}
+                        src={img}
                         alt={`${product.name} thumbnail ${i + 1}`}
                         className='w-full h-full object-contain p-1'
                         loading='lazy'
@@ -235,18 +235,18 @@ export default function MVMProduct() {
               {/* Features */}
               {features.length > 0 && (
                 <div className='mb-6'>
-                  <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
+                  <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-3'>
                     Key Features
                   </p>
-                  <div className='space-y-2'>
-                    {features.map((f) => (
-                      <div key={f.label} className='flex items-start gap-2'>
-                        <span className='text-amber-400 mt-0.5 shrink-0'>
-                          {f.icon || '•'}
+                  <div className='space-y-3'>
+                    {features.map((f, i) => (
+                      <div key={f.label} className='flex items-start gap-3'>
+                        <span className='w-6 h-6 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5'>
+                          {i + 1}
                         </span>
                         <div>
                           <p className='text-sm text-white font-medium'>{f.label}</p>
-                          {f.detail && <p className='text-xs text-gray-500'>{f.detail}</p>}
+                          {f.detail && <p className='text-xs text-gray-500 mt-0.5 leading-relaxed'>{f.detail}</p>}
                         </div>
                       </div>
                     ))}
@@ -360,12 +360,12 @@ export default function MVMProduct() {
                     <Link
                       key={p.id}
                       to={`/mvm/${pCat?.slug || collection}/${p.slug}`}
-                      className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
+                      className='group rounded-2xl bg-white/[0.03] overflow-hidden hover:bg-white/[0.06] transition-all duration-300'
                     >
                       <div className='aspect-square bg-white/[0.02] overflow-hidden'>
                         {pImg ? (
                           <img
-                            src={getOptimizedImageUrl(pImg, 400)}
+                            src={pImg}
                             alt={p.name || 'Product'}
                             className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
                             loading='lazy'

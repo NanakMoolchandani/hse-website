@@ -4,7 +4,7 @@ import { ArrowLeft, MessageCircle, Search, X } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
 import { getCategoryBySlug, CATEGORIES } from '@/src/lib/categories'
-import { fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
 export default function MVMCollection() {
   const { collection } = useParams<{ collection: string }>()
@@ -194,13 +194,13 @@ function ProductCard({ product, collection }: { product: CatalogProduct; collect
   return (
     <Link
       to={`/mvm/${collection}/${product.slug}`}
-      className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
+      className='group rounded-2xl bg-white/[0.03] overflow-hidden hover:bg-white/[0.06] transition-all duration-300'
     >
       {/* Image */}
       <div className='aspect-square bg-white/[0.02] overflow-hidden relative'>
         {imgSrc ? (
           <img
-            src={getOptimizedImageUrl(imgSrc, 500)}
+            src={imgSrc}
             alt={product.name || 'Product'}
             className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
             loading='lazy'

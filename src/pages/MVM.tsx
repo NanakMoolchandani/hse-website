@@ -4,7 +4,7 @@ import { MessageCircle, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
 import { CATEGORIES } from '@/src/lib/categories'
-import { fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
 // ── MVM Stats ───────────────────────────────────────────────────────────
 
@@ -202,12 +202,12 @@ export default function MVM() {
                             <Link
                               key={product.id}
                               to={`/mvm/${cat.slug}/${product.slug}`}
-                              className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
+                              className='group rounded-2xl bg-white/[0.03] overflow-hidden hover:bg-white/[0.06] transition-all duration-300'
                             >
                               <div className='aspect-square bg-white/[0.02] overflow-hidden'>
                                 {imgSrc ? (
                                   <img
-                                    src={getOptimizedImageUrl(imgSrc, 400)}
+                                    src={imgSrc}
                                     alt={product.name || 'Product'}
                                     className='w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500'
                                     loading='lazy'
