@@ -8,9 +8,11 @@
   }
 
   body {
-    background: white;
+    /* Background set dynamically by App.tsx useLayoutEffect to prevent
+       white flash during route transitions (light ↔ dark pages) */
     color: #111827;
     overflow-x: hidden;
+    transition: background-color 0.15s ease;
   }
 }
 

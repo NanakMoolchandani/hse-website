@@ -367,6 +367,22 @@ function Navbar() {
 export default function App() {
   const location = useLocation()
 
+  // Determine if current route uses a dark background
+  const isDarkRoute =
+    location.pathname.startsWith('/nilkamal') ||
+    location.pathname.startsWith('/supreme') ||
+    location.pathname.startsWith('/seatex') ||
+    location.pathname.startsWith('/mvm') ||
+    location.pathname === '/'
+
+  // Set body background SYNCHRONOUSLY before paint to prevent white flash
+  // during route transitions (e.g., white Home → dark product page)
+  useLayoutEffect(() => {
+    const bg = isDarkRoute ? '#030712' : '#ffffff'
+    document.documentElement.style.backgroundColor = bg
+    document.body.style.backgroundColor = bg
+  }, [isDarkRoute])
+
   // Kill GSAP ScrollTriggers BEFORE new page sets up its own (useLayoutEffect cleanup)
   useLayoutEffect(() => {
     return () => {
@@ -392,7 +408,7 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <div className='bg-white'>
+    <div className={isDarkRoute ? 'bg-gray-950' : 'bg-white'}>
       <Navbar />
       <Routes>
         <Route path='/' element={<Navigate to='/mvm' replace />} />

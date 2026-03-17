@@ -181,7 +181,7 @@ export function createProductSchema(product: {
 }) {
   const categorySlug = product.category
     ? product.category.toLowerCase().replace(/_/g, '-')
-    : 'products'
+    : 'executive-chairs'
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -190,7 +190,7 @@ export function createProductSchema(product: {
     image: product.processed_photo_urls?.length > 0
       ? product.processed_photo_urls
       : product.raw_photo_urls || [],
-    url: `${BASE_URL}/products/${categorySlug}/${product.slug}`,
+    url: `${BASE_URL}/mvm/${categorySlug}/${product.slug}`,
     brand: { '@type': 'Brand', name: 'MVM Aasanam' },
     manufacturer: {
       '@type': 'Organization',
