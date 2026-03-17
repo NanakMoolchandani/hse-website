@@ -134,12 +134,8 @@ export const LOCAL_BUSINESS_SCHEMA = {
       closes: '19:00',
     },
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    reviewCount: '500',
-    bestRating: '5',
-  },
+  // aggregateRating removed — Google requires reviews from an actual review system,
+  // not self-declared ratings. Was causing 2 invalid Review Snippets in GSC.
 }
 
 export const ORGANIZATION_SCHEMA = {
