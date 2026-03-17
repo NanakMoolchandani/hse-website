@@ -4,7 +4,6 @@ import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Che
 import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
 import {
-  fetchNilkamalProduct,
   fetchNilkamalCollection,
   cleanProductTitle,
   nilkamalImageUrl,
@@ -26,23 +25,19 @@ export default function NilkamalProduct() {
   const cat = collection ? getNilkamalCollection(collection) : undefined
 
   useEffect(() => {
-    if (!handle) return
+    if (!handle || !collection) return
     setLoading(true)
     setActiveImage(0)
-    fetchNilkamalProduct(handle).then((p) => {
-      setProduct(p)
-      setLoading(false)
-      if (!p) navigate('/nilkamal', { replace: true })
-    })
-  }, [handle, navigate])
 
-  // Fetch related products from same collection
-  useEffect(() => {
-    if (!collection || !product) return
+    // Fetch the full collection and find the product by handle
+    // (Shopify's single-product .json endpoint is not available on all stores)
     fetchNilkamalCollection(collection).then((all) => {
-      setRelated(all.filter((p) => p.id !== product.id).slice(0, 4))
+      const found = all.find((p) => p.handle === handle) || null
+      setProduct(found)
+      setRelated(found ? all.filter((p) => p.id !== found.id).slice(0, 4) : [])
+      setLoading(false)
     })
-  }, [collection, product])
+  }, [handle, collection])
 
   const handleShare = async () => {
     const url = window.location.href
@@ -63,7 +58,20 @@ export default function NilkamalProduct() {
     )
   }
 
-  if (!product) return null
+  if (!product) {
+    return (
+      <div className='min-h-screen bg-gray-950 flex flex-col items-center justify-center pt-16 px-4'>
+        <p className='text-gray-400 text-lg mb-4'>Product not found</p>
+        <Link
+          to={cat ? `/nilkamal/${collection}` : '/nilkamal'}
+          className='inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors'
+        >
+          <ArrowLeft className='w-4 h-4' />
+          Back to {cat?.label || 'Nilkamal'}
+        </Link>
+      </div>
+    )
+  }
 
   const title = cleanProductTitle(product.title)
   const description = product.body_html ? stripHtml(product.body_html) : ''
