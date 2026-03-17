@@ -41,6 +41,8 @@ export default function SEO({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content="en_IN" />
@@ -120,7 +122,10 @@ export const LOCAL_BUSINESS_SCHEMA = {
       { '@type': 'OfferCatalog', name: 'Visitor & Reception Furniture' },
     ],
   },
-  sameAs: [],
+  logo: 'https://mvm-furniture.com/logos/mvm-logo.png',
+  sameAs: [
+    'https://wa.me/919981516171',
+  ],
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
@@ -161,6 +166,10 @@ export const ORGANIZATION_SCHEMA = {
     availableLanguage: ['English', 'Hindi'],
   },
   taxID: '23AJUPM2209E1ZD',
+  logo: 'https://mvm-furniture.com/logos/mvm-logo.png',
+  sameAs: [
+    'https://wa.me/919981516171',
+  ],
   hasCredential: [
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 9001:2015' },
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 14001:2015' },
@@ -228,17 +237,5 @@ export function createBreadcrumbSchema(items: { name: string; url: string }[]) {
   }
 }
 
-export function createFAQSchema(faqs: { q: string; a: string }[]) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.a,
-      },
-    })),
-  }
-}
+// createFAQSchema REMOVED — FAQPage is restricted to government/healthcare sites since Aug 2023.
+// FAQ content in HTML still helps with PAA matching — just don't use the schema.

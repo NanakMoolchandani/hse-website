@@ -3,6 +3,38 @@ Allow: /
 
 Sitemap: https://mvm-furniture.com/sitemap.xml
 
+# AI Search Crawlers — Allow for search visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# AI Training Crawlers — Block (not needed for search visibility)
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
 # Hari Shewa Enterprises — MVM Aasanam
 # Office & Cafeteria Furniture Manufacturer
 # Neemuch, Madhya Pradesh, India
