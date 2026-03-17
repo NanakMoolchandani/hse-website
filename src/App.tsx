@@ -18,6 +18,9 @@ import SupremeProductPage from '@/src/pages/SupremeProduct'
 import Seatex from '@/src/pages/Seatex'
 import SeatexCollection from '@/src/pages/SeatexCollection'
 import SeatexProductPage from '@/src/pages/SeatexProduct'
+import MVM from '@/src/pages/MVM'
+import MVMCollection from '@/src/pages/MVMCollection'
+import MVMProductPage from '@/src/pages/MVMProduct'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
 
@@ -47,7 +50,7 @@ function Navbar() {
   const isHome = location.pathname === '/home'
 
   // Category pages and Nilkamal page have a dark background — navbar should be transparent/dark
-  const isDarkPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname.startsWith('/nilkamal') || location.pathname.startsWith('/supreme') || location.pathname.startsWith('/seatex')
+  const isDarkPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname.startsWith('/nilkamal') || location.pathname.startsWith('/supreme') || location.pathname.startsWith('/seatex') || location.pathname.startsWith('/mvm')
   const isCategoryPage = isDarkPage
 
   useEffect(() => {
@@ -139,6 +142,16 @@ function Navbar() {
                               </Link>
                             ))}
                             <div className={`mx-3 my-1 border-t ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`} />
+                            <Link
+                              to='/mvm'
+                              className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              MVM Aasanam
+                              <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-50 text-amber-600'}`}>
+                                Our Brand
+                              </span>
+                            </Link>
                             {[
                               { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
                               { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
@@ -256,6 +269,18 @@ function Navbar() {
                     {cat.label}
                   </Link>
                 ))}
+                <Link
+                  to='/mvm'
+                  className={`flex items-center gap-2 text-lg font-medium py-1.5 ${
+                    isCategoryPage ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                  onClick={() => setOpen(false)}
+                >
+                  MVM Aasanam
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-50 text-amber-600'}`}>
+                    Our Brand
+                  </span>
+                </Link>
                 {[
                   { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
                   { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
@@ -373,6 +398,9 @@ export default function App() {
         <Route path='/seatex' element={<Seatex />} />
         <Route path='/seatex/:collection' element={<SeatexCollection />} />
         <Route path='/seatex/:collection/:handle' element={<SeatexProductPage />} />
+        <Route path='/mvm' element={<MVM />} />
+        <Route path='/mvm/:collection' element={<MVMCollection />} />
+        <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
         <Route path='/products/:category' element={<CategoryPage />} />
