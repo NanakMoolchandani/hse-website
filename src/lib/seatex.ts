@@ -128,8 +128,7 @@ function makeSeatexProduct(
 const CHAIRS_STANDARD: SeatexProduct[] = [
   makeSeatexProduct('Crazy', 'crazy', 'Gloss finish economy plastic chair. Lightweight, stackable, and built for everyday use.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/452963144/YQ/UB/RX/76964044/seatex-crazy-plastic-chair-1000x1000.jpg'),
   makeSeatexProduct('Elba', 'elba', 'Matt finished economy plastic chair. Sleek matte texture with comfortable seating.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2023/5/307041612/AH/BH/BJ/129960380/screenshot-2023-05-10-220054-250x250.jpg'),
-  makeSeatexProduct('Fantasy', 'fantasy', 'Armless gloss finish plastic chair. Clean design without arms for easy stacking and compact storage.', 'Chair', SEATEX_STANDARD_COLORS),
-  makeSeatexProduct('Rainbow', 'rainbow', 'Plastic chair with arms and gloss finish. Medium back design for comfortable everyday seating.', 'Chair', SEATEX_STANDARD_COLORS),
+  makeSeatexProduct('Rainbow', 'rainbow', 'Plastic chair with arms and gloss finish. Medium back design for comfortable everyday seating.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449668437/JB/LO/LP/76964044/rainbow-brown-1000x1000.jpg'),
   makeSeatexProduct('Diamond', 'diamond', 'Armless medium back plastic chair. Simple and sturdy design for homes, shops, and events.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449672140/MP/DU/OR/76964044/diamond-red-500x500.jpg'),
   makeSeatexProduct('Kinder', 'kinder', "Kid's plastic chair. Small, colourful, and safe — designed specifically for children.", 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449688953/FJ/YM/WN/76964044/kinder-red-1000x1000.jpg'),
 ]
@@ -138,20 +137,19 @@ const CHAIRS_STANDARD: SeatexProduct[] = [
 
 const CHAIRS_PREMIUM: SeatexProduct[] = [
   makeSeatexProduct('Oxford', 'oxford', 'Heavy duty sofa chair with arm. Premium gloss and matt combined finish for superior comfort and style.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://image1.jdomni.in/product/28082023/B7/AE/5D/26FD8CA45B5E599ECF682FEB76_1693203869871.webp'),
-  makeSeatexProduct('Craven', 'craven', 'Matt finished heavy duty premium plastic chair. Built for durability and long-lasting comfort.', 'Chair', SEATEX_PREMIUM_COLORS),
-  makeSeatexProduct('Boston', 'boston', 'Premium plastic chair with arm. Elegant design with comfortable armrests for extended seating.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://image1.jdomni.in/product/28082023/E1/FDA/D6/48EDB74114B367AA4AEE2AC467_1693204883984.webp'),
+  makeSeatexProduct('Craven', 'craven', 'Matt finished heavy duty premium plastic chair. Built for durability and long-lasting comfort.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/448282883/II/BZ/AR/76964044/radium-1000x1000.jpg'),
+  makeSeatexProduct('Boston', 'boston', 'Premium plastic chair with arm. Elegant design with comfortable armrests for extended seating.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/448281381/TY/GA/WO/76964044/oxford-1000x1000.jpg'),
   makeSeatexProduct('Maxim', 'maxim', 'Premium plastic chair with refined design and superior build quality.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2023/2/DA/LP/HF/24595504/seatex-maxim-plastic-chair-1000x1000.jpeg'),
   makeSeatexProduct('Magic', 'magic', 'Comfortable plastic chair with attractive design and solid construction.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://image1.jdomni.in/product/28082023/36/A1/2C/6A45E885B8FC59C5578732A559_1693201156473.webp'),
   makeSeatexProduct('Platinum', 'platinum', 'Premium chair with sophisticated finish and enhanced comfort features.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://image1.jdomni.in/product/28082023/CC/21/2D/D8069B31C0C5D307F3883FF79F_1693200556813.webp'),
   makeSeatexProduct('Resto', 'resto', 'Plastic chair designed for restaurants, cafes, and commercial spaces.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2023/3/NG/RE/NH/24595504/seatex-resto-plastic-chair-1000x1000.jpg'),
   makeSeatexProduct('Steelo', 'steelo', 'Armless chair with stainless steel legs. Modern hybrid design combining plastic and metal.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://image1.jdomni.in/product/28082023/74/C0/EF/FEFF1EEC40964E9C14A2E1D0F4_1693200378174.webp'),
-  makeSeatexProduct('Magnum', 'magnum', 'Premium chair with robust build and generous seating area.', 'Chair', SEATEX_PREMIUM_COLORS),
+  makeSeatexProduct('Magnum', 'magnum', 'Premium chair with robust build and generous seating area.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/IOS/Default/2024/11/464502257/HA/WU/ND/76964044/product-jpeg-1000x1000.png'),
   makeSeatexProduct('Golf', 'golf', 'Premium plastic chair with elegant contours and comfortable seating.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/450199654/TV/ZV/LA/76964044/golf-black-white-plastic-chair-500x500.jpg'),
   makeSeatexProduct('Neo Champ', 'neo-champ', 'Premium chair with modern design aesthetics and enhanced durability.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/IOS/Default/2024/11/464496026/GJ/QD/GF/76964044/product-jpeg-500x500.png'),
   makeSeatexProduct('Rolex', 'rolex', 'Premium plastic chair with stylish design and superior finish.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449662247/FZ/UX/AD/76964044/resto-red-plastic-arm-chair-1000x1000.jpg'),
-  makeSeatexProduct('Radium', 'radium', 'Premium chair with eye-catching design and solid construction.', 'Chair', SEATEX_PREMIUM_COLORS),
-  makeSeatexProduct('Idea', 'idea', 'Premium plastic chair with innovative design and comfortable seating.', 'Chair', SEATEX_PREMIUM_COLORS),
-  makeSeatexProduct('Dolby', 'dolby', 'Premium plastic chair with refined aesthetics and durable build.', 'Chair', SEATEX_PREMIUM_COLORS),
+  makeSeatexProduct('Radium', 'radium', 'Premium chair with eye-catching design and solid construction.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449732368/GG/KX/KS/76964044/seatex-radium-peach-plastic-arm-chair-1000x1000.jpeg'),
+  makeSeatexProduct('Dolby', 'dolby', 'Premium plastic chair with refined aesthetics and durable build.', 'Chair', SEATEX_PREMIUM_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449663580/GK/KI/DO/76964044/dolby-brown-plastic-arm-chair-1000x1000.jpg'),
 ]
 
 // ── Tables ──────────────────────────────────────────────────────────────────
