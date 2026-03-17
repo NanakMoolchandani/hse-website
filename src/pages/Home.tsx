@@ -527,77 +527,80 @@ export default function Home() {
           </section>
         )}
 
-        {/* Nilkamal — Authorized Wholesale Dealer */}
+        {/* Brands We Deal — Authorized Wholesale Dealer */}
         <section className='py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
-            <div className='flex flex-col lg:flex-row items-center gap-10 lg:gap-16'>
-              {/* Left — Text */}
-              <div className='flex-1 text-center lg:text-left'>
-                <div className='inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 mb-5'>
-                  <span className='w-1.5 h-1.5 rounded-full bg-blue-500' />
-                  <span className='text-xs font-semibold text-blue-700 tracking-wide uppercase'>Authorized Wholesale Dealer</span>
-                </div>
-                <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
-                  We Are Nilkamal<br />Wholesale Dealers
-                </h2>
-                <p className='text-gray-500 text-lg mb-6 max-w-lg leading-relaxed'>
-                  Hari Shewa Enterprises is the <span className='text-gray-900 font-semibold'>Authorized Wholesale Dealer</span> of Nilkamal — India's #1 moulded furniture brand. Get the complete range of Nilkamal chairs, tables, storage cabinets, and more at best wholesale prices.
-                </p>
-                <div className='flex flex-wrap gap-3 mb-8 justify-center lg:justify-start'>
-                  {['Chairs', 'Storage & Cabinets', 'Tables', 'Office Furniture', 'Outdoor', 'Mattresses'].map((tag) => (
-                    <span key={tag} className='text-sm px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200'>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className='flex flex-col sm:flex-row gap-3 justify-center lg:justify-start'>
-                  <Link
-                    to='/nilkamal'
-                    className='inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-7 py-3 rounded-full hover:bg-gray-700 transition-colors'
-                  >
-                    View Nilkamal Products
-                    <ChevronRight className='w-4 h-4' />
-                  </Link>
-                  <a
-                    href='https://wa.me/919981516171?text=Hi%2C%20I%27m%20interested%20in%20Nilkamal%20products.'
-                    className='inline-flex items-center justify-center gap-2 border border-gray-300 text-gray-700 font-semibold px-7 py-3 rounded-full hover:bg-gray-50 transition-colors'
-                  >
-                    <MessageCircle className='w-4 h-4' />
-                    Enquire Now
-                  </a>
-                </div>
+            <div className='text-center mb-12'>
+              <div className='inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 mb-5'>
+                <span className='w-1.5 h-1.5 rounded-full bg-gray-500' />
+                <span className='text-xs font-semibold text-gray-600 tracking-wide uppercase'>Authorized Wholesale Dealer</span>
               </div>
-              {/* Right — Product Grid Preview */}
-              <div className='flex-1 w-full max-w-md lg:max-w-lg'>
-                <div className='grid grid-cols-2 gap-3'>
-                  {[
-                    { name: 'Plastic Chairs', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/CHR_2135_-_Bright_Red.jpg?v=1711020988&width=400', bg: 'bg-red-50' },
-                    { name: 'Freedom Cabinets', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/Freedom_Big_1_-_Weathered_Brown___Biscuit.jpg?v=1711005489&width=400', bg: 'bg-amber-50' },
-                    { name: 'Office Chairs', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/Libra_High_Back_-_Black.jpg?v=1711018234&width=400', bg: 'bg-blue-50' },
-                    { name: 'Outdoor Furniture', img: 'https://www.nilkamalfurniture.com/cdn/shop/files/Goa_Sofa_3_1_1_Set.jpg?v=1711019876&width=400', bg: 'bg-teal-50' },
-                  ].map((item) => (
-                    <Link
-                      key={item.name}
-                      to='/nilkamal'
-                      className={`group rounded-2xl ${item.bg} p-4 border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300`}
-                    >
-                      <div className='aspect-square rounded-xl overflow-hidden bg-white/50 mb-3 flex items-center justify-center'>
-                        <img
-                          src={item.img}
-                          alt={item.name}
-                          className='w-full h-full object-contain group-hover:scale-105 transition-transform duration-300'
-                          loading='lazy'
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            target.style.display = 'none'
-                          }}
-                        />
-                      </div>
-                      <p className='text-sm font-medium text-gray-700 text-center'>{item.name}</p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <h2 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-4'>
+                Brands We Deal
+              </h2>
+              <p className='text-gray-500 text-lg max-w-2xl mx-auto'>
+                Hari Shewa Enterprises is the Authorized Wholesale Dealer of India's top plastic furniture brands. Get the complete range at best wholesale prices.
+              </p>
+            </div>
+
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+              {[
+                {
+                  name: 'Nilkamal',
+                  to: '/nilkamal',
+                  desc: "India's #1 moulded furniture brand. Chairs, tables, storage cabinets, beds, and more.",
+                  tags: ['Chairs', 'Cabinets', 'Tables', 'Beds'],
+                  borderColor: 'border-blue-200 hover:border-blue-400',
+                  badgeBg: 'bg-blue-50',
+                  badgeText: 'text-blue-700',
+                  dotColor: 'bg-blue-500',
+                },
+                {
+                  name: 'Supreme',
+                  to: '/supreme',
+                  desc: "By Supreme Industries — India's largest plastics company. 50+ years of quality and trust.",
+                  tags: ['Seating', 'Tables', 'Storage', 'Kids'],
+                  borderColor: 'border-orange-200 hover:border-orange-400',
+                  badgeBg: 'bg-orange-50',
+                  badgeText: 'text-orange-700',
+                  dotColor: 'bg-orange-500',
+                },
+                {
+                  name: 'Seatex',
+                  to: '/seatex',
+                  desc: "Hindustan ka sabse favorite furniture. 40+ designs across 15+ colours.",
+                  tags: ['Standard', 'Premium', 'Tables', 'Stools'],
+                  borderColor: 'border-emerald-200 hover:border-emerald-400',
+                  badgeBg: 'bg-emerald-50',
+                  badgeText: 'text-emerald-700',
+                  dotColor: 'bg-emerald-500',
+                },
+              ].map((brand) => (
+                <Link
+                  key={brand.name}
+                  to={brand.to}
+                  className={`group rounded-2xl border-2 ${brand.borderColor} p-6 transition-all duration-300 hover:shadow-lg`}
+                >
+                  <div className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full ${brand.badgeBg} mb-4`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${brand.dotColor}`} />
+                    <span className={`text-[10px] font-semibold ${brand.badgeText} tracking-wide uppercase`}>Dealer</span>
+                  </div>
+                  <h3 className='text-2xl font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors'>
+                    {brand.name}
+                  </h3>
+                  <p className='text-sm text-gray-500 leading-relaxed mb-4'>{brand.desc}</p>
+                  <div className='flex flex-wrap gap-2 mb-5'>
+                    {brand.tags.map((tag) => (
+                      <span key={tag} className='text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-600'>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <span className='inline-flex items-center gap-1 text-sm font-semibold text-gray-900 group-hover:gap-2 transition-all'>
+                    Browse Products <ChevronRight className='w-4 h-4' />
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

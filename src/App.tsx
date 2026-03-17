@@ -12,6 +12,12 @@ import About from '@/src/pages/About'
 import Nilkamal from '@/src/pages/Nilkamal'
 import NilkamalCollection from '@/src/pages/NilkamalCollection'
 import NilkamalProductPage from '@/src/pages/NilkamalProduct'
+import Supreme from '@/src/pages/Supreme'
+import SupremeCollection from '@/src/pages/SupremeCollection'
+import SupremeProductPage from '@/src/pages/SupremeProduct'
+import Seatex from '@/src/pages/Seatex'
+import SeatexCollection from '@/src/pages/SeatexCollection'
+import SeatexProductPage from '@/src/pages/SeatexProduct'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
 
@@ -41,7 +47,8 @@ function Navbar() {
   const isHome = location.pathname === '/home'
 
   // Category pages and Nilkamal page have a dark background — navbar should be transparent/dark
-  const isCategoryPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname.startsWith('/nilkamal')
+  const isDarkPage = /^\/products\/[^/]+$/.test(location.pathname) || location.pathname.startsWith('/nilkamal') || location.pathname.startsWith('/supreme') || location.pathname.startsWith('/seatex')
+  const isCategoryPage = isDarkPage
 
   useEffect(() => {
     const onScroll = () => {
@@ -132,16 +139,23 @@ function Navbar() {
                               </Link>
                             ))}
                             <div className={`mx-3 my-1 border-t ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`} />
-                            <Link
-                              to='/nilkamal'
-                              className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
-                              onClick={() => setProductsOpen(false)}
-                            >
-                              Nilkamal Range
-                              <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
-                                Dealer
-                              </span>
-                            </Link>
+                            {[
+                              { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
+                              { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
+                              { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400', bgLight: 'bg-emerald-50 text-emerald-600' },
+                            ].map((brand) => (
+                              <Link
+                                key={brand.to}
+                                to={brand.to}
+                                className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
+                                onClick={() => setProductsOpen(false)}
+                              >
+                                {brand.label}
+                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isCategoryPage ? brand.bg : brand.bgLight}`}>
+                                  Dealer
+                                </span>
+                              </Link>
+                            ))}
                           </div>
                           {/* Documents */}
                           <div className={`py-2 w-48 border-l ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`}>
@@ -242,18 +256,25 @@ function Navbar() {
                     {cat.label}
                   </Link>
                 ))}
-                <Link
-                  to='/nilkamal'
-                  className={`flex items-center gap-2 text-lg font-medium py-1.5 ${
-                    isCategoryPage ? 'text-gray-300' : 'text-gray-700'
-                  }`}
-                  onClick={() => setOpen(false)}
-                >
-                  Nilkamal Range
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
-                    Dealer
-                  </span>
-                </Link>
+                {[
+                  { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
+                  { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
+                  { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400', bgLight: 'bg-emerald-50 text-emerald-600' },
+                ].map((brand) => (
+                  <Link
+                    key={brand.to}
+                    to={brand.to}
+                    className={`flex items-center gap-2 text-lg font-medium py-1.5 ${
+                      isCategoryPage ? 'text-gray-300' : 'text-gray-700'
+                    }`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {brand.label}
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isCategoryPage ? brand.bg : brand.bgLight}`}>
+                      Dealer
+                    </span>
+                  </Link>
+                ))}
               </div>
             </div>
             <div>
@@ -346,6 +367,12 @@ export default function App() {
         <Route path='/nilkamal' element={<Nilkamal />} />
         <Route path='/nilkamal/:collection' element={<NilkamalCollection />} />
         <Route path='/nilkamal/:collection/:handle' element={<NilkamalProductPage />} />
+        <Route path='/supreme' element={<Supreme />} />
+        <Route path='/supreme/:collection' element={<SupremeCollection />} />
+        <Route path='/supreme/:collection/:handle' element={<SupremeProductPage />} />
+        <Route path='/seatex' element={<Seatex />} />
+        <Route path='/seatex/:collection' element={<SeatexCollection />} />
+        <Route path='/seatex/:collection/:handle' element={<SeatexProductPage />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
         <Route path='/products/:category' element={<CategoryPage />} />
