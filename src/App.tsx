@@ -127,19 +127,8 @@ function Navbar() {
                       <div className='fixed inset-0 z-40' onClick={() => setProductsOpen(false)} />
                       <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border z-50 ${dropdownBg}`}>
                         <div className='flex'>
-                          {/* Categories */}
+                          {/* Brands */}
                           <div className='py-2 w-52'>
-                            {CATEGORIES.map((cat) => (
-                              <Link
-                                key={cat.slug}
-                                to={`/mvm/${cat.slug}`}
-                                className={`block px-4 py-2 text-sm ${dropdownItemClass}`}
-                                onClick={() => setProductsOpen(false)}
-                              >
-                                {cat.label}
-                              </Link>
-                            ))}
-                            <div className={`mx-3 my-1 border-t ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`} />
                             <Link
                               to='/mvm'
                               className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
@@ -255,18 +244,6 @@ function Navbar() {
                 isCategoryPage ? 'text-gray-500' : 'text-gray-400'
               }`}>Products</p>
               <div className='space-y-1 pl-2'>
-                {CATEGORIES.map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    to={`/mvm/${cat.slug}`}
-                    className={`block text-lg font-medium py-1.5 ${
-                      isCategoryPage ? 'text-gray-300' : 'text-gray-700'
-                    }`}
-                    onClick={() => setOpen(false)}
-                  >
-                    {cat.label}
-                  </Link>
-                ))}
                 <Link
                   to='/mvm'
                   className={`flex items-center gap-2 text-lg font-medium py-1.5 ${

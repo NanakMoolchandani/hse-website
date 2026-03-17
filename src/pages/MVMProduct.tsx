@@ -350,8 +350,7 @@ export default function MVMProduct() {
               </div>
               <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
                 {related.map((p) => {
-                  const pImg = p.thumbnail_url
-                    || p.processed_photo_urls?.[0]
+                  const pImg = p.processed_photo_urls?.[0]
                     || p.raw_photo_urls?.[0]
                     || null
                   const pCat = getCategoryByEnum(p.category || '')

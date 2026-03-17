@@ -185,8 +185,7 @@ export default function MVMCollection() {
 // ── Product Card ─────────────────────────────────────────────────────────────
 
 function ProductCard({ product, collection }: { product: CatalogProduct; collection: string }) {
-  const imgSrc = product.thumbnail_url
-    || product.processed_photo_urls?.[0]
+  const imgSrc = product.processed_photo_urls?.[0]
     || product.raw_photo_urls?.[0]
     || null
   const features = product.metadata?.features || []

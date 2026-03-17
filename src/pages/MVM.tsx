@@ -193,8 +193,7 @@ export default function MVM() {
                     <>
                       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
                         {preview.map((product) => {
-                          const imgSrc = product.thumbnail_url
-                            || product.processed_photo_urls?.[0]
+                          const imgSrc = product.processed_photo_urls?.[0]
                             || product.raw_photo_urls?.[0]
                             || null
 
