@@ -157,21 +157,29 @@ function Navbar() {
                               </Link>
                             ))}
                           </div>
-                          {/* Documents */}
-                          <div className={`py-2 w-48 border-l ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`}>
+                          {/* Catalogs */}
+                          <div className={`py-2 w-52 border-l ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`}>
                             <p className={`px-4 py-1 text-[10px] font-semibold tracking-widest uppercase ${isCategoryPage ? 'text-gray-500' : 'text-gray-400'}`}>
-                              Documents
+                              Catalogs
                             </p>
-                            <a
-                              href='https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              className={`flex items-center gap-2 px-4 py-2 text-sm ${dropdownItemClass}`}
-                              onClick={() => setProductsOpen(false)}
-                            >
-                              <FileDown className='w-3.5 h-3.5' />
-                              Product Catalog
-                            </a>
+                            {[
+                              { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf' },
+                              { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf' },
+                              { label: 'Supreme', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Supreme-Catalog.pdf' },
+                              { label: 'Seatex', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Seatex-Catalog.pdf' },
+                            ].map((catalog) => (
+                              <a
+                                key={catalog.label}
+                                href={catalog.href}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className={`flex items-center gap-2 px-4 py-1.5 text-sm ${dropdownItemClass}`}
+                                onClick={() => setProductsOpen(false)}
+                              >
+                                <FileDown className='w-3 h-3 flex-shrink-0' />
+                                {catalog.label}
+                              </a>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -280,19 +288,27 @@ function Navbar() {
             <div>
               <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${
                 isCategoryPage ? 'text-gray-500' : 'text-gray-400'
-              }`}>Documents</p>
-              <a
-                href='https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf'
-                target='_blank'
-                rel='noopener noreferrer'
-                className={`flex items-center gap-2 text-lg font-medium py-1.5 pl-2 ${
-                  isCategoryPage ? 'text-gray-300' : 'text-gray-700'
-                }`}
-                onClick={() => setOpen(false)}
-              >
-                <FileDown className='w-4 h-4' />
-                Product Catalog PDF
-              </a>
+              }`}>Catalogs</p>
+              {[
+                { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf' },
+                { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf' },
+                { label: 'Supreme', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Supreme-Catalog.pdf' },
+                { label: 'Seatex', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Seatex-Catalog.pdf' },
+              ].map((catalog) => (
+                <a
+                  key={catalog.label}
+                  href={catalog.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className={`flex items-center gap-2 text-base font-medium py-1.5 pl-2 ${
+                    isCategoryPage ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                  onClick={() => setOpen(false)}
+                >
+                  <FileDown className='w-3.5 h-3.5 flex-shrink-0' />
+                  {catalog.label}
+                </a>
+              ))}
             </div>
             {isHome ? (
               <button
