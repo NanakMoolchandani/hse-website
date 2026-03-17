@@ -21,10 +21,13 @@ const MVM_CATEGORIES = [
   { slug: 'visitor-and-reception', enum: 'VISITOR_RECEPTION' },
 ]
 
-// Nilkamal collections — match src/lib/nilkamal.ts
+// Nilkamal collections — match src/lib/nilkamal.ts (all 19)
 const NILKAMAL_COLLECTIONS = [
   'chairs', 'plastic-cabinets', 'dining-sets', 'dining-tables',
   'office-chairs', 'office-tables', 'outdoor-furniture',
+  'sofas', 'recliners', 'beds', 'wardrobes', 'shoe-cabinets',
+  'tv-units', 'book-cases', 'centre-tables', 'dressing-tables',
+  'kids-furniture', 'stools', 'racks-trolleys',
 ]
 
 // Supreme collections — match src/lib/supreme.ts
