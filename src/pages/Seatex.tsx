@@ -201,6 +201,7 @@ export default function Seatex() {
                       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
                         {preview.map((product) => {
                           const title = cleanSeatexTitle(product.title)
+                          const imgSrc = product.images[0]?.src || null
 
                           return (
                             <Link
@@ -209,9 +210,18 @@ export default function Seatex() {
                               className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
                             >
                               <div className='aspect-square bg-white/[0.02] overflow-hidden'>
-                                <div className='w-full h-full flex items-center justify-center text-gray-700'>
-                                  <span className='text-2xl font-bold opacity-20'>{title[0]}</span>
-                                </div>
+                                {imgSrc ? (
+                                  <img
+                                    src={imgSrc}
+                                    alt={title}
+                                    className='w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500'
+                                    loading='lazy'
+                                  />
+                                ) : (
+                                  <div className='w-full h-full flex items-center justify-center text-gray-700'>
+                                    <span className='text-2xl font-bold opacity-20'>{title[0]}</span>
+                                  </div>
+                                )}
                               </div>
                               <div className='p-3'>
                                 <h4 className='text-xs font-medium text-white leading-snug line-clamp-2 mb-1.5 group-hover:text-emerald-300 transition-colors'>

@@ -198,11 +198,20 @@ function ProductCard({ product, collection }: { product: SeatexProduct; collecti
       to={`/seatex/${collection}/${product.handle}`}
       className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
     >
-      {/* Image placeholder */}
+      {/* Image */}
       <div className='aspect-square bg-white/[0.02] overflow-hidden relative'>
-        <div className='w-full h-full flex items-center justify-center text-gray-700'>
-          <span className='text-3xl font-bold opacity-20'>{title[0]}</span>
-        </div>
+        {product.images[0]?.src ? (
+          <img
+            src={product.images[0].src}
+            alt={title}
+            className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
+            loading='lazy'
+          />
+        ) : (
+          <div className='w-full h-full flex items-center justify-center text-gray-700'>
+            <span className='text-3xl font-bold opacity-20'>{title[0]}</span>
+          </div>
+        )}
       </div>
 
       {/* Info */}

@@ -104,12 +104,20 @@ export default function SeatexProduct() {
         {/* Main Content */}
         <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16'>
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
-            {/* Left — Image Placeholder */}
+            {/* Left — Image */}
             <div className='flex-1 max-w-2xl'>
               <div className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4'>
-                <div className='w-full h-full flex items-center justify-center text-gray-700'>
-                  <span className='text-6xl font-bold opacity-10'>{title[0]}</span>
-                </div>
+                {product.images[0]?.src ? (
+                  <img
+                    src={product.images[0].src}
+                    alt={title}
+                    className='w-full h-full object-contain p-6'
+                  />
+                ) : (
+                  <div className='w-full h-full flex items-center justify-center text-gray-700'>
+                    <span className='text-6xl font-bold opacity-10'>{title[0]}</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -218,6 +226,7 @@ export default function SeatexProduct() {
               <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
                 {related.map((p) => {
                   const pTitle = cleanSeatexTitle(p.title)
+                  const pImg = p.images[0]?.src || null
 
                   return (
                     <Link
@@ -226,9 +235,18 @@ export default function SeatexProduct() {
                       className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
                     >
                       <div className='aspect-square bg-white/[0.02] overflow-hidden'>
-                        <div className='w-full h-full flex items-center justify-center text-gray-700'>
-                          <span className='text-2xl font-bold opacity-20'>{pTitle[0]}</span>
-                        </div>
+                        {pImg ? (
+                          <img
+                            src={pImg}
+                            alt={pTitle}
+                            className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
+                            loading='lazy'
+                          />
+                        ) : (
+                          <div className='w-full h-full flex items-center justify-center text-gray-700'>
+                            <span className='text-2xl font-bold opacity-20'>{pTitle[0]}</span>
+                          </div>
+                        )}
                       </div>
                       <div className='p-3'>
                         <h4 className='text-xs font-medium text-white leading-snug line-clamp-2'>{pTitle}</h4>
