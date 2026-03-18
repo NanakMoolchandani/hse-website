@@ -279,7 +279,7 @@ function Navbar() {
                     <img
                       src={brand.logo}
                       alt={brand.label}
-                      className='h-4 w-auto'
+                      className='h-5 w-auto'
                       style={{ filter: isCategoryPage ? 'brightness(0) invert(1)' : 'none' }}
                     />
                     <span className={`text-[10px] font-medium tracking-wide uppercase ${
