@@ -383,15 +383,18 @@ export default function App() {
     document.body.style.backgroundColor = bg
   }, [isDarkRoute])
 
-  // Kill GSAP ScrollTriggers BEFORE new page sets up its own.
-  // Use ScrollTrigger.killAll(true) which properly reverts all pins and
-  // DOM changes. NEVER manually remove pin-spacer elements — that desync's
-  // React's virtual DOM and causes blank pages on navigation.
-  useLayoutEffect(() => {
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.revert())
+  // Clean up GSAP ScrollTriggers AFTER React has finished unmounting.
+  // CRITICAL: This must use useEffect (not useLayoutEffect) + setTimeout
+  // so it runs AFTER React's DOM reconciliation is complete. Calling kill()
+  // or revert() during unmount modifies the DOM (removes pin-spacer wrappers)
+  // while React still holds references to those nodes, causing "removeChild"
+  // errors and blank pages.
+  useEffect(() => {
+    const id = setTimeout(() => {
+      ScrollTrigger.getAll().forEach((t) => t.kill())
       ScrollTrigger.clearScrollMemory()
-    }
+    }, 0)
+    return () => clearTimeout(id)
   }, [location.pathname])
 
   // Scroll to top on route change

@@ -13,15 +13,34 @@ function padFrame(n: number): string {
 }
 
 export default function ChairExplosionSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const currentFrameRef = useRef(0)
   const [loadProgress, setLoadProgress] = useState(0)
+  const [shouldLoad, setShouldLoad] = useState(false)
+
+  // Defer frame loading until section is near viewport (saves ~240 requests on initial load)
+  useEffect(() => {
+    const section = stickyRef.current?.parentElement
+    if (!section) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
+    if (!shouldLoad) return
     const canvas = canvasRef.current
-    const section = sectionRef.current
-    if (!canvas || !section) return
+    const wrapper = stickyRef.current?.parentElement
+    if (!canvas || !wrapper) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -96,17 +115,16 @@ export default function ChairExplosionSection() {
       images[i] = img
     }
 
-    // Create ScrollTrigger immediately so section stays pinned
+    // ScrollTrigger for scrubbing frames — NO pin (we use CSS sticky instead)
     const frameObj = { frame: 0 }
 
     const tween = gsap.to(frameObj, {
       frame: TOTAL_FRAMES - 1,
       ease: 'none',
       scrollTrigger: {
-        trigger: section,
+        trigger: wrapper,
         start: 'top top',
-        end: '+=200%',
-        pin: true,
+        end: 'bottom bottom',
         scrub: 0.5,
       },
       onUpdate: () => {
@@ -124,69 +142,69 @@ export default function ChairExplosionSection() {
       window.removeEventListener('resize', resizeCanvas)
       tween.scrollTrigger?.kill()
       tween.kill()
-      // Clear any remaining pinned styles
-      gsap.set(section, { clearProps: 'all' })
     }
-  }, [])
+  }, [shouldLoad])
 
   return (
-    <section
-      ref={sectionRef}
-      className='relative w-full min-h-screen bg-black overflow-hidden'
-    >
-      <div className='flex flex-col-reverse lg:flex-row items-center h-screen'>
-        {/* Left — About text (narrower) */}
-        <div className='w-full lg:w-[35%] flex items-center justify-center px-6 md:px-12 lg:px-14 py-10 lg:py-0'>
-          <div className='max-w-md'>
-            <p className='text-xs font-semibold tracking-[0.25em] uppercase text-gray-500 mb-4'>
-              Est. 1997 &middot; Neemuch, MP
-            </p>
-            <h2 className='font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>
-              About MVM<br />Aasanam
-            </h2>
-            <p className='text-gray-300 text-base leading-relaxed mb-5'>
-              MVM Aasanam is the premium furniture brand of{' '}
-              <span className='text-white font-medium'>
-                Hari Shewa Enterprises
-              </span>
-              , headquartered in Neemuch, Madhya Pradesh. For over three decades,
-              we have designed, manufactured, and supplied commercial grade office
-              and cafeteria furniture trusted by corporates, government bodies, and
-              institutions across Central India.
-            </p>
-            <p className='text-gray-400 text-sm leading-relaxed mb-8'>
-              From executive boardrooms to 500 seat cafeterias, every product is
-              engineered for ergonomic comfort and built to endure years of
-              daily commercial use.
-            </p>
+    // Outer wrapper: tall scrollable area (300vh gives scroll distance for the animation)
+    <div className='relative bg-black' style={{ height: '300vh' }}>
+      {/* Inner sticky container: stays pinned via CSS position:sticky — no GSAP pin,
+          so React's DOM stays clean and navigation never crashes */}
+      <div ref={stickyRef} className='sticky top-0 w-full h-screen overflow-hidden'>
+        <div className='flex flex-col-reverse lg:flex-row items-center h-full'>
+          {/* Left — About text (narrower) */}
+          <div className='w-full lg:w-[35%] flex items-center justify-center px-6 md:px-12 lg:px-14 py-10 lg:py-0'>
+            <div className='max-w-md'>
+              <p className='text-xs font-semibold tracking-[0.25em] uppercase text-gray-500 mb-4'>
+                Est. 1997 &middot; Neemuch, MP
+              </p>
+              <h2 className='font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>
+                About MVM<br />Aasanam
+              </h2>
+              <p className='text-gray-300 text-base leading-relaxed mb-5'>
+                MVM Aasanam is the premium furniture brand of{' '}
+                <span className='text-white font-medium'>
+                  Hari Shewa Enterprises
+                </span>
+                , headquartered in Neemuch, Madhya Pradesh. For over three decades,
+                we have designed, manufactured, and supplied commercial grade office
+                and cafeteria furniture trusted by corporates, government bodies, and
+                institutions across Central India.
+              </p>
+              <p className='text-gray-400 text-sm leading-relaxed mb-8'>
+                From executive boardrooms to 500 seat cafeterias, every product is
+                engineered for ergonomic comfort and built to endure years of
+                daily commercial use.
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Right — Chair explosion canvas (wider) */}
-        <div className='w-full lg:w-[65%] h-[60vh] lg:h-full relative'>
-          <canvas
-            ref={canvasRef}
-            className='absolute inset-0 w-full h-full'
-            style={{
-              filter: 'contrast(1.3) brightness(0.85)',
-              imageRendering: 'high-quality' as React.CSSProperties['imageRendering'],
-            }}
-          />
-          {/* Loading indicator — fades out when all frames are ready */}
-          {loadProgress < 100 && (
-            <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
-              <div className='text-center'>
-                <div className='w-16 h-0.5 bg-white/10 rounded-full overflow-hidden'>
-                  <div
-                    className='h-full bg-white/40 rounded-full transition-all duration-300'
-                    style={{ width: `${loadProgress}%` }}
-                  />
+          {/* Right — Chair explosion canvas (wider) */}
+          <div className='w-full lg:w-[65%] h-[60vh] lg:h-full relative'>
+            <canvas
+              ref={canvasRef}
+              className='absolute inset-0 w-full h-full'
+              style={{
+                filter: 'contrast(1.3) brightness(0.85)',
+                imageRendering: 'high-quality' as React.CSSProperties['imageRendering'],
+              }}
+            />
+            {/* Loading indicator — fades out when all frames are ready */}
+            {loadProgress < 100 && (
+              <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
+                <div className='text-center'>
+                  <div className='w-16 h-0.5 bg-white/10 rounded-full overflow-hidden'>
+                    <div
+                      className='h-full bg-white/40 rounded-full transition-all duration-300'
+                      style={{ width: `${loadProgress}%` }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
