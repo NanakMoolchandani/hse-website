@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsx scripts/generate-sitemap.ts",
+    "build": "vite build && tsx scripts/critical-css.ts && tsx scripts/generate-sitemap.ts",
     "build:sitemap": "tsx scripts/generate-sitemap.ts",
     "preview": "vite preview"
   },
@@ -16,6 +16,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.27",
+    "critters": "^0.0.23",
     "postcss": "^8.5.6",
     "puppeteer": "^24.39.1",
     "tailwindcss": "^4.2.1",
