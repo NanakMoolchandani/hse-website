@@ -251,37 +251,44 @@ function Navbar() {
           </button>
         </div>
 
-        {/* Brand quick-links bar — desktop only */}
+        {/* Brand quick-links bar — desktop only, centered */}
         <div className={`hidden md:block ${
           isCategoryPage
-            ? scrolled ? 'bg-black/60 border-t border-white/10' : 'bg-black/40 backdrop-blur-sm'
-            : scrolled ? 'bg-gray-50 border-t border-gray-100' : 'bg-white/80 backdrop-blur-sm border-t border-gray-100'
+            ? scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
+            : scrolled ? 'bg-gray-50/95 backdrop-blur-md border-t border-gray-200' : 'bg-white/90 backdrop-blur-md border-t border-gray-100'
         }`}>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-5 h-10'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[
-              { to: '/mvm', label: 'MVM Aasanam', tag: 'Our Brand', color: 'amber' },
-              { to: '/nilkamal', label: 'Nilkamal', tag: 'Dealer', color: 'blue' },
-              { to: '/supreme', label: 'Supreme', tag: 'Dealer', color: 'orange' },
-              { to: '/seatex', label: 'Seatex', tag: 'Dealer', color: 'emerald' },
-            ].map((brand) => {
+              { to: '/mvm', label: 'MVM Aasanam', logo: '/logos/mvm.svg', tag: 'Our Brand' },
+              { to: '/nilkamal', label: 'Nilkamal', logo: '/logos/nilkamal.svg', tag: 'Dealer' },
+              { to: '/supreme', label: 'Supreme', logo: '/logos/supreme.svg', tag: 'Dealer' },
+              { to: '/seatex', label: 'Seatex', logo: '/logos/seatex.svg', tag: 'Dealer' },
+            ].map((brand, i) => {
               const isActive = location.pathname.startsWith(brand.to)
               return (
-                <Link
-                  key={brand.to}
-                  to={brand.to}
-                  className={`flex items-center gap-1.5 text-[13px] font-medium transition-all ${
-                    isActive
-                      ? (isCategoryPage ? 'text-white' : 'text-gray-900')
-                      : (isCategoryPage ? 'text-white/60 hover:text-white' : 'text-gray-500 hover:text-gray-900')
-                  }`}
-                >
-                  {brand.label}
-                  <span className={`text-[10px] font-semibold ${
-                    isCategoryPage ? 'text-white/40' : 'text-gray-400'
-                  }`}>
-                    {brand.tag}
-                  </span>
-                </Link>
+                <span key={brand.to} className='flex items-center'>
+                  {i > 0 && (
+                    <span className={`mr-8 h-4 w-px ${isCategoryPage ? 'bg-white/15' : 'bg-gray-200'}`} />
+                  )}
+                  <Link
+                    to={brand.to}
+                    className={`flex items-center gap-2 transition-all ${
+                      isActive ? 'opacity-100' : 'opacity-50 hover:opacity-90'
+                    }`}
+                  >
+                    <img
+                      src={brand.logo}
+                      alt={brand.label}
+                      className='h-4 w-auto'
+                      style={{ filter: isCategoryPage ? 'brightness(0) invert(1)' : 'none' }}
+                    />
+                    <span className={`text-[10px] font-medium tracking-wide uppercase ${
+                      isCategoryPage ? 'text-white/50' : 'text-gray-400'
+                    }`}>
+                      {brand.tag}
+                    </span>
+                  </Link>
+                </span>
               )
             })}
           </div>
