@@ -26,6 +26,7 @@ export default function About() {
         title="About Us — Office Furniture Manufacturer Since 1997"
         description="MVM Aasanam by Hari Shewa Enterprises — Office furniture manufacturer in Neemuch, Madhya Pradesh since 1997. ISO 9001, ISO 14001, ISO 45001 certified. BIFMA certified. GeM empanelled. 500+ corporates served, 50,000+ chairs delivered across Central India."
         canonical="/about"
+        ogImage="https://mvm-furniture.com/og-about.jpg"
         keywords="Hari Shewa Enterprises, MVM Aasanam, furniture manufacturer Neemuch, office furniture company Madhya Pradesh, ISO certified furniture manufacturer India, GeM empanelled supplier"
         jsonLd={[ORGANIZATION_SCHEMA, createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'About', url: '/about' }])]}
       />

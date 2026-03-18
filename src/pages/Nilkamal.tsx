@@ -58,6 +58,7 @@ export default function Nilkamal() {
         title="Nilkamal Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
         description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Nilkamal in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage cabinets (Freedom Series), office furniture, outdoor furniture, and more. Bulk orders and institutional supply available."
         canonical="/nilkamal"
+        ogImage="https://mvm-furniture.com/og-nilkamal.jpg"
         keywords="Nilkamal dealer Neemuch, Nilkamal wholesale Madhya Pradesh, Nilkamal furniture Neemuch, Nilkamal chairs wholesale, Freedom Series cabinets, Nilkamal authorized dealer MP, Nilkamal plastic furniture wholesale, Nilkamal office chairs, नीलकमल डीलर नीमच, नीलकमल फर्नीचर थोक"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Nilkamal', url: '/nilkamal' }])}
       />

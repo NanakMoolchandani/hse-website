@@ -51,6 +51,7 @@ export default function MVM() {
         title="MVM Aasanam — Office Furniture Manufacturer | Hari Shewa Enterprises, Neemuch"
         description="MVM Aasanam by Hari Shewa Enterprises — Premium office furniture manufacturer in Neemuch, Madhya Pradesh. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing, bulk orders, pan-India delivery."
         canonical="/mvm"
+        ogImage="https://mvm-furniture.com/og-mvm.jpg"
         keywords="MVM Aasanam, office furniture manufacturer Neemuch, executive chairs wholesale, ergonomic chairs manufacturer MP, cafeteria furniture wholesale, Hari Shewa Enterprises, office furniture Madhya Pradesh, कार्यालय फर्नीचर नीमच"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }])}
       />

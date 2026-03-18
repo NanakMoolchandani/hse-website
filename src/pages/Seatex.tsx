@@ -55,6 +55,7 @@ export default function Seatex() {
         title="Seatex Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
         description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Seatex in Neemuch, Madhya Pradesh. Shop the complete range: economy chairs, premium chairs, tables, stools, and kids furniture. Bulk orders and institutional supply available."
         canonical="/seatex"
+        ogImage="https://mvm-furniture.com/og-seatex.jpg"
         keywords="Seatex dealer Neemuch, Seatex wholesale Madhya Pradesh, Seatex furniture Neemuch, Seatex chairs wholesale, Seatex authorized dealer MP, Seatex plastic furniture wholesale, सीटेक्स डीलर नीमच, सीटेक्स फर्नीचर थोक"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Seatex', url: '/seatex' }])}
       />
