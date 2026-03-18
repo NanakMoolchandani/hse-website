@@ -260,8 +260,8 @@ function Navbar() {
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[
               { to: '/mvm', label: 'MVM Aasanam', logo: '/logos/mvm.svg', tag: 'Our Brand' },
-              { to: '/nilkamal', label: 'Nilkamal', logo: '/logos/nilkamal.svg', tag: 'Dealer' },
-              { to: '/supreme', label: 'Supreme', logo: '/logos/supreme.svg', tag: 'Dealer' },
+              { to: '/nilkamal', label: 'Nilkamal', logo: '/logos/nilkamal.png', tag: 'Dealer' },
+              { to: '/supreme', label: 'Supreme', logo: '/logos/supreme.png', tag: 'Dealer' },
               { to: '/seatex', label: 'Seatex', logo: '/logos/seatex.svg', tag: 'Dealer' },
             ].map((brand, i) => {
               const isActive = location.pathname.startsWith(brand.to)
