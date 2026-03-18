@@ -296,9 +296,13 @@ export default function Home() {
       {isMobile ? (
         <section className='relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden'>
           <img
-            src='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
-            alt='MVM Aasanam hero'
+            src='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1280'
+            alt='MVM Aasanam — Office furniture manufacturer in Neemuch, Madhya Pradesh'
             className='absolute inset-0 w-full h-full object-cover'
+            fetchPriority='high'
+            decoding='async'
+            width={1920}
+            height={1080}
           />
           <div className='absolute inset-0 bg-black/40' />
           <div className='relative z-10 text-center px-6'>
@@ -314,8 +318,8 @@ export default function Home() {
       ) : (
         <ScrollExpandMedia
           mediaType='image'
-          mediaSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
-          bgImageSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1920'
+          mediaSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1280'
+          bgImageSrc='https://images.pexels.com/videos/8347237/pexels-photo-8347237.jpeg?auto=compress&cs=tinysrgb&w=1280'
           title='MVM Aasanam'
           date='Est. 1997 · Neemuch, MP'
           scrollToExpand='Scroll to explore'
@@ -398,6 +402,8 @@ export default function Home() {
                     src={client.logo}
                     alt={client.name}
                     className='h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity'
+                    loading='lazy'
+                    decoding='async'
                   />
                 </div>
               ))}

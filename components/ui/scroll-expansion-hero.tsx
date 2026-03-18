@@ -149,6 +149,10 @@ const ScrollExpandMedia = ({
               src={bgImageSrc}
               alt='Background'
               className='w-screen h-screen object-cover object-center'
+              fetchPriority='high'
+              decoding='async'
+              width={1920}
+              height={1080}
             />
             <div className='absolute inset-0 bg-black/30' />
           </motion.div>
@@ -192,6 +196,8 @@ const ScrollExpandMedia = ({
                       src={mediaSrc}
                       alt={title || 'Media content'}
                       className='w-full h-full object-cover'
+                      fetchPriority='high'
+                      decoding='async'
                     />
                     <motion.div
                       className='absolute inset-0 bg-black/40 rounded-2xl'
