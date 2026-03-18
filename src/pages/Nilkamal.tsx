@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchNilkamalCollection,
   cleanProductTitle,
@@ -59,6 +59,7 @@ export default function Nilkamal() {
         description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Nilkamal in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage cabinets (Freedom Series), office furniture, outdoor furniture, and more. Bulk orders and institutional supply available."
         canonical="/nilkamal"
         keywords="Nilkamal dealer Neemuch, Nilkamal wholesale Madhya Pradesh, Nilkamal furniture Neemuch, Nilkamal chairs wholesale, Freedom Series cabinets, Nilkamal authorized dealer MP, Nilkamal plastic furniture wholesale, Nilkamal office chairs, नीलकमल डीलर नीमच, नीलकमल फर्नीचर थोक"
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Nilkamal', url: '/nilkamal' }])}
       />
 
       {/* Hero */}

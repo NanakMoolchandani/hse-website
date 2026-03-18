@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { CheckCircle2, MessageCircle, Phone, MapPin } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO, { ORGANIZATION_SCHEMA } from '@/src/components/SEO'
+import SEO, { ORGANIZATION_SCHEMA, createBreadcrumbSchema } from '@/src/components/SEO'
 
 const STATS = [
   { count: '500+', label: 'Corporates Served' },
@@ -27,7 +27,7 @@ export default function About() {
         description="MVM Aasanam by Hari Shewa Enterprises — Office furniture manufacturer in Neemuch, Madhya Pradesh since 1997. ISO 9001, ISO 14001, ISO 45001 certified. BIFMA certified. GeM empanelled. 500+ corporates served, 50,000+ chairs delivered across Central India."
         canonical="/about"
         keywords="Hari Shewa Enterprises, MVM Aasanam, furniture manufacturer Neemuch, office furniture company Madhya Pradesh, ISO certified furniture manufacturer India, GeM empanelled supplier"
-        jsonLd={ORGANIZATION_SCHEMA}
+        jsonLd={[ORGANIZATION_SCHEMA, createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'About', url: '/about' }])]}
       />
       {/* Hero */}
       <section className='bg-gray-900 text-white pt-28 pb-20 md:pt-36 md:pb-28'>

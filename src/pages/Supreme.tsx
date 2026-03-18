@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchSupremeCollection,
   cleanSupremeTitle,
@@ -59,6 +59,7 @@ export default function Supreme() {
         description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Supreme (by Supreme Industries Ltd) in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage, kids furniture, stools, beds, and more. Bulk orders and institutional supply available."
         canonical="/supreme"
         keywords="Supreme furniture dealer Neemuch, Supreme wholesale Madhya Pradesh, Supreme furniture Neemuch, Supreme chairs wholesale, Supreme Industries furniture, Supreme authorized dealer MP, Supreme plastic furniture wholesale, सुप्रीम डीलर नीमच, सुप्रीम फर्नीचर थोक"
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Supreme', url: '/supreme' }])}
       />
 
       {/* Hero */}

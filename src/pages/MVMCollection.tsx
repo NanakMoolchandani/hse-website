@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Search, X } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, CATEGORIES } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
@@ -48,6 +48,7 @@ export default function MVMCollection() {
         description={`Buy ${cat.label} at factory-direct prices from MVM Aasanam (Hari Shewa Enterprises), Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/mvm/${collection}`}
         keywords={`MVM Aasanam ${cat.label}, ${cat.label} manufacturer Neemuch, ${cat.label} wholesale MP, office furniture factory direct`}
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }, { name: cat.label, url: '/mvm/' + collection }])}
       />
 
       {/* Header */}

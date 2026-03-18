@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { FABRIC_COLORS, LEATHERETTE_COLORS, isCushionedChair } from '@/src/lib/customization-colors'
@@ -90,6 +90,7 @@ export default function MVMProduct() {
         ogImage={images[0] || undefined}
         ogType="product"
         keywords={`${product.name}, MVM Aasanam ${cat?.label || ''}, office furniture manufacturer Neemuch`}
+        jsonLd={[createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }, { name: cat?.label || '', url: '/mvm/' + collection }, { name: product.name || '', url: '/mvm/' + collection + '/' + slug }]), createProductSchema(product)]}
       />
 
       <div className='min-h-screen bg-gray-950'>

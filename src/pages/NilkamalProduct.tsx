@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchNilkamalCollection,
   cleanProductTitle,
@@ -91,6 +91,7 @@ export default function NilkamalProduct() {
         description={`Buy ${title} at wholesale price from Hari Shewa Enterprises, Authorized Nilkamal Dealer in Neemuch. ${description.slice(0, 140)}`}
         canonical={`/nilkamal/${collection}/${handle}`}
         keywords={`${title}, Nilkamal ${cat?.label || ''} wholesale, Nilkamal dealer Neemuch`}
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Nilkamal', url: '/nilkamal' }, { name: cat?.label || '', url: '/nilkamal/' + collection }, { name: title, url: '/nilkamal/' + collection + '/' + handle }])}
       />
 
       <div className='min-h-screen bg-gray-950'>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchSeatexCollection,
   cleanSeatexTitle,
@@ -81,6 +81,7 @@ export default function SeatexProduct() {
         description={`Buy Seatex ${title} at wholesale price from Hari Shewa Enterprises, Authorized Seatex Dealer in Neemuch. ${description.slice(0, 140)}`}
         canonical={`/seatex/${collection}/${handle}`}
         keywords={`Seatex ${title}, Seatex ${cat?.label || ''} wholesale, Seatex dealer Neemuch`}
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Seatex', url: '/seatex' }, { name: cat?.label || '', url: '/seatex/' + collection }, { name: title, url: '/seatex/' + collection + '/' + handle }])}
       />
 
       <div className='min-h-screen bg-gray-950'>

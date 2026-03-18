@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchSeatexCollection,
   cleanSeatexTitle,
@@ -56,6 +56,7 @@ export default function Seatex() {
         description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Seatex in Neemuch, Madhya Pradesh. Shop the complete range: economy chairs, premium chairs, tables, stools, and kids furniture. Bulk orders and institutional supply available."
         canonical="/seatex"
         keywords="Seatex dealer Neemuch, Seatex wholesale Madhya Pradesh, Seatex furniture Neemuch, Seatex chairs wholesale, Seatex authorized dealer MP, Seatex plastic furniture wholesale, सीटेक्स डीलर नीमच, सीटेक्स फर्नीचर थोक"
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Seatex', url: '/seatex' }])}
       />
 
       {/* Hero */}

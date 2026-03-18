@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Search, X } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchSeatexCollection,
   getSeatexCollection,
@@ -53,6 +53,7 @@ export default function SeatexCollection() {
         description={`Buy Seatex ${cat.label} at wholesale prices from Hari Shewa Enterprises, Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/seatex/${collection}`}
         keywords={`Seatex ${cat.label} wholesale, Seatex ${cat.label} Neemuch, Seatex dealer MP, ${cat.label} bulk order`}
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Seatex', url: '/seatex' }, { name: cat.label, url: '/seatex/' + collection }])}
       />
 
       {/* Header */}

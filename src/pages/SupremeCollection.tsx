@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Search, X } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchSupremeCollection,
   getSupremeCollection,
@@ -55,6 +55,7 @@ export default function SupremeCollection() {
         description={`Buy Supreme ${cat.label} at wholesale prices from Hari Shewa Enterprises, Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/supreme/${collection}`}
         keywords={`Supreme ${cat.label} wholesale, Supreme ${cat.label} Neemuch, Supreme dealer MP, ${cat.label} bulk order`}
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Supreme', url: '/supreme' }, { name: cat.label, url: '/supreme/' + collection }])}
       />
 
       {/* Header */}

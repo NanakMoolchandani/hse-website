@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { CATEGORIES } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
@@ -52,6 +52,7 @@ export default function MVM() {
         description="MVM Aasanam by Hari Shewa Enterprises — Premium office furniture manufacturer in Neemuch, Madhya Pradesh. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing, bulk orders, pan-India delivery."
         canonical="/mvm"
         keywords="MVM Aasanam, office furniture manufacturer Neemuch, executive chairs wholesale, ergonomic chairs manufacturer MP, cafeteria furniture wholesale, Hari Shewa Enterprises, office furniture Madhya Pradesh, कार्यालय फर्नीचर नीमच"
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }])}
       />
 
       {/* Hero */}

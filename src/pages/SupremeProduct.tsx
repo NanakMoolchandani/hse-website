@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import SEO from '@/src/components/SEO'
+import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchSupremeCollection,
   cleanSupremeTitle,
@@ -91,6 +91,7 @@ export default function SupremeProduct() {
         description={`Buy ${title} at wholesale price from Hari Shewa Enterprises, Authorized Supreme Dealer in Neemuch. ${description.slice(0, 140)}`}
         canonical={`/supreme/${collection}/${handle}`}
         keywords={`${title}, Supreme ${cat?.label || ''} wholesale, Supreme dealer Neemuch`}
+        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Supreme', url: '/supreme' }, { name: cat?.label || '', url: '/supreme/' + collection }, { name: title, url: '/supreme/' + collection + '/' + handle }])}
       />
 
       <div className='min-h-screen bg-gray-950'>
