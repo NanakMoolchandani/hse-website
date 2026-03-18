@@ -250,6 +250,37 @@ function Navbar() {
             {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
           </button>
         </div>
+
+        {/* Brand quick-links bar — desktop only */}
+        <div className='hidden md:block border-t border-white/5'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 h-9'>
+            {[
+              { to: '/mvm', label: 'MVM Aasanam', badge: 'Our Brand', badgeClass: isCategoryPage ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-50 text-amber-600' },
+              { to: '/nilkamal', label: 'Nilkamal', badge: 'Dealer', badgeClass: isCategoryPage ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600' },
+              { to: '/supreme', label: 'Supreme', badge: 'Dealer', badgeClass: isCategoryPage ? 'bg-orange-500/20 text-orange-400' : 'bg-orange-50 text-orange-600' },
+              { to: '/seatex', label: 'Seatex', badge: 'Dealer', badgeClass: isCategoryPage ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-50 text-emerald-600' },
+            ].map((brand, i) => (
+              <span key={brand.to} className='flex items-center'>
+                {i > 0 && (
+                  <span className={`mx-1.5 text-[10px] ${isCategoryPage ? 'text-white/20' : 'text-gray-300'}`}>|</span>
+                )}
+                <Link
+                  to={brand.to}
+                  className={`text-xs font-medium transition-colors ${
+                    location.pathname.startsWith(brand.to)
+                      ? (isCategoryPage ? 'text-white' : 'text-gray-900')
+                      : (isCategoryPage ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
+                  }`}
+                >
+                  {brand.label}
+                </Link>
+                <span className={`ml-1 text-[9px] px-1 py-0.5 rounded font-semibold leading-none ${brand.badgeClass}`}>
+                  {brand.badge}
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
       </nav>
 
       {/* Mobile menu */}
