@@ -7,6 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -18,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Puppeteer needs Chrome — install it
+      # Puppeteer needs Chrome
       - name: Install Chrome for Puppeteer
         run: npx puppeteer browsers install chrome
 
@@ -28,11 +31,20 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
+      - name: Set up Vercel auth
+        run: |
+          mkdir -p ~/.local/share/com.vercel.cli
+          echo '{"token":"${{ secrets.VERCEL_TOKEN }}"}' > ~/.local/share/com.vercel.cli/auth.json
+
+      - name: Create Vercel project link
+        run: |
+          mkdir -p .vercel
+          echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
+
       - name: Deploy to Vercel Production
         run: |
-          npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-          npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          npx vercel build --prod --yes
+          npx vercel deploy --prebuilt --prod --yes
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
