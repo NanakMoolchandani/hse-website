@@ -296,7 +296,7 @@ export default function Home() {
       {isMobile ? (
         <section className='relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden'>
           <img
-            src='/hero-storefront.png'
+            src='/hero-storefront.jpg'
             alt='Hari Shewa Enterprises — Office furniture showroom in Neemuch, Madhya Pradesh'
             className='absolute inset-0 w-full h-full object-cover'
             fetchPriority='high'
@@ -318,8 +318,8 @@ export default function Home() {
       ) : (
         <ScrollExpandMedia
           mediaType='image'
-          mediaSrc='/hero-showroom.png'
-          bgImageSrc='/hero-storefront.png'
+          mediaSrc='/hero-showroom.jpg'
+          bgImageSrc='/hero-storefront.jpg'
           title='MVM Aasanam'
           date='Est. 1997 · Neemuch, MP'
           scrollToExpand='Scroll to explore'
