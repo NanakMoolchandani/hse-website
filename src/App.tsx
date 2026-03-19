@@ -259,7 +259,7 @@ function Navbar() {
                       src={brand.logo}
                       alt={brand.label}
                       className={`h-5 w-auto ${('isRound' in brand && brand.isRound) ? 'rounded-full' : ''}`}
-                      style={{ filter: 'brightness(0) invert(1)' }}
+                      style={('isRound' in brand && brand.isRound) ? undefined : { filter: 'brightness(0) invert(1)' }}
                     />
                     {('isRound' in brand && brand.isRound) && (
                       <span className='text-xs font-semibold text-white'>
