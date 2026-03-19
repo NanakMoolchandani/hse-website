@@ -3,7 +3,6 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Menu, X, MessageCircle, ChevronDown, FileDown } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { CATEGORIES } from '@/src/lib/categories'
 import { Navigate } from 'react-router-dom'
 import Home from '@/src/pages/Home'
 import About from '@/src/pages/About'
@@ -65,10 +64,6 @@ function Navbar() {
   const location = useLocation()
   const isHome = location.pathname === '/home'
 
-  // Category pages and Nilkamal page have a dark background — navbar should be transparent/dark
-  const isDarkPage = location.pathname.startsWith('/nilkamal') || location.pathname.startsWith('/supreme') || location.pathname.startsWith('/seatex') || location.pathname.startsWith('/mvm')
-  const isCategoryPage = isDarkPage
-
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY
@@ -105,22 +100,14 @@ function Navbar() {
   }
 
   // Determine navbar styling based on context
-  const navBg = isCategoryPage
-    ? scrolled
-      ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
-      : 'bg-transparent'
-    : scrolled || !isHome
-      ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100'
-      : 'bg-transparent'
+  const navBg = scrolled
+    ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
+    : 'bg-transparent'
 
-  const textColor = isCategoryPage ? 'text-white' : 'text-gray-900'
-  const linkColor = isCategoryPage ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:opacity-70'
-  const dropdownBg = isCategoryPage
-    ? 'bg-gray-900/95 backdrop-blur-md border-white/10'
-    : 'bg-white border-gray-100'
-  const dropdownItemClass = isCategoryPage
-    ? 'text-gray-300 hover:bg-white/10 hover:text-white'
-    : 'text-gray-700 hover:bg-gray-50'
+  const textColor = 'text-white'
+  const linkColor = 'text-gray-300 hover:text-white'
+  const dropdownBg = 'bg-gray-900/95 backdrop-blur-md border-white/10'
+  const dropdownItemClass = 'text-gray-300 hover:bg-white/10 hover:text-white'
 
   return (
     <>
@@ -154,7 +141,7 @@ function Navbar() {
                               onClick={() => setProductsOpen(false)}
                             >
                               MVM Aasanam
-                              <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-50 text-amber-600'}`}>
+                              <span className='ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
                                 Our Brand
                               </span>
                             </Link>
@@ -170,15 +157,15 @@ function Navbar() {
                                 onClick={() => setProductsOpen(false)}
                               >
                                 {brand.label}
-                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isCategoryPage ? brand.bg : brand.bgLight}`}>
+                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${brand.bg}`}>
                                   Dealer
                                 </span>
                               </Link>
                             ))}
                           </div>
                           {/* Catalogs */}
-                          <div className={`py-2 w-52 border-l ${isCategoryPage ? 'border-white/10' : 'border-gray-100'}`}>
-                            <p className={`px-4 py-1 text-[10px] font-semibold tracking-widest uppercase ${isCategoryPage ? 'text-gray-500' : 'text-gray-400'}`}>
+                          <div className='py-2 w-52 border-l border-white/10'>
+                            <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-gray-500'>
                               Catalogs
                             </p>
                             {[
@@ -236,11 +223,7 @@ function Navbar() {
           </div>
           <a
             href='https://wa.me/919981516171'
-            className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
-              isCategoryPage
-                ? 'bg-white text-black hover:bg-gray-200'
-                : 'bg-gray-900 text-white hover:bg-gray-700'
-            }`}
+            className='hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all bg-white text-black hover:bg-gray-200'
           >
             WhatsApp Us
           </a>
@@ -254,38 +237,36 @@ function Navbar() {
 
         {/* Brand quick-links bar — desktop only, centered */}
         <div className={`hidden md:block ${
-          isCategoryPage
-            ? scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
-            : scrolled ? 'bg-gray-50/95 backdrop-blur-md border-t border-gray-200' : 'bg-white/90 backdrop-blur-md border-t border-gray-100'
+          scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
         }`}>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[
-              { to: '/mvm', label: 'MVM Aasanam', logo: '/logos/mvm.svg', tag: 'Our Brand' },
+              { to: '/mvm', label: 'MVM Aasanam', logo: '/logos/mvm-logo.png', tag: 'Our Brand', isRound: true },
               { to: '/nilkamal', label: 'Nilkamal', logo: '/logos/nilkamal.png', tag: 'Dealer' },
               { to: '/supreme', label: 'Supreme', logo: '/logos/supreme.png', tag: 'Dealer' },
               { to: '/seatex', label: 'Seatex', logo: '/logos/seatex.svg', tag: 'Dealer' },
             ].map((brand, i) => {
-              const isActive = location.pathname.startsWith(brand.to)
               return (
                 <span key={brand.to} className='flex items-center'>
                   {i > 0 && (
-                    <span className={`mr-8 h-4 w-px ${isCategoryPage ? 'bg-white/15' : 'bg-gray-200'}`} />
+                    <span className='mr-8 h-4 w-px bg-white/15' />
                   )}
                   <Link
                     to={brand.to}
-                    className={`flex items-center gap-2 transition-all ${
-                      isActive ? 'opacity-100' : 'opacity-50 hover:opacity-90'
-                    }`}
+                    className='flex items-center gap-2 transition-all opacity-100'
                   >
                     <img
                       src={brand.logo}
                       alt={brand.label}
-                      className='h-5 w-auto'
-                      style={{ filter: isCategoryPage ? 'brightness(0) invert(1)' : 'none' }}
+                      className={`h-5 w-auto ${('isRound' in brand && brand.isRound) ? 'rounded-full' : ''}`}
+                      style={{ filter: 'brightness(0) invert(1)' }}
                     />
-                    <span className={`text-[10px] font-medium tracking-wide uppercase ${
-                      isCategoryPage ? 'text-white/50' : 'text-gray-400'
-                    }`}>
+                    {('isRound' in brand && brand.isRound) && (
+                      <span className='text-xs font-semibold text-white'>
+                        {brand.label}
+                      </span>
+                    )}
+                    <span className='text-[10px] font-medium tracking-wide uppercase text-white/70'>
                       {brand.tag}
                     </span>
                   </Link>
@@ -298,31 +279,25 @@ function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className={`fixed inset-0 z-40 flex flex-col pt-16 ${
-          isCategoryPage ? 'bg-black' : 'bg-white'
-        }`}>
+        <div className='fixed inset-0 z-40 flex flex-col pt-16 bg-black'>
           <div className='flex flex-col px-6 py-8 gap-6'>
             <Link
               to='/home'
-              className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+              className='text-left text-2xl font-semibold py-2 text-white'
               onClick={() => setOpen(false)}
             >
               Home
             </Link>
             <div>
-              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${
-                isCategoryPage ? 'text-gray-500' : 'text-gray-400'
-              }`}>Products</p>
+              <p className='text-sm font-medium uppercase tracking-wider mb-3 text-gray-500'>Products</p>
               <div className='space-y-1 pl-2'>
                 <Link
                   to='/mvm'
-                  className={`flex items-center gap-2 text-lg font-medium py-1.5 ${
-                    isCategoryPage ? 'text-gray-300' : 'text-gray-700'
-                  }`}
+                  className='flex items-center gap-2 text-lg font-medium py-1.5 text-gray-300'
                   onClick={() => setOpen(false)}
                 >
                   MVM Aasanam
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isCategoryPage ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-50 text-amber-600'}`}>
+                  <span className='text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
                     Our Brand
                   </span>
                 </Link>
@@ -334,13 +309,11 @@ function Navbar() {
                   <Link
                     key={brand.to}
                     to={brand.to}
-                    className={`flex items-center gap-2 text-lg font-medium py-1.5 ${
-                      isCategoryPage ? 'text-gray-300' : 'text-gray-700'
-                    }`}
+                    className='flex items-center gap-2 text-lg font-medium py-1.5 text-gray-300'
                     onClick={() => setOpen(false)}
                   >
                     {brand.label}
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isCategoryPage ? brand.bg : brand.bgLight}`}>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${brand.bg}`}>
                       Dealer
                     </span>
                   </Link>
@@ -348,9 +321,7 @@ function Navbar() {
               </div>
             </div>
             <div>
-              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${
-                isCategoryPage ? 'text-gray-500' : 'text-gray-400'
-              }`}>Catalogs</p>
+              <p className='text-sm font-medium uppercase tracking-wider mb-3 text-gray-500'>Catalogs</p>
               {[
                 { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
                 { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
@@ -359,9 +330,7 @@ function Navbar() {
               ].map((catalog) => (
                 <button
                   key={catalog.label}
-                  className={`flex items-center gap-2 text-base font-medium py-1.5 pl-2 w-full text-left ${
-                    isCategoryPage ? 'text-gray-300' : 'text-gray-700'
-                  }`}
+                  className='flex items-center gap-2 text-base font-medium py-1.5 pl-2 w-full text-left text-gray-300'
                   onClick={() => {
                     setOpen(false)
                     downloadPdf(catalog.href, catalog.file)
@@ -375,14 +344,14 @@ function Navbar() {
             {isHome ? (
               <button
                 onClick={() => handleNavClick('/home#contact')}
-                className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+                className='text-left text-2xl font-semibold py-2 text-white'
               >
                 Contact
               </button>
             ) : (
               <Link
                 to='/home#contact'
-                className={`text-left text-2xl font-semibold py-2 ${isCategoryPage ? 'text-white' : 'text-gray-900'}`}
+                className='text-left text-2xl font-semibold py-2 text-white'
                 onClick={() => setOpen(false)}
               >
                 Contact
@@ -390,11 +359,7 @@ function Navbar() {
             )}
             <a
               href='https://wa.me/919981516171'
-              className={`mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium ${
-                isCategoryPage
-                  ? 'bg-white text-black'
-                  : 'bg-gray-900 text-white'
-              }`}
+              className='mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-white text-black'
             >
               <MessageCircle className='w-4 h-4' />
               WhatsApp Us
