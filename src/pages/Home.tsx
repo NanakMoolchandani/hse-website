@@ -296,8 +296,8 @@ export default function Home() {
       {isMobile ? (
         <section className='relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden'>
           <img
-            src='/hero.jpg'
-            alt='MVM Aasanam — Office furniture manufacturer in Neemuch, Madhya Pradesh'
+            src='/hero-storefront.png'
+            alt='Hari Shewa Enterprises — Office furniture showroom in Neemuch, Madhya Pradesh'
             className='absolute inset-0 w-full h-full object-cover'
             fetchPriority='high'
             decoding='async'
@@ -318,8 +318,8 @@ export default function Home() {
       ) : (
         <ScrollExpandMedia
           mediaType='image'
-          mediaSrc='/hero.jpg'
-          bgImageSrc='/hero.jpg'
+          mediaSrc='/hero-showroom.png'
+          bgImageSrc='/hero-storefront.png'
           title='MVM Aasanam'
           date='Est. 1997 · Neemuch, MP'
           scrollToExpand='Scroll to explore'

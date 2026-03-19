@@ -126,7 +126,8 @@ function Navbar() {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <Link to='/mvm' className={`text-base font-bold tracking-tight font-sans ${textColor}`}>
+          <Link to='/mvm' className={`flex items-center gap-2.5 text-base font-bold tracking-tight font-sans ${textColor}`}>
+            <img src='/logos/mvm-logo.png' alt='MVM Aasanam' className='w-9 h-9 rounded-full' />
             Hari Shewa Enterprises
           </Link>
           <div className='hidden md:flex items-center gap-8'>
