@@ -1,6 +1,6 @@
 // ── Nilkamal Shopify API Integration ─────────────────────────────────────────
 // Fetches real product data from nilkamalfurniture.com (public Shopify JSON API)
-// No API key needed — these are public storefront endpoints.
+// No API key needed - these are public storefront endpoints.
 
 const BASE = 'https://www.nilkamalfurniture.com'
 
@@ -50,21 +50,21 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
   {
     handle: 'chairs',
     label: 'Chairs',
-    description: 'Moulded plastic chairs — from the iconic CHR series to premium Crystal and Novella ranges. Stackable, durable, and available in 20+ colours.',
+    description: 'Moulded plastic chairs - from the iconic CHR series to premium Crystal and Novella ranges. Stackable, durable, and available in 20+ colours.',
     color: 'from-red-500/10 to-transparent',
     accent: 'text-red-500',
   },
   {
     handle: 'plastic-cabinets',
     label: 'Storage Cabinets',
-    description: 'The Freedom Series and more — weather-proof, termite-proof plastic cabinets and wardrobes for homes, offices, and institutions.',
+    description: 'The Freedom Series and more - weather-proof, termite-proof plastic cabinets and wardrobes for homes, offices, and institutions.',
     color: 'from-amber-500/10 to-transparent',
     accent: 'text-amber-600',
   },
   {
     handle: 'dining-sets',
     label: 'Dining Sets',
-    description: 'Complete dining sets — table and chairs in matching finishes. Available in 2, 4, and 6-seater configurations.',
+    description: 'Complete dining sets - table and chairs in matching finishes. Available in 2, 4, and 6-seater configurations.',
     color: 'from-emerald-500/10 to-transparent',
     accent: 'text-emerald-600',
   },
@@ -127,7 +127,7 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
   {
     handle: 'shoe-cabinets',
     label: 'Shoe Racks & Cabinets',
-    description: 'Dedicated shoe storage — cabinets, racks, and organisers to keep your entryway tidy.',
+    description: 'Dedicated shoe storage - cabinets, racks, and organisers to keep your entryway tidy.',
     color: 'from-orange-500/10 to-transparent',
     accent: 'text-orange-600',
   },
@@ -162,7 +162,7 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
   {
     handle: 'kids-furniture',
     label: 'Kids Furniture',
-    description: 'Safe, colourful furniture for children — study tables, chairs, beds, and storage with child-friendly designs.',
+    description: 'Safe, colourful furniture for children - study tables, chairs, beds, and storage with child-friendly designs.',
     color: 'from-pink-500/10 to-transparent',
     accent: 'text-pink-600',
   },
@@ -184,7 +184,7 @@ export const NILKAMAL_COLLECTIONS: NilkamalCategory[] = [
 
 // ── Fetch helpers ────────────────────────────────────────────────────────────
 
-/** Shopify CDN image resize — append size param for optimized loading */
+/** Shopify CDN image resize - append size param for optimized loading */
 export function nilkamalImageUrl(src: string, width: number = 600): string {
   if (src.includes('cdn.shopify.com')) {
     return src.replace(/(\.\w+)\?/, `_${width}x$1?`)
@@ -239,7 +239,7 @@ export function getNilkamalCollection(handle: string): NilkamalCategory | undefi
   return NILKAMAL_COLLECTIONS.find((c) => c.handle === handle)
 }
 
-/** Clean product title — remove "Nilkamal" prefix and redundant text */
+/** Clean product title - remove "Nilkamal" prefix and redundant text */
 export function cleanProductTitle(title: string): string {
   return title
     .replace(/^Nilkamal\s+/i, '')

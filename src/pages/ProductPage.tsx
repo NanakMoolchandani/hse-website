@@ -98,12 +98,12 @@ export default function ProductPage() {
           <img src={img} alt="" className="fx-bg-img" />
           <div className="fx-bg-overlay" />
 
-          {/* ——— LEFT LAMP ——— */}
+          {/* --- LEFT LAMP --- */}
           <div style={{ position: 'absolute', left: '2rem', top: 0, bottom: 0, width: '3px', background: glow.leftLight, boxShadow: `0 0 24px 6px ${glow.left}`, zIndex: 30, opacity: 0.9 }} />
           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '12rem', background: glow.left, filter: 'blur(40px)', opacity: 0.55, zIndex: 10, pointerEvents: 'none' as const }} />
           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '40%', background: `linear-gradient(to right, ${glow.left}55, ${glow.left}22 50%, transparent)`, zIndex: 5, pointerEvents: 'none' as const }} />
 
-          {/* ——— RIGHT LAMP ——— */}
+          {/* --- RIGHT LAMP --- */}
           <div style={{ position: 'absolute', right: '2rem', top: 0, bottom: 0, width: '3px', background: glow.rightLight, boxShadow: `0 0 24px 6px ${glow.right}`, zIndex: 30, opacity: 0.9 }} />
           <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '12rem', background: glow.right, filter: 'blur(40px)', opacity: 0.55, zIndex: 10, pointerEvents: 'none' as const }} />
           <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '40%', background: `linear-gradient(to left, ${glow.right}55, ${glow.right}22 50%, transparent)`, zIndex: 5, pointerEvents: 'none' as const }} />
@@ -148,7 +148,7 @@ export default function ProductPage() {
   return (
     <div className='min-h-screen bg-white flex flex-col'>
       <SEO
-        title={`${product.name} — ${productCategory?.label || 'Office Furniture'} | Neemuch`}
+        title={`${product.name} - ${productCategory?.label || 'Office Furniture'} | Neemuch`}
         description={`${product.name} by MVM Aasanam (Hari Shewa Enterprises). ${product.description?.slice(0, 140) || `Premium ${productCategory?.label?.toLowerCase() || 'office furniture'} from Neemuch, Madhya Pradesh.`} Factory-direct pricing. ISO certified.`}
         canonical={`/products/${category}/${slug}`}
         ogImage={ogImage}
@@ -237,7 +237,7 @@ export default function ProductPage() {
           </nav>
         </div>
 
-        {/* Product info — name + CTAs */}
+        {/* Product info - name + CTAs */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-8'>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16'>
             {/* Left: Product name only */}
@@ -294,7 +294,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Color swatches — immediately after name, before description */}
+        {/* Color swatches - immediately after name, before description */}
         {product.category === 'EXECUTIVE_CHAIRS' && (
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 border-t border-gray-100'>
             <ColorSwatches
@@ -305,7 +305,7 @@ export default function ProductPage() {
           </div>
         )}
 
-        {/* Description — after colors */}
+        {/* Description - after colors */}
         {(product.description || product.description_hindi) && (
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 border-t border-gray-100'>
             {product.description_hindi && (

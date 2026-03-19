@@ -77,7 +77,7 @@ export default function SeatexProduct() {
   return (
     <>
       <SEO
-        title={`${title} | Seatex — Hari Shewa Enterprises`}
+        title={`${title} | Seatex - Hari Shewa Enterprises`}
         description={`Buy Seatex ${title} at wholesale price from Hari Shewa Enterprises, Authorized Seatex Dealer in Neemuch. ${description.slice(0, 140)}`}
         canonical={`/seatex/${collection}/${handle}`}
         keywords={`Seatex ${title}, Seatex ${cat?.label || ''} wholesale, Seatex dealer Neemuch`}
@@ -105,7 +105,7 @@ export default function SeatexProduct() {
         {/* Main Content */}
         <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16'>
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
-            {/* Left — Image */}
+            {/* Left - Image */}
             <div className='flex-1 max-w-2xl'>
               <div className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4'>
                 {product.images[0]?.src ? (
@@ -122,7 +122,7 @@ export default function SeatexProduct() {
               </div>
             </div>
 
-            {/* Right — Product Info */}
+            {/* Right - Product Info */}
             <div className='flex-1 lg:max-w-md'>
               {/* Badges */}
               <div className='flex flex-wrap items-center gap-2 mb-4'>

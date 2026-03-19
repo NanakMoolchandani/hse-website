@@ -235,7 +235,7 @@ function Navbar() {
           </button>
         </div>
 
-        {/* Brand quick-links bar — desktop only, centered */}
+        {/* Brand quick-links bar - desktop only, centered */}
         <div className={`hidden md:block ${
           scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
         }`}>

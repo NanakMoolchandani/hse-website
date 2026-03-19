@@ -49,7 +49,7 @@ export default function SeatexCollection() {
   return (
     <>
       <SEO
-        title={`Seatex ${cat.label} | Hari Shewa Enterprises — Authorized Dealer`}
+        title={`Seatex ${cat.label} | Hari Shewa Enterprises - Authorized Dealer`}
         description={`Buy Seatex ${cat.label} at wholesale prices from Hari Shewa Enterprises, Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/seatex/${collection}`}
         keywords={`Seatex ${cat.label} wholesale, Seatex ${cat.label} Neemuch, Seatex dealer MP, ${cat.label} bulk order`}

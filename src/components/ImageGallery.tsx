@@ -83,7 +83,7 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
 
   return (
     <>
-      {/* Main image — swipeable on mobile */}
+      {/* Main image - swipeable on mobile */}
       <div className='relative'>
         <div
           className='relative aspect-[3/4] bg-gray-50 rounded-2xl overflow-hidden cursor-pointer group touch-pan-y'
@@ -103,7 +103,7 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
           >
             <img
               src={images[activeIndex]}
-              alt={`${alt} — photo ${activeIndex + 1}`}
+              alt={`${alt} - photo ${activeIndex + 1}`}
               className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
             />
           </div>
@@ -219,7 +219,7 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
 
           <img
             src={images[activeIndex]}
-            alt={`${alt} — full size`}
+            alt={`${alt} - full size`}
             className='max-h-[90vh] max-w-[90vw] object-contain'
             onClick={(e) => e.stopPropagation()}
           />

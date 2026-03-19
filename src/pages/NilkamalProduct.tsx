@@ -87,7 +87,7 @@ export default function NilkamalProduct() {
   return (
     <>
       <SEO
-        title={`${title} | Nilkamal — Hari Shewa Enterprises`}
+        title={`${title} | Nilkamal - Hari Shewa Enterprises`}
         description={`Buy ${title} at wholesale price from Hari Shewa Enterprises, Authorized Nilkamal Dealer in Neemuch. ${description.slice(0, 140)}`}
         canonical={`/nilkamal/${collection}/${handle}`}
         keywords={`${title}, Nilkamal ${cat?.label || ''} wholesale, Nilkamal dealer Neemuch`}
@@ -115,14 +115,14 @@ export default function NilkamalProduct() {
         {/* Main Content */}
         <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16'>
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
-            {/* Left — Image Gallery */}
+            {/* Left - Image Gallery */}
             <div className='flex-1 max-w-2xl'>
               {/* Main Image */}
               <div className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4'>
                 {images.length > 0 ? (
                   <img
                     src={nilkamalImageUrl(images[activeImage].src, 1000)}
-                    alt={`${title} — Image ${activeImage + 1}`}
+                    alt={`${title} - Image ${activeImage + 1}`}
                     className='w-full h-full object-contain p-6'
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
@@ -188,7 +188,7 @@ export default function NilkamalProduct() {
               )}
             </div>
 
-            {/* Right — Product Info */}
+            {/* Right - Product Info */}
             <div className='flex-1 lg:max-w-md'>
               {/* Badges */}
               <div className='flex flex-wrap items-center gap-2 mb-4'>

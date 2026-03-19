@@ -1,5 +1,5 @@
 // ============================================
-// HSE 3D Explosion Website — Main Script
+// HSE 3D Explosion Website - Main Script
 // ============================================
 
 // Configuration
@@ -307,7 +307,7 @@ function animateCounter(el) {
 }
 
 // ============================================
-// Product Data — MVM Aasanam Catalogue
+// Product Data - MVM Aasanam Catalogue
 // ============================================
 const PRODUCTS = [
   {
@@ -587,7 +587,7 @@ function initProductViewer() {
     mainImg.classList.add('fading')
     setTimeout(() => {
       mainImg.src = product.images[idx].src
-      mainImg.alt = `${product.name} — ${product.images[idx].label}`
+      mainImg.alt = `${product.name} - ${product.images[idx].label}`
       mainImg.classList.remove('fading')
     }, 150)
 

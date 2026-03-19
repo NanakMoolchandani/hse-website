@@ -48,8 +48,8 @@ export default function MVM() {
   return (
     <>
       <SEO
-        title="MVM Aasanam — Office Furniture Manufacturer | Hari Shewa Enterprises, Neemuch"
-        description="MVM Aasanam by Hari Shewa Enterprises — Premium office furniture manufacturer in Neemuch, Madhya Pradesh. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing, bulk orders, pan-India delivery."
+        title="MVM Aasanam - Office Furniture Manufacturer | Hari Shewa Enterprises, Neemuch"
+        description="MVM Aasanam by Hari Shewa Enterprises - Premium office furniture manufacturer in Neemuch, Madhya Pradesh. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing, bulk orders, pan-India delivery."
         canonical="/mvm"
         ogImage="https://mvm-furniture.com/og-mvm.jpg"
         keywords="MVM Aasanam, office furniture manufacturer Neemuch, executive chairs wholesale, ergonomic chairs manufacturer MP, cafeteria furniture wholesale, Hari Shewa Enterprises, office furniture Madhya Pradesh, कार्यालय फर्नीचर नीमच"
@@ -63,7 +63,7 @@ export default function MVM() {
           backgroundSize: '60px 60px',
         }} />
 
-        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center'>
+        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6'>
           <Link
             to='/home'
             className='inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8'
@@ -72,6 +72,7 @@ export default function MVM() {
             Back to Home
           </Link>
 
+          <div className='text-center'>
           <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6'>
             <span className='w-2 h-2 rounded-full bg-amber-400 animate-pulse' />
             <span className='text-sm font-medium text-amber-400'>Our Own Manufacturing</span>
@@ -103,6 +104,7 @@ export default function MVM() {
               Call for Bulk Pricing
             </a>
           </div>
+          </div>
         </div>
       </section>
 
@@ -125,7 +127,7 @@ export default function MVM() {
             {[
               { title: 'Factory-Direct Pricing', desc: 'No middlemen. Get the best rates directly from our manufacturing unit in Neemuch. Bulk and institutional orders welcome.' },
               { title: 'Premium Quality', desc: 'ISO certified manufacturing with rigorous quality control. Every product tested for durability, comfort, and finish.' },
-              { title: 'Pan-India Delivery', desc: 'We deliver across India — Madhya Pradesh, Rajasthan, Gujarat, Maharashtra, and beyond. Doorstep delivery for bulk orders.' },
+              { title: 'Pan-India Delivery', desc: 'We deliver across India - Madhya Pradesh, Rajasthan, Gujarat, Maharashtra, and beyond. Doorstep delivery for bulk orders.' },
             ].map((item) => (
               <div key={item.title} className='rounded-2xl border border-white/10 bg-white/[0.02] p-6'>
                 <h3 className='text-lg font-semibold text-white mb-2'>{item.title}</h3>
@@ -136,7 +138,7 @@ export default function MVM() {
         </div>
       </section>
 
-      {/* Product Categories — real products from Supabase */}
+      {/* Product Categories - real products from Supabase */}
       <section className='bg-gray-950 py-16 md:py-24'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <div className='text-center mb-14'>

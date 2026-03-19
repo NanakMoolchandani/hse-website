@@ -1,5 +1,5 @@
 // ── Seatex Product Data (Hardcoded) ─────────────────────────────────────────
-// Seatex has no API (Wix website) — all product data is hardcoded here.
+// Seatex has no API (Wix website) - all product data is hardcoded here.
 // Uses the same interfaces as Nilkamal for consistency across brand pages.
 
 // ── Types (same shape as Nilkamal for consistent rendering) ─────────────────
@@ -47,14 +47,14 @@ export interface SeatexCategory {
 export const SEATEX_COLLECTIONS: SeatexCategory[] = [
   {
     handle: 'chairs-standard',
-    label: 'Chairs — Standard Line',
+    label: 'Chairs - Standard Line',
     description: 'Economy moulded plastic chairs in gloss and matt finishes. Durable, stackable, and available in multiple colours. Perfect for everyday use.',
     color: 'from-emerald-500/10 to-transparent',
     accent: 'text-emerald-500',
   },
   {
     handle: 'chairs-premium',
-    label: 'Chairs — Premium Line',
+    label: 'Chairs - Premium Line',
     description: 'Heavy-duty premium plastic chairs with superior finish, comfort, and design. Built for long-lasting use in homes, offices, and events.',
     color: 'from-green-500/10 to-transparent',
     accent: 'text-green-500',
@@ -62,21 +62,21 @@ export const SEATEX_COLLECTIONS: SeatexCategory[] = [
   {
     handle: 'tables',
     label: 'Tables',
-    description: 'Plastic dining tables and centre tables — lightweight, durable, and easy to maintain. Available in multiple sizes and finishes.',
+    description: 'Plastic dining tables and centre tables - lightweight, durable, and easy to maintain. Available in multiple sizes and finishes.',
     color: 'from-teal-500/10 to-transparent',
     accent: 'text-teal-500',
   },
   {
     handle: 'stools',
     label: 'Stools',
-    description: 'Sturdy plastic stools with leg support. Stackable and compact — ideal for kitchens, shops, and outdoor use.',
+    description: 'Sturdy plastic stools with leg support. Stackable and compact - ideal for kitchens, shops, and outdoor use.',
     color: 'from-lime-500/10 to-transparent',
     accent: 'text-lime-500',
   },
   {
     handle: 'kids',
     label: 'Kids Furniture',
-    description: 'Colourful and safe plastic furniture designed for children — study tables, play tables, and kid-sized chairs.',
+    description: 'Colourful and safe plastic furniture designed for children - study tables, play tables, and kid-sized chairs.',
     color: 'from-cyan-500/10 to-transparent',
     accent: 'text-cyan-500',
   },
@@ -130,7 +130,7 @@ const CHAIRS_STANDARD: SeatexProduct[] = [
   makeSeatexProduct('Elba', 'elba', 'Matt finished economy plastic chair. Sleek matte texture with comfortable seating.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2023/5/307041612/AH/BH/BJ/129960380/screenshot-2023-05-10-220054-250x250.jpg'),
   makeSeatexProduct('Rainbow', 'rainbow', 'Plastic chair with arms and gloss finish. Medium back design for comfortable everyday seating.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449668437/JB/LO/LP/76964044/rainbow-brown-1000x1000.jpg'),
   makeSeatexProduct('Diamond', 'diamond', 'Armless medium back plastic chair. Simple and sturdy design for homes, shops, and events.', 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449672140/MP/DU/OR/76964044/diamond-red-500x500.jpg'),
-  makeSeatexProduct('Kinder', 'kinder', "Kid's plastic chair. Small, colourful, and safe — designed specifically for children.", 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449688953/FJ/YM/WN/76964044/kinder-red-1000x1000.jpg'),
+  makeSeatexProduct('Kinder', 'kinder', "Kid's plastic chair. Small, colourful, and safe - designed specifically for children.", 'Chair', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449688953/FJ/YM/WN/76964044/kinder-red-1000x1000.jpg'),
 ]
 
 // ── Premium Chairs ──────────────────────────────────────────────────────────
@@ -164,7 +164,7 @@ const TABLES: SeatexProduct[] = [
 
 const STOOLS: SeatexProduct[] = [
   makeSeatexProduct('Boxim', 'boxim', '21-inch plastic stool with leg support. Stackable, sturdy, and perfect for kitchens, shops, and outdoor use.', 'Stool', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449670488/QC/TQ/FV/76964044/boxim-red-1000x1000.jpg'),
-  makeSeatexProduct('Polo', 'polo', 'Compact plastic stool. Lightweight and stackable — ideal for everyday use in homes and shops.', 'Stool', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449695345/GE/QM/JO/76964044/polo-yellow-500x500.jpg'),
+  makeSeatexProduct('Polo', 'polo', 'Compact plastic stool. Lightweight and stackable - ideal for everyday use in homes and shops.', 'Stool', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449695345/GE/QM/JO/76964044/polo-yellow-500x500.jpg'),
   makeSeatexProduct('Vetro', 'vetro', 'Sturdy plastic stool with clean design. Perfect for kitchens, shops, and outdoor seating.', 'Stool', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449696259/UK/VA/RR/76964044/vetro-red-500x500.jpg'),
 ]
 
@@ -173,8 +173,8 @@ const STOOLS: SeatexProduct[] = [
 const KIDS: SeatexProduct[] = [
   makeSeatexProduct('Happy', 'happy', "Kids plastic baby chair with arms. Colourful, safe, and designed for children up to 12 years.", 'Kids', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449683971/OZ/FZ/YU/76964044/happy-pink-1000x1000.jpg'),
   makeSeatexProduct('Kiddo Master', 'kiddo-master', "Kids plastic study table. Designed for young learners with ample surface area and child-safe edges.", 'Kids', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449682867/VN/MZ/OC/76964044/kiddo-sr-500x500.jpg'),
-  makeSeatexProduct('Kiddo Junior', 'kiddo-junior', "Kids plastic table. Compact and colourful — perfect for play, drawing, and light activities.", 'Kids', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/450200378/AR/LZ/KB/76964044/kiddo-junior-kids-table-1000x1000.jpg'),
-  makeSeatexProduct('Kinder', 'kinder-kids', "Kids plastic chair. Small, colourful, and safe — designed specifically for children.", 'Kids', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449688953/FJ/YM/WN/76964044/kinder-red-1000x1000.jpg'),
+  makeSeatexProduct('Kiddo Junior', 'kiddo-junior', "Kids plastic table. Compact and colourful - perfect for play, drawing, and light activities.", 'Kids', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/450200378/AR/LZ/KB/76964044/kiddo-junior-kids-table-1000x1000.jpg'),
+  makeSeatexProduct('Kinder', 'kinder-kids', "Kids plastic chair. Small, colourful, and safe - designed specifically for children.", 'Kids', SEATEX_STANDARD_COLORS, 'https://5.imimg.com/data5/SELLER/Default/2024/9/449688953/FJ/YM/WN/76964044/kinder-red-1000x1000.jpg'),
 ]
 
 // ── Collection → Products mapping ───────────────────────────────────────────
@@ -209,7 +209,7 @@ export function getSeatexCollection(handle: string): SeatexCategory | undefined 
   return SEATEX_COLLECTIONS.find((c) => c.handle === handle)
 }
 
-/** Clean product title — remove "Seatex" prefix */
+/** Clean product title - remove "Seatex" prefix */
 export function cleanSeatexTitle(title: string): string {
   return title
     .replace(/^Seatex\s+/i, '')

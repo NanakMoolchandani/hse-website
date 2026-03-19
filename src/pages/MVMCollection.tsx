@@ -44,7 +44,7 @@ export default function MVMCollection() {
   return (
     <>
       <SEO
-        title={`${cat.label} — MVM Aasanam | Hari Shewa Enterprises`}
+        title={`${cat.label} - MVM Aasanam | Hari Shewa Enterprises`}
         description={`Buy ${cat.label} at factory-direct prices from MVM Aasanam (Hari Shewa Enterprises), Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/mvm/${collection}`}
         keywords={`MVM Aasanam ${cat.label}, ${cat.label} manufacturer Neemuch, ${cat.label} wholesale MP, office furniture factory direct`}

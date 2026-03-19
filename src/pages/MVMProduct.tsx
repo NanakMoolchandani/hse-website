@@ -84,7 +84,7 @@ export default function MVMProduct() {
   return (
     <>
       <SEO
-        title={`${product.name} | MVM Aasanam — Hari Shewa Enterprises`}
+        title={`${product.name} | MVM Aasanam - Hari Shewa Enterprises`}
         description={`Buy ${product.name} at factory-direct price from MVM Aasanam (Hari Shewa Enterprises), Neemuch. ${product.description?.slice(0, 140) || ''}`}
         canonical={`/mvm/${collection}/${slug}`}
         ogImage={images[0] || undefined}
@@ -114,14 +114,14 @@ export default function MVMProduct() {
         {/* Main Content */}
         <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16'>
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
-            {/* Left — Image Gallery */}
+            {/* Left - Image Gallery */}
             <div className='flex-1 max-w-2xl'>
               {/* Main Image */}
               <div className='relative aspect-square rounded-2xl bg-white/[0.03] overflow-hidden mb-4'>
                 {images.length > 0 ? (
                   <img
                     src={images[activeImage]}
-                    alt={`${product.name} — Image ${activeImage + 1}`}
+                    alt={`${product.name} - Image ${activeImage + 1}`}
                     className='w-full h-full object-contain p-6'
                   />
                 ) : (
@@ -177,7 +177,7 @@ export default function MVMProduct() {
               )}
             </div>
 
-            {/* Right — Product Info */}
+            {/* Right - Product Info */}
             <div className='flex-1 lg:max-w-md'>
               {/* Badges */}
               <div className='flex flex-wrap items-center gap-2 mb-4'>
@@ -218,7 +218,7 @@ export default function MVMProduct() {
                 </div>
               )}
 
-              {/* Colour Customisation — only for cushioned chairs */}
+              {/* Colour Customisation - only for cushioned chairs */}
               {isCushionedChair(product.category || '', materials, features) && (
                 <div className='mb-6'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-amber-400 mb-3'>
@@ -367,7 +367,7 @@ export default function MVMProduct() {
                   <span className='text-sm font-medium text-white'>Manufactured by Hari Shewa Enterprises</span>
                 </div>
                 <p className='text-xs text-gray-500 leading-relaxed'>
-                  MVM Aasanam — Premium office furniture made in Neemuch, Madhya Pradesh.
+                  MVM Aasanam - Premium office furniture made in Neemuch, Madhya Pradesh.
                   Factory-direct pricing with ISO certified quality. Bulk orders and institutional supply available.
                 </p>
               </div>

@@ -134,7 +134,7 @@ export const LOCAL_BUSINESS_SCHEMA = {
       closes: '19:00',
     },
   ],
-  // aggregateRating removed — Google requires reviews from an actual review system,
+  // aggregateRating removed - Google requires reviews from an actual review system,
   // not self-declared ratings. Was causing 2 invalid Review Snippets in GSC.
 }
 
@@ -233,5 +233,5 @@ export function createBreadcrumbSchema(items: { name: string; url: string }[]) {
   }
 }
 
-// createFAQSchema REMOVED — FAQPage is restricted to government/healthcare sites since Aug 2023.
-// FAQ content in HTML still helps with PAA matching — just don't use the schema.
+// createFAQSchema REMOVED - FAQPage is restricted to government/healthcare sites since Aug 2023.
+// FAQ content in HTML still helps with PAA matching - just don't use the schema.

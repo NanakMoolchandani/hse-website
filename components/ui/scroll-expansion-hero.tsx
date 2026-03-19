@@ -229,7 +229,7 @@ const ScrollExpandMedia = ({
                 )}
               </div>
 
-              {/* Title text — slides apart as media expands */}
+              {/* Title text - slides apart as media expands */}
               <div
                 className={`flex items-center justify-center text-center gap-6 w-full relative z-10 transition-none ${
                   textBlend ? 'mix-blend-difference' : 'mix-blend-normal'
@@ -250,7 +250,7 @@ const ScrollExpandMedia = ({
               </div>
             </div>
 
-            {/* Children section — fades in after full expansion */}
+            {/* Children section - fades in after full expansion */}
             {children && (
               <motion.section
                 className='flex flex-col w-full px-6 py-16 md:px-10 lg:py-24'

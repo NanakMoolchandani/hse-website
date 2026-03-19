@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ProductColor } from '@/src/lib/supabase'
 
-// Cloth (Kapda) colors with fabric-like texture — 30 colors
+// Cloth (Kapda) colors with fabric-like texture - 30 colors
 const CLOTH_COLORS = [
   { name: 'Royal Blue', hex: '#1a3a6b' },
   { name: 'Charcoal Grey', hex: '#3d3d3d' },
@@ -35,7 +35,7 @@ const CLOTH_COLORS = [
   { name: 'Peacock Blue', hex: '#1a4a5e' },
 ]
 
-// Leatherette colors with leather-like texture — 30 colors
+// Leatherette colors with leather-like texture - 30 colors
 const LEATHERETTE_COLORS = [
   { name: 'Jet Black', hex: '#1a1a1a' },
   { name: 'Dark Brown', hex: '#3e2213' },

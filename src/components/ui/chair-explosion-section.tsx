@@ -115,7 +115,7 @@ export default function ChairExplosionSection() {
       images[i] = img
     }
 
-    // ScrollTrigger for scrubbing frames — NO pin (we use CSS sticky instead)
+    // ScrollTrigger for scrubbing frames - NO pin (we use CSS sticky instead)
     const frameObj = { frame: 0 }
 
     const tween = gsap.to(frameObj, {
@@ -148,11 +148,11 @@ export default function ChairExplosionSection() {
   return (
     // Outer wrapper: tall scrollable area (300vh gives scroll distance for the animation)
     <div className='relative bg-black' style={{ height: '300vh' }}>
-      {/* Inner sticky container: stays pinned via CSS position:sticky — no GSAP pin,
+      {/* Inner sticky container: stays pinned via CSS position:sticky - no GSAP pin,
           so React's DOM stays clean and navigation never crashes */}
       <div ref={stickyRef} className='sticky top-0 w-full h-screen overflow-hidden'>
         <div className='flex flex-col-reverse lg:flex-row items-center h-full'>
-          {/* Left — About text (narrower) */}
+          {/* Left - About text (narrower) */}
           <div className='w-full lg:w-[35%] flex items-center justify-center px-6 md:px-12 lg:px-14 py-10 lg:py-0'>
             <div className='max-w-md'>
               <p className='text-xs font-semibold tracking-[0.25em] uppercase text-gray-500 mb-4'>
@@ -179,7 +179,7 @@ export default function ChairExplosionSection() {
             </div>
           </div>
 
-          {/* Right — Chair explosion canvas (wider) */}
+          {/* Right - Chair explosion canvas (wider) */}
           <div className='w-full lg:w-[65%] h-[60vh] lg:h-full relative'>
             <canvas
               ref={canvasRef}
@@ -189,7 +189,7 @@ export default function ChairExplosionSection() {
                 imageRendering: 'high-quality' as React.CSSProperties['imageRendering'],
               }}
             />
-            {/* Loading indicator — fades out when all frames are ready */}
+            {/* Loading indicator - fades out when all frames are ready */}
             {loadProgress < 100 && (
               <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
                 <div className='text-center'>

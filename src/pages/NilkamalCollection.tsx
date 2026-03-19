@@ -51,7 +51,7 @@ export default function NilkamalCollection() {
   return (
     <>
       <SEO
-        title={`Nilkamal ${cat.label} | Hari Shewa Enterprises — Authorized Dealer`}
+        title={`Nilkamal ${cat.label} | Hari Shewa Enterprises - Authorized Dealer`}
         description={`Buy Nilkamal ${cat.label} at wholesale prices from Hari Shewa Enterprises, Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/nilkamal/${collection}`}
         keywords={`Nilkamal ${cat.label} wholesale, Nilkamal ${cat.label} Neemuch, Nilkamal dealer MP, ${cat.label} bulk order`}

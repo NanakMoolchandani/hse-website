@@ -47,7 +47,7 @@ export function ProductImageLamp({
         className
       )}
     >
-      {/* ——— LEFT LAMP (desktop only) ——— */}
+      {/* --- LEFT LAMP (desktop only) --- */}
 
       {/* Left light bar */}
       <motion.div
@@ -117,7 +117,7 @@ export function ProductImageLamp({
         }}
       />
 
-      {/* ——— RIGHT LAMP (desktop only) ——— */}
+      {/* --- RIGHT LAMP (desktop only) --- */}
 
       {/* Right light bar */}
       <motion.div
@@ -187,7 +187,7 @@ export function ProductImageLamp({
         }}
       />
 
-      {/* ——— PRODUCT IMAGE ——— */}
+      {/* --- PRODUCT IMAGE --- */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}

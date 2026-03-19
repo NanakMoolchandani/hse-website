@@ -185,7 +185,7 @@ const ScrollExpandMedia = ({
       <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
         <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
 
-          {/* Background image — fades out as media expands */}
+          {/* Background image - fades out as media expands */}
           <motion.div
             className='absolute inset-0 z-0 h-full'
             initial={{ opacity: 0 }}
@@ -297,7 +297,7 @@ const ScrollExpandMedia = ({
                   </div>
                 )}
 
-                {/* Date + scroll hint — fade out quickly on scroll */}
+                {/* Date + scroll hint - fade out quickly on scroll */}
                 <div
                   className='flex flex-col items-center text-center absolute bottom-6 left-0 right-0 z-10 transition-none'
                   style={{ opacity: hintOpacity }}
@@ -315,7 +315,7 @@ const ScrollExpandMedia = ({
                 </div>
               </div>
 
-              {/* Split title — slides apart as media expands */}
+              {/* Split title - slides apart as media expands */}
               <div
                 className={`flex items-center justify-center text-center gap-3 w-full relative z-10 transition-none flex-col ${
                   textBlend ? 'mix-blend-difference' : 'mix-blend-normal'

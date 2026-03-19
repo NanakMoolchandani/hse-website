@@ -51,7 +51,7 @@ export default function SupremeCollection() {
   return (
     <>
       <SEO
-        title={`Supreme ${cat.label} | Hari Shewa Enterprises — Authorized Dealer`}
+        title={`Supreme ${cat.label} | Hari Shewa Enterprises - Authorized Dealer`}
         description={`Buy Supreme ${cat.label} at wholesale prices from Hari Shewa Enterprises, Neemuch. ${cat.description} Bulk orders and institutional supply available.`}
         canonical={`/supreme/${collection}`}
         keywords={`Supreme ${cat.label} wholesale, Supreme ${cat.label} Neemuch, Supreme dealer MP, ${cat.label} bulk order`}

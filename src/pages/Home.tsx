@@ -288,7 +288,7 @@ export default function Home() {
     <>
       <SEO
         title="Office Furniture Manufacturer in Neemuch, Madhya Pradesh"
-        description="MVM Aasanam by Hari Shewa Enterprises — Leading office furniture manufacturer & wholesale supplier in Neemuch, MP. Executive chairs, ergonomic task chairs, cafeteria furniture. ISO certified, GeM empanelled. 30+ years, 50,000+ chairs delivered. Factory-direct pricing."
+        description="MVM Aasanam by Hari Shewa Enterprises - Leading office furniture manufacturer & wholesale supplier in Neemuch, MP. Executive chairs, ergonomic task chairs, cafeteria furniture. ISO certified, GeM empanelled. 30+ years, 50,000+ chairs delivered. Factory-direct pricing."
         canonical="/home"
         keywords="office furniture manufacturer Neemuch, office chair wholesale Madhya Pradesh, furniture supplier MP, executive chairs manufacturer India, cafeteria furniture wholesale, GeM empanelled furniture supplier, office furniture Neemuch Mandsaur Ujjain Indore, commercial furniture manufacturer Central India, ऑफिस फर्नीचर नीमच, कुर्सी थोक विक्रेता मध्य प्रदेश, फर्नीचर निर्माता नीमच"
         jsonLd={[LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA]}
@@ -297,7 +297,7 @@ export default function Home() {
         <section className='relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden'>
           <img
             src='/hero-storefront.webp'
-            alt='Hari Shewa Enterprises — Office furniture showroom in Neemuch, Madhya Pradesh'
+            alt='Hari Shewa Enterprises - Office furniture showroom in Neemuch, Madhya Pradesh'
             className='absolute inset-0 w-full h-full object-cover'
             fetchPriority='high'
             decoding='async'
@@ -387,7 +387,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Client Trust Bar — scrolling marquee */}
+        {/* Client Trust Bar - scrolling marquee */}
         <section className='py-14 md:py-18 border-b border-gray-100 overflow-hidden'>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-8 text-center'>
             Trusted by India's Leading Institutions
@@ -411,7 +411,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Products — card stack carousel */}
+        {/* Products - card stack carousel */}
         <section id='collections' className='relative py-20 md:py-28 bg-gray-950 overflow-hidden'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <div className='text-center mb-12'>
@@ -478,7 +478,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Product Showcase — scrolling marquee */}
+        {/* Product Showcase - scrolling marquee */}
         {products.length > 0 && (
           <section className='relative py-16 md:py-20 bg-gray-800 overflow-hidden'>
             <div className='relative z-10'>
@@ -533,7 +533,7 @@ export default function Home() {
           </section>
         )}
 
-        {/* Brands We Deal — Authorized Wholesale Dealer */}
+        {/* Brands We Deal - Authorized Wholesale Dealer */}
         <section className='py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <div className='text-center mb-12'>
@@ -564,7 +564,7 @@ export default function Home() {
                 {
                   name: 'Supreme',
                   to: '/supreme',
-                  desc: "By Supreme Industries — India's largest plastics company. 50+ years of quality and trust.",
+                  desc: "By Supreme Industries - India's largest plastics company. 50+ years of quality and trust.",
                   tags: ['Seating', 'Tables', 'Storage', 'Kids'],
                   borderColor: 'border-orange-200 hover:border-orange-400',
                   badgeBg: 'bg-orange-50',
@@ -643,10 +643,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials — scroll-driven, one at a time */}
+        {/* Testimonials - scroll-driven, one at a time */}
         <ScrollTestimonials items={TESTIMONIALS} />
 
-        {/* Who We Serve — glowing bento grid */}
+        {/* Who We Serve - glowing bento grid */}
         <section className='py-10 md:py-16 bg-white'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>

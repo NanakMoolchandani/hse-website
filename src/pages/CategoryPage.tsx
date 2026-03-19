@@ -109,7 +109,7 @@ export default function CategoryPage() {
   return (
     <BeamsBackground intensity='medium' className='min-h-screen text-white flex flex-col'>
       <SEO
-        title={`${categoryInfo.label} — Office Furniture Manufacturer Neemuch`}
+        title={`${categoryInfo.label} - Office Furniture Manufacturer Neemuch`}
         description={`${categoryInfo.description}. Premium ${categoryInfo.label.toLowerCase()} by MVM Aasanam (Hari Shewa Enterprises), Neemuch, Madhya Pradesh. Factory-direct pricing, bulk orders, pan-India delivery. ISO certified, GeM empanelled.`}
         canonical={`/products/${category}`}
         keywords={categoryKeywords[category || ''] || `${categoryInfo.label} manufacturer Neemuch, office furniture wholesale Madhya Pradesh`}

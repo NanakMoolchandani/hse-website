@@ -56,7 +56,7 @@ export default function Supreme() {
     <>
       <SEO
         title="Supreme Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
-        description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Supreme (by Supreme Industries Ltd) in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage, kids furniture, stools, beds, and more. Bulk orders and institutional supply available."
+        description="Hari Shewa Enterprises - Authorized Wholesale Dealer of Supreme (by Supreme Industries Ltd) in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage, kids furniture, stools, beds, and more. Bulk orders and institutional supply available."
         canonical="/supreme"
         ogImage="https://mvm-furniture.com/og-supreme.jpg"
         keywords="Supreme furniture dealer Neemuch, Supreme wholesale Madhya Pradesh, Supreme furniture Neemuch, Supreme chairs wholesale, Supreme Industries furniture, Supreme authorized dealer MP, Supreme plastic furniture wholesale, सुप्रीम डीलर नीमच, सुप्रीम फर्नीचर थोक"
@@ -70,7 +70,7 @@ export default function Supreme() {
           backgroundSize: '60px 60px',
         }} />
 
-        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center'>
+        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6'>
           <Link
             to='/home'
             className='inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8'
@@ -79,6 +79,7 @@ export default function Supreme() {
             Back to Home
           </Link>
 
+          <div className='text-center'>
           <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6'>
             <span className='w-2 h-2 rounded-full bg-orange-400 animate-pulse' />
             <span className='text-sm font-medium text-orange-400'>Authorized Wholesale Dealer</span>
@@ -88,7 +89,7 @@ export default function Supreme() {
             Supreme
           </h1>
           <p className='text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed'>
-            We are the <span className='text-white font-semibold'>Authorized Wholesale Dealer</span> of Supreme — by Supreme Industries Ltd, India's largest plastics company — serving Neemuch, Mandsaur, and all of Central India.
+            We are the <span className='text-white font-semibold'>Authorized Wholesale Dealer</span> of Supreme - by Supreme Industries Ltd, India's largest plastics company - serving Neemuch, Mandsaur, and all of Central India.
           </p>
           <p className='text-base text-gray-500 max-w-xl mx-auto mb-10'>
             Get the complete Supreme furniture range at wholesale prices. Bulk orders, institutional supply, and doorstep delivery available.
@@ -109,6 +110,7 @@ export default function Supreme() {
               <Phone className='w-5 h-5' />
               Call for Bulk Pricing
             </a>
+          </div>
           </div>
         </div>
       </section>
@@ -143,7 +145,7 @@ export default function Supreme() {
         </div>
       </section>
 
-      {/* Product Collections — real products from Shopify API */}
+      {/* Product Collections - real products from Shopify API */}
       <section className='bg-gray-950 py-16 md:py-24'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <div className='text-center mb-14'>

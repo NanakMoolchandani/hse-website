@@ -1,6 +1,6 @@
 // ── Supreme Shopify API Integration ──────────────────────────────────────────
 // Fetches real product data from supremefurniture.co.in (public Shopify JSON API)
-// No API key needed — these are public storefront endpoints.
+// No API key needed - these are public storefront endpoints.
 
 const BASE = 'https://supremefurniture.co.in'
 
@@ -85,7 +85,7 @@ export const SUPREME_COLLECTIONS: SupremeCategory[] = [
   {
     handle: 'sets',
     label: 'Sets',
-    description: 'Table and chair combinations — ready-to-use sets for dining, outdoor, and everyday use.',
+    description: 'Table and chair combinations - ready-to-use sets for dining, outdoor, and everyday use.',
     color: 'from-orange-400/10 to-transparent',
     accent: 'text-orange-400',
   },
@@ -99,7 +99,7 @@ export const SUPREME_COLLECTIONS: SupremeCategory[] = [
   {
     handle: 'beds',
     label: 'Beds',
-    description: 'Folding beds — portable, space-saving, and durable plastic beds for home and travel.',
+    description: 'Folding beds - portable, space-saving, and durable plastic beds for home and travel.',
     color: 'from-orange-700/10 to-transparent',
     accent: 'text-orange-700',
   },
@@ -107,7 +107,7 @@ export const SUPREME_COLLECTIONS: SupremeCategory[] = [
 
 // ── Fetch helpers ────────────────────────────────────────────────────────────
 
-/** Shopify CDN image resize — append size param for optimized loading */
+/** Shopify CDN image resize - append size param for optimized loading */
 export function supremeImageUrl(src: string, width: number = 600): string {
   if (src.includes('cdn.shopify.com')) {
     return src.replace(/(\.\w+)\?/, `_${width}x$1?`)
@@ -162,7 +162,7 @@ export function getSupremeCollection(handle: string): SupremeCategory | undefine
   return SUPREME_COLLECTIONS.find((c) => c.handle === handle)
 }
 
-/** Clean product title — remove "Supreme " prefix and redundant text */
+/** Clean product title - remove "Supreme " prefix and redundant text */
 export function cleanSupremeTitle(title: string): string {
   return title
     .replace(/^Supreme\s+/i, '')

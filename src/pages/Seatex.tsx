@@ -53,7 +53,7 @@ export default function Seatex() {
     <>
       <SEO
         title="Seatex Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
-        description="Hari Shewa Enterprises — Authorized Wholesale Dealer of Seatex in Neemuch, Madhya Pradesh. Shop the complete range: economy chairs, premium chairs, tables, stools, and kids furniture. Bulk orders and institutional supply available."
+        description="Hari Shewa Enterprises - Authorized Wholesale Dealer of Seatex in Neemuch, Madhya Pradesh. Shop the complete range: economy chairs, premium chairs, tables, stools, and kids furniture. Bulk orders and institutional supply available."
         canonical="/seatex"
         ogImage="https://mvm-furniture.com/og-seatex.jpg"
         keywords="Seatex dealer Neemuch, Seatex wholesale Madhya Pradesh, Seatex furniture Neemuch, Seatex chairs wholesale, Seatex authorized dealer MP, Seatex plastic furniture wholesale, सीटेक्स डीलर नीमच, सीटेक्स फर्नीचर थोक"
@@ -67,7 +67,7 @@ export default function Seatex() {
           backgroundSize: '60px 60px',
         }} />
 
-        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center'>
+        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6'>
           <Link
             to='/home'
             className='inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8'
@@ -76,6 +76,7 @@ export default function Seatex() {
             Back to Home
           </Link>
 
+          <div className='text-center'>
           <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6'>
             <span className='w-2 h-2 rounded-full bg-emerald-400 animate-pulse' />
             <span className='text-sm font-medium text-emerald-400'>Authorized Wholesale Dealer</span>
@@ -88,7 +89,7 @@ export default function Seatex() {
             <span className='text-emerald-400 font-medium italic'>"Hindustan ka sabse favorite furniture"</span>
           </p>
           <p className='text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed'>
-            We are the <span className='text-white font-semibold'>Authorized Wholesale Dealer</span> of Seatex — a trusted moulded furniture brand from Mumbai — serving Neemuch, Mandsaur, and all of Central India.
+            We are the <span className='text-white font-semibold'>Authorized Wholesale Dealer</span> of Seatex - a trusted moulded furniture brand from Mumbai - serving Neemuch, Mandsaur, and all of Central India.
           </p>
           <p className='text-base text-gray-500 max-w-xl mx-auto mb-10'>
             Get the complete Seatex range at wholesale prices. Bulk orders, institutional supply, and doorstep delivery available.
@@ -109,6 +110,7 @@ export default function Seatex() {
               <Phone className='w-5 h-5' />
               Call for Bulk Pricing
             </a>
+          </div>
           </div>
         </div>
       </section>
