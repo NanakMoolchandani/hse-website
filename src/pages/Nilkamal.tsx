@@ -55,11 +55,11 @@ export default function Nilkamal() {
   return (
     <>
       <SEO
-        title="Nilkamal Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
-        description="Hari Shewa Enterprises - Authorized Wholesale Dealer of Nilkamal in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage cabinets (Freedom Series), office furniture, outdoor furniture, and more. Bulk orders and institutional supply available."
+        title="Nilkamal Furniture in Neemuch - Authorized Dealer | Chairs, Cabinets, Tables"
+        description="Buy Nilkamal furniture in Neemuch from Hari Shewa Enterprises, authorized wholesale dealer. Complete range: plastic chairs, Freedom Series cabinets, dining sets, office chairs, outdoor furniture. Best prices in Neemuch. Bulk orders available. Call +91 99815 16171."
         canonical="/nilkamal"
         ogImage="https://mvm-furniture.com/og-nilkamal.jpg"
-        keywords="Nilkamal dealer Neemuch, Nilkamal wholesale Madhya Pradesh, Nilkamal furniture Neemuch, Nilkamal chairs wholesale, Freedom Series cabinets, Nilkamal authorized dealer MP, Nilkamal plastic furniture wholesale, Nilkamal office chairs, नीलकमल डीलर नीमच, नीलकमल फर्नीचर थोक"
+        keywords="Nilkamal dealer Neemuch, Nilkamal furniture Neemuch, Nilkamal in Neemuch, Nilkamal chairs Neemuch, Nilkamal wholesale Madhya Pradesh, Nilkamal plastic furniture Neemuch, Freedom Series cabinets Neemuch, Nilkamal authorized dealer MP, Nilkamal office chairs Neemuch, Nilkamal dining set Neemuch, नीलकमल डीलर नीमच, नीलकमल फर्नीचर नीमच, नीमच में नीलकमल"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Nilkamal', url: '/nilkamal' }])}
       />
 

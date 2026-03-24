@@ -23,11 +23,11 @@ export default function About() {
   return (
     <div className='bg-white min-h-screen flex flex-col'>
       <SEO
-        title="About Us - Office Furniture Manufacturer Since 1997"
-        description="MVM Aasanam by Hari Shewa Enterprises - Office furniture manufacturer in Neemuch, Madhya Pradesh since 1997. ISO 9001, ISO 14001, ISO 45001 certified. BIFMA certified. GeM empanelled. 500+ corporates served, 50,000+ chairs delivered across Central India."
+        title="About Hari Shewa Enterprises - Furniture Store &amp; Manufacturer in Neemuch Since 1997"
+        description="Hari Shewa Enterprises - Best furniture store & manufacturer in Neemuch, MP since 1997. Authorized Nilkamal, Supreme & Seatex dealer. Own brand MVM Aasanam. ISO certified, GeM empanelled. 500+ corporates served, 50,000+ chairs delivered."
         canonical="/about"
         ogImage="https://mvm-furniture.com/og-about.jpg"
-        keywords="Hari Shewa Enterprises, MVM Aasanam, furniture manufacturer Neemuch, office furniture company Madhya Pradesh, ISO certified furniture manufacturer India, GeM empanelled supplier"
+        keywords="Hari Shewa Enterprises, furniture store Neemuch, furniture shop Neemuch, MVM Aasanam, furniture manufacturer Neemuch, Nilkamal dealer Neemuch, Supreme dealer Neemuch, ISO certified furniture, GeM empanelled supplier"
         jsonLd={[ORGANIZATION_SCHEMA, createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'About', url: '/about' }])]}
       />
       {/* Hero */}

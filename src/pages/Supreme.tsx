@@ -55,11 +55,11 @@ export default function Supreme() {
   return (
     <>
       <SEO
-        title="Supreme Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
-        description="Hari Shewa Enterprises - Authorized Wholesale Dealer of Supreme (by Supreme Industries Ltd) in Neemuch, Madhya Pradesh. Shop the complete range: chairs, tables, storage, kids furniture, stools, beds, and more. Bulk orders and institutional supply available."
+        title="Supreme Furniture in Neemuch - Authorized Dealer | Chairs, Tables, Storage"
+        description="Buy Supreme furniture in Neemuch from Hari Shewa Enterprises, authorized wholesale dealer. Complete range: plastic chairs, tables, storage, kids furniture, stools, beds. Best prices in Neemuch. Bulk orders available. Call +91 99815 16171."
         canonical="/supreme"
         ogImage="https://mvm-furniture.com/og-supreme.jpg"
-        keywords="Supreme furniture dealer Neemuch, Supreme wholesale Madhya Pradesh, Supreme furniture Neemuch, Supreme chairs wholesale, Supreme Industries furniture, Supreme authorized dealer MP, Supreme plastic furniture wholesale, सुप्रीम डीलर नीमच, सुप्रीम फर्नीचर थोक"
+        keywords="Supreme furniture Neemuch, Supreme dealer Neemuch, Supreme in Neemuch, Supreme chairs Neemuch, Supreme wholesale Madhya Pradesh, Supreme plastic furniture Neemuch, Supreme tables Neemuch, Supreme authorized dealer MP, सुप्रीम डीलर नीमच, सुप्रीम फर्नीचर नीमच, नीमच में सुप्रीम"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Supreme', url: '/supreme' }])}
       />
 

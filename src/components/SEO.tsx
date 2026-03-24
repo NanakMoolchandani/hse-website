@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 
-const SITE_NAME = 'MVM Aasanam by Hari Shewa Enterprises'
+const SITE_NAME = 'Hari Shewa Enterprises - Furniture Store Neemuch'
 const BASE_URL = 'https://mvm-furniture.com'
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-default.jpg`
 
@@ -83,7 +83,7 @@ export const LOCAL_BUSINESS_SCHEMA = {
   name: 'Hari Shewa Enterprises',
   alternateName: 'MVM Aasanam',
   description:
-    'Office furniture manufacturer and wholesale supplier in Neemuch, Madhya Pradesh. Executive chairs, ergonomic task chairs, cafeteria furniture, and visitor seating. ISO certified, GeM empanelled. Serving corporates across Central India since 1997.',
+    'Best furniture store in Neemuch, Madhya Pradesh. Authorized Nilkamal, Supreme & Seatex dealer. Office chairs, plastic furniture, dining sets, storage cabinets. Own brand MVM Aasanam. ISO certified, GeM empanelled. Serving customers across Central India since 1997.',
   url: BASE_URL,
   telephone: ['+919981516171', '+917999970552'],
   email: 'mvmfurniture.hse@gmail.com',
@@ -101,7 +101,7 @@ export const LOCAL_BUSINESS_SCHEMA = {
   ],
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Industrial Area',
+    streetAddress: '01, Ambedkar Road',
     addressLocality: 'Neemuch',
     addressRegion: 'Madhya Pradesh',
     postalCode: '458441',
@@ -114,12 +114,15 @@ export const LOCAL_BUSINESS_SCHEMA = {
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Office & Cafeteria Furniture',
+    name: 'Furniture',
     itemListElement: [
-      { '@type': 'OfferCatalog', name: 'Executive Chairs' },
-      { '@type': 'OfferCatalog', name: 'Ergonomic Task Chairs' },
+      { '@type': 'OfferCatalog', name: 'Office Chairs' },
+      { '@type': 'OfferCatalog', name: 'Plastic Chairs & Furniture' },
+      { '@type': 'OfferCatalog', name: 'Dining Sets & Tables' },
+      { '@type': 'OfferCatalog', name: 'Storage Cabinets' },
+      { '@type': 'OfferCatalog', name: 'Outdoor & Garden Furniture' },
       { '@type': 'OfferCatalog', name: 'Cafeteria Furniture' },
-      { '@type': 'OfferCatalog', name: 'Visitor & Reception Furniture' },
+      { '@type': 'OfferCatalog', name: 'Kids Furniture' },
     ],
   },
   logo: 'https://mvm-furniture.com/logos/mvm-logo.png',
@@ -148,11 +151,13 @@ export const ORGANIZATION_SCHEMA = {
   url: BASE_URL,
   foundingDate: '1997',
   description:
-    'Office furniture manufacturer in Neemuch, Madhya Pradesh. ISO 9001, ISO 14001, ISO 45001 certified. GeM empanelled. BIFMA certified.',
+    'Best furniture store in Neemuch, Madhya Pradesh. Authorized Nilkamal, Supreme & Seatex dealer. Own brand MVM Aasanam. ISO 9001, ISO 14001, ISO 45001 certified. GeM empanelled. BIFMA certified.',
   address: {
     '@type': 'PostalAddress',
+    streetAddress: '01, Ambedkar Road',
     addressLocality: 'Neemuch',
     addressRegion: 'Madhya Pradesh',
+    postalCode: '458441',
     addressCountry: 'IN',
   },
   contactPoint: {

@@ -35,6 +35,6 @@ Disallow: /
 User-agent: anthropic-ai
 Disallow: /
 
-# Hari Shewa Enterprises — MVM Aasanam
-# Office & Cafeteria Furniture Manufacturer
-# Neemuch, Madhya Pradesh, India
+# Hari Shewa Enterprises — Best Furniture Store in Neemuch
+# Authorized Nilkamal, Supreme & Seatex Dealer | MVM Aasanam Manufacturer
+# 01, Ambedkar Road, Neemuch, Madhya Pradesh 458441, India

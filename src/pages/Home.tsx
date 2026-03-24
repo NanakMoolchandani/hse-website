@@ -287,10 +287,10 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Office Furniture Manufacturer in Neemuch, Madhya Pradesh"
-        description="MVM Aasanam by Hari Shewa Enterprises - Leading office furniture manufacturer & wholesale supplier in Neemuch, MP. Executive chairs, ergonomic task chairs, cafeteria furniture. ISO certified, GeM empanelled. 30+ years, 50,000+ chairs delivered. Factory-direct pricing."
+        title="Best Furniture Store in Neemuch | Nilkamal, Supreme &amp; Seatex Dealer"
+        description="Best furniture store in Neemuch, MP. Authorized Nilkamal, Supreme & Seatex dealer. Office chairs, plastic furniture, dining sets, storage cabinets. Own brand MVM Aasanam. ISO certified, GeM empanelled. 30+ years. Call +91 99815 16171."
         canonical="/home"
-        keywords="office furniture manufacturer Neemuch, office chair wholesale Madhya Pradesh, furniture supplier MP, executive chairs manufacturer India, cafeteria furniture wholesale, GeM empanelled furniture supplier, office furniture Neemuch Mandsaur Ujjain Indore, commercial furniture manufacturer Central India, ऑफिस फर्नीचर नीमच, कुर्सी थोक विक्रेता मध्य प्रदेश, फर्नीचर निर्माता नीमच"
+        keywords="furniture store Neemuch, furniture shop Neemuch, furniture in Neemuch, best furniture Neemuch, Nilkamal dealer Neemuch, Supreme dealer Neemuch, Seatex dealer Neemuch, office furniture Neemuch, plastic furniture Neemuch, furniture Mandsaur, furniture Ratlam, furniture Ujjain, नीमच फर्नीचर, नीमच में फर्नीचर की दुकान, ऑफिस फर्नीचर नीमच, फर्नीचर निर्माता नीमच"
         jsonLd={[LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA]}
       />
       {isMobile ? (
@@ -790,7 +790,7 @@ export default function Home() {
             <div className='flex flex-col sm:flex-row items-center justify-center gap-8 text-gray-400 text-sm mb-12'>
               <div className='flex items-center gap-2'>
                 <MapPin className='w-4 h-4 shrink-0' />
-                <span>Neemuch, Madhya Pradesh</span>
+                <span>01, Ambedkar Road, Neemuch, MP 458441</span>
               </div>
               <div className='flex items-center gap-2'>
                 <CheckCircle2 className='w-4 h-4 shrink-0' />

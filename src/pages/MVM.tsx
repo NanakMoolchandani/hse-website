@@ -48,11 +48,11 @@ export default function MVM() {
   return (
     <>
       <SEO
-        title="MVM Aasanam - Office Furniture Manufacturer | Hari Shewa Enterprises, Neemuch"
-        description="MVM Aasanam by Hari Shewa Enterprises - Premium office furniture manufacturer in Neemuch, Madhya Pradesh. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing, bulk orders, pan-India delivery."
+        title="MVM Aasanam Office Chairs - Manufacturer in Neemuch | Executive &amp; Ergonomic"
+        description="MVM Aasanam by Hari Shewa Enterprises - Premium office chairs & furniture manufacturer in Neemuch, MP. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing. Call +91 99815 16171."
         canonical="/mvm"
         ogImage="https://mvm-furniture.com/og-mvm.jpg"
-        keywords="MVM Aasanam, office furniture manufacturer Neemuch, executive chairs wholesale, ergonomic chairs manufacturer MP, cafeteria furniture wholesale, Hari Shewa Enterprises, office furniture Madhya Pradesh, कार्यालय फर्नीचर नीमच"
+        keywords="MVM Aasanam, office chairs Neemuch, office furniture manufacturer Neemuch, executive chairs Neemuch, ergonomic chairs Neemuch, cafeteria furniture Neemuch, office furniture Madhya Pradesh, Hari Shewa Enterprises, ऑफिस चेयर नीमच, कार्यालय फर्नीचर नीमच"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }])}
       />
 

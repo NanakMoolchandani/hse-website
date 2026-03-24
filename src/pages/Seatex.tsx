@@ -52,11 +52,11 @@ export default function Seatex() {
   return (
     <>
       <SEO
-        title="Seatex Authorized Wholesale Dealer | Hari Shewa Enterprises, Neemuch"
-        description="Hari Shewa Enterprises - Authorized Wholesale Dealer of Seatex in Neemuch, Madhya Pradesh. Shop the complete range: economy chairs, premium chairs, tables, stools, and kids furniture. Bulk orders and institutional supply available."
+        title="Seatex Furniture in Neemuch - Authorized Dealer | Chairs, Tables, Stools"
+        description="Buy Seatex furniture in Neemuch from Hari Shewa Enterprises, authorized wholesale dealer. Premium & economy chairs, tables, stools, kids furniture. Best prices in Neemuch. Bulk orders available. Call +91 99815 16171."
         canonical="/seatex"
         ogImage="https://mvm-furniture.com/og-seatex.jpg"
-        keywords="Seatex dealer Neemuch, Seatex wholesale Madhya Pradesh, Seatex furniture Neemuch, Seatex chairs wholesale, Seatex authorized dealer MP, Seatex plastic furniture wholesale, सीटेक्स डीलर नीमच, सीटेक्स फर्नीचर थोक"
+        keywords="Seatex furniture Neemuch, Seatex dealer Neemuch, Seatex in Neemuch, Seatex chairs Neemuch, Seatex wholesale Madhya Pradesh, Seatex authorized dealer MP, सीटेक्स डीलर नीमच, सीटेक्स फर्नीचर नीमच, नीमच में सीटेक्स"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Seatex', url: '/seatex' }])}
       />
 
