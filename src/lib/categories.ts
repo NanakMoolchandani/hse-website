@@ -132,3 +132,13 @@ export function getCategoryBySlug(slug: string): CategoryInfo | undefined {
 export function getCategoryByEnum(enumVal: string): CategoryInfo | undefined {
   return CATEGORIES.find((c) => c.enum === enumVal)
 }
+
+const PARTICLE_BOARD_CATEGORIES = new Set([
+  'WARDROBES_ALMIRAHS', 'TV_UNITS', 'STUDY_COMPUTER_TABLES', 'BOOKSHELVES_DISPLAY',
+  'SHOE_RACKS', 'KITCHEN_PANTRY', 'BEDROOM_FURNITURE', 'DRESSING_TABLES',
+  'OFFICE_WORKSTATIONS', 'MODULAR_STORAGE',
+])
+
+export function isParticleBoardCategory(category: string): boolean {
+  return PARTICLE_BOARD_CATEGORIES.has(category)
+}

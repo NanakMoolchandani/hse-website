@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
-import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
+import { getCategoryBySlug, getCategoryByEnum, isParticleBoardCategory } from '@/src/lib/categories'
 import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 import { FABRIC_COLORS, LEATHERETTE_COLORS, isCushionedChair } from '@/src/lib/customization-colors'
 
@@ -201,8 +201,8 @@ export default function MVMProduct() {
                 {product.name}
               </h1>
 
-              {/* Colors */}
-              {colors.length > 0 && (
+              {/* Colors - only for NON particle board */}
+              {colors.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Available Colours
@@ -218,8 +218,8 @@ export default function MVMProduct() {
                 </div>
               )}
 
-              {/* Colour Customisation - only for cushioned chairs */}
-              {isCushionedChair(product.category || '', materials, features) && (
+              {/* Colour Customisation - only for cushioned chairs, NEVER particle board */}
+              {!isParticleBoardCategory(product.category || '') && isCushionedChair(product.category || '', materials, features) && (
                 <div className='mb-6'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-amber-400 mb-3'>
                     Colour Customisation
@@ -261,8 +261,8 @@ export default function MVMProduct() {
                 </div>
               )}
 
-              {/* Materials */}
-              {materials.length > 0 && (
+              {/* Materials - only for NON particle board */}
+              {materials.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Materials
@@ -277,8 +277,8 @@ export default function MVMProduct() {
                 </div>
               )}
 
-              {/* Features */}
-              {features.length > 0 && (
+              {/* Features - shown separately only for NON particle board */}
+              {features.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-3'>
                     Key Features
@@ -299,39 +299,76 @@ export default function MVMProduct() {
                 </div>
               )}
 
-              {/* Description */}
-              {(product.description || product.description_hindi) && (
-                <div className='mb-8'>
-                  <div className='flex items-center gap-2 mb-2'>
-                    <p className='text-xs font-semibold tracking-wider uppercase text-gray-500'>
-                      Description
-                    </p>
-                    {product.description_hindi && (
-                      <div className='flex gap-1'>
-                        <button
-                          onClick={() => setShowHindi(false)}
-                          className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
-                            !showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-gray-500'
-                          }`}
-                        >
-                          EN
-                        </button>
-                        <button
-                          onClick={() => setShowHindi(true)}
-                          className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
-                            showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-gray-500'
-                          }`}
-                        >
-                          HI
-                        </button>
-                      </div>
+              {/* Description - for particle board: combine features into bullet points */}
+              {(() => {
+                const isBoard = isParticleBoardCategory(product.category || '')
+                const descText = showHindi ? product.description_hindi : product.description
+                const hasDesc = descText || product.description_hindi
+
+                // Build bullet points for particle board: description lines + features
+                const bullets: string[] = []
+                if (isBoard) {
+                  if (descText) {
+                    // Split description by sentences or bullet markers
+                    descText.split(/[.•\n]/).forEach((s) => {
+                      const trimmed = s.trim()
+                      if (trimmed.length > 5) bullets.push(trimmed)
+                    })
+                  }
+                  features.forEach((f) => {
+                    const text = f.detail ? `${f.label} — ${f.detail}` : f.label
+                    if (!bullets.some((b) => b.toLowerCase().includes(f.label.toLowerCase()))) {
+                      bullets.push(text)
+                    }
+                  })
+                }
+
+                if (!hasDesc && bullets.length === 0) return null
+
+                return (
+                  <div className='mb-8'>
+                    <div className='flex items-center gap-2 mb-2'>
+                      <p className='text-xs font-semibold tracking-wider uppercase text-gray-500'>
+                        Description
+                      </p>
+                      {!isBoard && product.description_hindi && (
+                        <div className='flex gap-1'>
+                          <button
+                            onClick={() => setShowHindi(false)}
+                            className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
+                              !showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-gray-500'
+                            }`}
+                          >
+                            EN
+                          </button>
+                          <button
+                            onClick={() => setShowHindi(true)}
+                            className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
+                              showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-gray-500'
+                            }`}
+                          >
+                            HI
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    {isBoard && bullets.length > 0 ? (
+                      <ul className='space-y-1.5'>
+                        {bullets.map((b, i) => (
+                          <li key={i} className='flex items-start gap-2 text-sm text-gray-400 leading-relaxed'>
+                            <span className='text-amber-500 mt-1 shrink-0'>&#8226;</span>
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className='text-sm text-gray-400 leading-relaxed'>
+                        {descText}
+                      </p>
                     )}
                   </div>
-                  <p className='text-sm text-gray-400 leading-relaxed'>
-                    {showHindi ? product.description_hindi : product.description}
-                  </p>
-                </div>
-              )}
+                )
+              })()}
 
               {/* CTA Buttons */}
               <div className='space-y-3 mb-8'>
@@ -367,7 +404,7 @@ export default function MVMProduct() {
                   <span className='text-sm font-medium text-white'>Manufactured by Hari Shewa Enterprises</span>
                 </div>
                 <p className='text-xs text-gray-500 leading-relaxed'>
-                  MVM Aasanam - Premium office furniture made in Neemuch, Madhya Pradesh.
+                  MVM Aasanam — Premium furniture made in Neemuch, Madhya Pradesh.
                   Factory-direct pricing with ISO certified quality. Bulk orders and institutional supply available.
                 </p>
               </div>
