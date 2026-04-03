@@ -48,11 +48,11 @@ export default function MVM() {
   return (
     <>
       <SEO
-        title="MVM Aasanam Office Chairs - Manufacturer in Neemuch | Executive &amp; Ergonomic"
-        description="MVM Aasanam by Hari Shewa Enterprises - Premium office chairs & furniture manufacturer in Neemuch, MP. Executive chairs, ergonomic task chairs, cafeteria furniture, visitor seating. Factory-direct pricing. Call +91 99815 16171."
+        title="MVM Aasanam Furniture - Manufacturer in Neemuch | Office Chairs, Wardrobes, TV Units &amp; More"
+        description="MVM Aasanam by Hari Shewa Enterprises - Premium furniture manufacturer in Neemuch, MP. Office chairs, particle board wardrobes, TV units, study tables, bookshelves, shoe racks, kitchen units, bedroom furniture & more. Factory-direct pricing. Call +91 99815 16171."
         canonical="/mvm"
         ogImage="https://mvm-furniture.com/og-mvm.jpg"
-        keywords="MVM Aasanam, office chairs Neemuch, office furniture manufacturer Neemuch, executive chairs Neemuch, ergonomic chairs Neemuch, cafeteria furniture Neemuch, office furniture Madhya Pradesh, Hari Shewa Enterprises, ऑफिस चेयर नीमच, कार्यालय फर्नीचर नीमच"
+        keywords="MVM Aasanam, furniture manufacturer Neemuch, particle board furniture, wardrobes Neemuch, TV units, study tables, bookshelves, shoe racks, kitchen furniture, bedroom furniture, dressing tables, office furniture, modular storage, office chairs Neemuch, Hari Shewa Enterprises, फर्नीचर नीमच, वार्डरोब, टीवी यूनिट, स्टडी टेबल, बुकशेल्फ"
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }])}
       />
 
@@ -82,7 +82,7 @@ export default function MVM() {
             MVM Aasanam
           </h1>
           <p className='text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed'>
-            Premium office furniture <span className='text-white font-semibold'>manufactured by Hari Shewa Enterprises</span> in Neemuch, Madhya Pradesh. Built for comfort, designed for professionals.
+            Premium furniture <span className='text-white font-semibold'>manufactured by Hari Shewa Enterprises</span> in Neemuch, Madhya Pradesh. Office chairs, wardrobes, TV units, study tables, bookshelves and more.
           </p>
           <p className='text-base text-gray-500 max-w-xl mx-auto mb-10'>
             Factory-direct pricing. Bulk orders, institutional supply, and pan-India delivery available. ISO certified, GeM empanelled.
@@ -149,7 +149,7 @@ export default function MVM() {
               Browse MVM Aasanam Products
             </h2>
             <p className='text-gray-500 max-w-xl mx-auto text-lg'>
-              Premium office furniture crafted in our Neemuch manufacturing unit. Tap any category to explore the full collection.
+              Premium furniture crafted in our Neemuch manufacturing unit — office chairs, particle board wardrobes, TV units, tables and more. Tap any category to explore.
             </p>
           </div>
 
@@ -280,10 +280,10 @@ export default function MVM() {
       <section className='bg-gray-900 py-16 md:py-20 border-t border-white/5'>
         <div className='max-w-3xl mx-auto px-4 sm:px-6 text-center'>
           <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-4'>
-            Need Office Furniture?
+            Need Furniture?
           </h2>
           <p className='text-gray-400 text-lg mb-8 max-w-xl mx-auto'>
-            Get factory-direct rates on any MVM Aasanam product. Share your requirements and we'll send you a quote within 24 hours.
+            Get factory-direct rates on any MVM Aasanam product — chairs, wardrobes, TV units, tables, bookshelves and more. Share your requirements and we'll send a quote within 24 hours.
           </p>
           <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
             <a
