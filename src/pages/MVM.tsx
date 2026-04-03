@@ -212,7 +212,7 @@ export default function MVM() {
                                   <img
                                     src={imgSrc}
                                     alt={product.name || 'Product'}
-                                    className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
+                                    className='w-full h-full object-cover scale-150 group-hover:scale-[1.6] transition-transform duration-500'
                                     loading='lazy'
                                   />
                                 ) : (
