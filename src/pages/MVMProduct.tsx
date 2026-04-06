@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, MessageCircle, Phone, Share2, Check } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Phone, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import ProductImageZoom from '@/src/components/ProductImageZoom'
 import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
