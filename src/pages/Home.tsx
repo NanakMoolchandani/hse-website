@@ -831,7 +831,7 @@ export default function Home() {
             {/* Google Presence */}
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mb-10'>
               <a
-                href='https://g.co/kgs/Hari-Shewa-Enterprises-Neemuch'
+                href='https://www.google.com/maps/place/Hari+Shewa+Enterprises/@24.4656196,74.8740545,17z'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 border border-white/20 text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/10 transition-colors text-sm'
@@ -845,7 +845,7 @@ export default function Home() {
                 Find Us on Google
               </a>
               <a
-                href='https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRhBgdotc3SFk'
+                href='https://search.google.com/local/writereview?placeid=ChIJy3mGywpzZjmksuTaoaLR4A'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 border border-white/20 text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/10 transition-colors text-sm'
@@ -859,7 +859,7 @@ export default function Home() {
             <div className='max-w-4xl mx-auto rounded-xl overflow-hidden border border-white/10'>
               <iframe
                 title='Hari Shewa Enterprises Location'
-                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.5!2d74.87!3d24.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDI4JzEyLjAiTiA3NMKwNTInMTIuMCJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin&q=Neemuch,+Madhya+Pradesh'
+                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1500!2d74.8740545!3d24.4656196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3966730acb8679cb%3A0xe0d1a2a1dae4b2a4!2sHari%20Shewa%20Enterprises!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
                 width='100%'
                 height='250'
                 style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(0.9) contrast(0.9)' }}
