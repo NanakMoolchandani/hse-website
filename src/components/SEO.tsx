@@ -109,8 +109,8 @@ export const LOCAL_BUSINESS_SCHEMA = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 24.4764,
-    longitude: 74.8625,
+    latitude: 24.4656196,
+    longitude: 74.8740545,
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -123,11 +123,13 @@ export const LOCAL_BUSINESS_SCHEMA = {
       { '@type': 'OfferCatalog', name: 'Outdoor & Garden Furniture' },
       { '@type': 'OfferCatalog', name: 'Cafeteria Furniture' },
       { '@type': 'OfferCatalog', name: 'Kids Furniture' },
+      { '@type': 'OfferCatalog', name: 'Wardrobes & Almirahs' },
     ],
   },
   logo: 'https://mvm-furniture.com/logos/mvm-logo.png',
   sameAs: [
     'https://wa.me/919981516171',
+    'https://www.google.com/maps/place/Hari+Shewa+Enterprises/@24.4656196,74.8740545,17z',
   ],
   openingHoursSpecification: [
     {
@@ -170,6 +172,7 @@ export const ORGANIZATION_SCHEMA = {
   logo: 'https://mvm-furniture.com/logos/mvm-logo.png',
   sameAs: [
     'https://wa.me/919981516171',
+    'https://www.google.com/maps/place/Hari+Shewa+Enterprises/@24.4656196,74.8740545,17z',
   ],
   hasCredential: [
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 9001:2015' },

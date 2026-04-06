@@ -19,10 +19,8 @@ import {
   Banknote,
   Hotel,
 } from 'lucide-react'
-// GlowingEffect removed — using compact grid instead
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
-// ScrollTestimonials removed — using inline grid instead
 import Footer from '@/src/components/Footer'
 import SEO, { LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA } from '@/src/components/SEO'
 import { fetchProductCounts, fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
@@ -273,9 +271,9 @@ export default function Home() {
     <>
       <SEO
         title="Best Furniture Store in Neemuch | Nilkamal, Supreme &amp; Seatex Dealer"
-        description="Best furniture store in Neemuch, MP. Authorized Nilkamal, Supreme & Seatex dealer. Office chairs, plastic furniture, dining sets, storage cabinets. Own brand MVM Aasanam. ISO certified, GeM empanelled. 30+ years. Call +91 99815 16171."
+        description="Best furniture store in Neemuch, MP. Authorized Nilkamal, Supreme & Seatex dealer. Office chairs, tables, wardrobes, storage cabinets. Own brand MVM Aasanam. 5,000+ clients, 2 lakh+ chairs delivered. ISO certified, GeM empanelled. 30+ years. Call +91 99815 16171."
         canonical="/home"
-        keywords="furniture store Neemuch, furniture shop Neemuch, furniture in Neemuch, best furniture Neemuch, Nilkamal dealer Neemuch, Supreme dealer Neemuch, Seatex dealer Neemuch, office furniture Neemuch, plastic furniture Neemuch, furniture Mandsaur, furniture Ratlam, furniture Ujjain, नीमच फर्नीचर, नीमच में फर्नीचर की दुकान, ऑफिस फर्नीचर नीमच, फर्नीचर निर्माता नीमच"
+        keywords="furniture store Neemuch, furniture shop Neemuch, furniture in Neemuch, best furniture Neemuch, Nilkamal dealer Neemuch, Supreme dealer Neemuch, Seatex dealer Neemuch, office furniture Neemuch, plastic furniture Neemuch, tables Neemuch, wardrobes Neemuch, storage cabinets Neemuch, furniture Mandsaur, furniture Ratlam, furniture Ujjain, नीमच फर्नीचर, नीमच में फर्नीचर की दुकान, ऑफिस फर्नीचर नीमच, फर्नीचर निर्माता नीमच"
         jsonLd={[LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA]}
       />
       {isMobile ? (
