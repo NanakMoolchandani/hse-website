@@ -26,12 +26,27 @@
 }
 
 .animate-marquee-slow {
-  animation: marquee 25s linear infinite;
+  animation: marquee-triple 35s linear infinite;
+}
+
+@keyframes marquee-triple {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-33.33%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 28s linear infinite;
 }
 
 /* Pause marquee on hover to let user scroll */
 .marquee-container:hover .animate-marquee,
-.marquee-container:hover .animate-marquee-slow {
+.marquee-container:hover .animate-marquee-slow,
+.marquee-container:hover .animate-marquee-reverse {
   animation-play-state: paused;
 }
 

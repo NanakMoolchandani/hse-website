@@ -19,10 +19,10 @@ import {
   Banknote,
   Hotel,
 } from 'lucide-react'
-import { GlowingEffect } from '@/src/components/ui/glowing-effect'
+// GlowingEffect removed — using compact grid instead
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { CardStack, type CardStackItem } from '@/src/components/ui/card-stack'
-import ScrollTestimonials, { type Testimonial } from '@/src/components/ui/scroll-testimonials'
+// ScrollTestimonials removed — using inline grid instead
 import Footer from '@/src/components/Footer'
 import SEO, { LOCAL_BUSINESS_SCHEMA, ORGANIZATION_SCHEMA } from '@/src/components/SEO'
 import { fetchProductCounts, fetchProducts, getOptimizedImageUrl, type CatalogProduct } from '@/src/lib/supabase'
@@ -30,8 +30,8 @@ import { fetchProductCounts, fetchProducts, getOptimizedImageUrl, type CatalogPr
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const STATS = [
-  { count: '500+', label: 'Corporates Served' },
-  { count: '50,000+', label: 'Chairs Delivered' },
+  { count: '5,000+', label: 'Clients Served' },
+  { count: '2,00,000+', label: 'Chairs Delivered' },
   { count: '30+', label: 'Years of Experience' },
   { count: '300+', label: 'Active Designs' },
 ]
@@ -131,7 +131,7 @@ const FEATURES = [
     number: '04',
     title: 'Competitive Pricing',
     description:
-      'Direct from manufacturer to you, no middlemen. Get the best price on premium office and cafeteria furniture without compromising on quality.',
+      'Direct from manufacturer to you, no middlemen. Get the best price on chairs, tables, wardrobes, and all office furniture without compromising on quality.',
   },
 ]
 
@@ -156,34 +156,19 @@ const CLIENTS = [
   { name: 'AIIMS', logo: '/logos/aiims.svg' },
 ]
 
-const TESTIMONIALS: Testimonial[] = [
-  {
-    quote: 'We furnished our entire 200 seat office with MVM Aasanam chairs. The quality is exceptional.',
-    detail: 'After two years of heavy daily use across three floors, every single chair still looks and feels brand new. The lumbar support holds up perfectly even with 10+ hour workdays. Their team handled the entire bulk order from measurement to delivery seamlessly, and even sent a technician for on site assembly. We have since placed two more orders for our Bhopal and Raipur branches.',
-    name: 'Rajesh Sharma',
-    role: 'Head of Procurement',
-    company: 'Leading IT Services Company, Indore',
-    stat: '200+',
-    statLabel: 'chairs delivered in a single order',
-  },
-  {
-    quote: 'As a GeM empanelled supplier, Hari Shewa made our government procurement process completely hassle free.',
-    detail: 'Competitive pricing with full GST compliance, proper documentation for every single unit, and on time delivery for all 12 of our district offices across Madhya Pradesh. The entire process from GeM order placement to final installation took under 3 weeks. Their invoice and challan documentation was audit ready from day one, which saved us weeks of back and forth during our annual inspection.',
-    name: 'Dr. Anita Verma',
-    role: 'Administrative Officer',
-    company: 'Government Institution, Madhya Pradesh',
-    stat: '12',
-    statLabel: 'district offices furnished on time',
-  },
-  {
-    quote: 'The customization options are what set them apart from every other supplier we evaluated.',
-    detail: 'We needed specific fabric colours, armrest configurations, and base finishes to match our client\'s brand guidelines for a new 15,000 sq ft corporate office. MVM Aasanam delivered exactly what we specified, on schedule, with consistent quality across 300+ units. They even produced fabric samples in advance so we could get client approval before full production. That level of attention to detail is rare in this price range.',
-    name: 'Priya Mehta',
-    role: 'Interior Design Lead',
-    company: 'Architecture & Interiors Firm, Mumbai',
-    stat: '300+',
-    statLabel: 'custom units with zero defects',
-  },
+const TESTIMONIALS = [
+  { quote: 'Furnished our entire 200 seat office. Quality is exceptional — every chair still looks brand new after 2 years.', name: 'Rajesh Sharma', role: 'Head of Procurement', company: 'IT Services, Indore' },
+  { quote: 'GeM procurement made completely hassle free. On time delivery for all 12 district offices across MP.', name: 'Dr. Anita Verma', role: 'Administrative Officer', company: 'Govt. Institution, MP' },
+  { quote: 'Customization options set them apart. 300+ units delivered on schedule with zero defects.', name: 'Priya Mehta', role: 'Interior Design Lead', company: 'Interiors Firm, Mumbai' },
+  { quote: 'Best wholesale rates for Nilkamal products. We have been buying from them for 15 years now.', name: 'Suresh Patel', role: 'Store Owner', company: 'Furniture Mart, Ujjain' },
+  { quote: 'They set up our entire bank branch in under 2 weeks. Professional service from start to finish.', name: 'Vikram Joshi', role: 'Branch Manager', company: 'Public Sector Bank, Neemuch' },
+  { quote: 'Our hospital waiting area chairs needed to be durable and easy to clean. MVM delivered perfectly.', name: 'Dr. Meena Agarwal', role: 'Hospital Administrator', company: 'Multi Speciality Hospital, Mandsaur' },
+  { quote: 'Ordered 500 chairs for our new campus. The delivery and installation was remarkably smooth.', name: 'Prof. R. K. Singh', role: 'Registrar', company: 'Engineering College, Indore' },
+  { quote: 'Supreme plastic chairs for our restaurant chain. Bulk pricing was unbeatable in the region.', name: 'Amit Gupta', role: 'Operations Head', company: 'Restaurant Chain, Rajasthan' },
+  { quote: 'Conference room setup with executive chairs. Excellent lumbar support — our team loves them.', name: 'Neha Kulkarni', role: 'Office Manager', company: 'Consulting Firm, Bhopal' },
+  { quote: 'Reliable supplier for all our cafeteria furniture. Quick replacements when needed.', name: 'Rahul Verma', role: 'Facilities Manager', company: 'IT Park, Indore' },
+  { quote: 'Wardrobes and storage cabinets for our hostel. Sturdy build quality at a competitive price.', name: 'Deepak Jain', role: 'Hostel Warden', company: 'University, Ujjain' },
+  { quote: 'They handled our complete office fit out — tables, chairs, storage. Single vendor, zero hassle.', name: 'Kavita Sharma', role: 'Procurement Head', company: 'Manufacturing Co., Ratlam' },
 ]
 
 const BUSINESS_FAQS = [
@@ -419,11 +404,11 @@ export default function Home() {
                 Product Range
               </p>
               <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-4'>
-                Seating for Every Space
+                Furniture for Every Space
               </h2>
               <p className='text-white/50 max-w-xl mx-auto text-lg'>
-                From executive cabins to open workstations, conference rooms to cafeterias,
-                we have the right seating solution for every area of your office.
+                Chairs, tables, wardrobes, storage cabinets, and more — from executive cabins
+                to open workstations, conference rooms to cafeterias, we have the right solution for every area.
               </p>
             </div>
             <CardStack
@@ -478,7 +463,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Product Showcase - scrolling marquee */}
+        {/* Product Showcase - scrolling marquee (two rows) */}
         {products.length > 0 && (
           <section className='relative py-16 md:py-20 bg-gray-800 overflow-hidden'>
             <div className='relative z-10'>
@@ -490,20 +475,61 @@ export default function Home() {
                   Explore Our Collection
                 </h2>
               </div>
-              <div className='relative marquee-container'>
+              {/* Row 1 - scrolls left */}
+              <div className='relative marquee-container mb-6'>
                 <div className='absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-gray-800 to-transparent z-10 pointer-events-none' />
                 <div className='absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-gray-800 to-transparent z-10 pointer-events-none' />
-                <div className='flex animate-marquee-slow marquee-scrollable'>
-                  {[...products, ...products].map((product, i) => {
+                <div className='flex animate-marquee-slow'>
+                  {[...products, ...products, ...products].map((product, i) => {
                     const cat = getCategoryByEnum(product.category || '')
                     const catSlug = cat?.slug || 'executive-chairs'
                     const rawImg = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
                     const image = rawImg ? getOptimizedImageUrl(rawImg, 250, 70) : null
                     return (
                       <Link
-                        key={`${product.id}-${i}`}
+                        key={`row1-${product.id}-${i}`}
                         to={`/products/${catSlug}/${product.slug}`}
-                        className='shrink-0 w-48 mx-3 group'
+                        className='shrink-0 w-40 md:w-48 mx-2 md:mx-3 group'
+                      >
+                        <div className='aspect-[3/4] rounded-xl overflow-hidden bg-gray-900 border border-white/10 group-hover:border-indigo-500/30 transition-all duration-300 flex items-center justify-center'>
+                          {image ? (
+                            <img
+                              src={image}
+                              alt={product.name || 'Product'}
+                              className='w-full h-full object-contain group-hover:scale-105 transition-transform duration-300'
+                              loading='lazy'
+                            />
+                          ) : (
+                            <div className='w-full h-full flex items-center justify-center text-gray-600'>
+                              <svg className='w-12 h-12' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                        <p className='mt-2 text-sm text-white/80 text-center font-medium truncate group-hover:text-white transition-colors'>
+                          {product.name}
+                        </p>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+              {/* Row 2 - scrolls right (reverse) */}
+              <div className='relative marquee-container'>
+                <div className='absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-gray-800 to-transparent z-10 pointer-events-none' />
+                <div className='absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-gray-800 to-transparent z-10 pointer-events-none' />
+                <div className='flex animate-marquee-reverse'>
+                  {[...products, ...products, ...products].reverse().map((product, i) => {
+                    const cat = getCategoryByEnum(product.category || '')
+                    const catSlug = cat?.slug || 'executive-chairs'
+                    const rawImg = product.processed_photo_urls?.[0] || product.thumbnail_url || product.raw_photo_urls?.[0]
+                    const image = rawImg ? getOptimizedImageUrl(rawImg, 250, 70) : null
+                    return (
+                      <Link
+                        key={`row2-${product.id}-${i}`}
+                        to={`/products/${catSlug}/${product.slug}`}
+                        className='shrink-0 w-40 md:w-48 mx-2 md:mx-3 group'
                       >
                         <div className='aspect-[3/4] rounded-xl overflow-hidden bg-gray-900 border border-white/10 group-hover:border-indigo-500/30 transition-all duration-300 flex items-center justify-center'>
                           {image ? (
@@ -534,7 +560,7 @@ export default function Home() {
         )}
 
         {/* Brands We Deal - Authorized Wholesale Dealer */}
-        <section className='py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white'>
+        <section className='py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <div className='text-center mb-12'>
               <div className='inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 mb-5'>
@@ -612,7 +638,7 @@ export default function Home() {
         </section>
 
         {/* Process */}
-        <section className='py-12 md:py-28'>
+        <section className='py-10 md:py-16'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               How It Works
@@ -643,11 +669,38 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials - scroll-driven, one at a time */}
-        <ScrollTestimonials items={TESTIMONIALS} />
+        {/* Testimonials - compact grid */}
+        <section className='py-12 md:py-16 bg-gray-950'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+            <div className='text-center mb-8 md:mb-10'>
+              <p className='text-xs font-semibold tracking-widest uppercase text-indigo-400 mb-3'>
+                Client Feedback
+              </p>
+              <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-3'>
+                What Our Clients Say
+              </h2>
+              <p className='text-white/40 text-base max-w-lg mx-auto'>
+                We let our work speak, and our clients confirm it.
+              </p>
+            </div>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+              {TESTIMONIALS.map((t) => (
+                <div key={t.name} className='glass-card p-5 flex flex-col justify-between'>
+                  <p className='text-white/80 text-sm leading-relaxed mb-4'>
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+                  <div className='border-t border-white/10 pt-3'>
+                    <p className='text-white text-sm font-semibold'>{t.name}</p>
+                    <p className='text-white/40 text-xs'>{t.role}, {t.company}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-        {/* Who We Serve - glowing bento grid */}
-        <section className='py-10 md:py-16 bg-white'>
+        {/* Who We Serve - compact grid */}
+        <section className='py-8 md:py-12 bg-white'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
             <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-3'>
               Our Clientele
@@ -655,48 +708,26 @@ export default function Home() {
             <h2 className='font-display text-3xl md:text-4xl font-bold text-gray-900 mb-3'>
               Trusted Across Industries
             </h2>
-            <p className='text-gray-500 max-w-xl mb-6 md:mb-10 text-base'>
+            <p className='text-gray-500 max-w-xl mb-6 text-base'>
               From corporate offices to government institutions, we supply furniture to organisations
               that demand quality, durability, and value at scale.
             </p>
-            <ul className='grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3'>
               {([
-                { label: 'Corporate Offices', Icon: Building2, desc: 'IT parks, co-working spaces, MNCs', area: 'md:[grid-area:1/1/2/7]' },
-                { label: 'Government Bodies', Icon: Landmark, desc: 'GeM empanelled supplier', area: 'md:[grid-area:1/7/2/13]' },
-                { label: 'Hospitals & Clinics', Icon: Heart, desc: 'OPDs, waiting areas, admin offices', area: 'md:[grid-area:2/1/3/5]' },
-                { label: 'Educational Institutes', Icon: GraduationCap, desc: 'Schools, colleges, training centres', area: 'md:[grid-area:2/5/3/9]' },
-                { label: 'Banks & Finance', Icon: Banknote, desc: 'Branch offices, regional HQs', area: 'md:[grid-area:2/9/3/13]' },
-                { label: 'Hotels & Hospitality', Icon: Hotel, desc: 'Conference halls, business centres', area: 'md:[grid-area:3/1/4/13]' },
+                { label: 'Corporate Offices', Icon: Building2, desc: 'IT parks, MNCs' },
+                { label: 'Government', Icon: Landmark, desc: 'GeM empanelled' },
+                { label: 'Hospitals', Icon: Heart, desc: 'OPDs, waiting areas' },
+                { label: 'Education', Icon: GraduationCap, desc: 'Schools, colleges' },
+                { label: 'Banks', Icon: Banknote, desc: 'Branch offices' },
+                { label: 'Hotels', Icon: Hotel, desc: 'Conference halls' },
               ] as const).map((client) => (
-                <li key={client.label} className={`min-h-0 md:min-h-[11rem] list-none ${client.area}`}>
-                  <div className='relative h-full rounded-[1.25rem] border-[0.75px] border-gray-200 p-2 md:rounded-[1.5rem] md:p-3'>
-                    <GlowingEffect
-                      spread={40}
-                      glow
-                      disabled={false}
-                      proximity={64}
-                      inactiveZone={0.01}
-                      borderWidth={3}
-                    />
-                    <div className='relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl border-[0.75px] border-gray-100 bg-white p-6 shadow-sm md:p-6'>
-                      <div className='relative flex flex-1 flex-col justify-between gap-3'>
-                        <div className='w-fit rounded-lg border-[0.75px] border-gray-200 bg-gray-50 p-2'>
-                          <client.Icon className='h-4 w-4 text-gray-700' />
-                        </div>
-                        <div className='space-y-3'>
-                          <h3 className='pt-0.5 text-xl leading-[1.375rem] font-semibold tracking-[-0.04em] md:text-2xl md:leading-[1.875rem] text-gray-900'>
-                            {client.label}
-                          </h3>
-                          <p className='text-sm leading-[1.125rem] md:text-base md:leading-[1.375rem] text-gray-500'>
-                            {client.desc}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                <div key={client.label} className='rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow'>
+                  <client.Icon className='h-5 w-5 text-gray-600 mb-2' />
+                  <h3 className='text-sm font-semibold text-gray-900'>{client.label}</h3>
+                  <p className='text-xs text-gray-500 mt-0.5'>{client.desc}</p>
+                </div>
               ))}
-            </ul>
+            </div>
             <div className='mt-8 flex flex-wrap items-center justify-center gap-x-4 md:gap-x-10 gap-y-3'>
               {['ISO 9001', 'ISO 14001', 'ISO 45001', 'BIFMA', 'BIS / ISI Mark', 'GeM Empanelled', 'ZED Certified', 'NSIC', 'GREENGUARD'].map((badge) => (
                 <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
@@ -796,6 +827,34 @@ export default function Home() {
                 <CheckCircle2 className='w-4 h-4 shrink-0' />
                 <span>GSTIN: 23AJUPM2209E1ZD</span>
               </div>
+            </div>
+            {/* Google Presence */}
+            <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mb-10'>
+              <a
+                href='https://g.co/kgs/Hari-Shewa-Enterprises-Neemuch'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 border border-white/20 text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/10 transition-colors text-sm'
+              >
+                <svg className='w-5 h-5' viewBox='0 0 24 24' fill='currentColor'>
+                  <path d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z' fill='#4285F4'/>
+                  <path d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z' fill='#34A853'/>
+                  <path d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z' fill='#FBBC05'/>
+                  <path d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z' fill='#EA4335'/>
+                </svg>
+                Find Us on Google
+              </a>
+              <a
+                href='https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRhBgdotc3SFk'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 border border-white/20 text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/10 transition-colors text-sm'
+              >
+                <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 24 24'>
+                  <path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' />
+                </svg>
+                Leave a Review
+              </a>
             </div>
             <div className='max-w-4xl mx-auto rounded-xl overflow-hidden border border-white/10'>
               <iframe
