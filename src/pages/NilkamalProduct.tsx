@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, MessageCircle, Phone, ChevronLeft, ChevronRight, Share2, Check } from 'lucide-react'
+import { ArrowLeft, MessageCircle, Phone, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
+import ProductImageZoom from '@/src/components/ProductImageZoom'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchNilkamalCollection,
@@ -117,75 +118,20 @@ export default function NilkamalProduct() {
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
             {/* Left - Image Gallery */}
             <div className='flex-1 max-w-2xl'>
-              {/* Main Image */}
-              <div className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4'>
-                {images.length > 0 ? (
-                  <img
-                    src={nilkamalImageUrl(images[activeImage].src, 1000)}
-                    alt={`${title} - Image ${activeImage + 1}`}
-                    className='w-full h-full object-contain p-6'
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      if (target.src !== images[activeImage].src) {
-                        target.src = images[activeImage].src
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className='w-full h-full flex items-center justify-center text-gray-700'>
-                    <span className='text-6xl font-bold opacity-10'>{title[0]}</span>
-                  </div>
-                )}
-
-                {/* Nav arrows */}
-                {images.length > 1 && (
-                  <>
-                    <button
-                      onClick={() => setActiveImage((i) => (i - 1 + images.length) % images.length)}
-                      className='absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/60 transition-colors'
-                    >
-                      <ChevronLeft className='w-5 h-5' />
-                    </button>
-                    <button
-                      onClick={() => setActiveImage((i) => (i + 1) % images.length)}
-                      className='absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/60 transition-colors'
-                    >
-                      <ChevronRight className='w-5 h-5' />
-                    </button>
-                    <div className='absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-white/50 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full'>
-                      {activeImage + 1} / {images.length}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Thumbnails */}
-              {images.length > 1 && (
-                <div className='flex gap-2 overflow-x-auto pb-2'>
-                  {images.map((img, i) => (
-                    <button
-                      key={img.id}
-                      onClick={() => setActiveImage(i)}
-                      className={`shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                        i === activeImage
-                          ? 'border-blue-500 ring-1 ring-blue-500/30'
-                          : 'border-white/10 hover:border-white/25'
-                      }`}
-                    >
-                      <img
-                        src={nilkamalImageUrl(img.src, 100)}
-                        alt={`${title} thumbnail ${i + 1}`}
-                        className='w-full h-full object-contain p-1'
-                        loading='lazy'
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement
-                          if (target.src !== img.src) target.src = img.src
-                        }}
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
+              <ProductImageZoom
+                images={images.map((img) => nilkamalImageUrl(img.src, 1000))}
+                alt={title}
+                activeIndex={activeImage}
+                onActiveIndexChange={setActiveImage}
+                accentColor='blue'
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement
+                  const originalSrc = images[activeImage]?.src
+                  if (originalSrc && target.src !== originalSrc) {
+                    target.src = originalSrc
+                  }
+                }}
+              />
             </div>
 
             {/* Right - Product Info */}
