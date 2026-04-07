@@ -5,12 +5,16 @@ import Footer from '@/src/components/Footer'
 import ProductImageZoom from '@/src/components/ProductImageZoom'
 import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum, isParticleBoardCategory } from '@/src/lib/categories'
-import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
-import { FABRIC_COLORS, LEATHERETTE_COLORS, isCushionedChair } from '@/src/lib/customization-colors'
+import {
+  fetchProductWithVariants,
+  fetchProducts,
+  type CatalogProduct,
+  type ProductWithVariants,
+} from '@/src/lib/supabase'
 
 export default function MVMProduct() {
   const { collection, slug } = useParams<{ collection: string; slug: string }>()
-  const [product, setProduct] = useState<CatalogProduct | null>(null)
+  const [productData, setProductData] = useState<ProductWithVariants | null>(null)
   const [related, setRelated] = useState<CatalogProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [activeImage, setActiveImage] = useState(0)
@@ -18,14 +22,15 @@ export default function MVMProduct() {
   const [showHindi, setShowHindi] = useState(false)
 
   const cat = collection ? getCategoryBySlug(collection) : undefined
+  const product = productData
 
   useEffect(() => {
     if (!slug) return
     setLoading(true)
     setActiveImage(0)
 
-    fetchProduct(slug).then((found) => {
-      setProduct(found)
+    fetchProductWithVariants(slug).then((found) => {
+      setProductData(found)
       setLoading(false)
 
       if (found?.category) {
@@ -150,6 +155,56 @@ export default function MVMProduct() {
                 {product.name}
               </h1>
 
+              {/* Color variant selector — shows when this product family has variants */}
+              {(() => {
+                if (!productData) return null
+                // Family = parent + all variants. The current product is one of them.
+                const parentInFamily = productData.parent || product
+                const familyMembers: CatalogProduct[] = [parentInFamily, ...productData.variants]
+                if (familyMembers.length <= 1) return null
+
+                const currentSlug = product.slug
+
+                return (
+                  <div className='mb-6'>
+                    <p className='text-xs font-semibold tracking-wider uppercase text-amber-400 mb-3'>
+                      Available in {familyMembers.length} colour{familyMembers.length > 1 ? 's' : ''}
+                    </p>
+                    <div className='flex flex-wrap gap-2.5'>
+                      {familyMembers.map((member) => {
+                        const isActive = member.slug === currentSlug
+                        // Parent has no color of its own — show as the "default" with a neutral circle.
+                        const swatchHex = member.color_hex || '#9CA3AF'
+                        const label = member.color_name || 'Original'
+                        const memberSlug = member.slug || String(member.id)
+                        return (
+                          <Link
+                            key={member.id}
+                            to={`/mvm/${collection}/${memberSlug}`}
+                            title={label}
+                            className={`group flex items-center gap-2 rounded-full pl-1 pr-3 py-1 border transition-all ${
+                              isActive
+                                ? 'border-amber-400 bg-amber-500/10'
+                                : 'border-white/15 hover:border-white/40 bg-white/[0.03]'
+                            }`}
+                          >
+                            <span
+                              className={`w-6 h-6 rounded-full border-2 ${
+                                isActive ? 'border-amber-400' : 'border-white/30'
+                              }`}
+                              style={{ backgroundColor: swatchHex }}
+                            />
+                            <span className={`text-xs ${isActive ? 'text-amber-300 font-medium' : 'text-gray-300'}`}>
+                              {label}
+                            </span>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })()}
+
               {/* Colors - only for NON particle board */}
               {colors.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
@@ -164,49 +219,6 @@ export default function MVMProduct() {
                       </span>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* Colour Customisation - only for cushioned chairs, NEVER particle board */}
-              {!isParticleBoardCategory(product.category || '') && isCushionedChair(product.category || '', materials, features) && (
-                <div className='mb-6'>
-                  <p className='text-xs font-semibold tracking-wider uppercase text-amber-400 mb-3'>
-                    Colour Customisation
-                  </p>
-
-                  {/* Fabric */}
-                  <p className='text-[10px] font-semibold tracking-wider uppercase text-gray-500 mb-2'>
-                    Fabric Options
-                  </p>
-                  <div className='flex flex-wrap gap-1.5 mb-4'>
-                    {FABRIC_COLORS.map((c) => (
-                      <span
-                        key={c.name}
-                        title={c.name}
-                        className='w-6 h-6 rounded-full border border-white/15 hover:scale-125 transition-transform cursor-default'
-                        style={{ backgroundColor: c.hex }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Leatherette */}
-                  <p className='text-[10px] font-semibold tracking-wider uppercase text-gray-500 mb-2'>
-                    Leatherette Options
-                  </p>
-                  <div className='flex flex-wrap gap-1.5 mb-3'>
-                    {LEATHERETTE_COLORS.map((c) => (
-                      <span
-                        key={c.name}
-                        title={c.name}
-                        className='w-6 h-6 rounded-full border border-white/15 hover:scale-125 transition-transform cursor-default'
-                        style={{ backgroundColor: c.hex }}
-                      />
-                    ))}
-                  </div>
-
-                  <p className='text-xs text-amber-400/70 italic'>
-                    Customisation available as per customer's requirement. Contact us for specific colour samples.
-                  </p>
                 </div>
               )}
 

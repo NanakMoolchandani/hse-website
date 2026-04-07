@@ -42,15 +42,31 @@ export interface CatalogProduct {
   is_featured: boolean
   created_at: string
   updated_at: string
+  // ── Color variant support ──
+  parent_product_id: number | null
+  color_name: string | null
+  color_hex: string | null
+}
+
+export interface ProductWithVariants extends CatalogProduct {
+  /** Sibling variants (same parent). Empty if this product has no variants. */
+  variants: CatalogProduct[]
+  /** The parent product, if this product is itself a variant. */
+  parent: CatalogProduct | null
 }
 
 // ── Data Fetchers ──────────────────────────────────────────────────
 
+/**
+ * Fetch published top-level products. Variants (parent_product_id NOT NULL)
+ * are excluded so the listing pages show one tile per product family.
+ */
 export async function fetchProducts(category?: string): Promise<CatalogProduct[]> {
   let query = supabase
     .from('catalog_products')
     .select('*')
     .eq('status', 'PUBLISHED')
+    .is('parent_product_id', null)
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
 
@@ -68,6 +84,10 @@ export async function fetchProducts(category?: string): Promise<CatalogProduct[]
   return data || []
 }
 
+/**
+ * Fetch a single product by slug. Works for both top-level products AND
+ * color variants — variant slugs (e.g. "aerocom-hb-charcoal") resolve too.
+ */
 export async function fetchProduct(slug: string): Promise<CatalogProduct | null> {
   const { data, error } = await supabase
     .from('catalog_products')
@@ -85,6 +105,46 @@ export async function fetchProduct(slug: string): Promise<CatalogProduct | null>
 }
 
 /**
+ * Fetch a product along with its full variant family — siblings if it's a
+ * variant, children if it's a parent. Used by the product detail page to
+ * render a color selector.
+ */
+export async function fetchProductWithVariants(
+  slug: string,
+): Promise<ProductWithVariants | null> {
+  const product = await fetchProduct(slug)
+  if (!product) return null
+
+  // Determine the family root (the parent product).
+  const rootId = product.parent_product_id ?? product.id
+
+  let parent: CatalogProduct | null = null
+  if (product.parent_product_id !== null) {
+    const { data: parentData } = await supabase
+      .from('catalog_products')
+      .select('*')
+      .eq('id', product.parent_product_id)
+      .single()
+    parent = parentData
+  }
+
+  // Fetch all variants of the family root.
+  const { data: variantsData, error } = await supabase
+    .from('catalog_products')
+    .select('*')
+    .eq('parent_product_id', rootId)
+    .eq('status', 'PUBLISHED')
+    .order('created_at', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching variants:', error)
+    return { ...product, variants: [], parent }
+  }
+
+  return { ...product, variants: variantsData || [], parent }
+}
+
+/**
  * Get optimized image URL from Supabase storage with transforms.
  * Appends width/quality params for faster loading.
  */
@@ -97,10 +157,12 @@ export function getOptimizedImageUrl(url: string, width: number = 600, quality: 
 }
 
 export async function fetchProductCounts(): Promise<Record<string, number>> {
+  // Count parent products only — variants don't get their own listing card.
   const { data, error } = await supabase
     .from('catalog_products')
     .select('category')
     .eq('status', 'PUBLISHED')
+    .is('parent_product_id', null)
 
   if (error) {
     console.error('Error fetching product counts:', error)
@@ -111,6 +173,31 @@ export async function fetchProductCounts(): Promise<Record<string, number>> {
   for (const item of data || []) {
     if (item.category) {
       counts[item.category] = (counts[item.category] || 0) + 1
+    }
+  }
+  return counts
+}
+
+/**
+ * Fetch variant counts per parent — used to show "+N colours" badges in
+ * the listing grid. Returns a map of parent ID → number of variants.
+ */
+export async function fetchVariantCounts(): Promise<Record<number, number>> {
+  const { data, error } = await supabase
+    .from('catalog_products')
+    .select('parent_product_id')
+    .eq('status', 'PUBLISHED')
+    .not('parent_product_id', 'is', null)
+
+  if (error) {
+    console.error('Error fetching variant counts:', error)
+    return {}
+  }
+
+  const counts: Record<number, number> = {}
+  for (const item of data || []) {
+    if (item.parent_product_id !== null) {
+      counts[item.parent_product_id] = (counts[item.parent_product_id] || 0) + 1
     }
   }
   return counts

@@ -4,12 +4,13 @@ import { ArrowLeft, MessageCircle, Search, X } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, CATEGORIES } from '@/src/lib/categories'
-import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProducts, fetchVariantCounts, type CatalogProduct } from '@/src/lib/supabase'
 
 export default function MVMCollection() {
   const { collection } = useParams<{ collection: string }>()
   const navigate = useNavigate()
   const [products, setProducts] = useState<CatalogProduct[]>([])
+  const [variantCounts, setVariantCounts] = useState<Record<number, number>>({})
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
@@ -18,8 +19,9 @@ export default function MVMCollection() {
   useEffect(() => {
     if (!collection || !cat) return
     setLoading(true)
-    fetchProducts(cat.enum).then((p) => {
+    Promise.all([fetchProducts(cat.enum), fetchVariantCounts()]).then(([p, vc]) => {
       setProducts(p)
+      setVariantCounts(vc)
       setLoading(false)
     })
   }, [collection])
@@ -133,7 +135,12 @@ export default function MVMCollection() {
               </p>
               <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6'>
                 {filtered.map((product) => (
-                  <ProductCard key={product.id} product={product} collection={collection!} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    collection={collection!}
+                    variantCount={variantCounts[product.id] || 0}
+                  />
                 ))}
               </div>
             </>
@@ -185,11 +192,22 @@ export default function MVMCollection() {
 
 // ── Product Card ─────────────────────────────────────────────────────────────
 
-function ProductCard({ product, collection }: { product: CatalogProduct; collection: string }) {
+function ProductCard({
+  product,
+  collection,
+  variantCount,
+}: {
+  product: CatalogProduct
+  collection: string
+  variantCount: number
+}) {
   const imgSrc = product.processed_photo_urls?.[0]
     || product.raw_photo_urls?.[0]
     || null
   const features = product.metadata?.features || []
+  // +1 because the product card represents the parent (which counts as 1 colour),
+  // plus all child variants. Only show when ≥ 1 actual variant exists.
+  const totalColours = variantCount + 1
 
   return (
     <Link
@@ -213,6 +231,11 @@ function ProductCard({ product, collection }: { product: CatalogProduct; collect
         {product.is_featured && (
           <div className='absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400'>
             Featured
+          </div>
+        )}
+        {variantCount > 0 && (
+          <div className='absolute bottom-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/60 backdrop-blur text-white border border-white/20'>
+            {totalColours} colours
           </div>
         )}
       </div>

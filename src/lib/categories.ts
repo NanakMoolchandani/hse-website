@@ -41,6 +41,22 @@ export const CATEGORIES: CategoryInfo[] = [
     description: 'Stylish visitor chairs, waiting area sofas and reception counters',
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
   },
+  {
+    slug: 'gaming-chairs',
+    enum: 'GAMING_CHAIRS',
+    label: 'Gaming Chairs',
+    series: 'Arena Series',
+    description: 'High-back gaming chairs with full lumbar support, headrest pillows and racing-inspired ergonomics for long sessions',
+    image: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80',
+  },
+  {
+    slug: 'recliners',
+    enum: 'RECLINERS',
+    label: 'Recliners',
+    series: 'Lounge Collection',
+    description: 'Premium reclining chairs and sofas with multi-position adjustment for ultimate relaxation at home or office',
+    image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80',
+  },
 
   // ── Particle Board Furniture ──────────────────────────────────────
   {
