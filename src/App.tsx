@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Menu, X, MessageCircle, ChevronDown, FileDown } from 'lucide-react'
+import { Menu, X, MessageCircle, ChevronDown, FileDown, Palette } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Navigate } from 'react-router-dom'
@@ -20,6 +20,8 @@ import MVMCollection from '@/src/pages/MVMCollection'
 import MVMProductPage from '@/src/pages/MVMProduct'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
+import CatalogueColors from '@/src/pages/CatalogueColors'
+import CatalogueDetail from '@/src/pages/CatalogueDetail'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -186,6 +188,16 @@ function Navbar() {
                                 {catalog.label}
                               </button>
                             ))}
+                            <div className='border-t border-white/10 mt-1 pt-1'>
+                              <Link
+                                to='/catalogue-colors'
+                                className={`flex items-center gap-2 px-4 py-1.5 text-sm font-medium ${dropdownItemClass}`}
+                                onClick={() => setProductsOpen(false)}
+                              >
+                                <Palette className='w-3 h-3 flex-shrink-0' />
+                                Catalogue Colors
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -340,6 +352,14 @@ function Navbar() {
                   {catalog.label}
                 </button>
               ))}
+              <Link
+                to='/catalogue-colors'
+                className='flex items-center gap-2 text-base font-medium py-1.5 pl-2 text-purple-400'
+                onClick={() => setOpen(false)}
+              >
+                <Palette className='w-3.5 h-3.5 flex-shrink-0' />
+                Catalogue Colors
+              </Link>
             </div>
             {isHome ? (
               <button
@@ -382,6 +402,7 @@ export default function App() {
     location.pathname.startsWith('/supreme') ||
     location.pathname.startsWith('/seatex') ||
     location.pathname.startsWith('/mvm') ||
+    location.pathname.startsWith('/catalogue-colors') ||
     location.pathname === '/'
 
   // Set body background SYNCHRONOUSLY before paint to prevent white flash
@@ -432,6 +453,8 @@ export default function App() {
         <Route path='/mvm' element={<MVM />} />
         <Route path='/mvm/:collection' element={<MVMCollection />} />
         <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
+        <Route path='/catalogue-colors' element={<CatalogueColors />} />
+        <Route path='/catalogue-colors/:slug' element={<CatalogueDetail />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/terms' element={<Terms />} />
         {/* Redirect old /products/ URLs to /mvm/ */}
