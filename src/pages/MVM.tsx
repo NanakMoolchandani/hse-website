@@ -1,40 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { MessageCircle, Phone, ArrowLeft, ChevronRight } from 'lucide-react'
+import { MessageCircle, Phone, ArrowLeft, Search } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { CATEGORIES } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
-// ── MVM Stats ───────────────────────────────────────────────────────────
-
-const MVM_STATS = [
-  { value: '25+', label: 'Years in Business' },
-  { value: '500+', label: 'Products Delivered' },
-  { value: 'Pan-India', label: 'Delivery Network' },
-  { value: 'ISO', label: 'Certified Quality' },
-]
-
-// ── Page Component ───────────────────────────────────────────────────────────
-
 export default function MVM() {
   const [categoryProducts, setCategoryProducts] = useState<Record<string, CatalogProduct[]>>({})
   const [loadingCategories, setLoadingCategories] = useState(true)
+  const [activeCategoryEnum, setActiveCategoryEnum] = useState(CATEGORIES[0].enum)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     let cancelled = false
 
     async function loadAll() {
       const results: Record<string, CatalogProduct[]> = {}
-
-      const fetches = CATEGORIES.map(async (cat) => {
-        const products = await fetchProducts(cat.enum)
-        if (!cancelled) {
-          results[cat.enum] = products
-        }
-      })
-
-      await Promise.all(fetches)
+      await Promise.all(
+        CATEGORIES.map(async (cat) => {
+          const products = await fetchProducts(cat.enum)
+          if (!cancelled) results[cat.enum] = products
+        }),
+      )
       if (!cancelled) {
         setCategoryProducts(results)
         setLoadingCategories(false)
@@ -42,267 +30,280 @@ export default function MVM() {
     }
 
     loadAll()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [])
+
+  function selectCategory(enumVal: string) {
+    setActiveCategoryEnum(enumVal)
+    setSearchQuery('')
+  }
+
+  const activeCat = CATEGORIES.find((c) => c.enum === activeCategoryEnum)!
+  const products = categoryProducts[activeCategoryEnum] || []
+  const isLoading = loadingCategories && products.length === 0
+
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products
+    const q = searchQuery.toLowerCase()
+    return products.filter((p) => (p.name || '').toLowerCase().includes(q))
+  }, [products, searchQuery])
 
   return (
     <>
       <SEO
-        title="MVM Aasanam Furniture - Manufacturer in Neemuch | Office Chairs, Wardrobes, TV Units &amp; More"
+        title="MVM Aasanam Furniture - Manufacturer in Neemuch | Office Chairs, Wardrobes, TV Units & More"
         description="MVM Aasanam by Hari Shewa Enterprises - Premium furniture manufacturer in Neemuch, MP. Office chairs, particle board wardrobes, TV units, study tables, bookshelves, shoe racks, kitchen units, bedroom furniture & more. Factory-direct pricing. Call +91 99815 16171."
         canonical="/mvm"
         ogImage="https://mvm-furniture.com/og-mvm.jpg"
-        keywords="MVM Aasanam, furniture manufacturer Neemuch, particle board furniture, wardrobes Neemuch, TV units, study tables, bookshelves, shoe racks, kitchen furniture, bedroom furniture, dressing tables, office furniture, modular storage, office chairs Neemuch, Hari Shewa Enterprises, फर्नीचर नीमच, वार्डरोब, टीवी यूनिट, स्टडी टेबल, बुकशेल्फ"
-        jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }])}
+        keywords="MVM Aasanam, furniture manufacturer Neemuch, particle board furniture, wardrobes Neemuch, TV units, study tables, bookshelves, shoe racks, kitchen furniture, bedroom furniture, dressing tables, office furniture, modular storage, office chairs Neemuch, Hari Shewa Enterprises"
+        jsonLd={createBreadcrumbSchema([
+          { name: 'Home', url: '/home' },
+          { name: 'MVM Aasanam', url: '/mvm' },
+        ])}
       />
 
-      {/* Hero */}
-      <section className='relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 overflow-hidden'>
-        <div className='absolute inset-0 opacity-[0.03]' style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }} />
-
-        <div className='relative z-10 max-w-5xl mx-auto px-4 sm:px-6'>
-          <Link
-            to='/home'
-            className='inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-300 transition-colors mb-8'
-          >
-            <ArrowLeft className='w-4 h-4' />
-            Back to Home
-          </Link>
-
-          <div className='text-center'>
-          <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6'>
-            <span className='w-2 h-2 rounded-full bg-amber-400 animate-pulse' />
-            <span className='text-sm font-medium text-amber-400'>Our Own Manufacturing</span>
-          </div>
-
-          <h1 className='font-display text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight'>
-            MVM Aasanam
-          </h1>
-          <p className='text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-4 leading-relaxed'>
-            Premium furniture <span className='text-white font-semibold'>manufactured by Hari Shewa Enterprises</span> in Neemuch, Madhya Pradesh. Office chairs, wardrobes, TV units, study tables, bookshelves and more.
-          </p>
-          <p className='text-base text-gray-500 max-w-xl mx-auto mb-10'>
-            Factory-direct pricing. Bulk orders, institutional supply, and pan-India delivery available. ISO certified, GeM empanelled.
-          </p>
-
-          <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-            <a
-              href='https://wa.me/919981516171?text=Hi%2C%20I%27m%20interested%20in%20MVM%20Aasanam%20office%20furniture.%20Please%20share%20details.'
-              className='inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors'
-            >
-              <MessageCircle className='w-5 h-5' />
-              Enquire on WhatsApp
-            </a>
-            <a
-              href='tel:+919981516171'
-              className='inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10 transition-colors'
-            >
-              <Phone className='w-5 h-5' />
-              Call for Bulk Pricing
-            </a>
-          </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className='bg-gray-950 border-y border-white/5 py-10'>
-        <div className='max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4 gap-8'>
-          {MVM_STATS.map((s) => (
-            <div key={s.label} className='text-center'>
-              <p className='text-2xl sm:text-3xl font-bold text-white font-display'>{s.value}</p>
-              <p className='text-sm text-gray-500 mt-1'>{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Why Buy From Us */}
-      <section className='bg-gray-950 py-16 md:py-20'>
-        <div className='max-w-5xl mx-auto px-4 sm:px-6'>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {[
-              { title: 'Factory-Direct Pricing', desc: 'No middlemen. Get the best rates directly from our manufacturing unit in Neemuch. Bulk and institutional orders welcome.' },
-              { title: 'Premium Quality', desc: 'ISO certified manufacturing with rigorous quality control. Every product tested for durability, comfort, and finish.' },
-              { title: 'Pan-India Delivery', desc: 'We deliver across India - Madhya Pradesh, Rajasthan, Gujarat, Maharashtra, and beyond. Doorstep delivery for bulk orders.' },
-            ].map((item) => (
-              <div key={item.title} className='rounded-2xl border border-white/10 bg-white/[0.02] p-6'>
-                <h3 className='text-lg font-semibold text-white mb-2'>{item.title}</h3>
-                <p className='text-sm text-gray-400 leading-relaxed'>{item.desc}</p>
+      {/* ── Compact Header ───────────────────────────────────────────── */}
+      <header className='bg-white border-b border-gray-100'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5'>
+          <div className='flex items-start sm:items-center justify-between gap-4 flex-wrap'>
+            <div>
+              <Link
+                to='/home'
+                className='inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors mb-1.5'
+              >
+                <ArrowLeft className='w-3.5 h-3.5' />
+                Back to Home
+              </Link>
+              <div className='flex items-center gap-3'>
+                <h1 className='text-xl sm:text-2xl font-bold text-gray-900'>MVM Aasanam</h1>
+                <span className='hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold'>
+                  Our Own Manufacturing
+                </span>
               </div>
-            ))}
+              <p className='text-sm text-gray-500 mt-0.5'>
+                Premium furniture by Hari Shewa Enterprises · Neemuch, MP
+              </p>
+            </div>
+
+            <div className='flex items-center gap-2.5 flex-shrink-0'>
+              <a
+                href='tel:+919981516171'
+                className='inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors'
+              >
+                <Phone className='w-3.5 h-3.5' />
+                Call
+              </a>
+              <a
+                href='https://wa.me/919981516171?text=Hi%2C%20I%27m%20interested%20in%20MVM%20Aasanam%20furniture.%20Please%20share%20details.'
+                className='inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors'
+              >
+                <MessageCircle className='w-3.5 h-3.5' />
+                WhatsApp
+              </a>
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* Product Categories - real products from Supabase */}
-      <section className='bg-gray-950 py-16 md:py-24'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
-          <div className='text-center mb-14'>
-            <p className='text-xs font-semibold tracking-widest uppercase text-amber-400 mb-3'>
-              Our Product Range
-            </p>
-            <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-4'>
-              Browse MVM Aasanam Products
-            </h2>
-            <p className='text-gray-500 max-w-xl mx-auto text-lg'>
-              Premium furniture crafted in our Neemuch manufacturing unit — office chairs, particle board wardrobes, TV units, tables and more. Tap any category to explore.
-            </p>
-          </div>
+      {/* ── Body: Sidebar + Grid ─────────────────────────────────────── */}
+      <div className='bg-gray-50 min-h-screen'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
+          <div className='flex gap-6 items-start'>
 
-          <div className='space-y-16'>
-            {CATEGORIES.map((cat) => {
-              const products = categoryProducts[cat.enum] || []
-              const isLoading = loadingCategories && products.length === 0
-              const preview = products.slice(0, 6)
-
-              return (
-                <div key={cat.slug}>
-                  {/* Category Header */}
-                  <div className='flex items-end justify-between mb-6'>
-                    <div>
-                      <h3 className='text-2xl font-bold text-white mb-1'>
-                        {cat.label}
-                      </h3>
-                      <p className='text-sm text-gray-500 max-w-lg'>{cat.description}</p>
-                    </div>
-                    {products.length > 0 && (
-                      <Link
-                        to={`/mvm/${cat.slug}`}
-                        className='hidden md:inline-flex items-center gap-1 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors shrink-0'
+            {/* Desktop Sidebar */}
+            <aside className='hidden md:block w-52 flex-shrink-0'>
+              <div className='sticky top-4'>
+                <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1'>
+                  Categories
+                </p>
+                <nav className='space-y-0.5'>
+                  {CATEGORIES.map((cat) => {
+                    const count = categoryProducts[cat.enum]?.length
+                    const isActive = cat.enum === activeCategoryEnum
+                    return (
+                      <button
+                        key={cat.enum}
+                        onClick={() => selectCategory(cat.enum)}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+                          isActive
+                            ? 'bg-amber-500 text-white font-semibold shadow-sm'
+                            : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
+                        }`}
                       >
-                        View all {products.length} products
-                        <ChevronRight className='w-4 h-4' />
-                      </Link>
-                    )}
-                  </div>
-
-                  {/* Product Preview Grid */}
-                  {isLoading ? (
-                    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
-                      {Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className='rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden animate-pulse'>
-                          <div className='aspect-square bg-white/[0.05]' />
-                          <div className='p-3 space-y-1.5'>
-                            <div className='h-3 bg-white/[0.05] rounded w-3/4' />
-                            <div className='h-2.5 bg-white/[0.05] rounded w-1/2' />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : preview.length > 0 ? (
-                    <>
-                      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
-                        {preview.map((product) => {
-                          const imgSrc = product.processed_photo_urls?.[0]
-                            || product.raw_photo_urls?.[0]
-                            || null
-
-                          return (
-                            <Link
-                              key={product.id}
-                              to={`/mvm/${cat.slug}/${product.slug}`}
-                              className='group rounded-2xl bg-white/[0.03] overflow-hidden hover:bg-white/[0.06] transition-all duration-300'
+                        <span className='flex items-center justify-between gap-2'>
+                          <span className='leading-snug'>{cat.label}</span>
+                          {count !== undefined && (
+                            <span
+                              className={`text-[11px] flex-shrink-0 font-medium ${
+                                isActive ? 'text-amber-100' : 'text-gray-400'
+                              }`}
                             >
-                              <div className='aspect-square bg-white/[0.02] overflow-hidden'>
-                                {imgSrc ? (
-                                  <img
-                                    src={imgSrc}
-                                    alt={product.name || 'Product'}
-                                    className='w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500'
-                                    loading='lazy'
-                                  />
-                                ) : (
-                                  <div className='w-full h-full flex items-center justify-center text-gray-700'>
-                                    <span className='text-2xl font-bold opacity-20'>{(product.name || 'P')[0]}</span>
-                                  </div>
-                                )}
-                              </div>
-                              <div className='p-3'>
-                                <h4 className='text-xs font-medium text-white leading-snug line-clamp-2 mb-1.5 group-hover:text-amber-300 transition-colors'>
-                                  {product.name}
-                                </h4>
-                                <span className='text-[11px] font-medium text-amber-400 group-hover:text-amber-300 transition-colors'>
-                                  View Details →
-                                </span>
-                              </div>
-                            </Link>
-                          )
-                        })}
-                      </div>
+                              {count}
+                            </span>
+                          )}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </nav>
 
-                      {products.length > 6 && (
-                        <div className='mt-4 text-center md:text-left'>
-                          <Link
-                            to={`/mvm/${cat.slug}`}
-                            className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors'
-                          >
-                            View all {products.length} products in {cat.label}
-                            <ChevronRight className='w-4 h-4' />
-                          </Link>
-                        </div>
-                      )}
-                      {products.length <= 6 && products.length > 0 && (
-                        <div className='mt-4 text-center md:hidden'>
-                          <Link
-                            to={`/mvm/${cat.slug}`}
-                            className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors'
-                          >
-                            View {cat.label}
-                            <ChevronRight className='w-4 h-4' />
-                          </Link>
-                        </div>
-                      )}
-                    </>
-                  ) : !isLoading ? (
-                    <div className='rounded-2xl border border-white/5 bg-white/[0.02] p-8 text-center'>
-                      <p className='text-gray-500 text-sm mb-3'>Products coming soon for this category.</p>
-                      <a
-                        href={`https://wa.me/919981516171?text=${encodeURIComponent(`Hi, I'm interested in MVM Aasanam ${cat.label}. Please share what's available.`)}`}
-                        className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors'
-                      >
-                        <MessageCircle className='w-3.5 h-3.5' />
-                        Ask about availability
-                      </a>
-                    </div>
-                  ) : null}
+                <div className='mt-5 p-3.5 rounded-xl bg-white border border-gray-100 shadow-sm'>
+                  <p className='text-xs font-semibold text-gray-800 mb-1'>Need bulk pricing?</p>
+                  <p className='text-[11px] text-gray-500 mb-3 leading-relaxed'>
+                    Share your requirements and get a quote within 24 hours.
+                  </p>
+                  <a
+                    href='https://wa.me/919981516171?text=Hi%2C%20I%20need%20a%20bulk%20quote%20for%20MVM%20Aasanam%20furniture.'
+                    className='block w-full text-center text-xs font-semibold bg-amber-500 text-white py-2 rounded-lg hover:bg-amber-600 transition-colors'
+                  >
+                    WhatsApp Us
+                  </a>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+              </div>
+            </aside>
 
-      {/* CTA */}
-      <section className='bg-gray-900 py-16 md:py-20 border-t border-white/5'>
-        <div className='max-w-3xl mx-auto px-4 sm:px-6 text-center'>
-          <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-4'>
-            Need Furniture?
-          </h2>
-          <p className='text-gray-400 text-lg mb-8 max-w-xl mx-auto'>
-            Get factory-direct rates on any MVM Aasanam product — chairs, wardrobes, TV units, tables, bookshelves and more. Share your requirements and we'll send a quote within 24 hours.
-          </p>
-          <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-            <a
-              href='https://wa.me/919981516171?text=Hi%2C%20I%20need%20MVM%20Aasanam%20office%20furniture.%20Please%20share%20pricing.'
-              className='inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors'
-            >
-              <MessageCircle className='w-5 h-5' />
-              WhatsApp Us
-            </a>
-            <a
-              href='tel:+919981516171'
-              className='inline-flex items-center gap-2 border border-white/20 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10 transition-colors'
-            >
-              <Phone className='w-5 h-5' />
-              Call Now
-            </a>
+            {/* Main Content */}
+            <main className='flex-1 min-w-0'>
+
+              {/* Mobile: horizontal category strip */}
+              <div className='md:hidden mb-4 -mx-4 px-4'>
+                <div className='flex gap-2 overflow-x-auto pb-2'>
+                  {CATEGORIES.map((cat) => {
+                    const isActive = cat.enum === activeCategoryEnum
+                    return (
+                      <button
+                        key={cat.enum}
+                        onClick={() => selectCategory(cat.enum)}
+                        className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                          isActive
+                            ? 'bg-amber-500 text-white shadow-sm'
+                            : 'bg-white border border-gray-200 text-gray-600'
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Category title + search row */}
+              <div className='flex items-center gap-4 mb-4 flex-wrap'>
+                <div className='flex-1 min-w-0'>
+                  <h2 className='text-lg font-bold text-gray-900'>{activeCat.label}</h2>
+                  <p className='text-xs text-gray-500 mt-0.5 hidden sm:block line-clamp-1'>
+                    {activeCat.description}
+                  </p>
+                </div>
+                <div className='relative flex-shrink-0 w-full sm:w-56'>
+                  <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
+                  <input
+                    type='text'
+                    placeholder='Search products...'
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className='w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent'
+                  />
+                </div>
+              </div>
+
+              {/* Count */}
+              {!isLoading && (
+                <p className='text-xs text-gray-400 mb-3'>
+                  {filteredProducts.length}{' '}
+                  {filteredProducts.length === 1 ? 'product' : 'products'}
+                  {searchQuery.trim() ? ` matching "${searchQuery}"` : ''}
+                </p>
+              )}
+
+              {/* Grid */}
+              {isLoading ? (
+                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3'>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className='rounded-xl bg-white border border-gray-100 overflow-hidden animate-pulse'
+                    >
+                      <div className='aspect-square bg-gray-100' />
+                      <div className='p-3 space-y-2'>
+                        <div className='h-3 bg-gray-100 rounded w-3/4' />
+                        <div className='h-2.5 bg-gray-100 rounded w-1/2' />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : filteredProducts.length > 0 ? (
+                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3'>
+                  {filteredProducts.map((product) => {
+                    const imgSrc =
+                      product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || null
+
+                    return (
+                      <Link
+                        key={product.id}
+                        to={`/mvm/${activeCat.slug}/${product.slug}`}
+                        className='group rounded-xl bg-white border border-gray-100 overflow-hidden hover:border-amber-300 hover:shadow-md transition-all duration-200'
+                      >
+                        <div className='aspect-square bg-gray-50 overflow-hidden'>
+                          {imgSrc ? (
+                            <img
+                              src={imgSrc}
+                              alt={product.name || 'Product'}
+                              className='w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300'
+                              loading='lazy'
+                            />
+                          ) : (
+                            <div className='w-full h-full flex items-center justify-center'>
+                              <span className='text-3xl font-bold text-gray-200'>
+                                {(product.name || 'P')[0]}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div className='p-3 border-t border-gray-50'>
+                          <h4 className='text-sm font-medium text-gray-800 leading-snug line-clamp-2 mb-1.5 group-hover:text-amber-600 transition-colors'>
+                            {product.name}
+                          </h4>
+                          <span className='text-xs text-amber-500 font-medium group-hover:text-amber-600 transition-colors'>
+                            View Details →
+                          </span>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              ) : products.length === 0 ? (
+                <div className='rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center'>
+                  <p className='text-gray-400 text-sm mb-4'>Products coming soon for this category.</p>
+                  <a
+                    href={`https://wa.me/919981516171?text=${encodeURIComponent(
+                      `Hi, I'm interested in MVM Aasanam ${activeCat.label}. Please share what's available.`,
+                    )}`}
+                    className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-500 hover:text-amber-600 transition-colors'
+                  >
+                    <MessageCircle className='w-3.5 h-3.5' />
+                    Ask about availability
+                  </a>
+                </div>
+              ) : (
+                <div className='rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center'>
+                  <p className='text-gray-400 text-sm mb-2'>
+                    No products match &ldquo;{searchQuery}&rdquo;.
+                  </p>
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className='text-xs text-amber-500 hover:text-amber-600 transition-colors'
+                  >
+                    Clear search
+                  </button>
+                </div>
+              )}
+            </main>
           </div>
         </div>
-      </section>
+      </div>
 
       <Footer variant='dark' />
     </>
