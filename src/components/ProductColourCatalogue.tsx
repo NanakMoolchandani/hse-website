@@ -97,35 +97,59 @@ function CataloguePanel({
         </div>
       </div>
 
-      {/* Swatch grid — rounded squares with real fabric photos */}
-      <div className='grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-9 gap-2'>
-        {colours.map((colour, i) => (
-          <button
-            key={colour.slug}
-            title={colour.name}
-            onClick={() => setActiveIdx(i)}
-            onMouseEnter={() => setHoveredIdx(i)}
-            onMouseLeave={() => setHoveredIdx(null)}
-            className={`relative aspect-square rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
-              i === activeIdx
-                ? 'ring-2 ring-offset-2 ring-gray-800 scale-105 shadow-lg'
-                : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
-            }`}
-          >
-            {!imageErrors.has(i) ? (
-              <img
-                src={colour.imageUrl}
-                alt={colour.name}
-                className='w-full h-full object-cover'
-                loading='lazy'
-                onError={() => handleImageError(i)}
-              />
-            ) : (
-              <div className='w-full h-full' style={{ backgroundColor: colour.hex }} />
-            )}
-          </button>
-        ))}
-      </div>
+      {/* Swatch grid — staggered brick layout */}
+      {(() => {
+        // Tune columns so rows split cleanly:
+        // Luxury (17) → 9 cols = 9+8 (two rows)
+        // Renult (29) → 10 cols = 10+10+9 (three rows)
+        const cols = colours.length <= 20 ? 9 : 10
+        // swatch = 40px, gap = 8px → half-offset = (40+8)/2 = 24px
+        const rows: typeof colours[] = []
+        for (let i = 0; i < colours.length; i += cols) {
+          rows.push(colours.slice(i, i + cols))
+        }
+        return (
+          <div className='flex flex-col gap-2'>
+            {rows.map((row, rowIdx) => (
+              <div
+                key={rowIdx}
+                className='flex gap-2'
+                style={{ marginLeft: rowIdx % 2 === 1 ? '24px' : '0px' }}
+              >
+                {row.map((colour, colIdx) => {
+                  const globalIdx = rowIdx * cols + colIdx
+                  return (
+                    <button
+                      key={colour.slug}
+                      title={colour.name}
+                      onClick={() => setActiveIdx(globalIdx)}
+                      onMouseEnter={() => setHoveredIdx(globalIdx)}
+                      onMouseLeave={() => setHoveredIdx(null)}
+                      className={`relative w-10 h-10 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
+                        globalIdx === activeIdx
+                          ? 'ring-2 ring-offset-2 ring-gray-800 scale-105 shadow-lg'
+                          : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
+                      }`}
+                    >
+                      {!imageErrors.has(globalIdx) ? (
+                        <img
+                          src={colour.imageUrl}
+                          alt={colour.name}
+                          className='w-full h-full object-cover'
+                          loading='lazy'
+                          onError={() => handleImageError(globalIdx)}
+                        />
+                      ) : (
+                        <div className='w-full h-full' style={{ backgroundColor: colour.hex }} />
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        )
+      })()}
     </div>
   )
 }
