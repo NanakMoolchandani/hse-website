@@ -32,7 +32,7 @@ export default function MVMProduct() {
     })
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [loading])
 
   const cat = collection ? getCategoryBySlug(collection) : undefined
   const product = productData
@@ -89,6 +89,13 @@ export default function MVMProduct() {
   }
 
   const productCategory = getCategoryByEnum(product.category || '')
+
+  // Detect mesh-back chairs by checking name and materials for "mesh" keyword
+  const meshKeyword = /\bmesh\b/i
+  const isMeshBack =
+    meshKeyword.test(product.name || '') ||
+    (product.metadata?.materials ?? []).some((m) => meshKeyword.test(m))
+
   const images = product.processed_photo_urls?.length > 0
     ? product.processed_photo_urls
     : product.raw_photo_urls || []
@@ -388,7 +395,7 @@ export default function MVMProduct() {
         </section>
 
         {/* Colour catalogue — shown for seating categories that support upholstery customisation */}
-        <ProductColourCatalogue category={product.category || ''} />
+        <ProductColourCatalogue category={product.category || ''} isMeshBack={isMeshBack} />
 
         {/* Related Products */}
         {related.length > 0 && (

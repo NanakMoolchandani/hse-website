@@ -10,12 +10,6 @@ export const COLOUR_CATALOGUE_CATEGORIES = new Set([
   'CAFETERIA_FURNITURE',
 ])
 
-// Mesh-back categories: colour options apply to the seat only
-const SEAT_ONLY_CATEGORIES = new Set([
-  'ERGONOMIC_TASK_CHAIRS',
-  'VISITOR_RECEPTION',
-  'CAFETERIA_FURNITURE',
-])
 
 const LUXURY_COLOURS = [
   { name: 'Greige',         hex: '#98927C' },
@@ -170,10 +164,16 @@ function CataloguePanel({
   )
 }
 
-export default function ProductColourCatalogue({ category }: { category: string }) {
+export default function ProductColourCatalogue({
+  category,
+  isMeshBack = false,
+}: {
+  category: string
+  isMeshBack?: boolean
+}) {
   if (!COLOUR_CATALOGUE_CATEGORIES.has(category)) return null
 
-  const showSeatOnlyNote = SEAT_ONLY_CATEGORIES.has(category)
+  const showSeatOnlyNote = isMeshBack
 
   return (
     <section className='border-t border-gray-100 py-14'>
