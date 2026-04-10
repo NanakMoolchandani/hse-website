@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Info } from 'lucide-react'
+import { CATALOGUE_COLOURS } from '@/src/pages/CatalogueDetail'
 
 // Categories that display the colour catalogue section
 export const COLOUR_CATALOGUE_CATEGORIES = new Set([
@@ -10,85 +11,34 @@ export const COLOUR_CATALOGUE_CATEGORIES = new Set([
   'CAFETERIA_FURNITURE',
 ])
 
-
-const LUXURY_COLOURS = [
-  { name: 'Greige',         hex: '#98927C' },
-  { name: 'Taupe',          hex: '#676057' },
-  { name: 'Golden Brown',   hex: '#856C4A' },
-  { name: 'Deep Drab',      hex: '#413B2E' },
-  { name: 'Russet Brown',   hex: '#7A5641' },
-  { name: 'Mist Grey',      hex: '#6B6B66' },
-  { name: 'Charcoal Grey',  hex: '#373733' },
-  { name: 'Petrol Blue',    hex: '#123740' },
-  { name: 'Ruby Red',       hex: '#7E021D' },
-  { name: 'Plum Grey',      hex: '#3B383C' },
-  { name: 'Dusty Cedar',    hex: '#643430' },
-  { name: 'Dusty Teal',     hex: '#405E64' },
-  { name: 'Teal',           hex: '#1C5F6B' },
-  { name: 'Sapphire Blue',  hex: '#053060' },
-  { name: 'Hunter Green',   hex: '#1A3E2F' },
-  { name: 'Deep Teal',      hex: '#0F4B55' },
-  { name: 'Charcoal Black', hex: '#1E2625' },
-]
-
-const RENULT_COLOURS = [
-  { name: 'Cherry Red',      hex: '#C41A1B' },
-  { name: 'Dark Brown',      hex: '#181614' },
-  { name: 'Beige',           hex: '#A69A83' },
-  { name: 'Jet Black',       hex: '#202220' },
-  { name: 'Jet Black II',    hex: '#1F1F1F' },
-  { name: 'Chocolate Brown', hex: '#201814' },
-  { name: 'Dove Grey',       hex: '#B1B3B2' },
-  { name: 'Tobacco Brown',   hex: '#844D2F' },
-  { name: 'Mahogany',        hex: '#542D27' },
-  { name: 'Maroon',          hex: '#381E22' },
-  { name: 'Dark Olive',      hex: '#68695C' },
-  { name: 'Wine Red',        hex: '#B31F33' },
-  { name: 'Deep Brown',      hex: '#3C3531' },
-  { name: 'Midnight Blue',   hex: '#1E2328' },
-  { name: 'Bone',            hex: '#D5D5D1' },
-  { name: 'Burgundy',        hex: '#50132D' },
-  { name: 'Dark Chocolate',  hex: '#291D1A' },
-  { name: 'Milk Chocolate',  hex: '#4D3428' },
-  { name: 'Espresso',        hex: '#231D1A' },
-  { name: 'Jet Black III',   hex: '#21272C' },
-  { name: 'Rust Brown',      hex: '#5F2E20' },
-  { name: 'Navy Blue',       hex: '#28323C' },
-  { name: 'Cocoa',           hex: '#2F2520' },
-  { name: 'Red',             hex: '#CE2828' },
-  { name: 'Charcoal Grey',   hex: '#313331' },
-  { name: 'Ash Grey',        hex: '#232829' },
-  { name: 'Mocha',           hex: '#2F261F' },
-  { name: 'Warm Brown',      hex: '#343331' },
-  { name: 'Navy Teal',       hex: '#1E2626' },
-]
-
-// Light-coloured swatches that need dark text overlay
+// Light-coloured swatches that need dark text on the preview
 const LIGHT_HEX = new Set(['#A69A83', '#B1B3B2', '#D5D5D1', '#98927C'])
 
 function CataloguePanel({
+  catalogueSlug,
   name,
   material,
-  colours,
-  texture,
-  catalogueSlug,
 }: {
+  catalogueSlug: 'luxury' | 'renult'
   name: string
   material: string
-  colours: { name: string; hex: string }[]
-  texture: 'cloth' | 'leather'
-  catalogueSlug: string
 }) {
+  const colours = CATALOGUE_COLOURS[catalogueSlug] ?? []
   const [activeIdx, setActiveIdx] = useState(0)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
 
   const displayIdx = hoveredIdx ?? activeIdx
   const displayColour = colours[displayIdx]
 
+  function handleImageError(idx: number) {
+    setImageErrors((prev) => new Set(prev).add(idx))
+  }
+
   return (
     <div className='flex-1 min-w-0'>
-      {/* Catalogue header */}
-      <div className='flex items-end justify-between mb-3'>
+      {/* Header */}
+      <div className='flex items-end justify-between mb-4'>
         <div>
           <p className='text-xs font-semibold tracking-widest uppercase text-gray-400 mb-0.5'>
             {material}
@@ -99,65 +49,81 @@ function CataloguePanel({
           to={`/catalogue-colors/${catalogueSlug}`}
           className='text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors shrink-0 ml-4'
         >
-          View all {colours.length} colours →
+          View all {colours.length} →
         </Link>
       </div>
 
-      {/* Active colour preview strip */}
-      <div
-        className='relative h-16 rounded-2xl mb-4 overflow-hidden transition-colors duration-300'
-        style={{ backgroundColor: displayColour.hex }}
-      >
-        {texture === 'cloth' ? (
-          <div
-            className='absolute inset-0 opacity-20'
-            style={{
-              backgroundImage: `
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.12) 2px, rgba(255,255,255,0.12) 4px),
-                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.12) 2px, rgba(255,255,255,0.12) 4px)
-              `,
-              backgroundSize: '5px 5px',
-            }}
+      {/* Large preview image */}
+      <div className='relative aspect-[16/7] rounded-2xl overflow-hidden mb-5 bg-gray-100'>
+        {!imageErrors.has(displayIdx) ? (
+          <img
+            key={displayColour.imageUrl}
+            src={displayColour.imageUrl}
+            alt={`${displayColour.name} fabric swatch`}
+            className='w-full h-full object-cover transition-opacity duration-300'
+            onError={() => handleImageError(displayIdx)}
           />
         ) : (
-          <>
-            <div
-              className='absolute inset-0 opacity-60'
-              style={{
-                backgroundImage: `
-                  radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.12) 0%, transparent 55%),
-                  radial-gradient(ellipse at 75% 65%, rgba(0,0,0,0.1) 0%, transparent 50%)
-                `,
-              }}
-            />
-            <div className='absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-black/10' />
-          </>
+          /* Fallback to hex colour with texture pattern */
+          <div
+            className='w-full h-full'
+            style={{
+              backgroundColor: displayColour.hex,
+              backgroundImage:
+                catalogueSlug === 'luxury'
+                  ? `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.07) 2px, rgba(255,255,255,0.07) 4px),
+                     repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.07) 2px, rgba(255,255,255,0.07) 4px)`
+                  : `radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.1) 0%, transparent 55%),
+                     radial-gradient(ellipse at 75% 65%, rgba(0,0,0,0.08) 0%, transparent 50%)`,
+              backgroundSize: catalogueSlug === 'luxury' ? '5px 5px' : 'auto',
+            }}
+          />
         )}
-        <div
-          className={`absolute bottom-2.5 left-4 text-sm font-medium tracking-wide transition-opacity duration-150 ${
-            LIGHT_HEX.has(displayColour.hex) ? 'text-gray-800/75' : 'text-white/80'
-          }`}
-        >
-          {displayColour.name}
+
+        {/* Colour name overlay */}
+        <div className='absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent' />
+        <div className='absolute bottom-3 left-4 flex items-center gap-2.5'>
+          <span
+            className='w-4 h-4 rounded-full border-2 border-white/40 shrink-0'
+            style={{ backgroundColor: displayColour.hex }}
+          />
+          <span
+            className={`text-sm font-semibold tracking-wide ${
+              LIGHT_HEX.has(displayColour.hex) ? 'text-gray-800' : 'text-white'
+            }`}
+          >
+            {displayColour.name}
+          </span>
         </div>
       </div>
 
-      {/* Swatch grid */}
-      <div className='flex flex-wrap gap-2'>
+      {/* Swatch grid — rounded squares with real fabric photos */}
+      <div className='grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-9 gap-2'>
         {colours.map((colour, i) => (
           <button
-            key={colour.name}
+            key={colour.slug}
             title={colour.name}
             onClick={() => setActiveIdx(i)}
             onMouseEnter={() => setHoveredIdx(i)}
             onMouseLeave={() => setHoveredIdx(null)}
-            className={`w-7 h-7 rounded-full transition-all duration-150 cursor-pointer ${
+            className={`relative aspect-square rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
               i === activeIdx
-                ? 'ring-2 ring-offset-2 ring-gray-700 scale-110 shadow-md'
-                : 'ring-1 ring-inset ring-gray-200 hover:ring-gray-400 hover:scale-110'
+                ? 'ring-2 ring-offset-2 ring-gray-800 scale-105 shadow-lg'
+                : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
             }`}
-            style={{ backgroundColor: colour.hex }}
-          />
+          >
+            {!imageErrors.has(i) ? (
+              <img
+                src={colour.imageUrl}
+                alt={colour.name}
+                className='w-full h-full object-cover'
+                loading='lazy'
+                onError={() => handleImageError(i)}
+              />
+            ) : (
+              <div className='w-full h-full' style={{ backgroundColor: colour.hex }} />
+            )}
+          </button>
         ))}
       </div>
     </div>
@@ -173,8 +139,6 @@ export default function ProductColourCatalogue({
 }) {
   if (!COLOUR_CATALOGUE_CATEGORIES.has(category)) return null
 
-  const showSeatOnlyNote = isMeshBack
-
   return (
     <section className='border-t border-gray-100 py-14'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
@@ -186,7 +150,7 @@ export default function ProductColourCatalogue({
           <h2 className='text-2xl font-bold text-gray-900 mb-3'>
             Upholstery Colour Options
           </h2>
-          {showSeatOnlyNote ? (
+          {isMeshBack ? (
             <div className='inline-flex items-start gap-2 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 max-w-xl'>
               <Info className='w-4 h-4 shrink-0 mt-0.5 text-amber-500' />
               <p className='text-sm text-gray-600 leading-relaxed'>
@@ -206,22 +170,17 @@ export default function ProductColourCatalogue({
         {/* Two catalogue panels */}
         <div className='flex flex-col sm:flex-row gap-10 lg:gap-14'>
           <CataloguePanel
+            catalogueSlug='luxury'
             name='Luxury'
             material='Premium Velvet / Suede'
-            colours={LUXURY_COLOURS}
-            texture='cloth'
-            catalogueSlug='luxury'
           />
 
-          {/* Vertical divider (desktop only) */}
           <div className='hidden sm:block w-px bg-gray-100 self-stretch' />
 
           <CataloguePanel
+            catalogueSlug='renult'
             name='Renult'
             material='Premium Leatherette'
-            colours={RENULT_COLOURS}
-            texture='leather'
-            catalogueSlug='renult'
           />
         </div>
 
