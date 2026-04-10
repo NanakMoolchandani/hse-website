@@ -171,8 +171,8 @@ export default function ProductImageZoom({
 
   if (images.length === 0) {
     return (
-      <div className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4'>
-        <div className='w-full h-full flex items-center justify-center text-gray-700'>
+      <div className='relative aspect-square rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden mb-4'>
+        <div className='w-full h-full flex items-center justify-center text-gray-300'>
           <span className='text-6xl font-bold opacity-10'>{(alt || 'P')[0]}</span>
         </div>
       </div>
@@ -184,7 +184,7 @@ export default function ProductImageZoom({
       {/* Main Image with hover zoom */}
       <div
         ref={imageContainerRef}
-        className='relative aspect-square rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden mb-4 group'
+        className='relative aspect-square rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden mb-4 group'
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
@@ -266,7 +266,7 @@ export default function ProductImageZoom({
               className={`shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${
                 i === activeIndex
                   ? accent.thumbActive
-                  : 'border-white/10 hover:border-white/25'
+                  : 'border-gray-100 hover:border-gray-300'
               }`}
             >
               <img
