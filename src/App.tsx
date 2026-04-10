@@ -64,7 +64,7 @@ function Navbar() {
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
   const location = useLocation()
-  const isHome = location.pathname === '/home'
+  const isHome = location.pathname === '/home' || location.pathname === '/'
 
   useEffect(() => {
     const onScroll = () => {
@@ -101,15 +101,21 @@ function Navbar() {
     }
   }
 
-  // Determine navbar styling based on context
-  const navBg = scrolled
-    ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
-    : 'bg-transparent'
+  // Determine navbar styling based on whether we're on the home/dark route
+  const navBg = isHome
+    ? scrolled
+      ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
+      : 'bg-transparent'
+    : 'bg-white border-b border-gray-100 shadow-sm'
 
-  const textColor = 'text-white'
-  const linkColor = 'text-gray-300 hover:text-white'
-  const dropdownBg = 'bg-gray-900/95 backdrop-blur-md border-white/10'
-  const dropdownItemClass = 'text-gray-300 hover:bg-white/10 hover:text-white'
+  const textColor = isHome ? 'text-white' : 'text-gray-900'
+  const linkColor = isHome ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+  const dropdownBg = isHome
+    ? 'bg-gray-900/95 backdrop-blur-md border-white/10'
+    : 'bg-white border border-gray-200 shadow-xl'
+  const dropdownItemClass = isHome
+    ? 'text-gray-300 hover:bg-white/10 hover:text-white'
+    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
 
   return (
     <>
@@ -159,14 +165,14 @@ function Navbar() {
                                 onClick={() => setProductsOpen(false)}
                               >
                                 {brand.label}
-                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${brand.bg}`}>
+                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
                                   Dealer
                                 </span>
                               </Link>
                             ))}
                           </div>
                           {/* Catalogs */}
-                          <div className='py-2 w-52 border-l border-white/10'>
+                          <div className={`py-2 w-52 border-l ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
                             <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-gray-500'>
                               Catalogs
                             </p>
@@ -188,7 +194,7 @@ function Navbar() {
                                 {catalog.label}
                               </button>
                             ))}
-                            <div className='border-t border-white/10 mt-1 pt-1'>
+                            <div className={`border-t mt-1 pt-1 ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
                               <Link
                                 to='/catalogue-colors'
                                 className={`flex items-center gap-2 px-4 py-1.5 text-sm font-medium ${dropdownItemClass}`}
@@ -235,7 +241,11 @@ function Navbar() {
           </div>
           <a
             href='https://wa.me/919981516171'
-            className='hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all bg-white text-black hover:bg-gray-200'
+            className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
+              isHome
+                ? 'bg-white text-black hover:bg-gray-200'
+                : 'bg-amber-500 text-white hover:bg-amber-600'
+            }`}
           >
             WhatsApp Us
           </a>
@@ -249,7 +259,9 @@ function Navbar() {
 
         {/* Brand quick-links bar - desktop only, centered */}
         <div className={`hidden md:block ${
-          scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
+          isHome
+            ? scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
+            : 'bg-gray-50 border-t border-gray-100'
         }`}>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[
@@ -261,7 +273,7 @@ function Navbar() {
               return (
                 <span key={brand.to} className='flex items-center'>
                   {i > 0 && (
-                    <span className='mr-8 h-4 w-px bg-white/15' />
+                    <span className={`mr-8 h-4 w-px ${isHome ? 'bg-white/15' : 'bg-gray-200'}`} />
                   )}
                   <Link
                     to={brand.to}
@@ -271,14 +283,14 @@ function Navbar() {
                       src={brand.logo}
                       alt={brand.label}
                       className={`h-5 w-auto ${('isRound' in brand && brand.isRound) ? 'rounded-full' : ''}`}
-                      style={('isRound' in brand && brand.isRound) ? undefined : { filter: 'brightness(0) invert(1)' }}
+                      style={('isRound' in brand && brand.isRound) ? undefined : (isHome ? { filter: 'brightness(0) invert(1)' } : undefined)}
                     />
                     {('isRound' in brand && brand.isRound) && (
-                      <span className='text-xs font-semibold text-white'>
+                      <span className={`text-xs font-semibold ${isHome ? 'text-white' : 'text-gray-700'}`}>
                         {brand.label}
                       </span>
                     )}
-                    <span className='text-[10px] font-medium tracking-wide uppercase text-white/70'>
+                    <span className={`text-[10px] font-medium tracking-wide uppercase ${isHome ? 'text-white/70' : 'text-gray-400'}`}>
                       {brand.tag}
                     </span>
                   </Link>
@@ -291,21 +303,21 @@ function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className='fixed inset-0 z-40 flex flex-col pt-16 bg-black'>
+        <div className={`fixed inset-0 z-40 flex flex-col pt-16 ${isHome ? 'bg-black' : 'bg-white'}`}>
           <div className='flex flex-col px-6 py-8 gap-6'>
             <Link
               to='/home'
-              className='text-left text-2xl font-semibold py-2 text-white'
+              className={`text-left text-2xl font-semibold py-2 ${isHome ? 'text-white' : 'text-gray-900'}`}
               onClick={() => setOpen(false)}
             >
               Home
             </Link>
             <div>
-              <p className='text-sm font-medium uppercase tracking-wider mb-3 text-gray-500'>Products</p>
+              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
               <div className='space-y-1 pl-2'>
                 <Link
                   to='/mvm'
-                  className='flex items-center gap-2 text-lg font-medium py-1.5 text-gray-300'
+                  className={`flex items-center gap-2 text-lg font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
                   onClick={() => setOpen(false)}
                 >
                   MVM Aasanam
@@ -321,11 +333,11 @@ function Navbar() {
                   <Link
                     key={brand.to}
                     to={brand.to}
-                    className='flex items-center gap-2 text-lg font-medium py-1.5 text-gray-300'
+                    className={`flex items-center gap-2 text-lg font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => setOpen(false)}
                   >
                     {brand.label}
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${brand.bg}`}>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
                       Dealer
                     </span>
                   </Link>
@@ -333,7 +345,7 @@ function Navbar() {
               </div>
             </div>
             <div>
-              <p className='text-sm font-medium uppercase tracking-wider mb-3 text-gray-500'>Catalogs</p>
+              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Catalogs</p>
               {[
                 { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
                 { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
@@ -342,7 +354,7 @@ function Navbar() {
               ].map((catalog) => (
                 <button
                   key={catalog.label}
-                  className='flex items-center gap-2 text-base font-medium py-1.5 pl-2 w-full text-left text-gray-300'
+                  className={`flex items-center gap-2 text-base font-medium py-1.5 pl-2 w-full text-left ${isHome ? 'text-gray-300' : 'text-gray-600'}`}
                   onClick={() => {
                     setOpen(false)
                     downloadPdf(catalog.href, catalog.file)
@@ -354,7 +366,7 @@ function Navbar() {
               ))}
               <Link
                 to='/catalogue-colors'
-                className='flex items-center gap-2 text-base font-medium py-1.5 pl-2 text-purple-400'
+                className={`flex items-center gap-2 text-base font-medium py-1.5 pl-2 ${isHome ? 'text-purple-400' : 'text-purple-600'}`}
                 onClick={() => setOpen(false)}
               >
                 <Palette className='w-3.5 h-3.5 flex-shrink-0' />
@@ -364,14 +376,14 @@ function Navbar() {
             {isHome ? (
               <button
                 onClick={() => handleNavClick('/home#contact')}
-                className='text-left text-2xl font-semibold py-2 text-white'
+                className={`text-left text-2xl font-semibold py-2 ${isHome ? 'text-white' : 'text-gray-900'}`}
               >
                 Contact
               </button>
             ) : (
               <Link
                 to='/home#contact'
-                className='text-left text-2xl font-semibold py-2 text-white'
+                className={`text-left text-2xl font-semibold py-2 ${isHome ? 'text-white' : 'text-gray-900'}`}
                 onClick={() => setOpen(false)}
               >
                 Contact
@@ -379,7 +391,9 @@ function Navbar() {
             )}
             <a
               href='https://wa.me/919981516171'
-              className='mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-white text-black'
+              className={`mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium ${
+                isHome ? 'bg-white text-black' : 'bg-amber-500 text-white'
+              }`}
             >
               <MessageCircle className='w-4 h-4' />
               WhatsApp Us
@@ -396,13 +410,9 @@ function Navbar() {
 export default function App() {
   const location = useLocation()
 
-  // Determine if current route uses a dark background
+  // Only home routes use dark background
   const isDarkRoute =
-    location.pathname.startsWith('/nilkamal') ||
-    location.pathname.startsWith('/supreme') ||
-    location.pathname.startsWith('/seatex') ||
-    location.pathname.startsWith('/mvm') ||
-    location.pathname.startsWith('/catalogue-colors') ||
+    location.pathname === '/home' ||
     location.pathname === '/'
 
   // Set body background SYNCHRONOUSLY before paint to prevent white flash

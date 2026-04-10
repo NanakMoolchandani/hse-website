@@ -53,19 +53,19 @@ export default function NilkamalProduct() {
 
   if (loading) {
     return (
-      <div className='min-h-screen bg-gray-950 flex items-center justify-center pt-16'>
-        <div className='w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin' />
+      <div className='min-h-screen bg-white flex items-center justify-center pt-16'>
+        <div className='w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin' />
       </div>
     )
   }
 
   if (!product) {
     return (
-      <div className='min-h-screen bg-gray-950 flex flex-col items-center justify-center pt-16 px-4'>
-        <p className='text-gray-400 text-lg mb-4'>Product not found</p>
+      <div className='min-h-screen bg-white flex flex-col items-center justify-center pt-16 px-4'>
+        <p className='text-gray-600 text-lg mb-4'>Product not found</p>
         <Link
           to={cat ? `/nilkamal/${collection}` : '/nilkamal'}
-          className='inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors'
+          className='inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors'
         >
           <ArrowLeft className='w-4 h-4' />
           Back to {cat?.label || 'Nilkamal'}
@@ -95,21 +95,21 @@ export default function NilkamalProduct() {
         jsonLd={createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'Nilkamal', url: '/nilkamal' }, { name: cat?.label || '', url: '/nilkamal/' + collection }, { name: title, url: '/nilkamal/' + collection + '/' + handle }])}
       />
 
-      <div className='min-h-screen bg-gray-950'>
+      <div className='min-h-screen bg-white'>
         {/* Header */}
         <div className='pt-20 md:pt-24 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <div className='flex items-center gap-2 text-sm text-gray-500'>
-            <Link to='/nilkamal' className='hover:text-gray-300 transition-colors'>Nilkamal</Link>
+            <Link to='/nilkamal' className='hover:text-gray-700 transition-colors'>Nilkamal</Link>
             <span>/</span>
             {cat && (
               <>
-                <Link to={`/nilkamal/${collection}`} className='hover:text-gray-300 transition-colors'>
+                <Link to={`/nilkamal/${collection}`} className='hover:text-gray-700 transition-colors'>
                   {cat.label}
                 </Link>
                 <span>/</span>
               </>
             )}
-            <span className='text-gray-300 truncate max-w-[200px]'>{title}</span>
+            <span className='text-gray-900 truncate max-w-[200px]'>{title}</span>
           </div>
         </div>
 
@@ -138,18 +138,18 @@ export default function NilkamalProduct() {
             <div className='flex-1 lg:max-w-md'>
               {/* Badges */}
               <div className='flex flex-wrap items-center gap-2 mb-4'>
-                <span className='text-xs px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-medium'>
+                <span className='text-xs px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-600 font-medium'>
                   Nilkamal
                 </span>
                 {!isAvailable && (
-                  <span className='text-xs px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 font-medium'>
+                  <span className='text-xs px-2.5 py-1 rounded-full bg-red-50 border border-red-100 text-red-500 font-medium'>
                     Out of Stock
                   </span>
                 )}
               </div>
 
               {/* Title */}
-              <h1 className='text-2xl md:text-3xl font-bold text-white mb-3 leading-tight'>
+              <h1 className='text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight'>
                 {title}
               </h1>
 
@@ -166,7 +166,7 @@ export default function NilkamalProduct() {
                   </p>
                   <div className='flex flex-wrap gap-2'>
                     {colorTags.map((c) => (
-                      <span key={c} className='text-sm px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300'>
+                      <span key={c} className='text-sm px-3 py-1 rounded-full bg-gray-50 border border-gray-200 text-gray-700'>
                         {c}
                       </span>
                     ))}
@@ -185,7 +185,7 @@ export default function NilkamalProduct() {
                       .filter((t) => !colorTags.includes(t) && !['lessmrp', 'abovemrp', 'instock'].includes(t.toLowerCase()))
                       .slice(0, 12)
                       .map((t) => (
-                        <span key={t} className='text-xs px-2 py-0.5 rounded-full bg-white/[0.04] text-gray-400'>
+                        <span key={t} className='text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600'>
                           {t}
                         </span>
                       ))}
@@ -199,7 +199,7 @@ export default function NilkamalProduct() {
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Description
                   </p>
-                  <p className='text-sm text-gray-400 leading-relaxed'>
+                  <p className='text-sm text-gray-600 leading-relaxed'>
                     {description}
                   </p>
                 </div>
@@ -209,7 +209,7 @@ export default function NilkamalProduct() {
               <div className='space-y-3 mb-8'>
                 <a
                   href={`https://wa.me/919981516171?text=${whatsappText}`}
-                  className='w-full inline-flex items-center justify-center gap-2 bg-white text-gray-900 font-semibold px-6 py-3.5 rounded-full hover:bg-gray-100 transition-colors'
+                  className='w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-6 py-3.5 rounded-full hover:bg-gray-700 transition-colors'
                 >
                   <MessageCircle className='w-5 h-5' />
                   Enquire for Wholesale Price
@@ -217,26 +217,26 @@ export default function NilkamalProduct() {
                 <div className='flex gap-3'>
                   <a
                     href='tel:+919981516171'
-                    className='flex-1 inline-flex items-center justify-center gap-2 border border-white/15 text-white font-medium px-4 py-3 rounded-full hover:bg-white/5 transition-colors'
+                    className='flex-1 inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-4 py-3 rounded-full hover:bg-gray-50 transition-colors'
                   >
                     <Phone className='w-4 h-4' />
                     Call Us
                   </a>
                   <button
                     onClick={handleShare}
-                    className='inline-flex items-center justify-center gap-2 border border-white/15 text-white font-medium px-5 py-3 rounded-full hover:bg-white/5 transition-colors'
+                    className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-medium px-5 py-3 rounded-full hover:bg-gray-50 transition-colors'
                   >
-                    {copied ? <Check className='w-4 h-4 text-green-400' /> : <Share2 className='w-4 h-4' />}
+                    {copied ? <Check className='w-4 h-4 text-green-500' /> : <Share2 className='w-4 h-4' />}
                     {copied ? 'Copied' : 'Share'}
                   </button>
                 </div>
               </div>
 
               {/* Dealer Trust */}
-              <div className='rounded-xl border border-white/5 bg-white/[0.02] p-4'>
+              <div className='rounded-xl border border-gray-200 bg-gray-50 p-4'>
                 <div className='flex items-center gap-2 mb-2'>
-                  <span className='w-2 h-2 rounded-full bg-blue-400' />
-                  <span className='text-sm font-medium text-white'>Authorized Wholesale Dealer</span>
+                  <span className='w-2 h-2 rounded-full bg-blue-500' />
+                  <span className='text-sm font-medium text-gray-900'>Authorized Wholesale Dealer</span>
                 </div>
                 <p className='text-xs text-gray-500 leading-relaxed'>
                   Hari Shewa Enterprises is the Authorized Dealer of Nilkamal in Neemuch, MP.
@@ -249,16 +249,16 @@ export default function NilkamalProduct() {
 
         {/* Related Products */}
         {related.length > 0 && (
-          <section className='border-t border-white/5 py-14'>
+          <section className='border-t border-gray-100 py-14'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
               <div className='flex items-end justify-between mb-6'>
-                <h2 className='text-xl font-bold text-white'>
+                <h2 className='text-xl font-bold text-gray-900'>
                   More in {cat?.label || 'this collection'}
                 </h2>
                 {cat && (
                   <Link
                     to={`/nilkamal/${collection}`}
-                    className='text-sm text-blue-400 hover:text-blue-300 transition-colors inline-flex items-center gap-1'
+                    className='text-sm text-blue-600 hover:text-blue-700 transition-colors inline-flex items-center gap-1'
                   >
                     View all
                     <ChevronRight className='w-3.5 h-3.5' />
@@ -274,9 +274,9 @@ export default function NilkamalProduct() {
                     <Link
                       key={p.id}
                       to={`/nilkamal/${collection}/${p.handle}`}
-                      className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
+                      className='group rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden hover:border-gray-300 hover:shadow-md transition-all duration-300'
                     >
-                      <div className='aspect-square bg-white/[0.02] overflow-hidden'>
+                      <div className='aspect-square bg-white overflow-hidden'>
                         {pImg ? (
                           <img
                             src={pImg}
@@ -285,13 +285,13 @@ export default function NilkamalProduct() {
                             loading='lazy'
                           />
                         ) : (
-                          <div className='w-full h-full flex items-center justify-center text-gray-700'>
-                            <span className='text-2xl font-bold opacity-20'>{pTitle[0]}</span>
+                          <div className='w-full h-full flex items-center justify-center text-gray-300'>
+                            <span className='text-2xl font-bold opacity-40'>{pTitle[0]}</span>
                           </div>
                         )}
                       </div>
                       <div className='p-3'>
-                        <h4 className='text-xs font-medium text-white leading-snug line-clamp-2'>{pTitle}</h4>
+                        <h4 className='text-xs font-medium text-gray-800 leading-snug line-clamp-2'>{pTitle}</h4>
                       </div>
                     </Link>
                   )
@@ -302,18 +302,18 @@ export default function NilkamalProduct() {
         )}
 
         {/* Back to Collection */}
-        <section className='border-t border-white/5 py-10'>
+        <section className='border-t border-gray-100 py-10'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link
               to={cat ? `/nilkamal/${collection}` : '/nilkamal'}
-              className='inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-white transition-colors'
+              className='inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors'
             >
               <ArrowLeft className='w-4 h-4' />
               Back to {cat?.label || 'Nilkamal'}
             </Link>
             <a
               href={`https://wa.me/919981516171?text=${whatsappText}`}
-              className='inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-6 py-2.5 rounded-full hover:bg-gray-100 transition-colors text-sm'
+              className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-6 py-2.5 rounded-full hover:bg-gray-700 transition-colors text-sm'
             >
               <MessageCircle className='w-4 h-4' />
               Get Wholesale Price

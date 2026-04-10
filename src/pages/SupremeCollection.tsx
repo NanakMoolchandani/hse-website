@@ -59,44 +59,44 @@ export default function SupremeCollection() {
       />
 
       {/* Header */}
-      <section className='bg-gray-950 pt-24 pb-12 md:pt-28 md:pb-16'>
+      <section className='bg-white pt-24 pb-12 md:pt-28 md:pb-16'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           {/* Breadcrumb */}
           <div className='flex items-center gap-2 text-sm text-gray-500 mb-6'>
-            <Link to='/supreme' className='hover:text-gray-300 transition-colors inline-flex items-center gap-1'>
+            <Link to='/supreme' className='hover:text-gray-700 transition-colors inline-flex items-center gap-1'>
               <ArrowLeft className='w-3.5 h-3.5' />
               Supreme
             </Link>
             <span>/</span>
-            <span className='text-gray-300'>{cat.label}</span>
+            <span className='text-gray-900'>{cat.label}</span>
           </div>
 
           <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-4'>
             <div>
               <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-4'>
-                <span className='w-1.5 h-1.5 rounded-full bg-orange-400' />
-                <span className='text-xs font-medium text-orange-400'>Authorized Wholesale Dealer</span>
+                <span className='w-1.5 h-1.5 rounded-full bg-orange-500' />
+                <span className='text-xs font-medium text-orange-600'>Authorized Wholesale Dealer</span>
               </div>
-              <h1 className='font-display text-3xl md:text-5xl font-bold text-white mb-2'>
+              <h1 className='font-display text-3xl md:text-5xl font-bold text-gray-900 mb-2'>
                 {cat.label}
               </h1>
-              <p className='text-gray-400 text-lg max-w-xl'>{cat.description}</p>
+              <p className='text-gray-600 text-lg max-w-xl'>{cat.description}</p>
             </div>
 
             {/* Search */}
             <div className='relative w-full md:w-72 shrink-0'>
-              <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500' />
+              <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' />
               <input
                 type='text'
                 placeholder='Search products...'
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className='w-full pl-10 pr-9 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-500/40 focus:ring-1 focus:ring-orange-500/20 transition-colors'
+                className='w-full pl-10 pr-9 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-200 transition-colors'
               />
               {search && (
                 <button
                   onClick={() => setSearch('')}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300'
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600'
                 >
                   <X className='w-4 h-4' />
                 </button>
@@ -107,16 +107,16 @@ export default function SupremeCollection() {
       </section>
 
       {/* Products Grid */}
-      <section className='bg-gray-950 py-8 md:py-12 min-h-[60vh]'>
+      <section className='bg-white py-8 md:py-12 min-h-[60vh]'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           {loading ? (
             <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6'>
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className='rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden animate-pulse'>
-                  <div className='aspect-square bg-white/[0.05]' />
+                <div key={i} className='rounded-2xl bg-gray-100 border border-gray-100 overflow-hidden animate-pulse'>
+                  <div className='aspect-square bg-gray-200' />
                   <div className='p-4 space-y-2'>
-                    <div className='h-4 bg-white/[0.05] rounded w-3/4' />
-                    <div className='h-3 bg-white/[0.05] rounded w-1/2' />
+                    <div className='h-4 bg-gray-200 rounded w-3/4' />
+                    <div className='h-3 bg-gray-200 rounded w-1/2' />
                   </div>
                 </div>
               ))}
@@ -127,7 +127,7 @@ export default function SupremeCollection() {
                 {search ? `No products matching "${search}"` : 'No products found in this collection.'}
               </p>
               {search && (
-                <button onClick={() => setSearch('')} className='mt-3 text-orange-400 hover:text-orange-300 text-sm'>
+                <button onClick={() => setSearch('')} className='mt-3 text-orange-600 hover:text-orange-700 text-sm'>
                   Clear search
                 </button>
               )}
@@ -149,17 +149,17 @@ export default function SupremeCollection() {
       </section>
 
       {/* CTA */}
-      <section className='bg-gray-900 py-14 border-t border-white/5'>
+      <section className='bg-gray-50 py-14 border-t border-gray-100'>
         <div className='max-w-3xl mx-auto px-4 sm:px-6 text-center'>
-          <h2 className='font-display text-2xl md:text-3xl font-bold text-white mb-3'>
+          <h2 className='font-display text-2xl md:text-3xl font-bold text-gray-900 mb-3'>
             Interested in {cat.label}?
           </h2>
-          <p className='text-gray-400 mb-6'>
+          <p className='text-gray-600 mb-6'>
             Contact us for wholesale pricing, bulk discounts, and availability. We deliver across Central India.
           </p>
           <a
             href={`https://wa.me/919981516171?text=${encodeURIComponent(`Hi, I'm interested in Supreme ${cat.label}. Please share wholesale pricing.`)}`}
-            className='inline-flex items-center gap-2 bg-white text-gray-900 font-semibold px-7 py-3 rounded-full hover:bg-gray-100 transition-colors'
+            className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-7 py-3 rounded-full hover:bg-gray-700 transition-colors'
           >
             <MessageCircle className='w-5 h-5' />
             Get Wholesale Pricing
@@ -168,15 +168,15 @@ export default function SupremeCollection() {
       </section>
 
       {/* Other Collections */}
-      <section className='bg-gray-950 py-14 border-t border-white/5'>
+      <section className='bg-white py-14 border-t border-gray-100'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
-          <h3 className='text-lg font-semibold text-white mb-6'>Browse Other Categories</h3>
+          <h3 className='text-lg font-semibold text-gray-900 mb-6'>Browse Other Categories</h3>
           <div className='flex flex-wrap gap-2'>
             {SUPREME_COLLECTIONS.filter((c) => c.handle !== collection).map((c) => (
               <Link
                 key={c.handle}
                 to={`/supreme/${c.handle}`}
-                className='text-sm px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-colors'
+                className='text-sm px-4 py-2 rounded-full bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors'
               >
                 {c.label}
               </Link>
@@ -202,10 +202,10 @@ function ProductCard({ product, collection }: { product: SupremeProduct; collect
   return (
     <Link
       to={`/supreme/${collection}/${product.handle}`}
-      className='group rounded-2xl bg-white/[0.03] border border-white/5 overflow-hidden hover:border-white/15 transition-all duration-300'
+      className='group rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden hover:border-gray-300 hover:shadow-md transition-all duration-300'
     >
       {/* Image */}
-      <div className='aspect-square bg-white/[0.02] overflow-hidden relative'>
+      <div className='aspect-square bg-white overflow-hidden relative'>
         {imgSrc ? (
           <img
             src={imgSrc}
@@ -220,12 +220,12 @@ function ProductCard({ product, collection }: { product: SupremeProduct; collect
             }}
           />
         ) : (
-          <div className='w-full h-full flex items-center justify-center text-gray-700'>
-            <span className='text-3xl font-bold opacity-20'>{title[0]}</span>
+          <div className='w-full h-full flex items-center justify-center text-gray-300'>
+            <span className='text-3xl font-bold opacity-40'>{title[0]}</span>
           </div>
         )}
         {!isAvailable && (
-          <div className='absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400'>
+          <div className='absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-100'>
             Out of Stock
           </div>
         )}
@@ -233,13 +233,13 @@ function ProductCard({ product, collection }: { product: SupremeProduct; collect
 
       {/* Info */}
       <div className='p-4'>
-        <h3 className='text-sm font-medium text-white leading-snug mb-2 line-clamp-2 group-hover:text-orange-300 transition-colors'>{title}</h3>
+        <h3 className='text-sm font-medium text-gray-800 leading-snug mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors'>{title}</h3>
         {colorTags.length > 0 && (
           <p className='text-xs text-gray-500 mb-2 truncate'>
             {colorTags.slice(0, 3).join(', ')}
           </p>
         )}
-        <span className='text-xs font-medium text-orange-400 group-hover:text-orange-300 transition-colors'>
+        <span className='text-xs font-medium text-orange-500 group-hover:text-orange-600 transition-colors'>
           View Details →
         </span>
       </div>
