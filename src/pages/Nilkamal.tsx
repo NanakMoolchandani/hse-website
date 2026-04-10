@@ -77,7 +77,7 @@ export default function Nilkamal() {
           <div className='flex'>
 
             {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-52 flex-shrink-0 sticky top-[112px] self-start h-[calc(100vh-112px)] bg-white border-r border-gray-100'>
+            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-[112px] self-start h-[calc(100vh-112px)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto py-4 px-3'>
                 <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1'>
                   Collections
