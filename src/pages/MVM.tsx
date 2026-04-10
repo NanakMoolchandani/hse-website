@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom'
 import { MessageCircle, Search } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
-import { CATEGORIES } from '@/src/lib/categories'
+import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
+
+const ALL = '__all__'
 
 export default function MVM() {
   const [categoryProducts, setCategoryProducts] = useState<Record<string, CatalogProduct[]>>({})
   const [loadingCategories, setLoadingCategories] = useState(true)
-  const [activeCategoryEnum, setActiveCategoryEnum] = useState(CATEGORIES[0].enum)
+  const [activeCategoryEnum, setActiveCategoryEnum] = useState(ALL)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
@@ -40,8 +42,13 @@ export default function MVM() {
     setSearchQuery('')
   }
 
-  const activeCat = CATEGORIES.find((c) => c.enum === activeCategoryEnum)!
-  const products = categoryProducts[activeCategoryEnum] || []
+  const activeCat = CATEGORIES.find((c) => c.enum === activeCategoryEnum)
+  const allProducts = useMemo(
+    () => Object.values(categoryProducts).flat(),
+    [categoryProducts],
+  )
+  const products = activeCategoryEnum === ALL ? allProducts : (categoryProducts[activeCategoryEnum] || [])
+  const totalCount = allProducts.length
   const isLoading = loadingCategories && products.length === 0
 
   const filteredProducts = useMemo(() => {
@@ -79,6 +86,24 @@ export default function MVM() {
                   Categories
                 </p>
                 <nav className='space-y-0.5'>
+                  {/* All Products */}
+                  <button
+                    onClick={() => selectCategory(ALL)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+                      activeCategoryEnum === ALL
+                        ? 'bg-amber-500 text-white font-semibold shadow-sm'
+                        : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
+                    }`}
+                  >
+                    <span className='flex items-center justify-between gap-2'>
+                      <span className='leading-snug'>All Products</span>
+                      {totalCount > 0 && (
+                        <span className={`text-[11px] flex-shrink-0 font-medium ${activeCategoryEnum === ALL ? 'text-amber-100' : 'text-gray-400'}`}>
+                          {totalCount}
+                        </span>
+                      )}
+                    </span>
+                  </button>
                   {CATEGORIES.map((cat) => {
                     const count = categoryProducts[cat.enum]?.length
                     const isActive = cat.enum === activeCategoryEnum
@@ -130,6 +155,14 @@ export default function MVM() {
               {/* Mobile: horizontal category strip */}
               <div className='md:hidden mb-4 -mx-4 px-4'>
                 <div className='flex gap-2 overflow-x-auto pb-2'>
+                  <button
+                    onClick={() => selectCategory(ALL)}
+                    className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      activeCategoryEnum === ALL ? 'bg-amber-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600'
+                    }`}
+                  >
+                    All
+                  </button>
                   {CATEGORIES.map((cat) => {
                     const isActive = cat.enum === activeCategoryEnum
                     return (
@@ -152,10 +185,12 @@ export default function MVM() {
               {/* Category title + search row */}
               <div className='flex items-center gap-4 mb-4 flex-wrap'>
                 <div className='flex-1 min-w-0'>
-                  <h2 className='text-lg font-bold text-gray-900'>{activeCat.label}</h2>
-                  <p className='text-xs text-gray-500 mt-0.5 hidden sm:block line-clamp-1'>
-                    {activeCat.description}
-                  </p>
+                  <h2 className='text-lg font-bold text-gray-900'>{activeCat?.label ?? 'All Products'}</h2>
+                  {activeCat?.description && (
+                    <p className='text-xs text-gray-500 mt-0.5 hidden sm:block line-clamp-1'>
+                      {activeCat.description}
+                    </p>
+                  )}
                 </div>
                 <div className='relative flex-shrink-0 w-full sm:w-56'>
                   <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
@@ -203,7 +238,7 @@ export default function MVM() {
                     return (
                       <Link
                         key={product.id}
-                        to={`/mvm/${activeCat.slug}/${product.slug}`}
+                        to={`/mvm/${activeCat?.slug ?? getCategoryByEnum(product.category || '')?.slug}/${product.slug}`}
                         className='group rounded-xl bg-white border border-gray-100 overflow-hidden hover:border-amber-300 hover:shadow-md transition-all duration-200'
                       >
                         <div className='aspect-square bg-gray-50 overflow-hidden'>
@@ -239,7 +274,7 @@ export default function MVM() {
                   <p className='text-gray-400 text-sm mb-4'>Products coming soon for this category.</p>
                   <a
                     href={`https://wa.me/919981516171?text=${encodeURIComponent(
-                      `Hi, I'm interested in MVM Aasanam ${activeCat.label}. Please share what's available.`,
+                      `Hi, I'm interested in MVM Aasanam ${activeCat?.label ?? 'furniture'}. Please share what's available.`,
                     )}`}
                     className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-500 hover:text-amber-600 transition-colors'
                   >
@@ -265,7 +300,7 @@ export default function MVM() {
         </div>
       </div>
 
-      <Footer variant='dark' />
+      <Footer variant='light' />
     </>
   )
 }

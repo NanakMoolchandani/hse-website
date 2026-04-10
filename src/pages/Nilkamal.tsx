@@ -11,10 +11,12 @@ import {
 } from '@/src/lib/nilkamal'
 import { Link } from 'react-router-dom'
 
+const ALL = '__all__'
+
 export default function Nilkamal() {
   const [collectionProducts, setCollectionProducts] = useState<Record<string, NilkamalProduct[]>>({})
   const [loadingCollections, setLoadingCollections] = useState(true)
-  const [activeHandle, setActiveHandle] = useState(NILKAMAL_COLLECTIONS[0].handle)
+  const [activeHandle, setActiveHandle] = useState(ALL)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
@@ -43,8 +45,10 @@ export default function Nilkamal() {
     setSearchQuery('')
   }
 
-  const activeCol = NILKAMAL_COLLECTIONS.find((c) => c.handle === activeHandle)!
-  const products = collectionProducts[activeHandle] || []
+  const activeCol = NILKAMAL_COLLECTIONS.find((c) => c.handle === activeHandle)
+  const allProducts = useMemo(() => Object.values(collectionProducts).flat(), [collectionProducts])
+  const products = activeHandle === ALL ? allProducts : (collectionProducts[activeHandle] || [])
+  const totalCount = allProducts.length
   const isLoading = loadingCollections && products.length === 0
 
   const filteredProducts = useMemo(() => {
@@ -79,6 +83,19 @@ export default function Nilkamal() {
                   Collections
                 </p>
                 <nav className='space-y-0.5'>
+                  <button
+                    onClick={() => selectCollection(ALL)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+                      activeHandle === ALL ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
+                    }`}
+                  >
+                    <span className='flex items-center justify-between gap-2'>
+                      <span className='leading-snug'>All Products</span>
+                      {totalCount > 0 && (
+                        <span className={`text-[11px] flex-shrink-0 font-medium ${activeHandle === ALL ? 'text-blue-100' : 'text-gray-400'}`}>{totalCount}</span>
+                      )}
+                    </span>
+                  </button>
                   {NILKAMAL_COLLECTIONS.map((col) => {
                     const count = collectionProducts[col.handle]?.length
                     const isActive = col.handle === activeHandle
@@ -126,6 +143,14 @@ export default function Nilkamal() {
               {/* Mobile: horizontal category strip */}
               <div className='md:hidden mb-4 -mx-4 px-4'>
                 <div className='flex gap-2 overflow-x-auto pb-2'>
+                  <button
+                    onClick={() => selectCollection(ALL)}
+                    className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      activeHandle === ALL ? 'bg-blue-600 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600'
+                    }`}
+                  >
+                    All
+                  </button>
                   {NILKAMAL_COLLECTIONS.map((col) => {
                     const isActive = col.handle === activeHandle
                     return (
@@ -148,10 +173,10 @@ export default function Nilkamal() {
               {/* Collection title + search */}
               <div className='flex items-center gap-4 mb-4 flex-wrap'>
                 <div className='flex-1 min-w-0'>
-                  <h2 className='text-lg font-bold text-gray-900'>{activeCol.label}</h2>
-                  <p className='text-xs text-gray-500 mt-0.5 hidden sm:block line-clamp-1'>
-                    {activeCol.description}
-                  </p>
+                  <h2 className='text-lg font-bold text-gray-900'>{activeCol?.label ?? 'All Products'}</h2>
+                  {activeCol?.description && (
+                    <p className='text-xs text-gray-500 mt-0.5 hidden sm:block line-clamp-1'>{activeCol.description}</p>
+                  )}
                 </div>
                 <div className='relative flex-shrink-0 w-full sm:w-56'>
                   <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
@@ -195,7 +220,7 @@ export default function Nilkamal() {
                     return (
                       <Link
                         key={product.id}
-                        to={`/nilkamal/${activeHandle}/${product.handle}`}
+                        to={`/nilkamal/${activeHandle === ALL ? (Object.entries(collectionProducts).find(([, ps]) => ps.some(p => p.id === product.id))?.[0] ?? NILKAMAL_COLLECTIONS[0].handle) : activeHandle}/${product.handle}`}
                         className='group rounded-xl bg-white border border-gray-100 overflow-hidden hover:border-blue-300 hover:shadow-md transition-all duration-200'
                       >
                         <div className='aspect-square bg-gray-50 overflow-hidden'>
@@ -232,7 +257,7 @@ export default function Nilkamal() {
                 <div className='rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center'>
                   <p className='text-gray-400 text-sm mb-4'>Products coming soon for this category.</p>
                   <a
-                    href={`https://wa.me/919981516171?text=${encodeURIComponent(`Hi, I'm interested in Nilkamal ${activeCol.label}. Please share what's available.`)}`}
+                    href={`https://wa.me/919981516171?text=${encodeURIComponent(`Hi, I'm interested in Nilkamal ${activeCol?.label ?? 'products'}. Please share what's available.`)}`}
                     className='inline-flex items-center gap-1.5 text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors'
                   >
                     <MessageCircle className='w-3.5 h-3.5' /> Ask about availability
@@ -251,7 +276,7 @@ export default function Nilkamal() {
         </div>
       </div>
 
-      <Footer variant='dark' />
+      <Footer variant='light' />
     </>
   )
 }
