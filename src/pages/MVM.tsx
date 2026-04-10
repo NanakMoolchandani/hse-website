@@ -81,15 +81,15 @@ export default function MVM() {
 
             {/* Desktop Sidebar */}
             <aside className='hidden md:block w-60 flex-shrink-0 sticky top-[112px] self-start h-[calc(100vh-112px)] bg-white border-r border-gray-100'>
-              <div className='h-full overflow-y-auto py-4 px-3'>
-                <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1'>
+              <div className='h-full overflow-y-auto pt-2 pb-4 px-2'>
+                <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'>
                   Categories
                 </p>
                 <nav className='space-y-0.5'>
                   {/* All Products */}
                   <button
                     onClick={() => selectCategory(ALL)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+                    className={`w-full text-left px-2 py-1.5 rounded-lg text-xs transition-all duration-150 ${
                       activeCategoryEnum === ALL
                         ? 'bg-amber-500 text-white font-semibold shadow-sm'
                         : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
@@ -111,7 +111,7 @@ export default function MVM() {
                       <button
                         key={cat.enum}
                         onClick={() => selectCategory(cat.enum)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+                        className={`w-full text-left px-2 py-1.5 rounded-lg text-xs transition-all duration-150 ${
                           isActive
                             ? 'bg-amber-500 text-white font-semibold shadow-sm'
                             : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
