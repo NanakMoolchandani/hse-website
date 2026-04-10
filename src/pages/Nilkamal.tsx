@@ -77,8 +77,8 @@ export default function Nilkamal() {
           <div className='flex gap-6 items-start'>
 
             {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-52 flex-shrink-0'>
-              <div className='sticky top-[112px] max-h-[calc(100vh-120px)] overflow-y-auto pr-1'>
+            <aside className='hidden md:block w-52 flex-shrink-0 sticky top-[112px] self-start h-[calc(100vh-120px)]'>
+              <div className='h-full overflow-y-auto pr-1'>
                 <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1'>
                   Collections
                 </p>
