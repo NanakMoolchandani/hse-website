@@ -265,38 +265,28 @@ function Navbar() {
         }`}>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[
-              { to: '/mvm', label: 'MVM Aasanam', logo: '/logos/mvm-logo.png', tag: 'Our Brand', isRound: true },
-              { to: '/nilkamal', label: 'Nilkamal', logo: '/logos/nilkamal.png', tag: 'Dealer' },
-              { to: '/supreme', label: 'Supreme', logo: '/logos/supreme.png', tag: 'Dealer' },
-              { to: '/seatex', label: 'Seatex', logo: '/logos/seatex.svg', tag: 'Dealer' },
-            ].map((brand, i) => {
-              return (
-                <span key={brand.to} className='flex items-center'>
-                  {i > 0 && (
-                    <span className={`mr-8 h-4 w-px ${isHome ? 'bg-white/15' : 'bg-gray-200'}`} />
-                  )}
-                  <Link
-                    to={brand.to}
-                    className='flex items-center gap-2 transition-all opacity-100'
-                  >
-                    <img
-                      src={brand.logo}
-                      alt={brand.label}
-                      className={`h-5 w-auto ${('isRound' in brand && brand.isRound) ? 'rounded-full' : ''}`}
-                      style={('isRound' in brand && brand.isRound) ? undefined : (isHome ? { filter: 'brightness(0) invert(1)' } : undefined)}
-                    />
-                    {('isRound' in brand && brand.isRound) && (
-                      <span className={`text-xs font-semibold ${isHome ? 'text-white' : 'text-gray-700'}`}>
-                        {brand.label}
-                      </span>
-                    )}
-                    <span className={`text-[10px] font-medium tracking-wide uppercase ${isHome ? 'text-white/70' : 'text-gray-400'}`}>
-                      {brand.tag}
-                    </span>
-                  </Link>
-                </span>
-              )
-            })}
+              { to: '/mvm',      label: 'MVM Aasanam', tag: 'Our Brand' },
+              { to: '/nilkamal', label: 'Nilkamal',     tag: 'Dealer' },
+              { to: '/supreme',  label: 'Supreme',      tag: 'Dealer' },
+              { to: '/seatex',   label: 'Seatex',       tag: 'Dealer' },
+            ].map((brand, i) => (
+              <span key={brand.to} className='flex items-center'>
+                {i > 0 && (
+                  <span className={`mr-8 h-4 w-px ${isHome ? 'bg-white/15' : 'bg-gray-200'}`} />
+                )}
+                <Link
+                  to={brand.to}
+                  className='flex items-center gap-2 transition-all opacity-100'
+                >
+                  <span className={`text-sm font-semibold ${isHome ? 'text-white' : 'text-gray-700'}`}>
+                    {brand.label}
+                  </span>
+                  <span className={`text-[10px] font-medium tracking-wide uppercase ${isHome ? 'text-white/60' : 'text-gray-400'}`}>
+                    {brand.tag}
+                  </span>
+                </Link>
+              </span>
+            ))}
           </div>
         </div>
       </nav>

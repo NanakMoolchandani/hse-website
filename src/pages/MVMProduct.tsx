@@ -101,7 +101,7 @@ export default function MVMProduct() {
 
       <div className='min-h-screen bg-white'>
         {/* Header */}
-        <div className='pt-20 md:pt-24 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+        <div className='pt-20 md:pt-[116px] pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <div className='flex items-center gap-2 text-sm text-gray-500'>
             <Link to='/mvm' className='hover:text-gray-700 transition-colors'>MVM Aasanam</Link>
             <span>/</span>
