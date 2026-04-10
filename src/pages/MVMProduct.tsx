@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import ProductImageZoom from '@/src/components/ProductImageZoom'
 import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum, isParticleBoardCategory } from '@/src/lib/categories'
+import ProductColourCatalogue from '@/src/components/ProductColourCatalogue'
 import {
   fetchProductWithVariants,
   fetchProducts,
@@ -20,6 +21,18 @@ export default function MVMProduct() {
   const [activeImage, setActiveImage] = useState(0)
   const [copied, setCopied] = useState(false)
   const [showHindi, setShowHindi] = useState(false)
+  const imageColRef = useRef<HTMLDivElement>(null)
+  const [imageColHeight, setImageColHeight] = useState<number | null>(null)
+
+  useEffect(() => {
+    const el = imageColRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      setImageColHeight(entries[0].contentRect.height)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const cat = collection ? getCategoryBySlug(collection) : undefined
   const product = productData
@@ -119,9 +132,9 @@ export default function MVMProduct() {
 
         {/* Main Content */}
         <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16'>
-          <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
-            {/* Left - Image Gallery */}
-            <div className='flex-1 max-w-2xl'>
+          <div className='flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-start'>
+            {/* Left - Image Gallery — ref so we can measure its rendered height */}
+            <div className='flex-1 max-w-2xl' ref={imageColRef}>
               <ProductImageZoom
                 images={images}
                 alt={product.name || 'Product'}
@@ -131,8 +144,11 @@ export default function MVMProduct() {
               />
             </div>
 
-            {/* Right - Product Info */}
-            <div className='flex-1 lg:max-w-md'>
+            {/* Right - Product Info — height locked to image column, scrolls internally */}
+            <div
+              className='flex-1 lg:max-w-md lg:overflow-y-auto lg:pr-1'
+              style={imageColHeight ? { maxHeight: imageColHeight } : undefined}
+            >
               {/* Badges */}
               <div className='flex flex-wrap items-center gap-2 mb-4'>
                 <span className='text-xs px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-medium'>
@@ -244,19 +260,17 @@ export default function MVMProduct() {
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-3'>
                     Key Features
                   </p>
-                  <div className='space-y-3'>
-                    {features.map((f, i) => (
-                      <div key={f.label} className='flex items-start gap-3'>
-                        <span className='w-6 h-6 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5'>
-                          {i + 1}
+                  <ul className='space-y-2'>
+                    {features.map((f) => (
+                      <li key={f.label} className='flex items-start gap-2'>
+                        <span className='text-amber-500 shrink-0 mt-1 leading-none'>•</span>
+                        <span className='text-sm text-gray-700 leading-snug'>
+                          <span className='font-medium text-gray-900'>{f.label}</span>
+                          {f.detail && <span className='text-gray-500'> — {f.detail}</span>}
                         </span>
-                        <div>
-                          <p className='text-sm text-gray-900 font-medium'>{f.label}</p>
-                          {f.detail && <p className='text-xs text-gray-500 mt-0.5 leading-relaxed'>{f.detail}</p>}
-                        </div>
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               )}
 
@@ -372,6 +386,9 @@ export default function MVMProduct() {
             </div>
           </div>
         </section>
+
+        {/* Colour catalogue — shown for seating categories that support upholstery customisation */}
+        <ProductColourCatalogue category={product.category || ''} />
 
         {/* Related Products */}
         {related.length > 0 && (
