@@ -14,6 +14,106 @@ export const COLOUR_CATALOGUE_CATEGORIES = new Set([
 // Light-coloured swatches that need dark text on the preview
 const LIGHT_HEX = new Set(['#A69A83', '#B1B3B2', '#D5D5D1', '#98927C'])
 
+// ── Colour group definitions ─────────────────────────────────────────────────
+
+type ColourGroup = { label: string; slugs: string[] }
+
+const LUXURY_GROUPS: ColourGroup[] = [
+  {
+    label: 'Neutrals',
+    slugs: ['greige', 'taupe', 'mist-grey', 'charcoal-grey', 'plum-grey', 'charcoal-black'],
+  },
+  {
+    label: 'Warm Tones',
+    slugs: ['golden-brown', 'deep-drab', 'russet-brown', 'dusty-cedar', 'ruby-red'],
+  },
+  {
+    label: 'Cool Tones',
+    slugs: ['petrol-blue', 'dusty-teal', 'teal', 'deep-teal', 'sapphire-blue', 'hunter-green'],
+  },
+]
+
+const RENULT_GROUPS: ColourGroup[] = [
+  {
+    label: 'Neutrals',
+    slugs: [
+      'bone', 'beige', 'dove-grey', 'dark-olive',
+      'jet-black', 'jet-black-5', 'jet-black-20',
+      'charcoal-grey', 'charcoal-grey-26', 'dark-brown-28',
+    ],
+  },
+  {
+    label: 'Warm Tones',
+    slugs: [
+      'dark-brown', 'chocolate-brown', 'dark-brown-8',
+      'mahogany', 'milk-chocolate', 'chocolate-brown-18',
+      'chocolate-brown-21', 'chocolate-brown-23',
+      'chocolate-brown-27', 'maroon', 'dark-brown-13',
+      'burgundy', 'chocolate-brown-17', 'chocolate-brown-19',
+      'cherry-red', 'wine-red', 'red',
+    ],
+  },
+  {
+    label: 'Cool Tones',
+    slugs: ['midnight-blue', 'navy-blue', 'navy-blue-29'],
+  },
+]
+
+const CATALOGUE_GROUPS: Record<string, ColourGroup[]> = {
+  luxury: LUXURY_GROUPS,
+  renult: RENULT_GROUPS,
+}
+
+// ── Swatch button ────────────────────────────────────────────────────────────
+
+function Swatch({
+  colour,
+  globalIdx,
+  isActive,
+  hasError,
+  onSelect,
+  onHover,
+  onHoverEnd,
+  onError,
+}: {
+  colour: { name: string; hex: string; imageUrl: string }
+  globalIdx: number
+  isActive: boolean
+  hasError: boolean
+  onSelect: (i: number) => void
+  onHover: (i: number) => void
+  onHoverEnd: () => void
+  onError: (i: number) => void
+}) {
+  return (
+    <button
+      title={colour.name}
+      onClick={() => onSelect(globalIdx)}
+      onMouseEnter={() => onHover(globalIdx)}
+      onMouseLeave={onHoverEnd}
+      className={`relative w-10 h-10 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
+        isActive
+          ? 'ring-2 ring-offset-2 ring-gray-800 scale-105 shadow-md'
+          : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
+      }`}
+    >
+      {!hasError ? (
+        <img
+          src={colour.imageUrl}
+          alt={colour.name}
+          className='w-full h-full object-cover'
+          loading='lazy'
+          onError={() => onError(globalIdx)}
+        />
+      ) : (
+        <div className='w-full h-full' style={{ backgroundColor: colour.hex }} />
+      )}
+    </button>
+  )
+}
+
+// ── Catalogue panel ───────────────────────────────────────────────────────────
+
 function CataloguePanel({
   catalogueSlug,
   name,
@@ -23,17 +123,27 @@ function CataloguePanel({
   name: string
   material: string
 }) {
-  const colours = CATALOGUE_COLOURS[catalogueSlug] ?? []
+  const allColours = CATALOGUE_COLOURS[catalogueSlug] ?? []
+  const groups = CATALOGUE_GROUPS[catalogueSlug] ?? []
+
+  // Build a flat ordered list that matches group order, for index tracking
+  const orderedColours = groups.flatMap((g) =>
+    g.slugs.map((slug) => allColours.find((c) => c.slug === slug)).filter(Boolean),
+  ) as typeof allColours
+
   const [activeIdx, setActiveIdx] = useState(0)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
 
   const displayIdx = hoveredIdx ?? activeIdx
-  const displayColour = colours[displayIdx]
+  const displayColour = orderedColours[displayIdx] ?? orderedColours[0]
 
-  function handleImageError(idx: number) {
+  function handleError(idx: number) {
     setImageErrors((prev) => new Set(prev).add(idx))
   }
+
+  // Build per-group flat index lookup: each slug maps to its position in orderedColours
+  const slugToIdx = new Map(orderedColours.map((c, i) => [c.slug, i]))
 
   return (
     <div className='flex-1 min-w-0'>
@@ -49,22 +159,21 @@ function CataloguePanel({
           to={`/catalogue-colors/${catalogueSlug}`}
           className='text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors shrink-0 ml-4'
         >
-          View all {colours.length} →
+          View all {allColours.length} →
         </Link>
       </div>
 
       {/* Large preview image */}
-      <div className='relative aspect-[16/7] rounded-2xl overflow-hidden mb-5 bg-gray-100'>
+      <div className='relative aspect-[16/7] rounded-2xl overflow-hidden mb-6 bg-gray-100'>
         {!imageErrors.has(displayIdx) ? (
           <img
             key={displayColour.imageUrl}
             src={displayColour.imageUrl}
             alt={`${displayColour.name} fabric swatch`}
             className='w-full h-full object-cover transition-opacity duration-300'
-            onError={() => handleImageError(displayIdx)}
+            onError={() => handleError(displayIdx)}
           />
         ) : (
-          /* Fallback to hex colour with texture pattern */
           <div
             className='w-full h-full'
             style={{
@@ -73,14 +182,11 @@ function CataloguePanel({
                 catalogueSlug === 'luxury'
                   ? `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.07) 2px, rgba(255,255,255,0.07) 4px),
                      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.07) 2px, rgba(255,255,255,0.07) 4px)`
-                  : `radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.1) 0%, transparent 55%),
-                     radial-gradient(ellipse at 75% 65%, rgba(0,0,0,0.08) 0%, transparent 50%)`,
+                  : `radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.1) 0%, transparent 55%)`,
               backgroundSize: catalogueSlug === 'luxury' ? '5px 5px' : 'auto',
             }}
           />
         )}
-
-        {/* Colour name overlay */}
         <div className='absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent' />
         <div className='absolute bottom-3 left-4 flex items-center gap-2.5'>
           <span
@@ -97,62 +203,47 @@ function CataloguePanel({
         </div>
       </div>
 
-      {/* Swatch grid — staggered brick layout */}
-      {(() => {
-        // Tune columns so rows split cleanly:
-        // Luxury (17) → 9 cols = 9+8 (two rows)
-        // Renult (29) → 10 cols = 10+10+9 (three rows)
-        const cols = colours.length <= 20 ? 9 : 10
-        // swatch = 40px, gap = 8px → half-offset = (40+8)/2 = 24px
-        const rows: typeof colours[] = []
-        for (let i = 0; i < colours.length; i += cols) {
-          rows.push(colours.slice(i, i + cols))
-        }
-        return (
-          <div className='flex flex-col gap-2'>
-            {rows.map((row, rowIdx) => (
-              <div
-                key={rowIdx}
-                className='flex gap-2'
-                style={{ marginLeft: rowIdx % 2 === 1 ? '24px' : '0px' }}
-              >
-                {row.map((colour, colIdx) => {
-                  const globalIdx = rowIdx * cols + colIdx
+      {/* Grouped swatch columns */}
+      <div className='grid grid-cols-3 gap-x-4 gap-y-0'>
+        {groups.map((group) => {
+          const groupColours = group.slugs
+            .map((slug) => allColours.find((c) => c.slug === slug))
+            .filter(Boolean) as typeof allColours
+
+          return (
+            <div key={group.label}>
+              {/* Group label */}
+              <p className='text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-2'>
+                {group.label}
+              </p>
+              {/* 4-per-row swatch grid */}
+              <div className='grid grid-cols-4 gap-1.5 mb-1'>
+                {groupColours.map((colour) => {
+                  const globalIdx = slugToIdx.get(colour.slug) ?? 0
                   return (
-                    <button
+                    <Swatch
                       key={colour.slug}
-                      title={colour.name}
-                      onClick={() => setActiveIdx(globalIdx)}
-                      onMouseEnter={() => setHoveredIdx(globalIdx)}
-                      onMouseLeave={() => setHoveredIdx(null)}
-                      className={`relative w-10 h-10 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
-                        globalIdx === activeIdx
-                          ? 'ring-2 ring-offset-2 ring-gray-800 scale-105 shadow-lg'
-                          : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
-                      }`}
-                    >
-                      {!imageErrors.has(globalIdx) ? (
-                        <img
-                          src={colour.imageUrl}
-                          alt={colour.name}
-                          className='w-full h-full object-cover'
-                          loading='lazy'
-                          onError={() => handleImageError(globalIdx)}
-                        />
-                      ) : (
-                        <div className='w-full h-full' style={{ backgroundColor: colour.hex }} />
-                      )}
-                    </button>
+                      colour={colour}
+                      globalIdx={globalIdx}
+                      isActive={globalIdx === activeIdx}
+                      hasError={imageErrors.has(globalIdx)}
+                      onSelect={setActiveIdx}
+                      onHover={setHoveredIdx}
+                      onHoverEnd={() => setHoveredIdx(null)}
+                      onError={handleError}
+                    />
                   )
                 })}
               </div>
-            ))}
-          </div>
-        )
-      })()}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
+
+// ── Page section ─────────────────────────────────────────────────────────────
 
 export default function ProductColourCatalogue({
   category,
@@ -198,9 +289,7 @@ export default function ProductColourCatalogue({
             name='Luxury'
             material='Premium Velvet / Suede'
           />
-
           <div className='hidden sm:block w-px bg-gray-100 self-stretch' />
-
           <CataloguePanel
             catalogueSlug='renult'
             name='Renult'
