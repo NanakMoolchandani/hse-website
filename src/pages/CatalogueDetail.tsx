@@ -59,6 +59,7 @@ export const CATALOGUE_COLOURS: Record<string, FabricColour[]> = {
   ],
   luxury: [
     { name: 'Greige',         hex: '#98927C', slug: 'greige',         imageUrl: luxuryImageUrl('01-greige.webp') },
+    { name: 'Taupe',          hex: '#676057', slug: 'taupe',          imageUrl: luxuryImageUrl('02-taupe.webp') },
     { name: 'Golden Brown',   hex: '#856C4A', slug: 'golden-brown',   imageUrl: luxuryImageUrl('02-golden-brown.webp') },
     { name: 'Deep Drab',      hex: '#413B2E', slug: 'deep-drab',      imageUrl: luxuryImageUrl('03-deep-drab.webp') },
     { name: 'Russet Brown',   hex: '#7A5641', slug: 'russet-brown',   imageUrl: luxuryImageUrl('04-russet-brown.webp') },
