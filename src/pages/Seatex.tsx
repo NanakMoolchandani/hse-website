@@ -62,7 +62,7 @@ export default function Seatex() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
           <div className='flex gap-6 items-start'>
             <aside className='hidden md:block w-52 flex-shrink-0'>
-              <div className='sticky top-4'>
+              <div className='sticky top-[112px] max-h-[calc(100vh-120px)] overflow-y-auto pr-1'>
                 <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2 px-1'>Collections</p>
                 <nav className='space-y-0.5'>
                   <button onClick={() => selectCollection(ALL)}
