@@ -21,7 +21,42 @@ function luxuryImageUrl(filename: string): string {
   return `${SUPABASE_STORAGE_BASE}/colour-catalogues/luxury/${filename}`
 }
 
+function renultImageUrl(filename: string): string {
+  return `${SUPABASE_STORAGE_BASE}/colour-catalogues/renult/${filename}`
+}
+
 export const CATALOGUE_COLOURS: Record<string, FabricColour[]> = {
+  renult: [
+    { name: 'Cherry Red',         hex: '#C41A1B', slug: 'cherry-red',          imageUrl: renultImageUrl('01-cherry-red.webp') },
+    { name: 'Dark Brown',         hex: '#181614', slug: 'dark-brown',          imageUrl: renultImageUrl('02-dark-brown.webp') },
+    { name: 'Beige',              hex: '#A69A83', slug: 'beige',               imageUrl: renultImageUrl('03-beige.webp') },
+    { name: 'Jet Black',          hex: '#202220', slug: 'jet-black',           imageUrl: renultImageUrl('04-jet-black.webp') },
+    { name: 'Jet Black',          hex: '#1F1F1F', slug: 'jet-black-5',         imageUrl: renultImageUrl('05-jet-black-5.webp') },
+    { name: 'Chocolate Brown',    hex: '#201814', slug: 'chocolate-brown',     imageUrl: renultImageUrl('06-chocolate-brown.webp') },
+    { name: 'Dove Grey',          hex: '#B1B3B2', slug: 'dove-grey',           imageUrl: renultImageUrl('07-dove-grey.webp') },
+    { name: 'Dark Brown',         hex: '#844D2F', slug: 'dark-brown-8',        imageUrl: renultImageUrl('08-dark-brown-8.webp') },
+    { name: 'Mahogany',           hex: '#542D27', slug: 'mahogany',            imageUrl: renultImageUrl('09-mahogany.webp') },
+    { name: 'Maroon',             hex: '#381E22', slug: 'maroon',              imageUrl: renultImageUrl('10-maroon.webp') },
+    { name: 'Dark Olive',         hex: '#68695C', slug: 'dark-olive',          imageUrl: renultImageUrl('11-dark-olive.webp') },
+    { name: 'Wine Red',           hex: '#B31F33', slug: 'wine-red',            imageUrl: renultImageUrl('12-wine-red.webp') },
+    { name: 'Dark Brown',         hex: '#3C3531', slug: 'dark-brown-13',       imageUrl: renultImageUrl('13-dark-brown-13.webp') },
+    { name: 'Midnight Blue',      hex: '#1E2328', slug: 'midnight-blue',       imageUrl: renultImageUrl('14-midnight-blue.webp') },
+    { name: 'Bone',               hex: '#D5D5D1', slug: 'bone',                imageUrl: renultImageUrl('15-bone.webp') },
+    { name: 'Burgundy',           hex: '#50132D', slug: 'burgundy',            imageUrl: renultImageUrl('16-burgundy.webp') },
+    { name: 'Chocolate Brown',    hex: '#291D1A', slug: 'chocolate-brown-17',  imageUrl: renultImageUrl('17-chocolate-brown-17.webp') },
+    { name: 'Chocolate Brown',    hex: '#4D3428', slug: 'chocolate-brown-18',  imageUrl: renultImageUrl('18-chocolate-brown-18.webp') },
+    { name: 'Chocolate Brown',    hex: '#231D1A', slug: 'chocolate-brown-19',  imageUrl: renultImageUrl('19-chocolate-brown-19.webp') },
+    { name: 'Jet Black',          hex: '#21272C', slug: 'jet-black-20',        imageUrl: renultImageUrl('20-jet-black-20.webp') },
+    { name: 'Chocolate Brown',    hex: '#5F2E20', slug: 'chocolate-brown-21',  imageUrl: renultImageUrl('21-chocolate-brown-21.webp') },
+    { name: 'Navy Blue',          hex: '#28323C', slug: 'navy-blue',           imageUrl: renultImageUrl('22-navy-blue.webp') },
+    { name: 'Chocolate Brown',    hex: '#2F2520', slug: 'chocolate-brown-23',  imageUrl: renultImageUrl('23-chocolate-brown-23.webp') },
+    { name: 'Red',                hex: '#CE2828', slug: 'red',                 imageUrl: renultImageUrl('24-red.webp') },
+    { name: 'Charcoal Grey',      hex: '#313331', slug: 'charcoal-grey',       imageUrl: renultImageUrl('25-charcoal-grey.webp') },
+    { name: 'Charcoal Grey',      hex: '#232829', slug: 'charcoal-grey-26',    imageUrl: renultImageUrl('26-charcoal-grey-26.webp') },
+    { name: 'Chocolate Brown',    hex: '#2F261F', slug: 'chocolate-brown-27',  imageUrl: renultImageUrl('27-chocolate-brown-27.webp') },
+    { name: 'Dark Brown',         hex: '#343331', slug: 'dark-brown-28',       imageUrl: renultImageUrl('28-dark-brown-28.webp') },
+    { name: 'Navy Blue',          hex: '#1E2626', slug: 'navy-blue-29',        imageUrl: renultImageUrl('29-navy-blue-29.webp') },
+  ],
   luxury: [
     { name: 'Greige',         hex: '#98927C', slug: 'greige',         imageUrl: luxuryImageUrl('01-greige.webp') },
     { name: 'Golden Brown',   hex: '#856C4A', slug: 'golden-brown',   imageUrl: luxuryImageUrl('02-golden-brown.webp') },

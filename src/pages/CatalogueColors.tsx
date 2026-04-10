@@ -18,6 +18,14 @@ export interface ColourCatalogue {
 
 export const COLOUR_CATALOGUES: ColourCatalogue[] = [
   {
+    slug: 'renult',
+    name: 'Renult',
+    description: 'Premium leatherette upholstery — smooth, durable synthetic leather with a soft sheen. Available across a wide range of classic and contemporary shades.',
+    material: 'Premium Leatherette',
+    colorCount: 29,
+    previewColors: ['#C41A1B', '#181614', '#A69A83', '#202220', '#B1B3B2', '#844D2F', '#542D27', '#B31F33'],
+  },
+  {
     slug: 'luxury',
     name: 'Luxury',
     description: 'Premium velvet and suede upholstery fabrics — rich, deep colors with a soft matte finish. Ideal for executive chairs, recliners, and high-end seating.',
