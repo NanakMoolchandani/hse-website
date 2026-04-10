@@ -90,11 +90,8 @@ export default function MVMProduct() {
 
   const productCategory = getCategoryByEnum(product.category || '')
 
-  // Detect mesh-back chairs by checking name and materials for "mesh" keyword
-  const meshKeyword = /\bmesh\b/i
-  const isMeshBack =
-    meshKeyword.test(product.name || '') ||
-    (product.metadata?.materials ?? []).some((m) => meshKeyword.test(m))
+  // Detect mesh-back chairs by product name only — materials metadata can be unreliable
+  const isMeshBack = /\bmesh\b/i.test(product.name || '')
 
   const images = product.processed_photo_urls?.length > 0
     ? product.processed_photo_urls
