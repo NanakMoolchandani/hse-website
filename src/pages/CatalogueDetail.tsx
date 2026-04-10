@@ -22,24 +22,7 @@ function luxuryImageUrl(filename: string): string {
 }
 
 export const CATALOGUE_COLOURS: Record<string, FabricColour[]> = {
-  luxury: [
-    { name: 'Greige',          hex: '#A09F93', slug: 'greige',          imageUrl: luxuryImageUrl('01-greige.webp') },
-    { name: 'Golden Brown',    hex: '#9C7850', slug: 'golden-brown',    imageUrl: luxuryImageUrl('02-golden-brown.webp') },
-    { name: 'Deep Drab',       hex: '#41403B', slug: 'deep-drab',       imageUrl: luxuryImageUrl('03-deep-drab.webp') },
-    { name: 'Russet Brown',    hex: '#80482B', slug: 'russet-brown',    imageUrl: luxuryImageUrl('04-russet-brown.webp') },
-    { name: 'Mist Grey',       hex: '#A3ADB1', slug: 'mist-grey',       imageUrl: luxuryImageUrl('05-mist-grey.webp') },
-    { name: 'Charcoal Grey',   hex: '#484D4E', slug: 'charcoal-grey',   imageUrl: luxuryImageUrl('06-charcoal-grey.webp') },
-    { name: 'Petrol Blue',     hex: '#304C4E', slug: 'petrol-blue',     imageUrl: luxuryImageUrl('07-petrol-blue.webp') },
-    { name: 'Ruby Red',        hex: '#CC2144', slug: 'ruby-red',        imageUrl: luxuryImageUrl('08-ruby-red.webp') },
-    { name: 'Plum Grey',       hex: '#5D5762', slug: 'plum-grey',       imageUrl: luxuryImageUrl('09-plum-grey.webp') },
-    { name: 'Dusty Cedar',     hex: '#A5656A', slug: 'dusty-cedar',     imageUrl: luxuryImageUrl('10-dusty-cedar.webp') },
-    { name: 'Dusty Teal',      hex: '#477E86', slug: 'dusty-teal',      imageUrl: luxuryImageUrl('11-dusty-teal.webp') },
-    { name: 'Teal',            hex: '#2E8384', slug: 'teal',            imageUrl: luxuryImageUrl('12-teal.webp') },
-    { name: 'Sapphire Blue',   hex: '#1E4F8C', slug: 'sapphire-blue',   imageUrl: luxuryImageUrl('13-sapphire-blue.webp') },
-    { name: 'Hunter Green',    hex: '#136041', slug: 'hunter-green',    imageUrl: luxuryImageUrl('14-hunter-green.webp') },
-    { name: 'Deep Teal',       hex: '#007D82', slug: 'deep-teal',       imageUrl: luxuryImageUrl('15-deep-teal.webp') },
-    { name: 'Charcoal Black',  hex: '#2A2F32', slug: 'charcoal-black',  imageUrl: luxuryImageUrl('16-charcoal-grey.webp') },
-  ],
+  luxury: [],
 }
 
 // ── Page Component ─────────────────────────────────────────────────

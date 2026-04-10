@@ -22,8 +22,8 @@ export const COLOUR_CATALOGUES: ColourCatalogue[] = [
     name: 'Luxury',
     description: 'Premium velvet and suede upholstery fabrics — rich, deep colors with a soft matte finish. Ideal for executive chairs, recliners, and high-end seating.',
     material: 'Premium Velvet / Suede',
-    colorCount: 16,
-    previewColors: ['#A09F93', '#9C7850', '#CC2144', '#1E4F8C', '#007D82', '#136041', '#2E8384', '#484D4E'],
+    colorCount: 0,
+    previewColors: [],
   },
 ]
 
