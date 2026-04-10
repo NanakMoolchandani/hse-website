@@ -93,7 +93,7 @@ function Swatch({
       onMouseLeave={onHoverEnd}
       className={`relative w-10 h-10 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
         isActive
-          ? 'ring-2 ring-offset-2 ring-gray-800 scale-105 shadow-md'
+          ? 'ring-2 ring-offset-[3px] ring-gray-800 shadow-sm'
           : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
       }`}
     >
@@ -203,21 +203,24 @@ function CataloguePanel({
         </div>
       </div>
 
-      {/* Grouped swatch columns */}
-      <div className='grid grid-cols-3 gap-x-4 gap-y-0'>
+      {/* Grouped swatch columns — equal-height bordered cards */}
+      <div className='grid grid-cols-3 gap-3 items-stretch'>
         {groups.map((group) => {
           const groupColours = group.slugs
             .map((slug) => allColours.find((c) => c.slug === slug))
             .filter(Boolean) as typeof allColours
 
           return (
-            <div key={group.label}>
+            <div
+              key={group.label}
+              className='border border-gray-100 rounded-2xl p-3 flex flex-col'
+            >
               {/* Group label */}
-              <p className='text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-2'>
+              <p className='text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-3'>
                 {group.label}
               </p>
-              {/* 4-per-row swatch grid */}
-              <div className='grid grid-cols-4 gap-1.5 mb-1'>
+              {/* 4-per-row swatch grid with generous gap */}
+              <div className='grid grid-cols-4 gap-3'>
                 {groupColours.map((colour) => {
                   const globalIdx = slugToIdx.get(colour.slug) ?? 0
                   return (
