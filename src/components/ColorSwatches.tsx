@@ -1,72 +1,58 @@
 import { useState } from 'react'
 import type { ProductColor } from '@/src/lib/supabase'
 
-// Cloth (Kapda) colors with fabric-like texture - 30 colors
+// Luxury catalogue — Premium Velvet / Suede (17 colors)
 const CLOTH_COLORS = [
-  { name: 'Royal Blue', hex: '#1a3a6b' },
-  { name: 'Charcoal Grey', hex: '#3d3d3d' },
-  { name: 'Maroon', hex: '#6b1a2a' },
-  { name: 'Forest Green', hex: '#1a4d2e' },
-  { name: 'Navy Black', hex: '#1a1a2e' },
-  { name: 'Burgundy', hex: '#4a0e1e' },
-  { name: 'Coffee Brown', hex: '#3e2723' },
-  { name: 'Steel Grey', hex: '#5c6370' },
-  { name: 'Sky Blue', hex: '#1a6b9a' },
-  { name: 'Teal', hex: '#005a5e' },
-  { name: 'Olive Green', hex: '#4a5226' },
-  { name: 'Mustard', hex: '#b5860d' },
-  { name: 'Rust Orange', hex: '#8b3a1a' },
-  { name: 'Purple', hex: '#4a1a6b' },
-  { name: 'Rose Pink', hex: '#8b2252' },
-  { name: 'Camel', hex: '#8b6530' },
-  { name: 'Slate Blue', hex: '#2e3f6e' },
-  { name: 'Dark Teal', hex: '#1a3d3d' },
-  { name: 'Wine Red', hex: '#5c1a2a' },
-  { name: 'Graphite', hex: '#2e2e2e' },
-  { name: 'Black', hex: '#111111' },
-  { name: 'Beige', hex: '#c4a882' },
-  { name: 'Cobalt Blue', hex: '#1e3d8f' },
-  { name: 'Dark Olive', hex: '#3d3d1a' },
-  { name: 'Jade Green', hex: '#1a5a3a' },
-  { name: 'Light Grey', hex: '#909090' },
-  { name: 'Dark Maroon', hex: '#3d0d1a' },
-  { name: 'Chocolate Brown', hex: '#4a2010' },
-  { name: 'Teal Green', hex: '#1a5a4a' },
-  { name: 'Peacock Blue', hex: '#1a4a5e' },
+  { name: 'Greige',         hex: '#98927C' },
+  { name: 'Taupe',          hex: '#676057' },
+  { name: 'Golden Brown',   hex: '#856C4A' },
+  { name: 'Deep Drab',      hex: '#413B2E' },
+  { name: 'Russet Brown',   hex: '#7A5641' },
+  { name: 'Mist Grey',      hex: '#6B6B66' },
+  { name: 'Charcoal Grey',  hex: '#373733' },
+  { name: 'Petrol Blue',    hex: '#123740' },
+  { name: 'Ruby Red',       hex: '#7E021D' },
+  { name: 'Plum Grey',      hex: '#3B383C' },
+  { name: 'Dusty Cedar',    hex: '#643430' },
+  { name: 'Dusty Teal',     hex: '#405E64' },
+  { name: 'Teal',           hex: '#1C5F6B' },
+  { name: 'Sapphire Blue',  hex: '#053060' },
+  { name: 'Hunter Green',   hex: '#1A3E2F' },
+  { name: 'Deep Teal',      hex: '#0F4B55' },
+  { name: 'Charcoal Black', hex: '#1E2625' },
 ]
 
-// Leatherette colors with leather-like texture - 30 colors
+// Renult catalogue — Premium Leatherette (29 colors)
 const LEATHERETTE_COLORS = [
-  { name: 'Jet Black', hex: '#1a1a1a' },
-  { name: 'Dark Brown', hex: '#3e2213' },
-  { name: 'Tan', hex: '#9b6e2e' },
-  { name: 'Cream', hex: '#d4c5a9' },
-  { name: 'Oxblood', hex: '#4a0000' },
-  { name: 'Walnut', hex: '#5c3317' },
-  { name: 'Slate', hex: '#4a4a4a' },
-  { name: 'Off White', hex: '#f0ede6' },
-  { name: 'Caramel', hex: '#a05c28' },
-  { name: 'Chocolate', hex: '#3d1c02' },
-  { name: 'Burgundy Wine', hex: '#6b0f1a' },
-  { name: 'Saddle Brown', hex: '#7a3d1a' },
-  { name: 'Navy', hex: '#1a1a4a' },
-  { name: 'Mocha', hex: '#6b4226' },
-  { name: 'Taupe', hex: '#8c7b6e' },
-  { name: 'Vintage Brown', hex: '#6b3a1e' },
-  { name: 'Gunmetal', hex: '#2e3336' },
-  { name: 'Ivory', hex: '#e8dfc8' },
-  { name: 'Forest Green', hex: '#1a3d2e' },
-  { name: 'Midnight Blue', hex: '#1a1a3e' },
-  { name: 'Espresso', hex: '#2c1005' },
-  { name: 'Sandy Beige', hex: '#c9a878' },
-  { name: 'Cognac', hex: '#9b4e1a' },
-  { name: 'British Green', hex: '#1e3d2a' },
-  { name: 'Cherry Red', hex: '#6b0a0a' },
-  { name: 'Parchment', hex: '#e8d5b0' },
-  { name: 'Steel Blue', hex: '#2a3f6e' },
-  { name: 'Tobacco', hex: '#7a4a20' },
-  { name: 'Mahogany', hex: '#5c1e0a' },
-  { name: 'Platinum', hex: '#9a9a9a' },
+  { name: 'Cherry Red',      hex: '#C41A1B' },
+  { name: 'Dark Brown',      hex: '#181614' },
+  { name: 'Beige',           hex: '#A69A83' },
+  { name: 'Jet Black',       hex: '#202220' },
+  { name: 'Jet Black II',    hex: '#1F1F1F' },
+  { name: 'Chocolate Brown', hex: '#201814' },
+  { name: 'Dove Grey',       hex: '#B1B3B2' },
+  { name: 'Tobacco Brown',   hex: '#844D2F' },
+  { name: 'Mahogany',        hex: '#542D27' },
+  { name: 'Maroon',          hex: '#381E22' },
+  { name: 'Dark Olive',      hex: '#68695C' },
+  { name: 'Wine Red',        hex: '#B31F33' },
+  { name: 'Deep Brown',      hex: '#3C3531' },
+  { name: 'Midnight Blue',   hex: '#1E2328' },
+  { name: 'Bone',            hex: '#D5D5D1' },
+  { name: 'Burgundy',        hex: '#50132D' },
+  { name: 'Dark Chocolate',  hex: '#291D1A' },
+  { name: 'Milk Chocolate',  hex: '#4D3428' },
+  { name: 'Espresso',        hex: '#231D1A' },
+  { name: 'Jet Black III',   hex: '#21272C' },
+  { name: 'Rust Brown',      hex: '#5F2E20' },
+  { name: 'Navy Blue',       hex: '#28323C' },
+  { name: 'Cocoa',           hex: '#2F2520' },
+  { name: 'Red',             hex: '#CE2828' },
+  { name: 'Charcoal Grey',   hex: '#313331' },
+  { name: 'Ash Grey',        hex: '#232829' },
+  { name: 'Mocha',           hex: '#2F261F' },
+  { name: 'Warm Brown',      hex: '#343331' },
+  { name: 'Navy Teal',       hex: '#1E2626' },
 ]
 
 function SwatchCircle({
@@ -175,8 +161,8 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
                 </svg>
               </div>
               <div>
-                <h3 className='font-semibold text-gray-900 text-base'>Cloth</h3>
-                <p className='text-xs text-gray-400'>Breathable fabric upholstery</p>
+                <h3 className='font-semibold text-gray-900 text-base'>Luxury</h3>
+                <p className='text-xs text-gray-400'>Premium Velvet / Suede</p>
               </div>
             </div>
 
@@ -200,7 +186,7 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
               </div>
             </div>
 
-            <div className='grid grid-cols-10 gap-2'>
+            <div className='grid grid-cols-6 sm:grid-cols-9 gap-2'>
               {CLOTH_COLORS.map((color, i) => (
                 <SwatchCircle
                   key={color.name}
@@ -224,8 +210,8 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
                 </svg>
               </div>
               <div>
-                <h3 className='font-semibold text-gray-900 text-base'>Leatherette</h3>
-                <p className='text-xs text-gray-400'>Premium synthetic leather finish</p>
+                <h3 className='font-semibold text-gray-900 text-base'>Renult</h3>
+                <p className='text-xs text-gray-400'>Premium Leatherette</p>
               </div>
             </div>
 
@@ -244,7 +230,7 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
               />
               <div className='absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10' />
               <div className={`absolute bottom-3 left-4 text-sm font-medium ${
-                ['#f0ede6', '#d4c5a9', '#e8dfc8', '#e8e0d0'].includes(LEATHERETTE_COLORS[activeLeather].hex)
+                ['#A69A83', '#B1B3B2', '#D5D5D1'].includes(LEATHERETTE_COLORS[activeLeather].hex)
                   ? 'text-gray-800/80'
                   : 'text-white/80'
               }`}>
@@ -252,7 +238,7 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
               </div>
             </div>
 
-            <div className='grid grid-cols-10 gap-2'>
+            <div className='grid grid-cols-6 sm:grid-cols-9 gap-2'>
               {LEATHERETTE_COLORS.map((color, i) => (
                 <SwatchCircle
                   key={color.name}
