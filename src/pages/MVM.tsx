@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { MessageCircle, Phone, ArrowLeft, Search } from 'lucide-react'
+import { MessageCircle, Search } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { CATEGORIES } from '@/src/lib/categories'
@@ -64,48 +64,8 @@ export default function MVM() {
         ])}
       />
 
-      {/* ── Compact Header ───────────────────────────────────────────── */}
-      <header className='bg-white border-b border-gray-100'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5'>
-          <div className='flex items-start sm:items-center justify-between gap-4 flex-wrap'>
-            <div>
-              <Link
-                to='/home'
-                className='inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors mb-1.5'
-              >
-                <ArrowLeft className='w-3.5 h-3.5' />
-                Back to Home
-              </Link>
-              <div className='flex items-center gap-3'>
-                <h1 className='text-xl sm:text-2xl font-bold text-gray-900'>MVM Aasanam</h1>
-                <span className='hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold'>
-                  Our Own Manufacturing
-                </span>
-              </div>
-              <p className='text-sm text-gray-500 mt-0.5'>
-                Premium furniture by Hari Shewa Enterprises · Neemuch, MP
-              </p>
-            </div>
-
-            <div className='flex items-center gap-2.5 flex-shrink-0'>
-              <a
-                href='tel:+919981516171'
-                className='inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors'
-              >
-                <Phone className='w-3.5 h-3.5' />
-                Call
-              </a>
-              <a
-                href='https://wa.me/919981516171?text=Hi%2C%20I%27m%20interested%20in%20MVM%20Aasanam%20furniture.%20Please%20share%20details.'
-                className='inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-colors'
-              >
-                <MessageCircle className='w-3.5 h-3.5' />
-                WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Spacer to clear the fixed navbar (main nav 64px + brand bar 44px desktop) */}
+      <div className='h-16 md:h-[108px]' />
 
       {/* ── Body: Sidebar + Grid ─────────────────────────────────────── */}
       <div className='bg-gray-50 min-h-screen'>
