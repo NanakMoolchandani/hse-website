@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { fetchProduct, fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProductWithVariants, fetchProducts, type CatalogProduct, type ProductWithVariants } from '@/src/lib/supabase'
 import { getCategoryBySlug, getCategoryByEnum } from '@/src/lib/categories'
 import { FullScreenScrollFX, type FullScreenFXAPI } from '@/src/components/ui/full-screen-scroll-fx'
 import ImageGallery from '@/src/components/ImageGallery'
@@ -28,7 +28,8 @@ const DEFAULT_GLOW = { left: '#06b6d4', leftLight: '#22d3ee', right: '#f43f5e', 
 
 export default function ProductPage() {
   const { category, slug } = useParams<{ category: string; slug: string }>()
-  const [product, setProduct] = useState<CatalogProduct | null>(null)
+  const [product, setProduct] = useState<ProductWithVariants | null>(null)
+  const [selectedVariant, setSelectedVariant] = useState<CatalogProduct | null>(null)
   const [related, setRelated] = useState<CatalogProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [showHindi, setShowHindi] = useState(false)
@@ -51,7 +52,8 @@ export default function ProductPage() {
   useEffect(() => {
     if (!slug) return
     setLoading(true)
-    fetchProduct(slug).then((data) => {
+    setSelectedVariant(null)
+    fetchProductWithVariants(slug).then((data) => {
       setProduct(data)
       setLoading(false)
 
@@ -64,12 +66,15 @@ export default function ProductPage() {
     })
   }, [slug])
 
-  // Build scroll sections from product images
+  // Build scroll sections from selected variant or base product images
   const scrollSections = useMemo(() => {
     if (!product) return []
-    const images = product.processed_photo_urls?.length > 0
-      ? product.processed_photo_urls
-      : product.raw_photo_urls || []
+    const activeProduct = selectedVariant ?? product
+    const images = activeProduct.processed_photo_urls?.length > 0
+      ? activeProduct.processed_photo_urls
+      : product.processed_photo_urls?.length > 0
+        ? product.processed_photo_urls
+        : product.raw_photo_urls || []
     const features = product.metadata?.features || []
     const productCategory = getCategoryByEnum(product.category || '')
     const glow = CATEGORY_GLOW[product.category || ''] || DEFAULT_GLOW
@@ -110,7 +115,7 @@ export default function ProductPage() {
         </>
       ),
     }))
-  }, [product])
+  }, [product, selectedVariant])
 
   if (loading) {
     return (
@@ -139,9 +144,12 @@ export default function ProductPage() {
   const productCategory = getCategoryByEnum(product.category || '')
   const features = product.metadata?.features || []
 
-  const productImages = product.processed_photo_urls?.length > 0
-    ? product.processed_photo_urls
-    : product.raw_photo_urls || []
+  const activeProduct = selectedVariant ?? product
+  const productImages = activeProduct.processed_photo_urls?.length > 0
+    ? activeProduct.processed_photo_urls
+    : product.processed_photo_urls?.length > 0
+      ? product.processed_photo_urls
+      : product.raw_photo_urls || []
 
   const ogImage = product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || undefined
 
@@ -301,6 +309,13 @@ export default function ProductPage() {
               isExecutiveChair
               colors={product.metadata?.colors}
               materials={product.metadata?.materials}
+              variants={product.variants}
+              selectedHex={selectedVariant?.color_hex ?? null}
+              onVariantSelect={(v) => {
+                setSelectedVariant(v)
+                // Scroll back to top of image gallery when switching colors
+                fxApiRef.current?.goTo(0)
+              }}
             />
           </div>
         )}

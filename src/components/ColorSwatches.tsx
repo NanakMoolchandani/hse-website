@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { ProductColor } from '@/src/lib/supabase'
+import type { ProductColor, CatalogProduct } from '@/src/lib/supabase'
 
 // Luxury catalogue — Premium Velvet / Suede (17 colors)
 const CLOTH_COLORS = [
@@ -60,11 +60,13 @@ function SwatchCircle({
   isActive,
   onClick,
   texture,
+  hasVariant,
 }: {
   color: { name: string; hex: string }
   isActive: boolean
   onClick: () => void
   texture: 'cloth' | 'leather'
+  hasVariant?: boolean
 }) {
   return (
     <button
@@ -72,7 +74,7 @@ function SwatchCircle({
       className={`group relative flex flex-col items-center gap-1.5 transition-all duration-200 ${
         isActive ? 'scale-110' : 'hover:scale-105'
       }`}
-      title={color.name}
+      title={hasVariant ? `${color.name} — view chair` : color.name}
     >
       <div
         className={`relative w-9 h-9 rounded-full overflow-hidden transition-all duration-200 ${
@@ -115,6 +117,10 @@ function SwatchCircle({
               : 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 50%)',
           }}
         />
+        {/* Small dot indicator: this color has real chair photos */}
+        {hasVariant && (
+          <div className='absolute bottom-0.5 right-0.5 w-2 h-2 rounded-full bg-white shadow ring-1 ring-gray-300' />
+        )}
       </div>
 
       <span
@@ -132,11 +138,30 @@ interface ColorSwatchesProps {
   colors?: ProductColor[]
   materials?: string[]
   isExecutiveChair?: boolean
+  /** Color variants with actual chair photos — matched by colorHex */
+  variants?: CatalogProduct[]
+  /** Called when user selects a variant color (null = revert to base product) */
+  onVariantSelect?: (variant: CatalogProduct | null) => void
+  /** Currently selected variant hex, if any */
+  selectedHex?: string | null
 }
 
-export default function ColorSwatches({ colors, materials, isExecutiveChair }: ColorSwatchesProps) {
+export default function ColorSwatches({
+  colors,
+  materials,
+  isExecutiveChair,
+  variants = [],
+  onVariantSelect,
+  selectedHex,
+}: ColorSwatchesProps) {
   const [activeCloth, setActiveCloth] = useState(0)
   const [activeLeather, setActiveLeather] = useState(0)
+
+  // Build a quick hex→variant lookup
+  const variantByHex: Record<string, CatalogProduct> = {}
+  for (const v of variants) {
+    if (v.color_hex) variantByHex[v.color_hex.toUpperCase()] = v
+  }
 
   // Executive chairs get the premium cloth/leatherette display
   if (isExecutiveChair) {
@@ -187,15 +212,22 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
             </div>
 
             <div className='grid grid-cols-6 sm:grid-cols-9 gap-2'>
-              {CLOTH_COLORS.map((color, i) => (
-                <SwatchCircle
-                  key={color.name}
-                  color={color}
-                  isActive={i === activeCloth}
-                  onClick={() => setActiveCloth(i)}
-                  texture='cloth'
-                />
-              ))}
+              {CLOTH_COLORS.map((color, i) => {
+                const variant = variantByHex[color.hex.toUpperCase()]
+                return (
+                  <SwatchCircle
+                    key={color.name}
+                    color={color}
+                    isActive={i === activeCloth}
+                    hasVariant={!!variant}
+                    onClick={() => {
+                      setActiveCloth(i)
+                      if (onVariantSelect) onVariantSelect(variant ?? null)
+                    }}
+                    texture='cloth'
+                  />
+                )
+              })}
             </div>
           </div>
 
@@ -239,20 +271,33 @@ export default function ColorSwatches({ colors, materials, isExecutiveChair }: C
             </div>
 
             <div className='grid grid-cols-6 sm:grid-cols-9 gap-2'>
-              {LEATHERETTE_COLORS.map((color, i) => (
-                <SwatchCircle
-                  key={color.name}
-                  color={color}
-                  isActive={i === activeLeather}
-                  onClick={() => setActiveLeather(i)}
-                  texture='leather'
-                />
-              ))}
+              {LEATHERETTE_COLORS.map((color, i) => {
+                const variant = variantByHex[color.hex.toUpperCase()]
+                return (
+                  <SwatchCircle
+                    key={color.name}
+                    color={color}
+                    isActive={i === activeLeather}
+                    hasVariant={!!variant}
+                    onClick={() => {
+                      setActiveLeather(i)
+                      if (onVariantSelect) onVariantSelect(variant ?? null)
+                    }}
+                    texture='leather'
+                  />
+                )
+              })}
             </div>
           </div>
         </div>
 
-        <p className='mt-6 text-sm text-gray-400 text-center'>
+        {variants.length > 0 && (
+          <p className='mt-4 text-xs text-gray-400 text-center'>
+            <span className='inline-block w-2 h-2 rounded-full bg-white ring-1 ring-gray-300 mr-1.5 align-middle' />
+            Colours with a dot have real chair photos — click to preview
+          </p>
+        )}
+        <p className='mt-2 text-sm text-gray-400 text-center'>
           Custom colours available on request. Contact us on WhatsApp for fabric and colour samples.
         </p>
       </div>
