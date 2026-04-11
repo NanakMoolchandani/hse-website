@@ -305,7 +305,7 @@ export default function MVMProduct() {
                 if (!hasDesc && bullets.length === 0) return null
 
                 return (
-                  <div className='mb-8'>
+                  <div className='mb-8 hidden md:block'>
                     <div className='flex items-center gap-2 mb-2'>
                       <p className='text-xs font-semibold tracking-wider uppercase text-gray-500'>
                         Description

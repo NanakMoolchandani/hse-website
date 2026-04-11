@@ -164,7 +164,7 @@ function CataloguePanel({
       </div>
 
       {/* Large preview image */}
-      <div className='relative aspect-[16/7] rounded-2xl overflow-hidden mb-6 bg-gray-100'>
+      <div className='relative aspect-[16/9] sm:aspect-[16/7] rounded-2xl overflow-hidden mb-6 bg-gray-100'>
         {!imageErrors.has(displayIdx) ? (
           <img
             key={displayColour.imageUrl}
@@ -204,7 +204,7 @@ function CataloguePanel({
       </div>
 
       {/* Grouped swatch columns — equal-height bordered cards */}
-      <div className='grid grid-cols-3 gap-3 items-stretch'>
+      <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch'>
         {groups.map((group) => {
           const groupColours = group.slugs
             .map((slug) => allColours.find((c) => c.slug === slug))
@@ -219,8 +219,8 @@ function CataloguePanel({
               <p className='text-[10px] font-semibold tracking-widest uppercase text-gray-400 mb-3'>
                 {group.label}
               </p>
-              {/* 4-per-row swatch grid with generous gap */}
-              <div className='grid grid-cols-4 gap-3'>
+              {/* 6-per-row on mobile (full-width card), 4-per-row on sm+ (1/3-width card) */}
+              <div className='grid grid-cols-6 sm:grid-cols-4 gap-2 sm:gap-3'>
                 {groupColours.map((colour) => {
                   const globalIdx = slugToIdx.get(colour.slug) ?? 0
                   return (
@@ -286,7 +286,7 @@ export default function ProductColourCatalogue({
         </div>
 
         {/* Two catalogue panels */}
-        <div className='flex flex-col sm:flex-row gap-10 lg:gap-14'>
+        <div className='flex flex-col sm:flex-row gap-8 sm:gap-10 lg:gap-14'>
           <CataloguePanel
             catalogueSlug='luxury'
             name='Luxury'

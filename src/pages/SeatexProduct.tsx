@@ -149,7 +149,7 @@ export default function SeatexProduct() {
 
               {/* Description */}
               {description && (
-                <div className='mb-8'>
+                <div className='mb-8 hidden md:block'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Description
                   </p>

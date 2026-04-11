@@ -150,10 +150,10 @@ export default function MVM() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-gray-50 px-6 pt-20 md:pt-[120px] pb-8'>
+            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-[120px] pb-8'>
 
               {/* Mobile: horizontal category strip */}
-              <div className='md:hidden mb-4'>
+              <div className='md:hidden mb-4 -mx-4 px-4'>
                 <div className='flex gap-2 overflow-x-auto pb-2'>
                   <button
                     onClick={() => selectCategory(ALL)}
@@ -183,7 +183,7 @@ export default function MVM() {
               </div>
 
               {/* Category title + search row */}
-              <div className='flex items-center gap-4 mb-4 flex-wrap'>
+              <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4'>
                 <div className='flex-1 min-w-0'>
                   <h2 className='text-lg font-bold text-gray-900'>{activeCat?.label ?? 'All Products'}</h2>
                   {activeCat?.description && (
@@ -192,7 +192,7 @@ export default function MVM() {
                     </p>
                   )}
                 </div>
-                <div className='relative flex-shrink-0 w-full sm:w-56'>
+                <div className='relative w-full sm:w-56 flex-shrink-0'>
                   <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
                   <input
                     type='text'

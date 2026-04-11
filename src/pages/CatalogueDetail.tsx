@@ -208,7 +208,7 @@ export default function CatalogueDetail() {
                     {colour.name}
                   </span>
                 </div>
-                <p className='mt-0.5 text-xs text-gray-600 uppercase tracking-wider ml-6'>
+                <p className='mt-0.5 text-xs text-gray-600 uppercase tracking-wider ml-6 hidden sm:block'>
                   {colour.hex}
                 </p>
               </button>
@@ -251,7 +251,7 @@ export default function CatalogueDetail() {
             {/* Close button */}
             <button
               onClick={() => setSelectedIdx(null)}
-              className='absolute -top-12 right-0 text-gray-400 hover:text-white transition-colors p-2'
+              className='absolute -top-10 right-0 sm:-top-12 text-gray-400 hover:text-white transition-colors p-2'
             >
               <X className='w-6 h-6' />
             </button>
@@ -276,18 +276,18 @@ export default function CatalogueDetail() {
             </div>
 
             {/* Info bar */}
-            <div className='mt-4 flex items-center justify-between'>
-              <div className='flex items-center gap-3'>
+            <div className='mt-4 flex items-center justify-between gap-3'>
+              <div className='flex items-center gap-3 min-w-0'>
                 <span
-                  className='w-8 h-8 rounded-full border-2 border-white/20'
+                  className='w-8 h-8 rounded-full border-2 border-white/20 flex-shrink-0'
                   style={{ backgroundColor: selectedColour.hex }}
                 />
-                <div>
-                  <h3 className='text-lg font-bold text-white'>{selectedColour.name}</h3>
-                  <p className='text-sm text-gray-500 uppercase tracking-wider'>{selectedColour.hex}</p>
+                <div className='min-w-0'>
+                  <h3 className='text-base sm:text-lg font-bold text-white truncate'>{selectedColour.name}</h3>
+                  <p className='text-xs sm:text-sm text-gray-500 uppercase tracking-wider'>{selectedColour.hex}</p>
                 </div>
               </div>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-2 flex-shrink-0'>
                 <button
                   onClick={handlePrev}
                   className='p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors'

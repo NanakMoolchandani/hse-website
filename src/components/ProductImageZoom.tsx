@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X, ZoomIn, Minus, Plus } from 'lucide-react'
 
 interface ProductImageZoomProps {
@@ -29,7 +30,8 @@ const ACCENT_CLASSES = {
   },
 }
 
-const ZOOM_LEVEL = 2.5
+const ZOOM_LEVEL = 3.5
+const ZOOM_PANEL_SIZE = 430
 
 export default function ProductImageZoom({
   images,
@@ -40,7 +42,8 @@ export default function ProductImageZoom({
   onError,
 }: ProductImageZoomProps) {
   const [isZooming, setIsZooming] = useState(false)
-  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 })
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [containerRect, setContainerRect] = useState<DOMRect | null>(null)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxScale, setLightboxScale] = useState(1)
   const [lightboxOffset, setLightboxOffset] = useState({ x: 0, y: 0 })
@@ -62,12 +65,11 @@ export default function ProductImageZoom({
     setLightboxOffset({ x: 0, y: 0 })
   }, [activeIndex])
 
-  // Desktop hover zoom
+  // Desktop hover zoom (Amazon-style)
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    setZoomPos({ x, y })
+    setContainerRect(rect)
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top })
     setIsZooming(true)
   }, [])
 
@@ -169,6 +171,42 @@ export default function ProductImageZoom({
     setLightboxOffset({ x: 0, y: 0 })
   }
 
+  // Calculate Amazon-style zoom lens + panel
+  const getZoomData = () => {
+    if (!containerRect || !isZooming) return null
+    if (window.innerWidth < 768) return null  // desktop only
+
+    const lensW = ZOOM_PANEL_SIZE / ZOOM_LEVEL
+    const lensH = ZOOM_PANEL_SIZE / ZOOM_LEVEL
+
+    // Clamp lens so it doesn't go outside the container
+    const lensX = Math.min(Math.max(mousePos.x - lensW / 2, 0), containerRect.width - lensW)
+    const lensY = Math.min(Math.max(mousePos.y - lensH / 2, 0), containerRect.height - lensH)
+
+    // Map lens position to background-position percentage
+    const bgX = containerRect.width > lensW ? (lensX / (containerRect.width - lensW)) * 100 : 50
+    const bgY = containerRect.height > lensH ? (lensY / (containerRect.height - lensH)) * 100 : 50
+
+    // Place zoom panel to the right of the container; fall back to left if no room
+    const gap = 16
+    let panelLeft = containerRect.right + gap
+    if (panelLeft + ZOOM_PANEL_SIZE > window.innerWidth - 8) {
+      panelLeft = containerRect.left - gap - ZOOM_PANEL_SIZE
+    }
+    // If no room on either side, skip
+    if (panelLeft < 0) return null
+
+    // Vertically align with container top, clamped to viewport
+    const panelTop = Math.min(
+      Math.max(containerRect.top, 8),
+      window.innerHeight - ZOOM_PANEL_SIZE - 8
+    )
+
+    return { lensX, lensY, lensW, lensH, bgX, bgY, panelLeft, panelTop }
+  }
+
+  const zoomData = getZoomData()
+
   if (images.length === 0) {
     return (
       <div className='relative aspect-square rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden mb-4'>
@@ -181,37 +219,37 @@ export default function ProductImageZoom({
 
   return (
     <>
-      {/* Main Image with hover zoom */}
+      {/* Main Image with Amazon-style zoom */}
       <div
         ref={imageContainerRef}
         className='relative aspect-square rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden mb-4 group'
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        style={{ cursor: zoomData ? 'none' : 'default' }}
       >
-        {/* Normal image */}
+        {/* Product image */}
         <img
           src={images[activeIndex]}
           alt={`${alt} - Image ${activeIndex + 1}`}
-          className={`w-full h-full object-contain p-6 transition-opacity duration-200 ${
-            isZooming ? 'opacity-0' : 'opacity-100'
-          }`}
+          className='w-full h-full object-contain p-6'
           onError={onError}
         />
 
-        {/* Zoomed image (desktop hover) — uses background-image trick */}
-        <div
-          className={`absolute inset-0 transition-opacity duration-200 hidden md:block ${
-            isZooming ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-          style={{
-            backgroundImage: `url(${images[activeIndex]})`,
-            backgroundSize: `${ZOOM_LEVEL * 100}%`,
-            backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`,
-            backgroundRepeat: 'no-repeat',
-            cursor: 'zoom-in',
-          }}
-          onClick={() => setLightboxOpen(true)}
-        />
+        {/* Lens overlay (desktop) */}
+        {zoomData && (
+          <div
+            className='absolute pointer-events-none hidden md:block'
+            style={{
+              left: zoomData.lensX,
+              top: zoomData.lensY,
+              width: zoomData.lensW,
+              height: zoomData.lensH,
+              border: '1.5px solid rgba(100, 116, 139, 0.6)',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 0 0 9999px rgba(255,255,255,0.35)',
+            }}
+          />
+        )}
 
         {/* Mobile tap-to-zoom overlay */}
         <button
@@ -220,7 +258,7 @@ export default function ProductImageZoom({
           aria-label='Tap to zoom'
         />
 
-        {/* Zoom hint */}
+        {/* Zoom hint (desktop) */}
         <div className={`absolute bottom-4 right-4 flex items-center gap-1.5 text-xs ${accent.hint} bg-black/30 backdrop-blur-sm px-2.5 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none hidden md:flex`}>
           <ZoomIn className='w-3.5 h-3.5' />
           Hover to zoom
@@ -279,6 +317,25 @@ export default function ProductImageZoom({
             </button>
           ))}
         </div>
+      )}
+
+      {/* Amazon-style zoom panel (rendered via portal so it can escape the container) */}
+      {zoomData && typeof document !== 'undefined' && createPortal(
+        <div
+          className='fixed z-[200] rounded-xl overflow-hidden border border-gray-200 shadow-2xl pointer-events-none'
+          style={{
+            left: zoomData.panelLeft,
+            top: zoomData.panelTop,
+            width: ZOOM_PANEL_SIZE,
+            height: ZOOM_PANEL_SIZE,
+            backgroundImage: `url(${images[activeIndex]})`,
+            backgroundSize: `${ZOOM_LEVEL * 100}%`,
+            backgroundPosition: `${zoomData.bgX}% ${zoomData.bgY}%`,
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: '#f9fafb',
+          }}
+        />,
+        document.body
       )}
 
       {/* Fullscreen Lightbox with pinch-to-zoom + button zoom */}

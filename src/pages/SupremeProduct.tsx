@@ -176,7 +176,7 @@ export default function SupremeProduct() {
 
               {/* Tags */}
               {product.tags.length > 0 && (
-                <div className='mb-6'>
+                <div className='mb-6 hidden md:block'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Tags
                   </p>
@@ -195,7 +195,7 @@ export default function SupremeProduct() {
 
               {/* Description */}
               {description && (
-                <div className='mb-8'>
+                <div className='mb-8 hidden md:block'>
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Description
                   </p>
