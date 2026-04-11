@@ -91,7 +91,7 @@ function Swatch({
       onClick={() => onSelect(globalIdx)}
       onMouseEnter={() => onHover(globalIdx)}
       onMouseLeave={onHoverEnd}
-      className={`relative w-10 h-10 flex-shrink-0 rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
+      className={`relative w-full aspect-square rounded-xl overflow-hidden transition-all duration-150 focus:outline-none ${
         isActive
           ? 'ring-2 ring-offset-[3px] ring-gray-800 shadow-sm'
           : 'ring-1 ring-gray-200 hover:ring-gray-400 hover:scale-105'
