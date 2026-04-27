@@ -287,15 +287,33 @@ export default function Home() {
             width={1920}
             height={1080}
           />
-          <div className='absolute inset-0 bg-black/40' />
-          <div className='relative z-10 text-center px-6'>
-            <h1 className='text-4xl font-bold text-white font-display tracking-tight'>
-              MVM आसनम
-            </h1>
-            <p className='text-white/70 text-sm font-medium tracking-widest uppercase mt-3'>
+          <div className='absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/80' />
+          <div className='relative z-10 text-center px-5 w-full max-w-sm'>
+            <p className='text-amber-300/90 text-[10px] font-semibold tracking-[0.3em] uppercase mb-3'>
               Est. 1997 · Neemuch, MP
             </p>
-            <ChevronDown className='w-6 h-6 text-white/50 mx-auto mt-8 animate-bounce' />
+            <h1 className='text-5xl font-bold text-white font-display tracking-tight leading-[1.05]'>
+              MVM आसनम
+            </h1>
+            <p className='text-white/80 text-sm font-medium mt-4 leading-relaxed'>
+              Premium office furniture and authorized dealer of Nilkamal, Supreme & Seatex.
+            </p>
+            <div className='flex flex-col gap-2.5 mt-7'>
+              <a
+                href='https://wa.me/919981516171'
+                className='inline-flex items-center justify-center gap-2 bg-white text-gray-900 font-semibold px-6 py-3 rounded-full text-sm'
+              >
+                <MessageCircle className='w-4 h-4' />
+                Get a Free Quote
+              </a>
+              <a
+                href='#collections'
+                className='inline-flex items-center justify-center gap-2 border border-white/30 text-white font-semibold px-6 py-3 rounded-full text-sm backdrop-blur-sm'
+              >
+                Explore Products
+              </a>
+            </div>
+            <ChevronDown className='w-5 h-5 text-white/50 mx-auto mt-8 animate-bounce' />
           </div>
         </section>
       ) : (

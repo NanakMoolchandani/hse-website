@@ -138,7 +138,7 @@ export default function Nilkamal() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-gray-50 px-6 pt-20 md:pt-[120px] pb-8'>
+            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-[120px] pb-8'>
 
               {/* Mobile: horizontal category strip */}
               <div className='md:hidden mb-4'>

@@ -94,7 +94,7 @@ export default function Seatex() {
                 </div>
               </div>
             </aside>
-            <main className='flex-1 min-w-0 bg-gray-50 px-6 pt-20 md:pt-[120px] pb-8'>
+            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-[120px] pb-8'>
               <div className='md:hidden mb-4'>
                 <div className='flex gap-2 overflow-x-auto pb-2'>
                   <button onClick={() => selectCollection(ALL)}

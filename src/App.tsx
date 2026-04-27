@@ -16,7 +16,6 @@ import Seatex from '@/src/pages/Seatex'
 import SeatexCollection from '@/src/pages/SeatexCollection'
 import SeatexProductPage from '@/src/pages/SeatexProduct'
 import MVM from '@/src/pages/MVM'
-import MVMCollection from '@/src/pages/MVMCollection'
 import MVMProductPage from '@/src/pages/MVMProduct'
 import Privacy from '@/src/pages/Privacy'
 import Terms from '@/src/pages/Terms'
@@ -120,10 +119,13 @@ function Navbar() {
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16'>
-          <Link to='/mvm' className={`flex items-center gap-2.5 text-base font-bold tracking-tight font-sans ${textColor}`}>
-            <img src='/logos/mvm-logo.png' alt='MVM Aasanam' className='w-9 h-9 rounded-full' />
-            Hari Shewa Enterprises
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-2'>
+          <Link to='/mvm' className={`flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight font-sans min-w-0 ${textColor}`}>
+            <img src='/logos/mvm-logo.png' alt='MVM Aasanam' className='w-8 h-8 sm:w-9 sm:h-9 rounded-full flex-shrink-0' />
+            <span className='text-[13px] sm:text-base truncate'>
+              <span className='sm:hidden'>Hari Shewa</span>
+              <span className='hidden sm:inline'>Hari Shewa Enterprises</span>
+            </span>
           </Link>
           <div className='hidden md:flex items-center gap-8'>
             {NAV_LINKS.map((l) =>
@@ -293,25 +295,25 @@ function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className={`fixed inset-0 z-40 flex flex-col pt-16 ${isHome ? 'bg-black' : 'bg-white'}`}>
-          <div className='flex flex-col px-6 py-8 gap-6'>
+        <div className={`fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto ${isHome ? 'bg-black' : 'bg-white'}`}>
+          <div className='flex flex-col px-5 py-6 gap-5'>
             <Link
               to='/home'
-              className={`text-left text-2xl font-semibold py-2 ${isHome ? 'text-white' : 'text-gray-900'}`}
+              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
               onClick={() => setOpen(false)}
             >
               Home
             </Link>
             <div>
-              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
-              <div className='space-y-1 pl-2'>
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
+              <div className='space-y-0.5 pl-1'>
                 <Link
                   to='/mvm'
-                  className={`flex items-center gap-2 text-lg font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
+                  className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
                   onClick={() => setOpen(false)}
                 >
                   MVM Aasanam
-                  <span className='text-[10px] px-2 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
+                  <span className='text-[9px] px-1.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
                     Our Brand
                   </span>
                 </Link>
@@ -323,11 +325,11 @@ function Navbar() {
                   <Link
                     key={brand.to}
                     to={brand.to}
-                    className={`flex items-center gap-2 text-lg font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
+                    className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
                     onClick={() => setOpen(false)}
                   >
                     {brand.label}
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
                       Dealer
                     </span>
                   </Link>
@@ -335,7 +337,7 @@ function Navbar() {
               </div>
             </div>
             <div>
-              <p className={`text-sm font-medium uppercase tracking-wider mb-3 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Catalogs</p>
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Catalogs</p>
               {[
                 { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
                 { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
@@ -344,7 +346,7 @@ function Navbar() {
               ].map((catalog) => (
                 <button
                   key={catalog.label}
-                  className={`flex items-center gap-2 text-base font-medium py-1.5 pl-2 w-full text-left ${isHome ? 'text-gray-300' : 'text-gray-600'}`}
+                  className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 w-full text-left ${isHome ? 'text-gray-300' : 'text-gray-600'}`}
                   onClick={() => {
                     setOpen(false)
                     downloadPdf(catalog.href, catalog.file)
@@ -356,7 +358,7 @@ function Navbar() {
               ))}
               <Link
                 to='/catalogue-colors'
-                className={`flex items-center gap-2 text-base font-medium py-1.5 pl-2 ${isHome ? 'text-purple-400' : 'text-purple-600'}`}
+                className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 ${isHome ? 'text-purple-400' : 'text-purple-600'}`}
                 onClick={() => setOpen(false)}
               >
                 <Palette className='w-3.5 h-3.5 flex-shrink-0' />
@@ -366,14 +368,14 @@ function Navbar() {
             {isHome ? (
               <button
                 onClick={() => handleNavClick('/home#contact')}
-                className={`text-left text-2xl font-semibold py-2 ${isHome ? 'text-white' : 'text-gray-900'}`}
+                className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
               >
                 Contact
               </button>
             ) : (
               <Link
                 to='/home#contact'
-                className={`text-left text-2xl font-semibold py-2 ${isHome ? 'text-white' : 'text-gray-900'}`}
+                className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
                 onClick={() => setOpen(false)}
               >
                 Contact
@@ -381,7 +383,7 @@ function Navbar() {
             )}
             <a
               href='https://wa.me/919981516171'
-              className={`mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium ${
+              className={`mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold w-full ${
                 isHome ? 'bg-white text-black' : 'bg-amber-500 text-white'
               }`}
             >
@@ -451,7 +453,7 @@ export default function App() {
         <Route path='/seatex/:collection' element={<SeatexCollection />} />
         <Route path='/seatex/:collection/:handle' element={<SeatexProductPage />} />
         <Route path='/mvm' element={<MVM />} />
-        <Route path='/mvm/:collection' element={<MVMCollection />} />
+        <Route path='/mvm/:collection' element={<Navigate to='/mvm' replace />} />
         <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
         <Route path='/catalogue-colors' element={<CatalogueColors />} />
         <Route path='/catalogue-colors/:slug' element={<CatalogueDetail />} />
