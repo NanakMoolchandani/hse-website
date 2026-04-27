@@ -78,11 +78,11 @@ export default function MVMProduct() {
       <div className='min-h-screen bg-white flex flex-col items-center justify-center pt-16 px-4'>
         <p className='text-gray-400 text-lg mb-4'>Product not found</p>
         <Link
-          to={cat ? `/mvm/${collection}` : '/mvm'}
+          to='/mvm'
           className='inline-flex items-center gap-2 text-sm font-medium text-amber-600 hover:text-amber-700 transition-colors'
         >
           <ArrowLeft className='w-4 h-4' />
-          Back to {cat?.label || 'MVM Aasanam'}
+          Back to MVM Aasanam
         </Link>
       </div>
     )
@@ -124,9 +124,7 @@ export default function MVMProduct() {
             <span>/</span>
             {cat && (
               <>
-                <Link to={`/mvm/${collection}`} className='hover:text-gray-700 transition-colors'>
-                  {cat.label}
-                </Link>
+                <span className='text-gray-500'>{cat.label}</span>
                 <span>/</span>
               </>
             )}
@@ -148,10 +146,14 @@ export default function MVMProduct() {
               />
             </div>
 
-            {/* Right - Product Info — height locked to image column, scrolls internally */}
+            {/* Right - Product Info — height locked to image column, scrolls internally
+                NOTE: maxHeight is exposed as a CSS variable and only consumed at lg+ via
+                the lg:[max-height:var(--col-h)] utility. On mobile/tablet the column flows
+                naturally — applying the inline maxHeight unconditionally was making content
+                overflow into the section below. */}
             <div
-              className='flex-1 lg:max-w-md lg:overflow-y-auto lg:pr-1'
-              style={imageColHeight ? { maxHeight: imageColHeight } : undefined}
+              className='flex-1 lg:max-w-md lg:overflow-y-auto lg:pr-1 lg:[max-height:var(--col-h)]'
+              style={imageColHeight ? ({ '--col-h': `${imageColHeight}px` } as React.CSSProperties) : undefined}
             >
               {/* Badges */}
               <div className='flex flex-wrap items-center gap-2 mb-4'>
@@ -404,7 +406,7 @@ export default function MVMProduct() {
                 </h2>
                 {cat && (
                   <Link
-                    to={`/mvm/${collection}`}
+                    to='/mvm'
                     className='text-sm text-amber-600 hover:text-amber-700 transition-colors inline-flex items-center gap-1'
                   >
                     View all
@@ -454,11 +456,11 @@ export default function MVMProduct() {
         <section className='border-t border-gray-100 py-10'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link
-              to={cat ? `/mvm/${collection}` : '/mvm'}
+              to='/mvm'
               className='inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors'
             >
               <ArrowLeft className='w-4 h-4' />
-              Back to {cat?.label || 'MVM Aasanam'}
+              Back to MVM Aasanam
             </Link>
             <a
               href={`https://wa.me/919981516171?text=${whatsappText}`}
