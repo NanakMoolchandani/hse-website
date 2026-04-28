@@ -15,12 +15,13 @@ const PRERENDER_ROUTES = [
   '/privacy',
   '/terms',
 
-  // MVM Aasanam — brand + 4 collections
+  // MVM Aasanam — brand + 5 collections
   '/mvm',
   '/mvm/executive-chairs',
   '/mvm/ergonomic-task-chairs',
   '/mvm/cafeteria-furniture',
   '/mvm/visitor-and-reception',
+  '/mvm/salon-chairs',
 
   // Nilkamal — brand + 19 collections
   '/nilkamal',

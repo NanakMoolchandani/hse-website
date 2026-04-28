@@ -19,6 +19,7 @@ const MVM_CATEGORIES = [
   { slug: 'ergonomic-task-chairs', enum: 'ERGONOMIC_TASK_CHAIRS' },
   { slug: 'cafeteria-furniture', enum: 'CAFETERIA_FURNITURE' },
   { slug: 'visitor-and-reception', enum: 'VISITOR_RECEPTION' },
+  { slug: 'salon-chairs', enum: 'SALON_CHAIRS' },
 ]
 
 // Nilkamal collections — match src/lib/nilkamal.ts (all 19)

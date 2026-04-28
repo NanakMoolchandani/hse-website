@@ -57,6 +57,14 @@ export const CATEGORIES: CategoryInfo[] = [
     description: 'Premium reclining chairs and sofas with multi-position adjustment for ultimate relaxation at home or office',
     image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80',
   },
+  {
+    slug: 'salon-chairs',
+    enum: 'SALON_CHAIRS',
+    label: 'Salon Chairs',
+    series: 'Salon Series',
+    description: 'Salon and barber chairs — wash units, styling chairs, and grooming seating for professional salons',
+    image: 'https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=600&q=80',
+  },
 
   // ── Particle Board Furniture ──────────────────────────────────────
   {
