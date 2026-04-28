@@ -8,6 +8,19 @@ import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
 
 const ALL = '__all__'
 
+const SEATING_ENUMS = new Set([
+  'EXECUTIVE_CHAIRS',
+  'ERGONOMIC_TASK_CHAIRS',
+  'CAFETERIA_FURNITURE',
+  'VISITOR_RECEPTION',
+  'GAMING_CHAIRS',
+  'RECLINERS',
+  'SALON_CHAIRS',
+])
+
+const SEATING_CATEGORIES = CATEGORIES.filter((c) => SEATING_ENUMS.has(c.enum))
+const STORAGE_CATEGORIES = CATEGORIES.filter((c) => !SEATING_ENUMS.has(c.enum))
+
 export default function MVM() {
   const [categoryProducts, setCategoryProducts] = useState<Record<string, CatalogProduct[]>>({})
   const [loadingCategories, setLoadingCategories] = useState(true)
@@ -72,147 +85,130 @@ export default function MVM() {
         ])}
       />
 
-      {/* Spacer to clear the fixed navbar (main nav 64px + brand bar 44px desktop) */}
-
-
       {/* ── Body: Sidebar + Grid ─────────────────────────────────────── */}
       <div className='bg-white min-h-screen'>
         <div className='max-w-7xl mx-auto'>
           <div className='flex'>
 
-            {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
-              <div className='h-full overflow-y-auto pt-2 pb-4 px-2'>
-                <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'>
+            {/* Desktop Sidebar — premium editorial treatment */}
+            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
+              <div className='h-full overflow-y-auto pt-7 pb-6 px-5'>
+                <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 mb-4'>
                   Categories
                 </p>
-                <nav className='space-y-0.5'>
-                  {/* All Products */}
-                  <button
-                    onClick={() => selectCategory(ALL)}
-                    className={`w-full text-left px-2 py-1.5 rounded-lg text-xs transition-all duration-150 ${
-                      activeCategoryEnum === ALL
-                        ? 'bg-amber-500 text-white font-semibold shadow-sm'
-                        : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
-                    }`}
-                  >
-                    <span className='flex items-center justify-between gap-2'>
-                      <span className='leading-snug'>All Products</span>
-                      {totalCount > 0 && (
-                        <span className={`text-[11px] flex-shrink-0 font-medium ${activeCategoryEnum === ALL ? 'text-amber-100' : 'text-gray-400'}`}>
-                          {totalCount}
-                        </span>
-                      )}
-                    </span>
-                  </button>
-                  {CATEGORIES.map((cat) => {
-                    const count = categoryProducts[cat.enum]?.length
-                    const isActive = cat.enum === activeCategoryEnum
-                    return (
-                      <button
-                        key={cat.enum}
-                        onClick={() => selectCategory(cat.enum)}
-                        className={`w-full text-left px-2 py-1.5 rounded-lg text-xs transition-all duration-150 ${
-                          isActive
-                            ? 'bg-amber-500 text-white font-semibold shadow-sm'
-                            : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'
-                        }`}
-                      >
-                        <span className='flex items-center justify-between gap-2'>
-                          <span className='leading-snug'>{cat.label}</span>
-                          {count !== undefined && (
-                            <span
-                              className={`text-[11px] flex-shrink-0 font-medium ${
-                                isActive ? 'text-amber-100' : 'text-gray-400'
-                              }`}
-                            >
-                              {count}
-                            </span>
-                          )}
-                        </span>
-                      </button>
-                    )
-                  })}
-                </nav>
 
-                <div className='mt-5 p-3.5 rounded-xl bg-white border border-gray-100 shadow-sm'>
-                  <p className='text-xs font-semibold text-gray-800 mb-1'>Need bulk pricing?</p>
-                  <p className='text-[11px] text-gray-500 mb-3 leading-relaxed'>
-                    Share your requirements and get a quote within 24 hours.
+                {/* All Products — top of list */}
+                <SidebarRow
+                  label='All Products'
+                  count={totalCount}
+                  active={activeCategoryEnum === ALL}
+                  onClick={() => selectCategory(ALL)}
+                  emphasis
+                />
+
+                {/* Seating group */}
+                <SidebarGroup label='Seating' />
+                {SEATING_CATEGORIES.map((cat) => (
+                  <SidebarRow
+                    key={cat.enum}
+                    label={cat.label}
+                    count={categoryProducts[cat.enum]?.length}
+                    active={cat.enum === activeCategoryEnum}
+                    onClick={() => selectCategory(cat.enum)}
+                  />
+                ))}
+
+                {/* Storage & Furniture group */}
+                <SidebarGroup label='Storage & Furniture' />
+                {STORAGE_CATEGORIES.map((cat) => (
+                  <SidebarRow
+                    key={cat.enum}
+                    label={cat.label}
+                    count={categoryProducts[cat.enum]?.length}
+                    active={cat.enum === activeCategoryEnum}
+                    onClick={() => selectCategory(cat.enum)}
+                  />
+                ))}
+
+                {/* Bulk pricing — dark catalog-ad treatment */}
+                <div className='mt-10 relative bg-gray-950 px-5 py-6 overflow-hidden'>
+                  <span className='absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent' />
+                  <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-400 mb-2'>
+                    Bulk Enquiry
+                  </p>
+                  <p className='font-display text-lg text-white leading-tight mb-1.5'>
+                    Need a custom quote?
+                  </p>
+                  <p className='text-[11px] text-gray-400 leading-relaxed mb-4'>
+                    Share your requirements — we respond within 24 hours.
                   </p>
                   <a
                     href='https://wa.me/919981516171?text=Hi%2C%20I%20need%20a%20bulk%20quote%20for%20MVM%20Aasanam%20furniture.'
-                    className='block w-full text-center text-xs font-semibold bg-amber-500 text-white py-2 rounded-lg hover:bg-amber-600 transition-colors'
+                    className='inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-400 hover:text-amber-300 transition-colors'
                   >
                     WhatsApp Us
+                    <span aria-hidden>→</span>
                   </a>
                 </div>
               </div>
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-[120px] pb-8'>
+            <main className='flex-1 min-w-0 bg-white px-4 sm:px-8 pt-20 md:pt-[120px] pb-12'>
 
-              {/* Mobile: horizontal category strip */}
-              <div className='md:hidden mb-4 -mx-4 px-4'>
-                <div className='flex gap-2 overflow-x-auto pb-2'>
-                  <button
+              {/* Mobile: horizontal category strip — quiet underline-tab style */}
+              <div className='md:hidden mb-6 -mx-4 px-4 border-b border-gray-100'>
+                <div className='flex gap-1 overflow-x-auto -mb-px'>
+                  <MobileTab
+                    label='All'
+                    active={activeCategoryEnum === ALL}
                     onClick={() => selectCategory(ALL)}
-                    className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
-                      activeCategoryEnum === ALL ? 'bg-amber-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600'
-                    }`}
-                  >
-                    All
-                  </button>
-                  {CATEGORIES.map((cat) => {
-                    const isActive = cat.enum === activeCategoryEnum
-                    return (
-                      <button
-                        key={cat.enum}
-                        onClick={() => selectCategory(cat.enum)}
-                        className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
-                          isActive
-                            ? 'bg-amber-500 text-white shadow-sm'
-                            : 'bg-white border border-gray-200 text-gray-600'
-                        }`}
-                      >
-                        {cat.label}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Category title + search row */}
-              <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4'>
-                <div className='flex-1 min-w-0'>
-                  <h2 className='text-lg font-bold text-gray-900'>{activeCat?.label ?? 'All Products'}</h2>
-                  {activeCat?.description && (
-                    <p className='text-xs text-gray-500 mt-0.5 hidden sm:block line-clamp-1'>
-                      {activeCat.description}
-                    </p>
-                  )}
-                </div>
-                <div className='relative w-full sm:w-56 flex-shrink-0'>
-                  <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
-                  <input
-                    type='text'
-                    placeholder='Search products...'
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className='w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent'
                   />
+                  {CATEGORIES.map((cat) => (
+                    <MobileTab
+                      key={cat.enum}
+                      label={cat.label}
+                      active={cat.enum === activeCategoryEnum}
+                      onClick={() => selectCategory(cat.enum)}
+                    />
+                  ))}
                 </div>
               </div>
 
-              {/* Count */}
-              {!isLoading && (
-                <p className='text-xs text-gray-400 mb-3'>
-                  {filteredProducts.length}{' '}
-                  {filteredProducts.length === 1 ? 'product' : 'products'}
-                  {searchQuery.trim() ? ` matching "${searchQuery}"` : ''}
-                </p>
-              )}
+              {/* Editorial header */}
+              <header className='border-b border-gray-100 pb-6 mb-8'>
+                <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4'>
+                  <div className='flex-1 min-w-0'>
+                    <p className='text-[10px] font-semibold uppercase tracking-[0.3em] text-amber-600 mb-2'>
+                      {activeCat?.series ?? 'MVM Aasanam'}
+                    </p>
+                    <h2 className='font-display text-3xl md:text-4xl text-gray-900 leading-[1.1]'>
+                      {activeCat?.label ?? 'All Products'}
+                    </h2>
+                    {activeCat?.description && (
+                      <p className='text-sm text-gray-500 mt-2.5 max-w-xl leading-relaxed'>
+                        {activeCat.description}
+                      </p>
+                    )}
+                    {!isLoading && (
+                      <p className='text-[10px] uppercase tracking-[0.25em] text-gray-400 mt-3'>
+                        {filteredProducts.length} {filteredProducts.length === 1 ? 'piece' : 'pieces'}
+                        {searchQuery.trim() ? ` matching “${searchQuery}”` : ''}
+                      </p>
+                    )}
+                  </div>
+                  <div className='relative w-full sm:w-56 flex-shrink-0'>
+                    <Search className='absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
+                    <input
+                      type='text'
+                      placeholder='Search'
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className='w-full pl-6 pr-2 py-2 bg-transparent border-0 border-b border-gray-200 text-sm placeholder:text-gray-400 focus:outline-none focus:border-amber-500 transition-colors'
+                    />
+                  </div>
+                </div>
+              </header>
 
               {/* Grid */}
               {isLoading ? (
@@ -303,5 +299,81 @@ export default function MVM() {
 
       <Footer variant='light' />
     </>
+  )
+}
+
+// ── Sidebar atoms ──────────────────────────────────────────────────────────
+
+function SidebarGroup({ label }: { label: string }) {
+  return (
+    <div className='mt-7 mb-3 flex items-center gap-3'>
+      <span className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 whitespace-nowrap'>
+        {label}
+      </span>
+      <span className='flex-1 h-px bg-gray-100' />
+    </div>
+  )
+}
+
+interface SidebarRowProps {
+  label: string
+  count?: number
+  active: boolean
+  onClick: () => void
+  emphasis?: boolean
+}
+
+function SidebarRow({ label, count, active, onClick, emphasis }: SidebarRowProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`group relative w-full text-left flex items-center justify-between gap-3 pl-3 pr-2 py-1.5 text-sm transition-colors ${
+        active
+          ? 'text-gray-900'
+          : 'text-gray-600 hover:text-gray-900'
+      } ${emphasis ? 'mb-1' : ''}`}
+    >
+      {/* Left accent bar — only when active */}
+      <span
+        aria-hidden
+        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[2px] transition-all ${
+          active ? 'h-4 bg-amber-500' : 'h-0 bg-transparent'
+        }`}
+      />
+      <span
+        className={`leading-snug truncate ${
+          active ? 'font-medium' : ''
+        } ${emphasis ? 'font-medium' : ''}`}
+      >
+        {label}
+      </span>
+      {count !== undefined && count > 0 && (
+        <span
+          className={`text-[11px] tabular-nums tracking-wider flex-shrink-0 ${
+            active ? 'text-amber-600 font-medium' : 'text-gray-300 group-hover:text-gray-400'
+          }`}
+        >
+          {count}
+        </span>
+      )}
+    </button>
+  )
+}
+
+// ── Mobile tab ─────────────────────────────────────────────────────────────
+
+function MobileTab({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex-shrink-0 relative px-3 py-2.5 text-xs whitespace-nowrap transition-colors ${
+        active ? 'text-gray-900 font-medium' : 'text-gray-500'
+      }`}
+    >
+      {label}
+      {active && (
+        <span className='absolute bottom-0 left-3 right-3 h-[2px] bg-amber-500' />
+      )}
+    </button>
   )
 }
