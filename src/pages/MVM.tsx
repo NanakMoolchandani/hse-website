@@ -18,17 +18,18 @@ export default function MVM() {
     let cancelled = false
 
     async function loadAll() {
+      // Single round-trip for all published products; group client-side by
+      // category. Replaces N parallel queries — same payload, fewer requests.
+      const all = await fetchProducts()
+      if (cancelled) return
       const results: Record<string, CatalogProduct[]> = {}
-      await Promise.all(
-        CATEGORIES.map(async (cat) => {
-          const products = await fetchProducts(cat.enum)
-          if (!cancelled) results[cat.enum] = products
-        }),
-      )
-      if (!cancelled) {
-        setCategoryProducts(results)
-        setLoadingCategories(false)
+      for (const cat of CATEGORIES) results[cat.enum] = []
+      for (const p of all) {
+        const key = p.category || ''
+        if (results[key]) results[key].push(p)
       }
+      setCategoryProducts(results)
+      setLoadingCategories(false)
     }
 
     loadAll()

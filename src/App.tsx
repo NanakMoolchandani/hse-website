@@ -1,26 +1,31 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Menu, X, MessageCircle, ChevronDown, FileDown, Palette } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Navigate } from 'react-router-dom'
-import Home from '@/src/pages/Home'
-import About from '@/src/pages/About'
-import Nilkamal from '@/src/pages/Nilkamal'
-import NilkamalCollection from '@/src/pages/NilkamalCollection'
-import NilkamalProductPage from '@/src/pages/NilkamalProduct'
-import Supreme from '@/src/pages/Supreme'
-import SupremeCollection from '@/src/pages/SupremeCollection'
-import SupremeProductPage from '@/src/pages/SupremeProduct'
-import Seatex from '@/src/pages/Seatex'
-import SeatexCollection from '@/src/pages/SeatexCollection'
-import SeatexProductPage from '@/src/pages/SeatexProduct'
+
+// MVM is the default landing route (/) — keep eager so first paint has no spinner.
 import MVM from '@/src/pages/MVM'
-import MVMProductPage from '@/src/pages/MVMProduct'
-import Privacy from '@/src/pages/Privacy'
-import Terms from '@/src/pages/Terms'
-import CatalogueColors from '@/src/pages/CatalogueColors'
-import CatalogueDetail from '@/src/pages/CatalogueDetail'
+
+// All other routes lazy — drops ~60% off initial JS. Prerender plugin uses
+// renderAfterTime:6000 so lazy chunks resolve before HTML snapshot for SEO.
+const Home = lazy(() => import('@/src/pages/Home'))
+const About = lazy(() => import('@/src/pages/About'))
+const Nilkamal = lazy(() => import('@/src/pages/Nilkamal'))
+const NilkamalCollection = lazy(() => import('@/src/pages/NilkamalCollection'))
+const NilkamalProductPage = lazy(() => import('@/src/pages/NilkamalProduct'))
+const Supreme = lazy(() => import('@/src/pages/Supreme'))
+const SupremeCollection = lazy(() => import('@/src/pages/SupremeCollection'))
+const SupremeProductPage = lazy(() => import('@/src/pages/SupremeProduct'))
+const Seatex = lazy(() => import('@/src/pages/Seatex'))
+const SeatexCollection = lazy(() => import('@/src/pages/SeatexCollection'))
+const SeatexProductPage = lazy(() => import('@/src/pages/SeatexProduct'))
+const MVMProductPage = lazy(() => import('@/src/pages/MVMProduct'))
+const Privacy = lazy(() => import('@/src/pages/Privacy'))
+const Terms = lazy(() => import('@/src/pages/Terms'))
+const CatalogueColors = lazy(() => import('@/src/pages/CatalogueColors'))
+const CatalogueDetail = lazy(() => import('@/src/pages/CatalogueDetail'))
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -439,30 +444,32 @@ export default function App() {
   return (
     <div className={isDarkRoute ? 'bg-gray-950' : 'bg-white'}>
       <Navbar />
-      <Routes>
-        <Route path='/' element={<Navigate to='/mvm' replace />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/nilkamal' element={<Nilkamal />} />
-        <Route path='/nilkamal/:collection' element={<NilkamalCollection />} />
-        <Route path='/nilkamal/:collection/:handle' element={<NilkamalProductPage />} />
-        <Route path='/supreme' element={<Supreme />} />
-        <Route path='/supreme/:collection' element={<SupremeCollection />} />
-        <Route path='/supreme/:collection/:handle' element={<SupremeProductPage />} />
-        <Route path='/seatex' element={<Seatex />} />
-        <Route path='/seatex/:collection' element={<SeatexCollection />} />
-        <Route path='/seatex/:collection/:handle' element={<SeatexProductPage />} />
-        <Route path='/mvm' element={<MVM />} />
-        <Route path='/mvm/:collection' element={<Navigate to='/mvm' replace />} />
-        <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
-        <Route path='/catalogue-colors' element={<CatalogueColors />} />
-        <Route path='/catalogue-colors/:slug' element={<CatalogueDetail />} />
-        <Route path='/privacy' element={<Privacy />} />
-        <Route path='/terms' element={<Terms />} />
-        {/* Redirect old /products/ URLs to /mvm/ */}
-        <Route path='/products/:category' element={<Navigate to='/mvm' replace />} />
-        <Route path='/products/:category/:slug' element={<Navigate to='/mvm' replace />} />
-      </Routes>
+      <Suspense fallback={<div className='min-h-screen' />}>
+        <Routes>
+          <Route path='/' element={<Navigate to='/mvm' replace />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/nilkamal' element={<Nilkamal />} />
+          <Route path='/nilkamal/:collection' element={<NilkamalCollection />} />
+          <Route path='/nilkamal/:collection/:handle' element={<NilkamalProductPage />} />
+          <Route path='/supreme' element={<Supreme />} />
+          <Route path='/supreme/:collection' element={<SupremeCollection />} />
+          <Route path='/supreme/:collection/:handle' element={<SupremeProductPage />} />
+          <Route path='/seatex' element={<Seatex />} />
+          <Route path='/seatex/:collection' element={<SeatexCollection />} />
+          <Route path='/seatex/:collection/:handle' element={<SeatexProductPage />} />
+          <Route path='/mvm' element={<MVM />} />
+          <Route path='/mvm/:collection' element={<Navigate to='/mvm' replace />} />
+          <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
+          <Route path='/catalogue-colors' element={<CatalogueColors />} />
+          <Route path='/catalogue-colors/:slug' element={<CatalogueDetail />} />
+          <Route path='/privacy' element={<Privacy />} />
+          <Route path='/terms' element={<Terms />} />
+          {/* Redirect old /products/ URLs to /mvm/ */}
+          <Route path='/products/:category' element={<Navigate to='/mvm' replace />} />
+          <Route path='/products/:category/:slug' element={<Navigate to='/mvm' replace />} />
+        </Routes>
+      </Suspense>
     </div>
   )
 }
