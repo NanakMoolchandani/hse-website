@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Info } from 'lucide-react'
-import { CATALOGUE_COLOURS } from '@/src/pages/CatalogueDetail'
+import { COLOURS as CATALOGUE_COLOURS } from '@/src/lib/catalogue-colours'
 
 // Categories that display the colour catalogue section
 export const COLOUR_CATALOGUE_CATEGORIES = new Set([

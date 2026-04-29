@@ -25,7 +25,6 @@ const MVMProductPage = lazy(() => import('@/src/pages/MVMProduct'))
 const Privacy = lazy(() => import('@/src/pages/Privacy'))
 const Terms = lazy(() => import('@/src/pages/Terms'))
 const CatalogueColors = lazy(() => import('@/src/pages/CatalogueColors'))
-const CatalogueDetail = lazy(() => import('@/src/pages/CatalogueDetail'))
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -462,7 +461,8 @@ export default function App() {
           <Route path='/mvm/:collection' element={<Navigate to='/mvm' replace />} />
           <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
           <Route path='/catalogue-colors' element={<CatalogueColors />} />
-          <Route path='/catalogue-colors/:slug' element={<CatalogueDetail />} />
+          {/* Legacy /catalogue-colors/<line> URLs redirect to the consolidated page */}
+          <Route path='/catalogue-colors/:slug' element={<Navigate to='/catalogue-colors' replace />} />
           <Route path='/privacy' element={<Privacy />} />
           <Route path='/terms' element={<Terms />} />
           {/* Redirect old /products/ URLs to /mvm/ */}
