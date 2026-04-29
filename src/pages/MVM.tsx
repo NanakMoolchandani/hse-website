@@ -4,7 +4,7 @@ import { MessageCircle, Search } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
-import { fetchProducts, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchProducts, fetchVariantCounts, type CatalogProduct } from '@/src/lib/supabase'
 
 const ALL = '__all__'
 
@@ -25,6 +25,7 @@ const STORAGE_CATEGORIES = CATEGORIES.filter((c) => !SEATING_ENUMS.has(c.enum))
 export default function MVM() {
   const [categoryProducts, setCategoryProducts] = useState<Record<string, CatalogProduct[]>>({})
   const [loadingCategories, setLoadingCategories] = useState(true)
+  const [variantCounts, setVariantCounts] = useState<Record<number, number>>({})
   const [activeCategoryEnum, setActiveCategoryEnum] = useState(ALL)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -47,9 +48,11 @@ export default function MVM() {
     }
 
     loadAll()
-    return () => {
-      cancelled = true
-    }
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    fetchVariantCounts().then(setVariantCounts)
   }, [])
 
   function selectCategory(enumVal: string) {
@@ -233,7 +236,7 @@ export default function MVM() {
                         to={`/mvm/${catSlug}/${product.slug}`}
                         className='group block cursor-pointer'
                       >
-                        {/* Square image — dark bg, subtle zoom on hover */}
+                        {/* Square image */}
                         <div className='relative aspect-square bg-[#1a1a1a] overflow-hidden'>
                           {imgSrc ? (
                             <img
@@ -248,6 +251,12 @@ export default function MVM() {
                                 {(product.name || 'P')[0]}
                               </span>
                             </div>
+                          )}
+                          {/* Colour count badge — shown if this product has variants */}
+                          {variantCounts[product.id] > 0 && (
+                            <span className='absolute bottom-2 right-2 text-[10px] font-medium tracking-wide bg-black/70 text-white/70 px-2 py-0.5 backdrop-blur-sm'>
+                              +{variantCounts[product.id]} colours
+                            </span>
                           )}
                         </div>
                         {/* Name + arrow */}

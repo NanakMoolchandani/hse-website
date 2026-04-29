@@ -23,6 +23,8 @@ export default function MVMProduct() {
   const [showHindi, setShowHindi] = useState(false)
   const imageColRef = useRef<HTMLDivElement>(null)
   const [imageColHeight, setImageColHeight] = useState<number | null>(null)
+  // ID of the colour variant currently displayed — null = parent/default
+  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
 
   useEffect(() => {
     const el = imageColRef.current
@@ -41,6 +43,7 @@ export default function MVMProduct() {
     if (!slug) return
     setLoading(true)
     setActiveImage(0)
+    setSelectedVariantId(null)
 
     fetchProductWithVariants(slug).then((found) => {
       setProductData(found)
@@ -89,11 +92,28 @@ export default function MVMProduct() {
   }
 
   const productCategory = getCategoryByEnum(product.category || '')
-
-  // Detect mesh-back chairs by product name only — materials metadata can be unreliable
   const isMeshBack = /\bmesh\b/i.test(product.name || '')
 
-  const images = product.processed_photo_urls?.length > 0
+  // Build the full family for colour swatching: parent + all variants
+  const parentInFamily = productData?.parent || product
+  const familyMembers: CatalogProduct[] = productData
+    ? [parentInFamily, ...productData.variants]
+    : [product]
+
+  // The member whose images are currently displayed
+  // Reset active image index whenever selected variant changes
+  useEffect(() => { setActiveImage(0) }, [selectedVariantId])
+
+  const activeMember = selectedVariantId
+    ? (familyMembers.find((m) => m.id === selectedVariantId) ?? product)
+    : product
+
+  // Images come from whichever variant is selected — swaps instantly on click
+  const images = activeMember.processed_photo_urls?.length > 0
+    ? activeMember.processed_photo_urls
+    : activeMember.raw_photo_urls?.length > 0
+    ? activeMember.raw_photo_urls
+    : product.processed_photo_urls?.length > 0
     ? product.processed_photo_urls
     : product.raw_photo_urls || []
   const features = product.metadata?.features || []
@@ -177,55 +197,63 @@ export default function MVMProduct() {
                 {product.name}
               </h1>
 
-              {/* Color variant selector — shows when this product family has variants */}
-              {(() => {
-                if (!productData) return null
-                // Family = parent + all variants. The current product is one of them.
-                const parentInFamily = productData.parent || product
-                const familyMembers: CatalogProduct[] = [parentInFamily, ...productData.variants]
-                if (familyMembers.length <= 1) return null
-
-                const currentSlug = product.slug
-
-                return (
-                  <div className='mb-6'>
-                    <p className='text-xs font-semibold tracking-wider uppercase text-amber-400 mb-3'>
-                      Available in {familyMembers.length} colour{familyMembers.length > 1 ? 's' : ''}
+              {/* ── Colour variant selector ──────────────────────────────── */}
+              {familyMembers.length > 1 && (
+                <div className='mb-8'>
+                  {/* Active colour name */}
+                  <div className='flex items-center gap-2 mb-3'>
+                    <p className='text-[10px] font-semibold tracking-[0.2em] uppercase text-[#9C9C9C]'>
+                      Colour
                     </p>
-                    <div className='flex flex-wrap gap-2.5'>
-                      {familyMembers.map((member) => {
-                        const isActive = member.slug === currentSlug
-                        // Parent has no color of its own — show as the "default" with a neutral circle.
-                        const swatchHex = member.color_hex || '#9CA3AF'
-                        const label = member.color_name || 'Original'
-                        const memberSlug = member.slug || String(member.id)
-                        return (
-                          <Link
-                            key={member.id}
-                            to={`/mvm/${collection}/${memberSlug}`}
-                            title={label}
-                            className={`group flex items-center gap-2 rounded-full pl-1 pr-3 py-1 border transition-all ${
-                              isActive
-                                ? 'border-amber-400 bg-amber-500/10'
-                                : 'border-white/[0.08] hover:border-white/40 bg-[#1a1a1a]'
-                            }`}
-                          >
+                    <p className='text-[13px] font-medium text-white'>
+                      {activeMember.color_name || 'Original'}
+                    </p>
+                    <p className='text-[10px] text-[#9C9C9C] ml-auto'>
+                      {familyMembers.length} options
+                    </p>
+                  </div>
+
+                  {/* Thumbnail swatches — clicking swaps images instantly */}
+                  <div className='flex flex-wrap gap-2'>
+                    {familyMembers.map((member) => {
+                      const isActive = member.id === (selectedVariantId ?? product.id)
+                      const swatchImg = member.processed_photo_urls?.[0] || member.raw_photo_urls?.[0]
+                      const swatchHex = member.color_hex || '#6B7280'
+                      const label = member.color_name || 'Original'
+
+                      return (
+                        <button
+                          key={member.id}
+                          onClick={() => {
+                            setSelectedVariantId(member.id)
+                            setActiveImage(0)
+                          }}
+                          title={label}
+                          className={`relative w-16 h-16 shrink-0 overflow-hidden transition-all duration-200 ${
+                            isActive
+                              ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0C0C0C]'
+                              : 'ring-1 ring-white/10 hover:ring-white/40'
+                          }`}
+                        >
+                          {swatchImg ? (
+                            <img
+                              src={swatchImg}
+                              alt={label}
+                              className='w-full h-full object-contain bg-[#1a1a1a] p-1'
+                              loading='lazy'
+                            />
+                          ) : (
                             <span
-                              className={`w-6 h-6 rounded-full border-2 ${
-                                isActive ? 'border-amber-400' : 'border-white/[0.08]'
-                              }`}
+                              className='block w-full h-full'
                               style={{ backgroundColor: swatchHex }}
                             />
-                            <span className={`text-xs ${isActive ? 'text-amber-600 font-medium' : 'text-[#9C9C9C]'}`}>
-                              {label}
-                            </span>
-                          </Link>
-                        )
-                      })}
-                    </div>
+                          )}
+                        </button>
+                      )
+                    })}
                   </div>
-                )
-              })()}
+                </div>
+              )}
 
               {/* Colors - only for NON particle board */}
               {colors.length > 0 && !isParticleBoardCategory(product.category || '') && (
