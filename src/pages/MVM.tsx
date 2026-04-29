@@ -87,12 +87,12 @@ export default function MVM() {
       />
 
       {/* ── Body: Sidebar + Grid ─────────────────────────────────────── */}
-      <div className='bg-white min-h-screen'>
+      <div className='bg-[#0C0C0C] min-h-screen'>
         <div className='max-w-7xl mx-auto'>
           <div className='flex'>
 
-            {/* Desktop Sidebar — premium editorial treatment */}
-            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
+            {/* Desktop Sidebar */}
+            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-[#0C0C0C] border-r border-white/[0.06]'>
               <div className='h-full overflow-y-auto pt-7 pb-6 px-5'>
                 <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 mb-4'>
                   Categories
@@ -155,7 +155,7 @@ export default function MVM() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-white px-4 sm:px-8 pt-20 md:pt-[120px] pb-12'>
+            <main className='flex-1 min-w-0 bg-[#0C0C0C] px-4 sm:px-8 pt-20 md:pt-[120px] pb-12'>
 
               {/* Mobile: horizontal category strip — quiet underline-tab style */}
               <div className='md:hidden mb-6 -mx-4 px-4 border-b border-gray-100'>
@@ -213,82 +213,69 @@ export default function MVM() {
 
               {/* Grid */}
               {isLoading ? (
-                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3'>
+                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10'>
                   {Array.from({ length: 8 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className='rounded-xl bg-white border border-gray-100 overflow-hidden animate-pulse'
-                    >
-                      <div className='aspect-square bg-gray-100' />
-                      <div className='p-3 space-y-2'>
-                        <div className='h-3 bg-gray-100 rounded w-3/4' />
-                        <div className='h-2.5 bg-gray-100 rounded w-1/2' />
-                      </div>
+                    <div key={i} className='animate-pulse'>
+                      <div className='aspect-square bg-white/[0.04]' />
+                      <div className='mt-3 h-3 bg-white/[0.06] rounded w-3/4' />
                     </div>
                   ))}
                 </div>
               ) : filteredProducts.length > 0 ? (
-                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3'>
+                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10'>
                   {filteredProducts.map((product) => {
-                    const imgSrc =
-                      product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || null
+                    const imgSrc = product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || null
+                    const catSlug = activeCat?.slug ?? getCategoryByEnum(product.category || '')?.slug
 
                     return (
                       <Link
                         key={product.id}
-                        to={`/mvm/${activeCat?.slug ?? getCategoryByEnum(product.category || '')?.slug}/${product.slug}`}
-                        className='group rounded-xl bg-white border border-gray-100 overflow-hidden hover:border-amber-300 hover:shadow-md transition-all duration-200'
+                        to={`/mvm/${catSlug}/${product.slug}`}
+                        className='group block cursor-pointer'
                       >
-                        <div className='aspect-square bg-gray-50 overflow-hidden'>
+                        {/* Square image — dark bg, subtle zoom on hover */}
+                        <div className='relative aspect-square bg-[#1a1a1a] overflow-hidden'>
                           {imgSrc ? (
                             <img
                               src={imgSrc}
                               alt={product.name || 'Product'}
-                              className='w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300'
+                              className='w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105'
                               loading='lazy'
                             />
                           ) : (
                             <div className='w-full h-full flex items-center justify-center'>
-                              <span className='text-3xl font-bold text-gray-200'>
+                              <span className='text-4xl font-bold text-white/10'>
                                 {(product.name || 'P')[0]}
                               </span>
                             </div>
                           )}
                         </div>
-                        <div className='p-3 border-t border-gray-50'>
-                          <h4 className='text-sm font-medium text-gray-800 leading-snug line-clamp-2 mb-1.5 group-hover:text-amber-600 transition-colors'>
+                        {/* Name + arrow */}
+                        <div className='mt-3 flex items-start justify-between gap-2'>
+                          <h4 className='text-[13px] font-medium text-[#9C9C9C] group-hover:text-white transition-colors duration-200 leading-snug line-clamp-2'>
                             {product.name}
                           </h4>
-                          <span className='text-xs text-amber-500 font-medium group-hover:text-amber-600 transition-colors'>
-                            View Details →
-                          </span>
+                          <span className='text-[#9C9C9C] group-hover:text-white transition-colors shrink-0 mt-0.5'>→</span>
                         </div>
                       </Link>
                     )
                   })}
                 </div>
               ) : products.length === 0 ? (
-                <div className='rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center'>
-                  <p className='text-gray-400 text-sm mb-4'>Products coming soon for this category.</p>
+                <div className='border border-dashed border-white/10 p-16 text-center'>
+                  <p className='text-[#9C9C9C] text-sm mb-4'>Products coming soon for this category.</p>
                   <a
-                    href={`https://wa.me/919981516171?text=${encodeURIComponent(
-                      `Hi, I'm interested in MVM Aasanam ${activeCat?.label ?? 'furniture'}. Please share what's available.`,
-                    )}`}
-                    className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-500 hover:text-amber-600 transition-colors'
+                    href={`https://wa.me/919981516171?text=${encodeURIComponent(`Hi, I'm interested in MVM Aasanam ${activeCat?.label ?? 'furniture'}. Please share what's available.`)}`}
+                    className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors'
                   >
                     <MessageCircle className='w-3.5 h-3.5' />
                     Ask about availability
                   </a>
                 </div>
               ) : (
-                <div className='rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center'>
-                  <p className='text-gray-400 text-sm mb-2'>
-                    No products match &ldquo;{searchQuery}&rdquo;.
-                  </p>
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className='text-xs text-amber-500 hover:text-amber-600 transition-colors'
-                  >
+                <div className='border border-dashed border-white/10 p-16 text-center'>
+                  <p className='text-[#9C9C9C] text-sm mb-2'>No products match &ldquo;{searchQuery}&rdquo;.</p>
+                  <button onClick={() => setSearchQuery('')} className='text-xs text-amber-400 hover:text-amber-300 transition-colors'>
                     Clear search
                   </button>
                 </div>
