@@ -16,6 +16,7 @@ const SEATING_ENUMS = new Set([
   'GAMING_CHAIRS',
   'RECLINERS',
   'SALON_CHAIRS',
+  'VINTAGE_REVOLVING',
 ])
 
 const SEATING_CATEGORIES = CATEGORIES.filter((c) => SEATING_ENUMS.has(c.enum))

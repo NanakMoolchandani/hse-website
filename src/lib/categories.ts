@@ -65,6 +65,14 @@ export const CATEGORIES: CategoryInfo[] = [
     description: 'Salon and barber chairs — wash units, styling chairs, and grooming seating for professional salons',
     image: 'https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=600&q=80',
   },
+  {
+    slug: 'vintage-revolving',
+    enum: 'VINTAGE_REVOLVING',
+    label: 'Vintage Revolving',
+    series: 'Vintage Series',
+    description: 'Classic revolving office chairs with timeless proportions — mid-back and high-back options for everyday professional use',
+    image: 'https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?w=600&q=80',
+  },
 
   // ── Particle Board Furniture ──────────────────────────────────────
   {
