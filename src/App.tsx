@@ -67,17 +67,23 @@ function Navbar() {
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
   const location = useLocation()
+  const isHome = location.pathname === '/home' || location.pathname === '/'
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY
       setScrolled(y > 60)
       const delta = y - lastScrollY.current
+      // Only change hidden state on meaningful scroll (ignore tiny jitter)
       if (Math.abs(delta) > 5) {
-        if (y > 80 && delta > 0) setHidden(true)
-        else if (delta < 0) setHidden(false)
+        if (y > 80 && delta > 0) {
+          setHidden(true)   // scrolling down → hide
+        } else if (delta < 0) {
+          setHidden(false)  // scrolling up → show
+        }
         lastScrollY.current = y
       }
+      // Always show at top of page
       if (y <= 80) setHidden(false)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -91,21 +97,28 @@ function Navbar() {
 
   const handleNavClick = (href: string) => {
     setOpen(false)
-    if (href.includes('#')) {
+    if (href.includes('#') && isHome) {
       const hash = href.substring(href.indexOf('#'))
       const target = document.querySelector(hash)
       if (target) target.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
-  // Always dark navbar — full-site dark theme
-  const navBg = scrolled
-    ? 'bg-[#0C0C0C]/90 backdrop-blur-md border-b border-white/[0.06]'
-    : 'bg-transparent border-b border-white/[0.04]'
-  const textColor = 'text-white'
-  const linkColor = 'text-[#9C9C9C] hover:text-white'
-  const dropdownBg = 'bg-[#1F1F1F]/95 backdrop-blur-md border border-white/[0.08]'
-  const dropdownItemClass = 'text-[#9C9C9C] hover:bg-white/[0.06] hover:text-white'
+  // Determine navbar styling based on whether we're on the home/dark route
+  const navBg = isHome
+    ? scrolled
+      ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
+      : 'bg-transparent'
+    : 'bg-white border-b border-gray-100 shadow-sm'
+
+  const textColor = isHome ? 'text-white' : 'text-gray-900'
+  const linkColor = isHome ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+  const dropdownBg = isHome
+    ? 'bg-gray-900/95 backdrop-blur-md border-white/10'
+    : 'bg-white border border-gray-200 shadow-xl'
+  const dropdownItemClass = isHome
+    ? 'text-gray-300 hover:bg-white/10 hover:text-white'
+    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
 
   return (
     <>
@@ -147,9 +160,9 @@ function Navbar() {
                               </span>
                             </Link>
                             {[
-                              { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400' },
-                              { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400' },
-                              { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400' },
+                              { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
+                              { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
+                              { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400', bgLight: 'bg-emerald-50 text-emerald-600' },
                             ].map((brand) => (
                               <Link
                                 key={brand.to}
@@ -158,15 +171,15 @@ function Navbar() {
                                 onClick={() => setProductsOpen(false)}
                               >
                                 {brand.label}
-                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${brand.bg}`}>
+                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
                                   Dealer
                                 </span>
                               </Link>
                             ))}
                           </div>
                           {/* Catalogs */}
-                          <div className='py-2 w-52 border-l border-white/10'>
-                            <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-[#9C9C9C]'>
+                          <div className={`py-2 w-52 border-l ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
+                            <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-gray-500'>
                               Catalogs
                             </p>
                             {[
@@ -178,20 +191,23 @@ function Navbar() {
                               <button
                                 key={catalog.label}
                                 className={`flex items-center gap-2 px-4 py-1.5 text-sm w-full text-left ${dropdownItemClass}`}
-                                onClick={() => { setProductsOpen(false); downloadPdf(catalog.href, catalog.file) }}
+                                onClick={() => {
+                                  setProductsOpen(false)
+                                  downloadPdf(catalog.href, catalog.file)
+                                }}
                               >
                                 <FileDown className='w-3 h-3 flex-shrink-0' />
                                 {catalog.label}
                               </button>
                             ))}
-                            <div className='border-t mt-1 pt-1 border-white/10'>
+                            <div className={`border-t mt-1 pt-1 ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
                               <Link
                                 to='/catalogue-colors'
                                 className={`flex items-center gap-2 px-4 py-1.5 text-sm font-medium ${dropdownItemClass}`}
                                 onClick={() => setProductsOpen(false)}
                               >
                                 <Palette className='w-3 h-3 flex-shrink-0' />
-                                Colour Catalogue
+                                Catalogue Colors
                               </Link>
                             </div>
                           </div>
@@ -201,13 +217,23 @@ function Navbar() {
                   )}
                 </div>
               ) : l.href.includes('#') ? (
-                <button
-                  key={l.href}
-                  onClick={() => handleNavClick(l.href!)}
-                  className={`text-sm font-medium transition-colors ${linkColor}`}
-                >
-                  {l.label}
-                </button>
+                isHome ? (
+                  <button
+                    key={l.href}
+                    onClick={() => handleNavClick(l.href!)}
+                    className={`text-sm font-medium transition-colors ${linkColor}`}
+                  >
+                    {l.label}
+                  </button>
+                ) : (
+                  <Link
+                    key={l.href}
+                    to={l.href}
+                    className={`text-sm font-medium transition-colors ${linkColor}`}
+                  >
+                    {l.label}
+                  </Link>
+                )
               ) : (
                 <Link
                   key={l.href}
@@ -221,7 +247,11 @@ function Navbar() {
           </div>
           <a
             href='https://wa.me/919981516171'
-            className='hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all bg-white text-black hover:bg-gray-200'
+            className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
+              isHome
+                ? 'bg-white text-black hover:bg-gray-200'
+                : 'bg-amber-500 text-white hover:bg-amber-600'
+            }`}
           >
             WhatsApp Us
           </a>
@@ -233,9 +263,13 @@ function Navbar() {
           </button>
         </div>
 
-        {/* Brand quick-links bar */}
-        <div className={`hidden md:block ${scrolled ? 'bg-[#0C0C0C]/80 backdrop-blur-md border-t border-white/[0.06]' : 'bg-[#0C0C0C]/50 backdrop-blur-md'}`}>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-10'>
+        {/* Brand quick-links bar - desktop only, centered */}
+        <div className={`hidden md:block ${
+          isHome
+            ? scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
+            : 'bg-gray-50 border-t border-gray-100'
+        }`}>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[
               { to: '/mvm',      label: 'MVM Aasanam', tag: 'Our Brand' },
               { to: '/nilkamal', label: 'Nilkamal',     tag: 'Dealer' },
@@ -243,12 +277,17 @@ function Navbar() {
               { to: '/seatex',   label: 'Seatex',       tag: 'Dealer' },
             ].map((brand, i) => (
               <span key={brand.to} className='flex items-center'>
-                {i > 0 && <span className='mr-8 h-3.5 w-px bg-white/10' />}
-                <Link to={brand.to} className='flex items-center gap-2 group'>
-                  <span className='text-[13px] font-medium text-[#9C9C9C] group-hover:text-white transition-colors'>
+                {i > 0 && (
+                  <span className={`mr-8 h-4 w-px ${isHome ? 'bg-white/15' : 'bg-gray-200'}`} />
+                )}
+                <Link
+                  to={brand.to}
+                  className='flex items-center gap-2 transition-all opacity-100'
+                >
+                  <span className={`text-sm font-semibold ${isHome ? 'text-white' : 'text-gray-700'}`}>
                     {brand.label}
                   </span>
-                  <span className='text-[10px] tracking-wide uppercase text-white/30 group-hover:text-white/50 transition-colors'>
+                  <span className={`text-[10px] font-medium tracking-wide uppercase ${isHome ? 'text-white/60' : 'text-gray-400'}`}>
                     {brand.tag}
                   </span>
                 </Link>
@@ -258,54 +297,100 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu — always dark */}
+      {/* Mobile menu */}
       {open && (
-        <div className='fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto bg-[#0C0C0C]'>
+        <div className={`fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto ${isHome ? 'bg-black' : 'bg-white'}`}>
           <div className='flex flex-col px-5 py-6 gap-5'>
-            <Link to='/home' className='text-left text-xl font-semibold py-1.5 text-white' onClick={() => setOpen(false)}>
+            <Link
+              to='/home'
+              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
+              onClick={() => setOpen(false)}
+            >
               Home
             </Link>
             <div>
-              <p className='text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 text-[#9C9C9C]'>Products</p>
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
               <div className='space-y-0.5 pl-1'>
-                <Link to='/mvm' className='flex items-center gap-2 text-base font-medium py-1.5 text-[#9C9C9C] hover:text-white transition-colors' onClick={() => setOpen(false)}>
+                <Link
+                  to='/mvm'
+                  className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
+                  onClick={() => setOpen(false)}
+                >
                   MVM Aasanam
-                  <span className='text-[9px] px-1.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>Our Brand</span>
+                  <span className='text-[9px] px-1.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
+                    Our Brand
+                  </span>
                 </Link>
                 {[
-                  { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400' },
-                  { to: '/supreme',  label: 'Supreme',  bg: 'bg-orange-500/20 text-orange-400' },
-                  { to: '/seatex',   label: 'Seatex',   bg: 'bg-emerald-500/20 text-emerald-400' },
+                  { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
+                  { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
+                  { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400', bgLight: 'bg-emerald-50 text-emerald-600' },
                 ].map((brand) => (
-                  <Link key={brand.to} to={brand.to} className='flex items-center gap-2 text-base font-medium py-1.5 text-[#9C9C9C] hover:text-white transition-colors' onClick={() => setOpen(false)}>
+                  <Link
+                    key={brand.to}
+                    to={brand.to}
+                    className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
+                    onClick={() => setOpen(false)}
+                  >
                     {brand.label}
-                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${brand.bg}`}>Dealer</span>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
+                      Dealer
+                    </span>
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <p className='text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 text-[#9C9C9C]'>Catalogs</p>
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Catalogs</p>
               {[
                 { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
-                { label: 'Nilkamal',    href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
-                { label: 'Supreme',     href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Supreme-Catalog.pdf', file: 'Supreme-Catalog.pdf' },
-                { label: 'Seatex',      href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Seatex-Catalog.pdf', file: 'Seatex-Catalog.pdf' },
+                { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
+                { label: 'Supreme', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Supreme-Catalog.pdf', file: 'Supreme-Catalog.pdf' },
+                { label: 'Seatex', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Seatex-Catalog.pdf', file: 'Seatex-Catalog.pdf' },
               ].map((catalog) => (
-                <button key={catalog.label} className='flex items-center gap-2 text-sm font-medium py-1.5 pl-1 w-full text-left text-[#9C9C9C] hover:text-white transition-colors' onClick={() => { setOpen(false); downloadPdf(catalog.href, catalog.file) }}>
+                <button
+                  key={catalog.label}
+                  className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 w-full text-left ${isHome ? 'text-gray-300' : 'text-gray-600'}`}
+                  onClick={() => {
+                    setOpen(false)
+                    downloadPdf(catalog.href, catalog.file)
+                  }}
+                >
                   <FileDown className='w-3.5 h-3.5 flex-shrink-0' />
                   {catalog.label}
                 </button>
               ))}
-              <Link to='/catalogue-colors' className='flex items-center gap-2 text-sm font-medium py-1.5 pl-1 text-[#9C9C9C] hover:text-white transition-colors' onClick={() => setOpen(false)}>
+              <Link
+                to='/catalogue-colors'
+                className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 ${isHome ? 'text-purple-400' : 'text-purple-600'}`}
+                onClick={() => setOpen(false)}
+              >
                 <Palette className='w-3.5 h-3.5 flex-shrink-0' />
-                Colour Catalogue
+                Catalogue Colors
               </Link>
             </div>
-            <button onClick={() => handleNavClick('/home#contact')} className='text-left text-xl font-semibold py-1.5 text-white'>
-              Contact
-            </button>
-            <a href='https://wa.me/919981516171' className='mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold w-full bg-white text-black'>
+            {isHome ? (
+              <button
+                onClick={() => handleNavClick('/home#contact')}
+                className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
+              >
+                Contact
+              </button>
+            ) : (
+              <Link
+                to='/home#contact'
+                className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
+                onClick={() => setOpen(false)}
+              >
+                Contact
+              </Link>
+            )}
+            <a
+              href='https://wa.me/919981516171'
+              className={`mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold w-full ${
+                isHome ? 'bg-white text-black' : 'bg-amber-500 text-white'
+              }`}
+            >
               <MessageCircle className='w-4 h-4' />
               WhatsApp Us
             </a>
@@ -321,14 +406,18 @@ function Navbar() {
 export default function App() {
   const location = useLocation()
 
-  // All routes are dark — full-site dark theme matching premium furniture aesthetics
-  const isDarkRoute = true
+  // Only home routes use dark background
+  const isDarkRoute =
+    location.pathname === '/home' ||
+    location.pathname === '/'
 
-  // Always dark body — no white flash on any route
+  // Set body background SYNCHRONOUSLY before paint to prevent white flash
+  // during route transitions (e.g., white Home → dark product page)
   useLayoutEffect(() => {
-    document.documentElement.style.backgroundColor = '#0C0C0C'
-    document.body.style.backgroundColor = '#0C0C0C'
-  }, [])
+    const bg = isDarkRoute ? '#030712' : '#ffffff'
+    document.documentElement.style.backgroundColor = bg
+    document.body.style.backgroundColor = bg
+  }, [isDarkRoute])
 
   // Clean up GSAP ScrollTriggers AFTER React has finished unmounting.
   // CRITICAL: This must use useEffect (not useLayoutEffect) + setTimeout

@@ -90,12 +90,12 @@ export default function MVM() {
       />
 
       {/* ── Body: Sidebar + Grid ─────────────────────────────────────── */}
-      <div className='bg-[#0C0C0C] min-h-screen'>
+      <div className='bg-white min-h-screen'>
         <div className='max-w-7xl mx-auto'>
           <div className='flex'>
 
             {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-[#0C0C0C] border-r border-white/[0.06]'>
+            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto pt-7 pb-6 px-5'>
                 <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 mb-4'>
                   Categories
@@ -158,7 +158,7 @@ export default function MVM() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-[#0C0C0C] px-4 sm:px-8 pt-20 md:pt-[120px] pb-12'>
+            <main className='flex-1 min-w-0 bg-white px-4 sm:px-8 pt-20 md:pt-[120px] pb-12'>
 
               {/* Mobile: horizontal category strip — quiet underline-tab style */}
               <div className='md:hidden mb-6 -mx-4 px-4 border-b border-gray-100'>
@@ -237,7 +237,7 @@ export default function MVM() {
                         className='group block cursor-pointer'
                       >
                         {/* Square image */}
-                        <div className='relative aspect-square bg-[#1a1a1a] overflow-hidden'>
+                        <div className='relative aspect-square bg-gray-50 overflow-hidden'>
                           {imgSrc ? (
                             <img
                               src={imgSrc}
@@ -261,10 +261,10 @@ export default function MVM() {
                         </div>
                         {/* Name + arrow */}
                         <div className='mt-3 flex items-start justify-between gap-2'>
-                          <h4 className='text-[13px] font-medium text-[#9C9C9C] group-hover:text-white transition-colors duration-200 leading-snug line-clamp-2'>
+                          <h4 className='text-[13px] font-medium text-gray-700 group-hover:text-gray-900 transition-colors duration-200 leading-snug line-clamp-2'>
                             {product.name}
                           </h4>
-                          <span className='text-[#9C9C9C] group-hover:text-white transition-colors shrink-0 mt-0.5'>→</span>
+                          <span className='text-gray-700 group-hover:text-gray-900 transition-colors shrink-0 mt-0.5'>→</span>
                         </div>
                       </Link>
                     )
@@ -272,7 +272,7 @@ export default function MVM() {
                 </div>
               ) : products.length === 0 ? (
                 <div className='border border-dashed border-white/10 p-16 text-center'>
-                  <p className='text-[#9C9C9C] text-sm mb-4'>Products coming soon for this category.</p>
+                  <p className='text-gray-400 text-sm mb-4'>Products coming soon for this category.</p>
                   <a
                     href={`https://wa.me/919981516171?text=${encodeURIComponent(`Hi, I'm interested in MVM Aasanam ${activeCat?.label ?? 'furniture'}. Please share what's available.`)}`}
                     className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors'
@@ -283,7 +283,7 @@ export default function MVM() {
                 </div>
               ) : (
                 <div className='border border-dashed border-white/10 p-16 text-center'>
-                  <p className='text-[#9C9C9C] text-sm mb-2'>No products match &ldquo;{searchQuery}&rdquo;.</p>
+                  <p className='text-gray-400 text-sm mb-2'>No products match &ldquo;{searchQuery}&rdquo;.</p>
                   <button onClick={() => setSearchQuery('')} className='text-xs text-amber-400 hover:text-amber-300 transition-colors'>
                     Clear search
                   </button>

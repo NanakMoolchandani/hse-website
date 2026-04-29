@@ -73,16 +73,16 @@ export default function MVMProduct() {
 
   if (loading) {
     return (
-      <div className='min-h-screen bg-[#0C0C0C] flex items-center justify-center pt-16'>
-        <div className='w-8 h-8 border-2 border-white/[0.08] border-t-gray-600 rounded-full animate-spin' />
+      <div className='min-h-screen bg-white flex items-center justify-center pt-16'>
+        <div className='w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin' />
       </div>
     )
   }
 
   if (!product) {
     return (
-      <div className='min-h-screen bg-[#0C0C0C] flex flex-col items-center justify-center pt-16 px-4'>
-        <p className='text-[#9C9C9C] text-lg mb-4'>Product not found</p>
+      <div className='min-h-screen bg-white flex flex-col items-center justify-center pt-16 px-4'>
+        <p className='text-gray-500 text-lg mb-4'>Product not found</p>
         <Link
           to='/mvm'
           className='inline-flex items-center gap-2 text-sm font-medium text-amber-600 hover:text-amber-700 transition-colors'
@@ -135,19 +135,19 @@ export default function MVMProduct() {
         jsonLd={[createBreadcrumbSchema([{ name: 'Home', url: '/home' }, { name: 'MVM Aasanam', url: '/mvm' }, { name: cat?.label || '', url: '/mvm/' + collection }, { name: product.name || '', url: '/mvm/' + collection + '/' + slug }]), createProductSchema(product)]}
       />
 
-      <div className='min-h-screen bg-[#0C0C0C]'>
+      <div className='min-h-screen bg-white'>
         {/* Header */}
         <div className='pt-20 md:pt-[116px] pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
-          <div className='flex items-center gap-2 text-sm text-[#9C9C9C]'>
-            <Link to='/mvm' className='hover:text-[#9C9C9C] transition-colors'>MVM Aasanam</Link>
+          <div className='flex items-center gap-2 text-sm text-gray-500'>
+            <Link to='/mvm' className='hover:text-gray-500 transition-colors'>MVM Aasanam</Link>
             <span>/</span>
             {cat && (
               <>
-                <span className='text-[#9C9C9C]'>{cat.label}</span>
+                <span className='text-gray-500'>{cat.label}</span>
                 <span>/</span>
               </>
             )}
-            <span className='text-[#9C9C9C] truncate max-w-[200px]'>{product.name}</span>
+            <span className='text-gray-500 truncate max-w-[200px]'>{product.name}</span>
           </div>
         </div>
 
@@ -180,7 +180,7 @@ export default function MVMProduct() {
                   MVM Aasanam
                 </span>
                 {productCategory && (
-                  <span className='text-xs px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[#9C9C9C] font-medium'>
+                  <span className='text-xs px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200 text-gray-500 font-medium'>
                     {productCategory.series}
                   </span>
                 )}
@@ -192,7 +192,7 @@ export default function MVMProduct() {
               </div>
 
               {/* Title */}
-              <h1 className='text-2xl md:text-3xl font-bold text-white mb-3 leading-tight'>
+              <h1 className='text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight'>
                 {product.name}
               </h1>
 
@@ -201,13 +201,13 @@ export default function MVMProduct() {
                 <div className='mb-8'>
                   {/* Active colour name */}
                   <div className='flex items-center gap-2 mb-3'>
-                    <p className='text-[10px] font-semibold tracking-[0.2em] uppercase text-[#9C9C9C]'>
+                    <p className='text-[10px] font-semibold tracking-[0.2em] uppercase text-gray-500'>
                       Colour
                     </p>
-                    <p className='text-[13px] font-medium text-white'>
+                    <p className='text-[13px] font-medium text-gray-900'>
                       {activeMember.color_name || 'Original'}
                     </p>
-                    <p className='text-[10px] text-[#9C9C9C] ml-auto'>
+                    <p className='text-[10px] text-gray-500 ml-auto'>
                       {familyMembers.length} options
                     </p>
                   </div>
@@ -230,7 +230,7 @@ export default function MVMProduct() {
                           title={label}
                           className={`relative w-16 h-16 shrink-0 overflow-hidden transition-all duration-200 ${
                             isActive
-                              ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0C0C0C]'
+                              ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-50'
                               : 'ring-1 ring-white/10 hover:ring-white/40'
                           }`}
                         >
@@ -238,7 +238,7 @@ export default function MVMProduct() {
                             <img
                               src={swatchImg}
                               alt={label}
-                              className='w-full h-full object-contain bg-[#1a1a1a] p-1'
+                              className='w-full h-full object-contain bg-gray-50 p-1'
                               loading='lazy'
                             />
                           ) : (
@@ -257,12 +257,12 @@ export default function MVMProduct() {
               {/* Colors - only for NON particle board */}
               {colors.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
-                  <p className='text-xs font-semibold tracking-wider uppercase text-[#9C9C9C] mb-2'>
+                  <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Available Colours
                   </p>
                   <div className='flex flex-wrap gap-2'>
                     {colors.map((c) => (
-                      <span key={c.name} className='text-sm px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[#9C9C9C] inline-flex items-center gap-2'>
+                      <span key={c.name} className='text-sm px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-gray-500 inline-flex items-center gap-2'>
                         <span className='w-3 h-3 rounded-full border border-white/20' style={{ backgroundColor: c.hex }} />
                         {c.name}
                       </span>
@@ -274,12 +274,12 @@ export default function MVMProduct() {
               {/* Materials - only for NON particle board */}
               {materials.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
-                  <p className='text-xs font-semibold tracking-wider uppercase text-[#9C9C9C] mb-2'>
+                  <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2'>
                     Materials
                   </p>
                   <div className='flex flex-wrap gap-1.5'>
                     {materials.map((m) => (
-                      <span key={m} className='text-xs px-2 py-0.5 rounded-full bg-white/[0.05] text-[#9C9C9C]'>
+                      <span key={m} className='text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500'>
                         {m}
                       </span>
                     ))}
@@ -290,16 +290,16 @@ export default function MVMProduct() {
               {/* Features - shown separately only for NON particle board */}
               {features.length > 0 && !isParticleBoardCategory(product.category || '') && (
                 <div className='mb-6'>
-                  <p className='text-xs font-semibold tracking-wider uppercase text-[#9C9C9C] mb-3'>
+                  <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-3'>
                     Key Features
                   </p>
                   <ul className='space-y-2'>
                     {features.map((f) => (
                       <li key={f.label} className='flex items-start gap-2'>
                         <span className='text-amber-500 shrink-0 mt-1 leading-none'>•</span>
-                        <span className='text-sm text-[#9C9C9C] leading-snug'>
-                          <span className='font-medium text-white'>{f.label}</span>
-                          {f.detail && <span className='text-[#9C9C9C]'> — {f.detail}</span>}
+                        <span className='text-sm text-gray-500 leading-snug'>
+                          <span className='font-medium text-gray-900'>{f.label}</span>
+                          {f.detail && <span className='text-gray-500'> — {f.detail}</span>}
                         </span>
                       </li>
                     ))}
@@ -336,7 +336,7 @@ export default function MVMProduct() {
                 return (
                   <div className='mb-8 hidden md:block'>
                     <div className='flex items-center gap-2 mb-2'>
-                      <p className='text-xs font-semibold tracking-wider uppercase text-[#9C9C9C]'>
+                      <p className='text-xs font-semibold tracking-wider uppercase text-gray-500'>
                         Description
                       </p>
                       {!isBoard && product.description_hindi && (
@@ -344,7 +344,7 @@ export default function MVMProduct() {
                           <button
                             onClick={() => setShowHindi(false)}
                             className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
-                              !showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-white/[0.05] text-[#9C9C9C]'
+                              !showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-gray-100 text-gray-500'
                             }`}
                           >
                             EN
@@ -352,7 +352,7 @@ export default function MVMProduct() {
                           <button
                             onClick={() => setShowHindi(true)}
                             className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
-                              showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-white/[0.05] text-[#9C9C9C]'
+                              showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-gray-100 text-gray-500'
                             }`}
                           >
                             HI
@@ -363,14 +363,14 @@ export default function MVMProduct() {
                     {isBoard && bullets.length > 0 ? (
                       <ul className='space-y-1.5'>
                         {bullets.map((b, i) => (
-                          <li key={i} className='flex items-start gap-2 text-sm text-[#9C9C9C] leading-relaxed'>
+                          <li key={i} className='flex items-start gap-2 text-sm text-gray-500 leading-relaxed'>
                             <span className='text-amber-500 mt-1 shrink-0'>&#8226;</span>
                             <span>{b}</span>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className='text-sm text-[#9C9C9C] leading-relaxed'>
+                      <p className='text-sm text-gray-500 leading-relaxed'>
                         {descText}
                       </p>
                     )}
@@ -382,7 +382,7 @@ export default function MVMProduct() {
               <div className='space-y-3 mb-8'>
                 <a
                   href={`https://wa.me/919981516171?text=${whatsappText}`}
-                  className='w-full inline-flex items-center justify-center gap-2 bg-white text-black font-semibold px-6 py-3.5 rounded-full hover:bg-gray-100 transition-colors'
+                  className='w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-6 py-3.5 rounded-full hover:bg-gray-800 transition-colors'
                 >
                   <MessageCircle className='w-5 h-5' />
                   Enquire for Factory-Direct Price
@@ -390,14 +390,14 @@ export default function MVMProduct() {
                 <div className='flex gap-3'>
                   <a
                     href='tel:+919981516171'
-                    className='flex-1 inline-flex items-center justify-center gap-2 border border-white/[0.08] text-white font-medium px-4 py-3 rounded-full hover:bg-white/[0.05] transition-colors'
+                    className='flex-1 inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-900 font-medium px-4 py-3 rounded-full hover:bg-gray-100 transition-colors'
                   >
                     <Phone className='w-4 h-4' />
                     Call Us
                   </a>
                   <button
                     onClick={handleShare}
-                    className='inline-flex items-center justify-center gap-2 border border-white/[0.08] text-white font-medium px-5 py-3 rounded-full hover:bg-white/[0.05] transition-colors'
+                    className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-900 font-medium px-5 py-3 rounded-full hover:bg-gray-100 transition-colors'
                   >
                     {copied ? <Check className='w-4 h-4 text-green-400' /> : <Share2 className='w-4 h-4' />}
                     {copied ? 'Copied' : 'Share'}
@@ -406,12 +406,12 @@ export default function MVMProduct() {
               </div>
 
               {/* Manufacturer Trust */}
-              <div className='rounded-xl border border-white/[0.06] bg-[#1a1a1a] p-4'>
+              <div className='rounded-xl border border-gray-100 bg-gray-50 p-4'>
                 <div className='flex items-center gap-2 mb-2'>
                   <span className='w-2 h-2 rounded-full bg-amber-400' />
-                  <span className='text-sm font-medium text-white'>Manufactured by Hari Shewa Enterprises</span>
+                  <span className='text-sm font-medium text-gray-900'>Manufactured by Hari Shewa Enterprises</span>
                 </div>
-                <p className='text-xs text-[#9C9C9C] leading-relaxed'>
+                <p className='text-xs text-gray-500 leading-relaxed'>
                   MVM Aasanam — Premium furniture made in Neemuch, Madhya Pradesh.
                   Factory-direct pricing with ISO certified quality. Bulk orders and institutional supply available.
                 </p>
@@ -425,10 +425,10 @@ export default function MVMProduct() {
 
         {/* Related Products */}
         {related.length > 0 && (
-          <section className='border-t border-white/[0.06] py-14'>
+          <section className='border-t border-gray-100 py-14'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
               <div className='flex items-end justify-between mb-6'>
-                <h2 className='text-xl font-bold text-white'>
+                <h2 className='text-xl font-bold text-gray-900'>
                   More in {cat?.label || productCategory?.label || 'this collection'}
                 </h2>
                 {cat && (
@@ -452,9 +452,9 @@ export default function MVMProduct() {
                     <Link
                       key={p.id}
                       to={`/mvm/${pCat?.slug || collection}/${p.slug}`}
-                      className='group rounded-2xl bg-[#1a1a1a] overflow-hidden hover:bg-white/[0.05] transition-all duration-300'
+                      className='group rounded-2xl bg-gray-50 overflow-hidden hover:bg-gray-100 transition-all duration-300'
                     >
-                      <div className='aspect-square bg-[#1a1a1a] overflow-hidden'>
+                      <div className='aspect-square bg-gray-50 overflow-hidden'>
                         {pImg ? (
                           <img
                             src={pImg}
@@ -463,13 +463,13 @@ export default function MVMProduct() {
                             loading='lazy'
                           />
                         ) : (
-                          <div className='w-full h-full flex items-center justify-center text-[#9C9C9C]'>
+                          <div className='w-full h-full flex items-center justify-center text-gray-500'>
                             <span className='text-2xl font-bold opacity-20'>{(p.name || 'P')[0]}</span>
                           </div>
                         )}
                       </div>
                       <div className='p-3'>
-                        <h4 className='text-xs font-medium text-white leading-snug line-clamp-2'>{p.name}</h4>
+                        <h4 className='text-xs font-medium text-gray-800 leading-snug line-clamp-2'>{p.name}</h4>
                       </div>
                     </Link>
                   )
@@ -480,18 +480,18 @@ export default function MVMProduct() {
         )}
 
         {/* Back to Collection */}
-        <section className='border-t border-white/[0.06] py-10'>
+        <section className='border-t border-gray-100 py-10'>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link
               to='/mvm'
-              className='inline-flex items-center gap-2 text-sm font-medium text-[#9C9C9C] hover:text-white transition-colors'
+              className='inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors'
             >
               <ArrowLeft className='w-4 h-4' />
               Back to MVM Aasanam
             </Link>
             <a
               href={`https://wa.me/919981516171?text=${whatsappText}`}
-              className='inline-flex items-center gap-2 bg-white text-black font-semibold px-6 py-2.5 rounded-full hover:bg-gray-100 transition-colors text-sm'
+              className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-6 py-2.5 rounded-full hover:bg-gray-800 transition-colors text-sm'
             >
               <MessageCircle className='w-4 h-4' />
               Get Factory-Direct Price
