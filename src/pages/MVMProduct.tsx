@@ -57,6 +57,9 @@ export default function MVMProduct() {
     })
   }, [slug])
 
+  // Must be before any early returns — Rules of Hooks
+  useEffect(() => { setActiveImage(0) }, [selectedVariantId])
+
   const handleShare = async () => {
     const url = window.location.href
     if (navigator.share) {
@@ -99,10 +102,6 @@ export default function MVMProduct() {
   const familyMembers: CatalogProduct[] = productData
     ? [parentInFamily, ...productData.variants]
     : [product]
-
-  // The member whose images are currently displayed
-  // Reset active image index whenever selected variant changes
-  useEffect(() => { setActiveImage(0) }, [selectedVariantId])
 
   const activeMember = selectedVariantId
     ? (familyMembers.find((m) => m.id === selectedVariantId) ?? product)
