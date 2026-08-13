@@ -8,7 +8,7 @@
  * prices the payment.
  */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Minus, Plus, Trash2, ArrowRight, ShoppingBag, Truck, Info } from 'lucide-react'
 import Footer from '@/src/components/Footer'
@@ -17,8 +17,15 @@ import { useCart, loadCart, setQuantity, removeFromCart, dismissNotice } from '@
 import { track, adoptCartId } from '@/src/lib/analytics'
 import { inr } from '@/src/lib/utils'
 
+/** How long the leaving row is given, matched to `.animate-row-out` in CSS. */
+const ROW_EXIT_MS = 200
+
 export default function Cart() {
   const cart = useCart()
+  // The row being removed, held for one animation so the list does not snap
+  // shut under the reader's cursor. Deliberately not a full presence library:
+  // one row at a time, and the cart is the last place to spend 125kB.
+  const [leavingId, setLeavingId] = useState<number | null>(null)
   const [params] = useSearchParams()
   const cancelled = params.get('cancelled') === '1'
   const recover = params.get('cart')
@@ -46,13 +53,13 @@ export default function Cart() {
         <h1 className='text-display text-gray-900'>Your bag</h1>
 
         {cancelled && (
-          <p className='mt-4 rounded-lg bg-amber-50 border border-amber-100 px-4 py-3 text-sm text-amber-900'>
+          <p className='animate-notice-in mt-4 rounded-lg bg-amber-50 border border-amber-100 px-4 py-3 text-sm text-amber-900'>
             Payment was cancelled and nothing has been charged. Your bag is exactly as you left it.
           </p>
         )}
 
         {cart.notice && (
-          <div className='mt-4 flex items-start gap-2 rounded-lg bg-gray-50 border border-gray-100 px-4 py-3 text-sm text-gray-700'>
+          <div className='animate-notice-in mt-4 flex items-start gap-2 rounded-lg bg-gray-50 border border-gray-100 px-4 py-3 text-sm text-gray-700'>
             <Info className='w-4 h-4 mt-0.5 shrink-0 text-gray-400' />
             <span className='flex-1'>{cart.notice}</span>
             <button
@@ -66,7 +73,7 @@ export default function Cart() {
         )}
 
         {cart.error && (
-          <p className='mt-4 rounded-lg bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-800'>
+          <p className='animate-notice-in mt-4 rounded-lg bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-800'>
             {cart.error}
           </p>
         )}
@@ -97,7 +104,10 @@ export default function Cart() {
             {/* Lines */}
             <ul className='divide-y divide-gray-100 border-y border-gray-100'>
               {cart.lines.map((line) => (
-                <li key={line.webProductId} className='py-4 flex gap-4'>
+                <li
+                  key={line.webProductId}
+                  className={`py-4 flex gap-4 ${leavingId === line.webProductId ? 'animate-row-out' : ''}`}
+                >
                   <div className='w-20 h-20 shrink-0 rounded-lg bg-gray-50 overflow-hidden'>
                     {line.imageUrl && (
                       <img
@@ -143,7 +153,13 @@ export default function Cart() {
 
                       <button
                         type='button'
-                        onClick={() => removeFromCart(line.webProductId)}
+                        onClick={() => {
+                          setLeavingId(line.webProductId)
+                          window.setTimeout(() => {
+                            removeFromCart(line.webProductId)
+                            setLeavingId(null)
+                          }, ROW_EXIT_MS)
+                        }}
                         className='inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-red-600 transition-colors'
                       >
                         <Trash2 className='w-3.5 h-3.5' /> Remove

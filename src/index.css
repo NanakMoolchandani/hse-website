@@ -203,6 +203,73 @@
   transform: none;
 }
 
+/* ── Entrances ───────────────────────────────────────────────────────────────
+   For content that is conditionally rendered. React remounts the element when
+   the branch flips, so the animation runs on mount without any state to track.
+
+   Only `transform` and `opacity`, so these stay on the compositor. Nothing here
+   scales from 0: things grow from nearly-settled, which reads as arriving
+   rather than as being inflated. */
+
+/* One control replacing another in the same spot. */
+@keyframes swapIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.animate-swap-in {
+  animation: swapIn var(--duration-base) var(--ease-spring) both;
+}
+
+/* A line of explanation appearing under something. */
+@keyframes noticeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-notice-in {
+  animation: noticeIn var(--duration-base) var(--ease-spring) both;
+}
+
+/* Menus and popovers, anchored to the control that opened them. */
+@keyframes menuIn {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-menu-in {
+  transform-origin: top center;
+  animation: menuIn 180ms var(--ease-spring) both;
+}
+
+/* Full-screen takeover. */
+@keyframes sheetIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-sheet-in {
+  animation: sheetIn 220ms var(--ease-spring) both;
+}
+
+/* The one place bounce is earned: someone has just paid. Rare, first-time and
+   high emotion, which is exactly the tier the overshoot budget exists for. */
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.6); }
+  60% { opacity: 1; transform: scale(1.05); }
+  to { opacity: 1; transform: none; }
+}
+.animate-pop-in {
+  animation: popIn 420ms var(--ease-spring-bounce) both;
+}
+
+/* Leaving, rather than blinking out of existence. Paired with a matching delay
+   in JS before the row is actually dropped from state. */
+@keyframes rowOut {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateX(-8px); }
+}
+.animate-row-out {
+  animation: rowOut 200ms var(--ease-spring) both;
+  pointer-events: none;
+}
+
 /* Reduced motion means a gentler equivalent, not a dead interface: colour and
    opacity still respond, but nothing travels or springs. */
 @media (prefers-reduced-motion: reduce) {

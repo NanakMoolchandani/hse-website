@@ -94,14 +94,23 @@ export default function OrderSuccess() {
       <div className='flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-12 sm:py-16'>
         {/* The confirmation reads the same whether the order row has landed
             yet or not, because from the buyer's side it has: they paid. */}
+        {/* The only place on the site with a bounce. Someone has just handed
+            over a five-figure sum to a manufacturer they may have met an hour
+            ago; this is the moment that should feel like something happened. */}
         <div className='text-center'>
-          <span className='inline-grid place-items-center w-14 h-14 rounded-full bg-emerald-50'>
-            <CheckCircle2 className='w-7 h-7 text-emerald-600' />
+          <span className='animate-pop-in inline-grid place-items-center w-16 h-16 rounded-full bg-emerald-50'>
+            <CheckCircle2 className='w-8 h-8 text-emerald-600' />
           </span>
-          <h1 className='mt-4 text-3xl font-bold tracking-tight text-gray-900'>
+          <h1
+            className='animate-notice-in mt-5 text-display text-gray-900'
+            style={{ animationDelay: '120ms' }}
+          >
             Thank you, your order is placed
           </h1>
-          <p className='mt-2 text-gray-500'>
+          <p
+            className='animate-notice-in mt-3 text-gray-500 max-w-md mx-auto leading-relaxed'
+            style={{ animationDelay: '200ms' }}
+          >
             We have your payment. A receipt is on its way to your email, and we will send
             delivery updates on WhatsApp.
           </p>

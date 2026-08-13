@@ -97,17 +97,21 @@ export default function AddToBag({
   return (
     <div className='w-full'>
       <div className='flex flex-col gap-2'>
+        {/* These two are one control in the buyer's head, so the swap gets a
+            bridge. React remounts on the branch flip, which is what runs the
+            entrance; without it the button is simply replaced by a stepper
+            between one frame and the next. */}
         {quantity === 0 ? (
           <button
             type='button'
             onClick={add}
-            className={`pressable w-full ${h} inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 ${text} font-semibold text-white hover:bg-gray-800`}
+            className={`pressable animate-swap-in w-full ${h} inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 ${text} font-semibold text-white hover:bg-gray-800`}
           >
             <ShoppingBag className='w-3.5 h-3.5' />
             Add to bag
           </button>
         ) : (
-          <div className={`w-full ${h} flex items-stretch rounded-lg border border-black/[0.1] overflow-hidden`}>
+          <div className={`animate-swap-in w-full ${h} flex items-stretch rounded-lg border border-black/[0.1] overflow-hidden`}>
             <button
               type='button'
               onClick={() => bump(-1)}
@@ -147,7 +151,7 @@ export default function AddToBag({
       {/* Only after they actually try to go past it. Showing the ceiling
           before anyone has reached it is noise on every card. */}
       {hitCap && atCap && (
-        <p className='mt-2.5 text-[11px] leading-relaxed text-gray-500'>
+        <p className='animate-notice-in mt-2.5 text-[11px] leading-relaxed text-gray-500'>
           {capIsRetailLimit ? (
             <>
               Ten is the most of one item you can order here. For a larger

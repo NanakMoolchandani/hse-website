@@ -167,7 +167,7 @@ export default function Checkout() {
         </p>
 
         {cancelled && (
-          <p className='mt-5 rounded-lg bg-amber-50 border border-amber-100 px-4 py-3 text-sm text-amber-900'>
+          <p className='animate-notice-in mt-5 rounded-lg bg-amber-50 border border-amber-100 px-4 py-3 text-sm text-amber-900'>
             Payment was cancelled and nothing has been charged. Your details are still here.
           </p>
         )}
@@ -246,7 +246,7 @@ export default function Checkout() {
             </section>
 
             {failure && (
-              <div className='rounded-lg bg-red-50 border border-red-100 px-4 py-3'>
+              <div className='animate-notice-in rounded-lg bg-red-50 border border-red-100 px-4 py-3'>
                 <p className='text-sm text-red-800'>{failure}</p>
                 <a
                   href='https://wa.me/919981516171'

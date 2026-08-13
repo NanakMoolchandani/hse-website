@@ -197,7 +197,10 @@ function Navbar() {
                   {productsOpen && (
                     <>
                       <div className='fixed inset-0 z-40' onClick={() => setProductsOpen(false)} />
-                      <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border z-50 ${dropdownBg}`}>
+                      {/* Grows from the trigger rather than appearing beside
+                          it, so the menu and the word that opened it read as
+                          the same object. */}
+                      <div className={`animate-menu-in absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border z-50 ${dropdownBg}`}>
                         <div className='flex'>
                           {/* Brands */}
                           <div className='py-2 w-52'>
@@ -365,7 +368,7 @@ function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className={`fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto ${isHome ? 'bg-black' : 'bg-white'}`}>
+        <div className={`animate-sheet-in fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto ${isHome ? 'bg-black' : 'bg-white'}`}>
           <div className='flex flex-col px-5 py-6 gap-5'>
             <Link
               to='/home'
