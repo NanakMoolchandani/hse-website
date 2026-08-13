@@ -145,25 +145,30 @@ function Navbar() {
     }
   }
 
-  // Determine navbar styling based on whether we're on the home/dark route
+  // The chrome is a floating translucent layer, not an opaque strip: content
+  // travels under it as you scroll. It carries no permanent divider either;
+  // the shadow appears only once there is something beneath it to separate
+  // from, which is what makes the bar read as glass rather than as a border.
   const navBg = isHome
     ? scrolled
-      ? 'bg-black/80 backdrop-blur-md border-b border-white/5'
+      ? 'material-chrome-dark border-b border-white/5'
       : 'bg-transparent'
-    : 'bg-white border-b border-gray-100 shadow-sm'
+    : scrolled
+      ? 'material-chrome shadow-sm'
+      : 'material-chrome'
 
   const textColor = isHome ? 'text-white' : 'text-gray-900'
   const linkColor = isHome ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
   const dropdownBg = isHome
-    ? 'bg-gray-900/95 backdrop-blur-md border-white/10'
-    : 'bg-white border border-gray-200 shadow-xl'
+    ? 'material-chrome-dark border-white/10'
+    : 'material-chrome border border-black/[0.06] shadow-xl'
   const dropdownItemClass = isHome
     ? 'text-gray-300 hover:bg-white/10 hover:text-white'
     : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-spring ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-2'>
           <Link to='/mvm' className={`flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight font-sans min-w-0 ${textColor}`}>
             <img src='/logos/mvm-logo.png' alt='MVM Aasanam' className='w-8 h-8 sm:w-9 sm:h-9 rounded-full flex-shrink-0' />
@@ -286,7 +291,7 @@ function Navbar() {
             <a
               href='https://wa.me/919981516171'
               onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'navbar' } })}
-              className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
+              className={`pressable hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full ${
                 isHome
                   ? 'bg-white text-black hover:bg-gray-200'
                   : 'bg-amber-500 text-white hover:bg-amber-600'
@@ -295,7 +300,7 @@ function Navbar() {
               WhatsApp Us
             </a>
             <button
-              className={`md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center ${textColor}`}
+              className={`pressable md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full ${textColor}`}
               onClick={() => setOpen((o) => !o)}
             >
               {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
@@ -304,10 +309,15 @@ function Navbar() {
         </div>
 
         {/* Brand quick-links bar - desktop only, centered */}
+        {/* Part of the same pane of glass as the bar above it: a hairline
+            divider, never a second translucent layer stacked on the first,
+            which is what turns frosted chrome muddy. The unscrolled dark case
+            is the exception, because there the parent is transparent and this
+            strip needs its own material to stay legible over the hero. */}
         <div className={`hidden md:block ${
           isHome
-            ? scrolled ? 'bg-black/70 backdrop-blur-md border-t border-white/10' : 'bg-black/50 backdrop-blur-md'
-            : 'bg-gray-50 border-t border-gray-100'
+            ? scrolled ? 'border-t border-white/10' : 'material-chrome-dark'
+            : 'border-t border-gray-200/60'
         }`}>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
             {[

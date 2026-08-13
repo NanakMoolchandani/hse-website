@@ -146,7 +146,7 @@ export default function Checkout() {
           <button
             type='button'
             onClick={() => navigate('/shop')}
-            className='mt-5 inline-flex items-center gap-1.5 h-11 px-5 rounded-lg bg-gray-900 text-sm font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.98]'
+            className='pressable mt-5 inline-flex items-center gap-1.5 h-11 px-5 rounded-lg bg-gray-900 text-sm font-semibold text-white shadow-sm hover:bg-gray-800'
           >
             Browse the shop <ArrowRight className='w-4 h-4' />
           </button>
@@ -161,7 +161,7 @@ export default function Checkout() {
       <SEO title='Checkout' description='Complete your MVM Aasanam order.' canonical='/checkout' noindex />
 
       <div className='flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14'>
-        <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Checkout</h1>
+        <h1 className='text-display text-gray-900'>Checkout</h1>
         <p className='mt-1.5 text-sm text-gray-500'>
           No account needed. Fill this in once and pay.
         </p>
@@ -229,7 +229,7 @@ export default function Checkout() {
                     value={form.state}
                     onChange={set('state')}
                     autoComplete='address-level1'
-                    className='w-full h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500'
+                    className='w-full h-11 rounded-lg border border-black/[0.1] bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 transition-[border-color,box-shadow] duration-150 ease-spring'
                   >
                     {INDIAN_STATES.map((s) => (
                       <option key={s} value={s}>{s}</option>
@@ -261,7 +261,7 @@ export default function Checkout() {
           </div>
 
           {/* Summary */}
-          <aside className='rounded-xl border border-gray-200 p-5 lg:sticky lg:top-24'>
+          <aside className='rounded-xl border border-black/[0.06] bg-white p-5 shadow-sm lg:sticky lg:top-24'>
             <h2 className='text-sm font-semibold text-gray-900'>Your order</h2>
 
             <ul className='mt-4 space-y-3'>
@@ -294,7 +294,7 @@ export default function Checkout() {
               </div>
               <div className='pt-3 border-t border-gray-100 flex justify-between text-base'>
                 <dt className='font-semibold text-gray-900'>Total</dt>
-                <dd className='font-bold text-gray-900 tabular-nums'>{inr(cart.total)}</dd>
+                <dd className='font-semibold tracking-[-0.01em] text-gray-900 tabular-nums'>{inr(cart.total)}</dd>
               </div>
             </dl>
             <p className='mt-1.5 text-[11px] text-gray-400'>GST included</p>
@@ -302,7 +302,7 @@ export default function Checkout() {
             <button
               type='submit'
               disabled={submitting}
-              className='mt-5 w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white transition-[transform,background-color] duration-150 ease-out hover:bg-amber-600 active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100'
+              className='pressable mt-5 w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 disabled:opacity-60'
             >
               {submitting ? 'Taking you to payment…' : <><Lock className='w-4 h-4' /> Pay {inr(cart.total)}</>}
             </button>
@@ -365,12 +365,12 @@ function Field({
           placeholder={placeholder}
           maxLength={maxLength}
           aria-invalid={error ? true : undefined}
-          className={`w-full h-11 rounded-lg border bg-white text-sm text-gray-900 placeholder:text-gray-300 focus:outline-none focus:ring-2 ${
+          className={`w-full h-11 rounded-lg border bg-white text-sm text-gray-900 placeholder:text-gray-300 focus:outline-none focus:ring-2 transition-[border-color,box-shadow] duration-150 ease-spring ${
             prefix ? 'pl-12 pr-3' : 'px-3'
           } ${
             error
               ? 'border-red-300 focus:ring-red-500/30 focus:border-red-400'
-              : 'border-gray-200 focus:ring-amber-500/40 focus:border-amber-500'
+              : 'border-black/[0.1] focus:ring-amber-500/40 focus:border-amber-500'
           }`}
         />
       </div>

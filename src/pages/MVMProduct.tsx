@@ -201,7 +201,7 @@ export default function MVMProduct() {
               </div>
 
               {/* Title */}
-              <h1 className='text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight'>
+              <h1 className='text-display text-gray-900 mb-3'>
                 {product.name}
               </h1>
 
@@ -245,7 +245,7 @@ export default function MVMProduct() {
                             setActiveImage(0)
                           }}
                           title={label}
-                          className={`relative w-16 h-16 shrink-0 overflow-hidden transition-all duration-200 ${
+                          className={`relative w-16 h-16 shrink-0 overflow-hidden transition-all duration-250 ease-spring ${
                             isActive
                               ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-50'
                               : 'ring-1 ring-white/10 hover:ring-white/40'
@@ -399,7 +399,7 @@ export default function MVMProduct() {
               <div className='space-y-3 mb-8'>
                 <a
                   href={`https://wa.me/919981516171?text=${whatsappText}`}
-                  className='w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-6 py-3.5 rounded-full hover:bg-gray-800 transition-colors'
+                  className='pressable w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-6 py-3.5 rounded-full shadow-sm hover:bg-gray-800'
                 >
                   <MessageCircle className='w-5 h-5' />
                   Enquire for Factory-Direct Price
@@ -407,14 +407,14 @@ export default function MVMProduct() {
                 <div className='flex gap-3'>
                   <a
                     href='tel:+919981516171'
-                    className='flex-1 inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-900 font-medium px-4 py-3 rounded-full hover:bg-gray-100 transition-colors'
+                    className='pressable flex-1 inline-flex items-center justify-center gap-2 border border-black/[0.08] text-gray-900 font-medium px-4 py-3 rounded-full hover:bg-black/[0.04]'
                   >
                     <Phone className='w-4 h-4' />
                     Call Us
                   </a>
                   <button
                     onClick={handleShare}
-                    className='inline-flex items-center justify-center gap-2 border border-gray-200 text-gray-900 font-medium px-5 py-3 rounded-full hover:bg-gray-100 transition-colors'
+                    className='pressable inline-flex items-center justify-center gap-2 border border-black/[0.08] text-gray-900 font-medium px-5 py-3 rounded-full hover:bg-black/[0.04]'
                   >
                     {copied ? <Check className='w-4 h-4 text-green-400' /> : <Share2 className='w-4 h-4' />}
                     {copied ? 'Copied' : 'Share'}
@@ -445,7 +445,7 @@ export default function MVMProduct() {
           <section className='border-t border-gray-100 py-14'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
               <div className='flex items-end justify-between mb-6'>
-                <h2 className='text-xl font-bold text-gray-900'>
+                <h2 className='text-title-lg text-gray-900'>
                   More in {cat?.label || productCategory?.label || 'this collection'}
                 </h2>
                 {cat && (
@@ -469,14 +469,14 @@ export default function MVMProduct() {
                     <Link
                       key={p.id}
                       to={`/mvm/${pCat?.slug || collection}/${p.slug}`}
-                      className='group rounded-2xl bg-gray-50 overflow-hidden hover:bg-gray-100 transition-all duration-300'
+                      className='group rounded-2xl bg-gray-50 overflow-hidden transition-[transform,box-shadow,background-color] duration-250 ease-spring hover:-translate-y-0.5 hover:bg-gray-100 hover:shadow-lg'
                     >
                       <div className='aspect-square bg-gray-50 overflow-hidden'>
                         {pImg ? (
                           <img
                             src={pImg}
                             alt={p.name || 'Product'}
-                            className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
+                            className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-400 ease-spring'
                             loading='lazy'
                           />
                         ) : (
@@ -508,7 +508,7 @@ export default function MVMProduct() {
             </Link>
             <a
               href={`https://wa.me/919981516171?text=${whatsappText}`}
-              className='inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-6 py-2.5 rounded-full hover:bg-gray-800 transition-colors text-sm'
+              className='pressable inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-6 py-2.5 rounded-full shadow-sm hover:bg-gray-800 text-sm'
             >
               <MessageCircle className='w-4 h-4' />
               Get Factory-Direct Price

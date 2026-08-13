@@ -24,8 +24,8 @@ export default function CartButton({ dark = false, onNavigate }: { dark?: boolea
       to='/cart'
       onClick={onNavigate}
       aria-label={`Bag, ${itemCount} item${itemCount === 1 ? '' : 's'}`}
-      className={`relative inline-flex items-center justify-center w-11 h-11 rounded-full transition-[transform,background-color] duration-150 ease-out active:scale-[0.94] ${
-        dark ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'
+      className={`pressable relative inline-flex items-center justify-center w-11 h-11 rounded-full ${
+        dark ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-black/[0.06]'
       }`}
     >
       <ShoppingBag className='w-5 h-5' />

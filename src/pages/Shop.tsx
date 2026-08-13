@@ -124,7 +124,7 @@ export default function Shop() {
 
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14'>
         <header className='mb-8 sm:mb-10'>
-          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight text-gray-900'>Shop</h1>
+          <h1 className='text-display text-gray-900'>Shop</h1>
           <p className='mt-2 text-gray-500 max-w-2xl'>
             Chairs we make in Neemuch, in stock and ready to ship. Prices include GST,
             and delivery is free above {inr(15000)}.
@@ -134,7 +134,7 @@ export default function Shop() {
         {loading && (
           <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6'>
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className='rounded-xl border border-gray-100 overflow-hidden'>
+              <div key={i} className='rounded-xl border border-black/[0.06] overflow-hidden'>
                 <div className='aspect-square bg-gray-50 animate-pulse' />
                 <div className='p-3 space-y-2'>
                   <div className='h-3.5 w-3/4 bg-gray-50 rounded animate-pulse' />
@@ -158,13 +158,13 @@ export default function Shop() {
               <a
                 href='https://wa.me/919981516171'
                 onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-empty' } })}
-                className='inline-flex items-center gap-2 h-11 px-5 rounded-lg bg-amber-500 text-sm font-semibold text-white transition-[transform,background-color] duration-150 ease-out hover:bg-amber-600 active:scale-[0.98]'
+                className='pressable inline-flex items-center gap-2 h-11 px-5 rounded-lg bg-amber-500 text-sm font-semibold text-white shadow-sm hover:bg-amber-600'
               >
                 WhatsApp us
               </a>
               <Link
                 to='/mvm'
-                className='inline-flex items-center gap-1.5 h-11 px-5 rounded-lg border border-gray-200 text-sm font-semibold text-gray-700 transition-transform duration-150 ease-out active:scale-[0.98]'
+                className='pressable inline-flex items-center gap-1.5 h-11 px-5 rounded-lg border border-black/[0.08] text-sm font-semibold text-gray-700 hover:bg-black/[0.03]'
               >
                 Browse the catalogue <ArrowRight className='w-4 h-4' />
               </Link>
@@ -177,7 +177,7 @@ export default function Shop() {
             {items.map((item) => (
               <article
                 key={item.id}
-                className='group rounded-xl border border-gray-100 overflow-hidden flex flex-col hover:border-gray-200 hover:shadow-sm transition-[border-color,box-shadow] duration-200'
+                className='group rounded-xl border border-black/[0.06] bg-white overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-0.5 hover:border-black/[0.08] hover:shadow-lg'
               >
                 <Link to={item.href} className='block aspect-square bg-gray-50 overflow-hidden'>
                   {item.image ? (
@@ -185,7 +185,7 @@ export default function Shop() {
                       src={item.image}
                       alt={item.name}
                       loading='lazy'
-                      className='w-full h-full object-contain p-3 transition-transform duration-300 ease-out group-hover:scale-[1.03]'
+                      className='w-full h-full object-contain p-3 transition-transform duration-400 ease-spring group-hover:scale-[1.04]'
                     />
                   ) : (
                     <div className='w-full h-full grid place-items-center text-gray-300 text-xs'>
@@ -226,7 +226,7 @@ export default function Shop() {
                       <button
                         type='button'
                         onClick={() => handleAdd(item)}
-                        className='w-full h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 text-xs font-semibold text-white transition-[transform,background-color] duration-150 ease-out hover:bg-gray-800 active:scale-[0.98]'
+                        className='pressable w-full h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 text-xs font-semibold text-white hover:bg-gray-800'
                       >
                         {addedId === item.id ? (
                           <><Check className='w-3.5 h-3.5' /> Added</>
@@ -235,7 +235,7 @@ export default function Shop() {
                         )}
                       </button>
                     ) : (
-                      <span className='w-full h-10 inline-flex items-center justify-center rounded-lg border border-gray-200 text-xs font-medium text-gray-400'>
+                      <span className='w-full h-10 inline-flex items-center justify-center rounded-lg border border-black/[0.08] text-xs font-medium text-gray-400'>
                         Out of stock
                       </span>
                     )}

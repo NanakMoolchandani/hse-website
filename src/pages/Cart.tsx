@@ -43,7 +43,7 @@ export default function Cart() {
       />
 
       <div className='flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14'>
-        <h1 className='text-3xl font-bold tracking-tight text-gray-900'>Your bag</h1>
+        <h1 className='text-display text-gray-900'>Your bag</h1>
 
         {cancelled && (
           <p className='mt-4 rounded-lg bg-amber-50 border border-amber-100 px-4 py-3 text-sm text-amber-900'>
@@ -85,7 +85,7 @@ export default function Cart() {
             <p className='mt-3 text-gray-900 font-medium'>Your bag is empty.</p>
             <Link
               to='/shop'
-              className='mt-5 inline-flex items-center gap-1.5 h-11 px-5 rounded-lg bg-gray-900 text-sm font-semibold text-white transition-transform duration-150 ease-out active:scale-[0.98]'
+              className='pressable mt-5 inline-flex items-center gap-1.5 h-11 px-5 rounded-lg bg-gray-900 text-sm font-semibold text-white shadow-sm hover:bg-gray-800'
             >
               Browse the shop <ArrowRight className='w-4 h-4' />
             </Link>
@@ -119,12 +119,12 @@ export default function Cart() {
                     </p>
 
                     <div className='mt-2.5 flex items-center gap-3'>
-                      <div className='inline-flex items-center rounded-lg border border-gray-200'>
+                      <div className='inline-flex items-center rounded-lg border border-black/[0.08] overflow-hidden'>
                         <button
                           type='button'
                           onClick={() => setQuantity(line.webProductId, line.quantity - 1)}
                           aria-label='Reduce quantity'
-                          className='w-9 h-9 grid place-items-center text-gray-600 transition-transform duration-150 ease-out active:scale-[0.92]'
+                          className='pressable w-9 h-9 grid place-items-center text-gray-600 hover:bg-black/[0.04]'
                         >
                           <Minus className='w-3.5 h-3.5' />
                         </button>
@@ -135,7 +135,7 @@ export default function Cart() {
                           type='button'
                           onClick={() => setQuantity(line.webProductId, line.quantity + 1)}
                           aria-label='Increase quantity'
-                          className='w-9 h-9 grid place-items-center text-gray-600 transition-transform duration-150 ease-out active:scale-[0.92]'
+                          className='pressable w-9 h-9 grid place-items-center text-gray-600 hover:bg-black/[0.04]'
                         >
                           <Plus className='w-3.5 h-3.5' />
                         </button>
@@ -159,7 +159,7 @@ export default function Cart() {
             </ul>
 
             {/* Summary */}
-            <aside className='rounded-xl border border-gray-200 p-5 lg:sticky lg:top-24'>
+            <aside className='rounded-xl border border-black/[0.06] bg-white p-5 shadow-sm lg:sticky lg:top-24'>
               <h2 className='text-sm font-semibold text-gray-900'>Order summary</h2>
 
               <dl className='mt-4 space-y-2.5 text-sm'>
@@ -175,7 +175,7 @@ export default function Cart() {
                 </div>
                 <div className='pt-3 border-t border-gray-100 flex justify-between text-base'>
                   <dt className='font-semibold text-gray-900'>Total</dt>
-                  <dd className='font-bold text-gray-900 tabular-nums'>{inr(cart.total)}</dd>
+                  <dd className='font-semibold tracking-[-0.01em] text-gray-900 tabular-nums'>{inr(cart.total)}</dd>
                 </div>
               </dl>
 
@@ -190,14 +190,14 @@ export default function Cart() {
 
               <Link
                 to='/checkout'
-                className='mt-5 w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white transition-[transform,background-color] duration-150 ease-out hover:bg-amber-600 active:scale-[0.98]'
+                className='pressable mt-5 w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white shadow-sm hover:bg-amber-600'
               >
                 Checkout <ArrowRight className='w-4 h-4' />
               </Link>
 
               <Link
                 to='/shop'
-                className='mt-2.5 w-full h-11 inline-flex items-center justify-center rounded-lg border border-gray-200 text-sm font-medium text-gray-700 transition-transform duration-150 ease-out active:scale-[0.98]'
+                className='pressable mt-2.5 w-full h-11 inline-flex items-center justify-center rounded-lg border border-black/[0.08] text-sm font-medium text-gray-700 hover:bg-black/[0.03]'
               >
                 Keep shopping
               </Link>

@@ -79,10 +79,10 @@ export default function BuyBox({ slug }: BuyBoxProps) {
   }
 
   return (
-    <div className='mb-8 rounded-xl border border-gray-200 bg-white p-4 sm:p-5'>
+    <div className='mb-8 rounded-xl border border-black/[0.06] bg-white p-4 sm:p-5 shadow-sm'>
       {/* Price */}
       <div className='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
-        <span className='text-3xl font-bold text-gray-900 tabular-nums'>{inr(product.price)}</span>
+        <span className='text-3xl font-semibold tracking-[-0.02em] text-gray-900 tabular-nums'>{inr(product.price)}</span>
         {saving > 0 && (
           <>
             <span className='text-base text-gray-400 line-through tabular-nums'>
@@ -121,13 +121,13 @@ export default function BuyBox({ slug }: BuyBoxProps) {
       {canBuy && (
         <div className='mt-4 flex flex-wrap items-center gap-3'>
           {/* Quantity */}
-          <div className='inline-flex items-center rounded-lg border border-gray-200'>
+          <div className='inline-flex items-center rounded-lg border border-black/[0.08]'>
             <button
               type='button'
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={quantity <= 1}
               aria-label='Reduce quantity'
-              className='w-10 h-11 grid place-items-center text-gray-600 transition-transform duration-150 ease-out active:scale-[0.94] disabled:opacity-30 disabled:active:scale-100'
+              className='pressable w-10 h-11 grid place-items-center text-gray-600 disabled:opacity-30'
             >
               <Minus className='w-4 h-4' />
             </button>
@@ -137,7 +137,7 @@ export default function BuyBox({ slug }: BuyBoxProps) {
               onClick={() => setQuantity((q) => Math.min(max, q + 1))}
               disabled={quantity >= max}
               aria-label='Increase quantity'
-              className='w-10 h-11 grid place-items-center text-gray-600 transition-transform duration-150 ease-out active:scale-[0.94] disabled:opacity-30 disabled:active:scale-100'
+              className='pressable w-10 h-11 grid place-items-center text-gray-600 disabled:opacity-30'
             >
               <Plus className='w-4 h-4' />
             </button>
@@ -146,7 +146,7 @@ export default function BuyBox({ slug }: BuyBoxProps) {
           <button
             type='button'
             onClick={handleAdd}
-            className='flex-1 min-w-[180px] h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 text-sm font-semibold text-white transition-[transform,background-color] duration-150 ease-out hover:bg-amber-600 active:scale-[0.98]'
+            className='pressable flex-1 min-w-[180px] h-11 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600'
           >
             {added ? (
               <><Check className='w-4 h-4' /> Added to bag</>
