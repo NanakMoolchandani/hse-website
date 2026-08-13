@@ -80,6 +80,30 @@
 /* ── Heading trios ───────────────────────────────────────────────────────────
    Size, tracking and leading move together, never size alone. Large text needs
    negative tracking to stop reading as loose; body text stays near zero. */
+
+/* Full-viewport hero statements. Tracking goes sharply negative because at
+   this size default spacing reads as gappy. */
+.text-mega {
+  font-size: clamp(2.75rem, 1.2rem + 7vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+/* Section openers: big enough to act as a chapter break. */
+.text-section {
+  font-size: clamp(2rem, 1.2rem + 3.2vw, 3.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+/* The quiet line above a heading. */
+.text-eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.28em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 .text-hero {
   font-size: clamp(2.25rem, 1.6rem + 3vw, 4rem);
   line-height: 1.05;
@@ -157,6 +181,28 @@
   }
 }
 
+/* ── Scroll reveal ───────────────────────────────────────────────────────────
+   Content rises into place as it enters the viewport.
+
+   The hidden state is gated behind `.js-reveal`, which useReveal() puts on
+   <html> at runtime. Without that gate a JS failure, or the Puppeteer
+   prerender pass that generates the SEO snapshot, would leave every revealed
+   section stuck at opacity 0 and the page would look empty. No JS means
+   everything is simply visible, which is the correct fallback. */
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.reveal {
+  transition:
+    opacity var(--duration-slow) var(--ease-spring),
+    transform var(--duration-slow) var(--ease-spring);
+}
+.js-reveal .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 /* Reduced motion means a gentler equivalent, not a dead interface: colour and
    opacity still respond, but nothing travels or springs. */
 @media (prefers-reduced-motion: reduce) {
@@ -171,6 +217,11 @@
     transition-duration: 0.01ms !important;
   }
   .pressable:active {
+    transform: none;
+  }
+  /* Never hide content behind a reveal that will not animate. */
+  .js-reveal .reveal {
+    opacity: 1;
     transform: none;
   }
 }

@@ -29,12 +29,29 @@ import {
 
 const INTENT_KEY = 'mvm_cart_lines'
 
+/**
+ * How many of one product a buyer can put through the website.
+ *
+ * This site sells retail. Anything past this is a wholesale order, where the
+ * price is quoted per deal and the stock has to be checked against the
+ * production run before we promise a date, so it belongs on WhatsApp with the
+ * owner rather than behind a card form. The limit is per product, not per
+ * basket: ten of three different chairs is thirty chairs and entirely fine.
+ */
+export const RETAIL_MAX_PER_PRODUCT = 10
+
 export interface CartState {
   /** `idle` before the first load; `syncing` while a request is in flight. */
   status: 'idle' | 'syncing' | 'ready' | 'error'
   lines: ServerCartLine[]
   /** Straight from intent, so the header badge answers the click immediately. */
   itemCount: number
+  /**
+   * Live per-product quantities, straight from intent rather than the server's
+   * reply. A card showing a stepper has to reflect the tap in the same frame;
+   * waiting for the round trip makes the button feel broken.
+   */
+  quantities: Record<number, number>
   subtotal: number
   shipping: number
   total: number
@@ -49,6 +66,7 @@ const EMPTY: CartState = {
   status: 'idle',
   lines: [],
   itemCount: 0,
+  quantities: {},
   subtotal: 0,
   shipping: 0,
   total: 0,
@@ -58,7 +76,10 @@ const EMPTY: CartState = {
   error: null,
 }
 
-let state: CartState = { ...EMPTY, itemCount: countOf(readIntent()) }
+let state: CartState = (() => {
+  const intent = readIntent()
+  return { ...EMPTY, itemCount: countOf(intent), quantities: intent }
+})()
 const listeners = new Set<() => void>()
 
 function emit(next: Partial<CartState>): void {
@@ -79,7 +100,9 @@ function readIntent(): Intent {
     for (const [id, qty] of Object.entries(parsed)) {
       const pid = Number(id)
       const q = Number(qty)
-      if (Number.isInteger(pid) && Number.isInteger(q) && q > 0) clean[pid] = Math.min(q, 50)
+      if (Number.isInteger(pid) && Number.isInteger(q) && q > 0) {
+        clean[pid] = Math.min(q, RETAIL_MAX_PER_PRODUCT)
+      }
     }
     return clean
   } catch {
@@ -114,7 +137,7 @@ let syncToken = 0
 async function push(): Promise<void> {
   const token = ++syncToken
   const intent = readIntent()
-  emit({ status: 'syncing', itemCount: countOf(intent), error: null })
+  emit({ status: 'syncing', itemCount: countOf(intent), quantities: intent, error: null })
 
   try {
     const cart = await syncCart(asLines(intent))
@@ -148,6 +171,7 @@ function absorb(cart: ServerCart, intent: Intent): void {
     status: 'ready',
     lines: cart.items,
     itemCount: countOf(settled),
+    quantities: settled,
     subtotal: cart.subtotal,
     shipping: cart.shipping,
     total: cart.total,
@@ -202,13 +226,21 @@ export function loadCart(): void {
   })()
 }
 
+/**
+ * Add to the bag, clamped to the retail limit.
+ *
+ * Returns false when the clamp actually bit, so the control that called it can
+ * explain why the number stopped moving instead of appearing to ignore a tap.
+ */
 export function addToCart(
   webProductId: number,
   quantity = 1,
   meta?: { name?: string; price?: number },
-): void {
+): boolean {
   const intent = readIntent()
-  intent[webProductId] = Math.min(50, (intent[webProductId] ?? 0) + quantity)
+  const before = intent[webProductId] ?? 0
+  const wanted = before + quantity
+  intent[webProductId] = Math.min(RETAIL_MAX_PER_PRODUCT, wanted)
   writeIntent(intent)
   loaded = true
 
@@ -220,18 +252,21 @@ export function addToCart(
   })
 
   void push()
+  return wanted <= RETAIL_MAX_PER_PRODUCT
 }
 
-export function setQuantity(webProductId: number, quantity: number): void {
+/** Set an exact quantity. Returns false when the retail limit clamped it. */
+export function setQuantity(webProductId: number, quantity: number): boolean {
   const intent = readIntent()
   if (quantity <= 0) {
     delete intent[webProductId]
     track('REMOVE_FROM_CART', { productId: webProductId })
   } else {
-    intent[webProductId] = Math.min(50, quantity)
+    intent[webProductId] = Math.min(RETAIL_MAX_PER_PRODUCT, quantity)
   }
   writeIntent(intent)
   void push()
+  return quantity <= RETAIL_MAX_PER_PRODUCT
 }
 
 export function removeFromCart(webProductId: number): void {

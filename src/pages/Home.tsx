@@ -27,6 +27,22 @@ import { fetchProductCounts, fetchProducts, getOptimizedImageUrl, type CatalogPr
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
+/**
+ * Google Business Profile links.
+ *
+ * Both are keyed off the CID that already appears in the Maps embed further
+ * down this page (`0xe0d1a2a1dae4b2a4`), which is the one identifier here that
+ * is provably ours. The previous review link used a hand-entered Place ID that
+ * does not match that CID, which is why it went nowhere.
+ *
+ * If you have the short `g.page/...` review link from the Google Business
+ * Profile app, that is the better thing to put in GOOGLE_REVIEW_URL: it opens
+ * the review box in one tap rather than the listing.
+ */
+const GOOGLE_CID = '16199908150674240164'
+const GOOGLE_LISTING_URL = `https://www.google.com/maps?cid=${GOOGLE_CID}`
+const GOOGLE_REVIEW_URL = `https://www.google.com/maps?cid=${GOOGLE_CID}&reviews=1`
+
 const STATS = [
   { count: '5,000+', label: 'Clients Served' },
   { count: '2,00,000+', label: 'Chairs Delivered' },
@@ -745,7 +761,7 @@ export default function Home() {
               ))}
             </div>
             <div className='mt-8 flex flex-wrap items-center justify-center gap-x-4 md:gap-x-10 gap-y-3'>
-              {['ISO 9001', 'ISO 14001', 'ISO 45001', 'BIFMA', 'BIS / ISI Mark', 'GeM Empanelled', 'ZED Certified', 'NSIC', 'GREENGUARD'].map((badge) => (
+              {['ISO 9001', 'ISO 14001', 'ISO 45001', 'BIFMA', 'BIS / ISI Mark', 'GeM Empanelled', 'ZED Certified', 'NSIC'].map((badge) => (
                 <div key={badge} className='flex items-center gap-2 text-sm text-gray-500'>
                   <CheckCircle2 className='w-4 h-4 text-green-500 shrink-0' />
                   <span>{badge}</span>
@@ -847,7 +863,7 @@ export default function Home() {
             {/* Google Presence */}
             <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mb-10'>
               <a
-                href='https://www.google.com/maps/place/Hari+Shewa+Enterprises/@24.4656196,74.8740545,17z'
+                href={GOOGLE_LISTING_URL}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 border border-white/20 text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/10 transition-colors text-sm'
@@ -861,7 +877,7 @@ export default function Home() {
                 Find Us on Google
               </a>
               <a
-                href='https://search.google.com/local/writereview?placeid=ChIJy3mGywpzZjmksuTaoaLR4A'
+                href={GOOGLE_REVIEW_URL}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 border border-white/20 text-white font-medium px-6 py-2.5 rounded-full hover:bg-white/10 transition-colors text-sm'

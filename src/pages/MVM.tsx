@@ -5,6 +5,8 @@ import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { fetchProducts, fetchVariantCounts, type CatalogProduct } from '@/src/lib/supabase'
+import { fetchLivePricing } from '@/src/lib/analytics'
+import { inr } from '@/src/lib/utils'
 
 const ALL = '__all__'
 
@@ -19,13 +21,31 @@ const SEATING_ENUMS = new Set([
   'VINTAGE_REVOLVING',
 ])
 
+/**
+ * Two different offerings, deliberately not presented as one.
+ *
+ * Seating is the MVM Aasanam brand: our own line, made in the factory and
+ * carried in stock. The storage and furniture range is built to order against
+ * a customer's sizes and finish, so it is shown under its own heading rather
+ * than folded into the brand, where it would imply a shelf full of wardrobes
+ * ready to ship.
+ */
 const SEATING_CATEGORIES = CATEGORIES.filter((c) => SEATING_ENUMS.has(c.enum))
-const STORAGE_CATEGORIES = CATEGORIES.filter((c) => !SEATING_ENUMS.has(c.enum))
+const MADE_TO_ORDER_CATEGORIES = CATEGORIES.filter((c) => !SEATING_ENUMS.has(c.enum))
+
+const MADE_TO_ORDER = 'Made to Order'
+
+/** Which of the two lines a category belongs to. */
+function lineOf(categoryEnum: string | undefined): string {
+  if (!categoryEnum) return 'MVM Aasanam'
+  return SEATING_ENUMS.has(categoryEnum) ? 'MVM Aasanam' : MADE_TO_ORDER
+}
 
 export default function MVM() {
   const [categoryProducts, setCategoryProducts] = useState<Record<string, CatalogProduct[]>>({})
   const [loadingCategories, setLoadingCategories] = useState(true)
   const [variantCounts, setVariantCounts] = useState<Record<number, number>>({})
+  const [prices, setPrices] = useState<Record<string, number>>({})
   const [activeCategoryEnum, setActiveCategoryEnum] = useState(ALL)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -53,6 +73,22 @@ export default function MVM() {
 
   useEffect(() => {
     fetchVariantCounts().then(setVariantCounts)
+  }, [])
+
+  // Live prices, keyed by slug. Only a slice of the catalogue is published for
+  // sale: the rest is wholesale and quoted per deal, so a card either shows a
+  // real price or says so plainly. It never shows a stale or invented number.
+  useEffect(() => {
+    let cancelled = false
+    fetchLivePricing()
+      .then(({ products }) => {
+        if (cancelled) return
+        const byslug: Record<string, number> = {}
+        for (const p of products) if (p.slug && p.inStock !== false) byslug[p.slug] = p.price
+        setPrices(byslug)
+      })
+      .catch(() => { /* the grid is still useful without prices */ })
+    return () => { cancelled = true }
   }, [])
 
   function selectCategory(enumVal: string) {
@@ -89,8 +125,10 @@ export default function MVM() {
         ])}
       />
 
+      <Hero totalCount={totalCount} />
+
       {/* ── Body: Sidebar + Grid ─────────────────────────────────────── */}
-      <div className='bg-white min-h-screen'>
+      <div id='catalogue' className='bg-white min-h-screen'>
         <div className='max-w-7xl mx-auto'>
           <div className='flex'>
 
@@ -122,9 +160,12 @@ export default function MVM() {
                   />
                 ))}
 
-                {/* Storage & Furniture group */}
-                <SidebarGroup label='Storage & Furniture' />
-                {STORAGE_CATEGORIES.map((cat) => (
+                {/* Built to order, not part of the branded seating line */}
+                <SidebarGroup label={MADE_TO_ORDER} />
+                <p className='-mt-1 mb-3 pl-3 pr-2 text-[11px] leading-relaxed text-gray-400'>
+                  Built to your sizes and finish.
+                </p>
+                {MADE_TO_ORDER_CATEGORIES.map((cat) => (
                   <SidebarRow
                     key={cat.enum}
                     label={cat.label}
@@ -158,7 +199,7 @@ export default function MVM() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-white px-4 sm:px-8 pt-20 md:pt-[120px] pb-12'>
+            <main className='flex-1 min-w-0 bg-white px-4 sm:px-8 pt-12 md:pt-20 pb-20'>
 
               {/* Mobile: horizontal category strip — quiet underline-tab style */}
               <div className='md:hidden mb-6 -mx-4 px-4 border-b border-gray-100'>
@@ -180,17 +221,18 @@ export default function MVM() {
               </div>
 
               {/* Editorial header */}
-              <header className='border-b border-gray-100 pb-6 mb-8'>
+              <header className='border-b border-black/[0.06] pb-8 mb-12'>
                 <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4'>
                   <div className='flex-1 min-w-0'>
-                    <p className='text-[10px] font-semibold uppercase tracking-[0.3em] text-amber-600 mb-2'>
-                      {activeCat?.series ?? 'MVM Aasanam'}
+                    <p className='text-eyebrow text-amber-600 mb-3'>
+                      {activeCat ? lineOf(activeCat.enum) : 'MVM Aasanam'}
+                      {activeCat && <span className='text-gray-400'> &middot; {activeCat.series}</span>}
                     </p>
-                    <h2 className='font-display text-3xl md:text-4xl text-gray-900 leading-[1.1]'>
+                    <h2 className='text-section text-gray-900'>
                       {activeCat?.label ?? 'All Products'}
                     </h2>
                     {activeCat?.description && (
-                      <p className='text-sm text-gray-500 mt-2.5 max-w-xl leading-relaxed'>
+                      <p className='text-base text-gray-500 mt-4 max-w-xl leading-relaxed'>
                         {activeCat.description}
                       </p>
                     )}
@@ -225,8 +267,8 @@ export default function MVM() {
                   ))}
                 </div>
               ) : filteredProducts.length > 0 ? (
-                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10'>
-                  {filteredProducts.map((product) => {
+                <div className='grid grid-cols-2 lg:grid-cols-3 gap-x-5 sm:gap-x-8 gap-y-12 sm:gap-y-16'>
+                  {filteredProducts.map((product, i) => {
                     const imgSrc = product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || null
                     const catSlug = activeCat?.slug ?? getCategoryByEnum(product.category || '')?.slug
 
@@ -234,38 +276,46 @@ export default function MVM() {
                       <Link
                         key={product.id}
                         to={`/mvm/${catSlug}/${product.slug}`}
-                        className='group block cursor-pointer'
+                        className='group block cursor-pointer reveal'
+                        // Only the first screenful staggers. Past that the delay
+                        // would fire on rows the reader has already scrolled to.
+                        style={i < 6 ? { transitionDelay: `${i * 50}ms` } : undefined}
                       >
-                        {/* Square image */}
-                        <div className='relative aspect-square bg-gray-50 overflow-hidden'>
+                        <div className='relative aspect-square bg-gray-50 rounded-2xl overflow-hidden transition-[transform,box-shadow] duration-400 ease-spring group-hover:-translate-y-1.5 group-hover:shadow-xl'>
                           {imgSrc ? (
                             <img
                               src={imgSrc}
                               alt={product.name || 'Product'}
-                              className='w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105'
+                              className='w-full h-full object-contain p-5 sm:p-7 transition-transform duration-400 ease-spring group-hover:scale-[1.06]'
                               loading='lazy'
                             />
                           ) : (
                             <div className='w-full h-full flex items-center justify-center'>
-                              <span className='text-4xl font-bold text-white/10'>
+                              <span className='text-5xl font-semibold text-gray-200'>
                                 {(product.name || 'P')[0]}
                               </span>
                             </div>
                           )}
-                          {/* Colour count badge — shown if this product has variants */}
                           {variantCounts[product.id] > 0 && (
-                            <span className='absolute bottom-2 right-2 text-[10px] font-medium tracking-wide bg-black/70 text-white/70 px-2 py-0.5 backdrop-blur-sm'>
+                            <span className='absolute bottom-3 right-3 text-[10px] font-medium tracking-wide rounded-full bg-black/60 text-white px-2.5 py-1 backdrop-blur-sm'>
                               +{variantCounts[product.id]} colours
                             </span>
                           )}
                         </div>
-                        {/* Name + arrow */}
-                        <div className='mt-3 flex items-start justify-between gap-2'>
-                          <h4 className='text-[13px] font-medium text-gray-700 group-hover:text-gray-900 transition-colors duration-200 leading-snug line-clamp-2'>
+                        <div className='mt-5 flex items-start justify-between gap-3'>
+                          <h4 className='text-title text-gray-900 line-clamp-2'>
                             {product.name}
                           </h4>
-                          <span className='text-gray-700 group-hover:text-gray-900 transition-colors shrink-0 mt-0.5'>→</span>
+                          <span className='text-gray-300 group-hover:text-gray-900 transition-colors shrink-0 mt-1'>→</span>
                         </div>
+                        {product.slug && prices[product.slug] !== undefined ? (
+                          <p className='mt-1.5 text-[15px] font-semibold tracking-[-0.01em] text-gray-900 tabular-nums'>
+                            {inr(prices[product.slug])}
+                            <span className='ml-1.5 text-xs font-normal text-gray-400'>GST included</span>
+                          </p>
+                        ) : (
+                          <p className='mt-1.5 text-[13px] text-gray-400'>Price on request</p>
+                        )}
                       </Link>
                     )
                   })}
@@ -296,6 +346,73 @@ export default function MVM() {
 
       <Footer variant='light' />
     </>
+  )
+}
+
+// ── Hero ───────────────────────────────────────────────────────────────────
+
+/**
+ * The first screen of the whole site: `/` redirects here.
+ *
+ * Full bleed and full height on purpose. It runs under the fixed nav rather
+ * than starting below it, so the translucent chrome reads as floating over the
+ * photograph instead of sitting in a white strip above it.
+ *
+ * The photograph is the real Neemuch showroom, and it is the argument: a
+ * manufacturer with a room like that is worth buying from. It carries
+ * `fetchpriority=high` and no lazy attribute because it is the LCP element.
+ */
+function Hero({ totalCount }: { totalCount: number }) {
+  return (
+    <section className='relative min-h-[92svh] flex items-end overflow-hidden bg-gray-950'>
+      <picture>
+        <source srcSet='/hero-showroom.webp' type='image/webp' />
+        <img
+          src='/hero-showroom.jpg'
+          alt='The MVM Aasanam showroom in Neemuch, with chairs and fabric samples laid out'
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          {...({ fetchpriority: 'high' } as any)}
+          decoding='async'
+          className='absolute inset-0 w-full h-full object-cover'
+        />
+      </picture>
+
+      {/* Weighted to the bottom, where the type sits, so the top of the
+          photograph stays legible behind the frosted nav. */}
+      <div className='absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/25' />
+
+      <div className='relative w-full max-w-7xl mx-auto px-5 sm:px-8 pb-16 sm:pb-24 pt-40'>
+        <p className='text-eyebrow text-amber-400 reveal'>MVM Aasanam</p>
+        <h1 className='text-mega text-white mt-5 max-w-4xl reveal' style={{ transitionDelay: '60ms' }}>
+          Made in Neemuch.
+          <br />
+          Built to be sat in.
+        </h1>
+        <p
+          className='mt-7 max-w-xl text-base sm:text-lg leading-relaxed text-white/75 reveal'
+          style={{ transitionDelay: '140ms' }}
+        >
+          {totalCount > 0 ? `${totalCount} pieces` : 'Office seating and storage'}, manufactured in
+          our own factory and delivered across India. Chairs, wardrobes, tables and storage for
+          offices, hospitals and institutions.
+        </p>
+
+        <div className='mt-10 flex flex-wrap items-center gap-3 reveal' style={{ transitionDelay: '220ms' }}>
+          <Link
+            to='/shop'
+            className='pressable inline-flex items-center justify-center h-13 px-8 rounded-full bg-white text-[15px] font-semibold text-gray-950 hover:bg-white/90'
+          >
+            Shop chairs
+          </Link>
+          <a
+            href='#catalogue'
+            className='pressable inline-flex items-center justify-center h-13 px-8 rounded-full border border-white/30 text-[15px] font-semibold text-white hover:bg-white/10'
+          >
+            Browse the range
+          </a>
+        </div>
+      </div>
+    </section>
   )
 }
 

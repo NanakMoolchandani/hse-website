@@ -14,12 +14,12 @@
 
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, Check, ArrowRight, Truck } from 'lucide-react'
+import { ArrowRight, Truck } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
+import AddToBag from '@/src/components/AddToBag'
 import { supabase } from '@/src/lib/supabase'
 import { fetchLivePricing, track } from '@/src/lib/analytics'
-import { addToCart } from '@/src/lib/cart'
 import { getCategoryByEnum } from '@/src/lib/categories'
 import { inr } from '@/src/lib/utils'
 
@@ -48,7 +48,6 @@ interface CatalogRow {
 export default function Shop() {
   const [items, setItems] = useState<ShopItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [addedId, setAddedId] = useState<number | null>(null)
 
   useEffect(() => {
     let live = true
@@ -107,12 +106,6 @@ export default function Shop() {
 
     return () => { live = false }
   }, [])
-
-  const handleAdd = (item: ShopItem) => {
-    addToCart(item.id, 1, { name: item.name, price: item.price })
-    setAddedId(item.id)
-    window.setTimeout(() => setAddedId((id) => (id === item.id ? null : id)), 2200)
-  }
 
   return (
     <div className='min-h-screen bg-white pt-16'>
@@ -222,23 +215,13 @@ export default function Shop() {
                   )}
 
                   <div className='mt-auto pt-3'>
-                    {item.inStock ? (
-                      <button
-                        type='button'
-                        onClick={() => handleAdd(item)}
-                        className='pressable w-full h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 text-xs font-semibold text-white hover:bg-gray-800'
-                      >
-                        {addedId === item.id ? (
-                          <><Check className='w-3.5 h-3.5' /> Added</>
-                        ) : (
-                          <><ShoppingBag className='w-3.5 h-3.5' /> Add to bag</>
-                        )}
-                      </button>
-                    ) : (
-                      <span className='w-full h-10 inline-flex items-center justify-center rounded-lg border border-black/[0.08] text-xs font-medium text-gray-400'>
-                        Out of stock
-                      </span>
-                    )}
+                    <AddToBag
+                      productId={item.id}
+                      name={item.name}
+                      price={item.price}
+                      inStock={item.inStock}
+                      availableQty={item.availableQty}
+                    />
                   </div>
                 </div>
               </article>

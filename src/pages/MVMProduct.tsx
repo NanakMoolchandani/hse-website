@@ -15,6 +15,24 @@ import {
   type ProductWithVariants,
 } from '@/src/lib/supabase'
 
+/** The show more / show less control under a clamped description. */
+function DescToggle({
+  open, onToggle, moreLabel,
+}: { open: boolean; onToggle: () => void; moreLabel: string }) {
+  return (
+    <button
+      type='button'
+      onClick={onToggle}
+      className='mt-2 inline-flex items-center gap-1 text-xs font-semibold text-amber-700 hover:text-amber-800 transition-colors'
+    >
+      {open ? 'Show less' : moreLabel}
+      <span aria-hidden className={`transition-transform duration-250 ease-spring ${open ? 'rotate-180' : ''}`}>
+        &#8964;
+      </span>
+    </button>
+  )
+}
+
 export default function MVMProduct() {
   const { collection, slug } = useParams<{ collection: string; slug: string }>()
   const [productData, setProductData] = useState<ProductWithVariants | null>(null)
@@ -23,6 +41,9 @@ export default function MVMProduct() {
   const [activeImage, setActiveImage] = useState(0)
   const [copied, setCopied] = useState(false)
   const [showHindi, setShowHindi] = useState(false)
+  // Descriptions run long enough to push the right column well past the bottom
+  // of the photograph. Show a few lines, and let anyone who wants the rest ask.
+  const [descExpanded, setDescExpanded] = useState(false)
   const imageColRef = useRef<HTMLDivElement>(null)
   const [imageColHeight, setImageColHeight] = useState<number | null>(null)
   // ID of the colour variant currently displayed — null = parent/default
@@ -378,18 +399,40 @@ export default function MVMProduct() {
                       )}
                     </div>
                     {isBoard && bullets.length > 0 ? (
-                      <ul className='space-y-1.5'>
-                        {bullets.map((b, i) => (
-                          <li key={i} className='flex items-start gap-2 text-sm text-gray-500 leading-relaxed'>
-                            <span className='text-amber-500 mt-1 shrink-0'>&#8226;</span>
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <>
+                        <ul className='space-y-1.5'>
+                          {(descExpanded ? bullets : bullets.slice(0, 4)).map((b, i) => (
+                            <li key={i} className='flex items-start gap-2 text-sm text-gray-500 leading-relaxed'>
+                              <span className='text-amber-500 mt-1 shrink-0'>&#8226;</span>
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        {bullets.length > 4 && (
+                          <DescToggle
+                            open={descExpanded}
+                            onToggle={() => setDescExpanded((o) => !o)}
+                            moreLabel={`Show all ${bullets.length} details`}
+                          />
+                        )}
+                      </>
                     ) : (
-                      <p className='text-sm text-gray-500 leading-relaxed'>
-                        {descText}
-                      </p>
+                      <>
+                        <p
+                          className={`text-sm text-gray-500 leading-relaxed ${
+                            descExpanded ? '' : 'line-clamp-4'
+                          }`}
+                        >
+                          {descText}
+                        </p>
+                        {(descText?.length ?? 0) > 240 && (
+                          <DescToggle
+                            open={descExpanded}
+                            onToggle={() => setDescExpanded((o) => !o)}
+                            moreLabel='Read more'
+                          />
+                        )}
+                      </>
                     )}
                   </div>
                 )

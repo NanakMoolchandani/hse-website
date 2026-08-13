@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom'
 import CartButton from '@/src/components/CartButton'
 import { initAnalytics, trackPageView, track } from '@/src/lib/analytics'
 import { loadCart } from '@/src/lib/cart'
+import { useReveal } from '@/src/hooks/use-reveal'
 
 // MVM is the default landing route (/) — keep eager so first paint has no spinner.
 import MVM from '@/src/pages/MVM'
@@ -319,30 +320,40 @@ function Navbar() {
             ? scrolled ? 'border-t border-white/10' : 'material-chrome-dark'
             : 'border-t border-gray-200/60'
         }`}>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-8 h-11'>
-            {[
-              { to: '/mvm',      label: 'MVM Aasanam', tag: 'Our Brand' },
-              { to: '/nilkamal', label: 'Nilkamal',     tag: 'Dealer' },
-              { to: '/supreme',  label: 'Supreme',      tag: 'Dealer' },
-              { to: '/seatex',   label: 'Seatex',       tag: 'Dealer' },
-            ].map((brand, i) => (
-              <span key={brand.to} className='flex items-center'>
-                {i > 0 && (
-                  <span className={`mr-8 h-4 w-px ${isHome ? 'bg-white/15' : 'bg-gray-200'}`} />
-                )}
-                <Link
+          {/* Weighted 80/20. The four names were previously equal siblings,
+              which read as "we sell four brands". MVM Aasanam is the one we
+              manufacture, so it takes the width and the accent, and the three
+              dealer lines share the right edge. Both tags carry the same
+              weight; only their colour separates owning a brand from carrying
+              one. */}
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-stretch h-16'>
+            <BrandTab
+              to='/mvm'
+              label='MVM Aasanam'
+              tag='Our Brand'
+              owned
+              dark={isHome}
+              active={location.pathname.startsWith('/mvm')}
+              className='flex-[4]'
+            />
+            <span className={`my-3 w-px ${isHome ? 'bg-white/15' : 'bg-black/10'}`} />
+            <div className='flex-1 flex items-stretch'>
+              {[
+                { to: '/nilkamal', label: 'Nilkamal' },
+                { to: '/supreme', label: 'Supreme' },
+                { to: '/seatex', label: 'Seatex' },
+              ].map((brand) => (
+                <BrandTab
+                  key={brand.to}
                   to={brand.to}
-                  className='flex items-center gap-2 transition-all opacity-100'
-                >
-                  <span className={`text-sm font-semibold ${isHome ? 'text-white' : 'text-gray-700'}`}>
-                    {brand.label}
-                  </span>
-                  <span className={`text-[10px] font-medium tracking-wide uppercase ${isHome ? 'text-white/60' : 'text-gray-400'}`}>
-                    {brand.tag}
-                  </span>
-                </Link>
-              </span>
-            ))}
+                  label={brand.label}
+                  tag='Dealer'
+                  dark={isHome}
+                  active={location.pathname.startsWith(brand.to)}
+                  className='flex-1'
+                />
+              ))}
+            </div>
           </div>
         </div>
       </nav>
@@ -461,10 +472,73 @@ function Navbar() {
   )
 }
 
+// ── Brand tab ─────────────────────────────────────────────────────────────────
+
+interface BrandTabProps {
+  to: string
+  label: string
+  tag: string
+  /** Our own line, which gets the accent and the larger type. */
+  owned?: boolean
+  dark: boolean
+  active: boolean
+  className?: string
+}
+
+/**
+ * One name in the brand bar. Reads as a real tab: it lights on hover, presses
+ * on tap, and the route you are on keeps a lit underline so the bar always
+ * answers "which of these am I looking at".
+ */
+function BrandTab({ to, label, tag, owned, dark, active, className = '' }: BrandTabProps) {
+  return (
+    <Link
+      to={to}
+      className={`group relative flex flex-col justify-center px-4 transition-colors duration-150 ${
+        dark ? 'hover:bg-white/[0.07]' : 'hover:bg-black/[0.035]'
+      } ${className}`}
+    >
+      <span
+        className={`font-semibold leading-tight transition-colors ${
+          owned ? 'text-[15px]' : 'text-[13px]'
+        } ${
+          dark
+            ? active || owned ? 'text-white' : 'text-white/80 group-hover:text-white'
+            : active || owned ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
+        }`}
+      >
+        {label}
+      </span>
+      <span
+        className={`mt-0.5 text-[9px] font-bold uppercase leading-tight tracking-[0.18em] ${
+          owned
+            ? 'text-amber-500'
+            : dark ? 'text-white/40' : 'text-gray-400'
+        }`}
+      >
+        {tag}
+      </span>
+
+      {/* Sits under the tab, grows from nothing on hover, stays lit on the
+          route you are actually on. */}
+      <span
+        aria-hidden
+        className={`absolute bottom-0 left-0 right-0 h-[2px] origin-left transition-transform duration-250 ease-spring ${
+          owned ? 'bg-amber-500' : dark ? 'bg-white/50' : 'bg-gray-900'
+        } ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+      />
+    </Link>
+  )
+}
+
 // ── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const location = useLocation()
+
+  // Watches the whole document for `.reveal`, so pages opt in with a class
+  // rather than each wiring up its own observer.
+  useReveal()
 
   // Only home routes use dark background
   const isDarkRoute =

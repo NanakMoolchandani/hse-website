@@ -198,12 +198,6 @@ export default function About() {
                 desc: 'Registered under the Single Point Registration Scheme (SPRS). Provides verified credibility for government procurement with benefits including EMD exemption and price preference.',
                 color: 'bg-amber-50 text-amber-700',
               },
-              {
-                title: 'GREENGUARD',
-                subtitle: 'Low Chemical Emissions',
-                desc: 'UL GREENGUARD certification proving our furniture has low chemical emissions (VOCs). Ensures our products are safe for indoor air quality in offices, schools, and healthcare facilities.',
-                color: 'bg-emerald-50 text-emerald-700',
-              },
             ].map((cert) => (
               <div key={cert.title} className='rounded-2xl border border-gray-200 p-5 sm:p-8 hover:shadow-md transition-shadow'>
                 <div className={`inline-block text-xs font-bold tracking-wide uppercase px-3 py-1 rounded-full mb-4 ${cert.color}`}>
