@@ -25,13 +25,14 @@ export interface MaterialCatalogue {
   previewColors: string[]
 }
 
-const SUPABASE_STORAGE_BASE =
-  'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets'
+// Swatch images live on R2. The old Supabase storage host was retired and no
+// longer resolves, which is what left this page showing empty tiles.
+const CATALOG_ASSETS_BASE = 'https://assets.mvm-furniture.com/catalog-assets'
 
 const renult = (file: string) =>
-  `${SUPABASE_STORAGE_BASE}/colour-catalogues/renult/${file}`
+  `${CATALOG_ASSETS_BASE}/colour-catalogues/renult/${file}`
 const luxury = (file: string) =>
-  `${SUPABASE_STORAGE_BASE}/colour-catalogues/luxury/${file}`
+  `${CATALOG_ASSETS_BASE}/colour-catalogues/luxury/${file}`
 
 export const MATERIALS: Record<MaterialLine, MaterialCatalogue> = {
   renult: {

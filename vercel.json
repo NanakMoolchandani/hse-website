@@ -50,9 +50,22 @@
           "value": "public, max-age=2592000"
         }
       ]
+    },
+    {
+      "source": "/catalogs/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
     }
   ],
   "rewrites": [
+    {
+      "source": "/catalogs/:file",
+      "destination": "https://assets.mvm-furniture.com/catalog-assets/documents/:file"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

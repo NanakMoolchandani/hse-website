@@ -135,6 +135,17 @@ export default defineConfig(async () => ({
       '@': fileURLToPath(new URL('.', import.meta.url)),
     },
   },
+  // Mirrors the production /catalogs rewrite in vercel.json so catalogue
+  // downloads behave identically in dev.
+  server: {
+    proxy: {
+      '/catalogs': {
+        target: 'https://assets.mvm-furniture.com',
+        changeOrigin: true,
+        rewrite: (p: string) => p.replace(/^\/catalogs/, '/catalog-assets/documents'),
+      },
+    },
+  },
   build: {
     // Chunk splitting for better caching
     rollupOptions: {

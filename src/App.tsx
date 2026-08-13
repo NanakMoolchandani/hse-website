@@ -40,21 +40,46 @@ const NAV_LINKS = [
   { label: 'Contact', href: '/home#contact' },
 ]
 
-/** Download a cross-origin PDF as a file (bypasses browser PDF viewer) */
+/**
+ * Downloadable catalogues.
+ *
+ * These are served from `/catalogs/*` — a same-origin rewrite onto the R2
+ * asset host (see vercel.json). Same-origin matters: it is what lets `fetch`
+ * read the file without a CORS grant and lets the `download` attribute save it
+ * rather than opening the browser's PDF viewer.
+ */
+const CATALOGS = [
+  {
+    label: 'MVM Aasanam — Seating',
+    href: '/catalogs/MVM-Aasanam-Seating-Collection.pdf',
+    file: 'MVM-Aasanam-Seating-Collection.pdf',
+  },
+  { label: 'MVM Aasanam', href: '/catalogs/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
+  { label: 'Nilkamal', href: '/catalogs/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
+  { label: 'Supreme', href: '/catalogs/Supreme-Catalog.pdf', file: 'Supreme-Catalog.pdf' },
+  { label: 'Seatex', href: '/catalogs/Seatex-Catalog.pdf', file: 'Seatex-Catalog.pdf' },
+]
+
+/** Save a catalogue to disk rather than opening it in the PDF viewer. */
 async function downloadPdf(url: string, filename: string) {
   try {
     const res = await fetch(url)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const blob = await res.blob()
+    if (blob.size === 0) throw new Error('empty file')
+
+    const objectUrl = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
+    a.href = objectUrl
     a.download = filename
     document.body.appendChild(a)
     a.click()
     a.remove()
-    URL.revokeObjectURL(a.href)
+    // Safari aborts the save if the object URL is revoked too early.
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 10000)
   } catch {
-    // Fallback: open in new tab
-    window.open(url, '_blank')
+    // Last resort: let the browser handle the URL directly.
+    window.open(url, '_blank', 'noopener')
   }
 }
 
@@ -182,12 +207,7 @@ function Navbar() {
                             <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-gray-500'>
                               Catalogs
                             </p>
-                            {[
-                              { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
-                              { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
-                              { label: 'Supreme', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Supreme-Catalog.pdf', file: 'Supreme-Catalog.pdf' },
-                              { label: 'Seatex', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Seatex-Catalog.pdf', file: 'Seatex-Catalog.pdf' },
-                            ].map((catalog) => (
+                            {CATALOGS.map((catalog) => (
                               <button
                                 key={catalog.label}
                                 className={`flex items-center gap-2 px-4 py-1.5 text-sm w-full text-left ${dropdownItemClass}`}
@@ -342,12 +362,7 @@ function Navbar() {
             </div>
             <div>
               <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Catalogs</p>
-              {[
-                { label: 'MVM Aasanam', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
-                { label: 'Nilkamal', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
-                { label: 'Supreme', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Supreme-Catalog.pdf', file: 'Supreme-Catalog.pdf' },
-                { label: 'Seatex', href: 'https://kwxkapanfkviibxjhgps.supabase.co/storage/v1/object/public/catalog-assets/documents/Seatex-Catalog.pdf', file: 'Seatex-Catalog.pdf' },
-              ].map((catalog) => (
+              {CATALOGS.map((catalog) => (
                 <button
                   key={catalog.label}
                   className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 w-full text-left ${isHome ? 'text-gray-300' : 'text-gray-600'}`}
