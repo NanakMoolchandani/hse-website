@@ -166,7 +166,7 @@ export default function CatalogueColors() {
       </section>
 
       {/* ── Sticky filter bar ────────────────────────────────────────── */}
-      <div className='sticky top-16 md:top-[108px] z-30 bg-black/95 backdrop-blur-md border-b border-white/10'>
+      <div className='sticky top-16 md:top-32 z-30 bg-black/95 backdrop-blur-md border-b border-white/10'>
         <div className='max-w-6xl mx-auto px-4 sm:px-6'>
           <div className='flex items-center gap-1 overflow-x-auto -mb-px'>
             <FilterTab

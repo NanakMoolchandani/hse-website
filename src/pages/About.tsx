@@ -199,7 +199,7 @@ export default function About() {
                 color: 'bg-amber-50 text-amber-700',
               },
             ].map((cert) => (
-              <div key={cert.title} className='rounded-2xl border border-gray-200 p-5 sm:p-8 hover:shadow-md transition-shadow'>
+              <div key={cert.title} className='reveal rounded-2xl border border-black/[0.06] bg-white p-5 sm:p-8 transition-[transform,box-shadow] duration-250 ease-spring hover:-translate-y-1 hover:shadow-lg'>
                 <div className={`inline-block text-xs font-bold tracking-wide uppercase px-3 py-1 rounded-full mb-4 ${cert.color}`}>
                   {cert.title}
                 </div>

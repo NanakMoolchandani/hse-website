@@ -61,7 +61,7 @@ export default function Seatex() {
       <div className='bg-white min-h-screen'>
         <div className='max-w-7xl mx-auto'>
           <div className='flex'>
-            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
+            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-16 md:top-32 self-start h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto pt-2 pb-4 px-2'>
                 <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'>Collections</p>
                 <nav className='space-y-0.5'>
@@ -94,7 +94,7 @@ export default function Seatex() {
                 </div>
               </div>
             </aside>
-            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-[120px] pb-8'>
+            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-32 pb-8'>
               <div className='md:hidden mb-4'>
                 <div className='flex gap-2 overflow-x-auto pb-2'>
                   <button onClick={() => selectCollection(ALL)}
@@ -140,7 +140,7 @@ export default function Seatex() {
                     const imgSrc = image?.src || null
                     return (
                       <Link key={product.id} to={`/seatex/${activeHandle === ALL ? (Object.entries(collectionProducts).find(([, ps]) => ps.some(p => p.id === product.id))?.[0] ?? SEATEX_COLLECTIONS[0].handle) : activeHandle}/${product.handle}`}
-                        className='group rounded-xl bg-white border border-gray-100 overflow-hidden hover:border-emerald-300 hover:shadow-md transition-all duration-200'>
+                        className='group reveal rounded-2xl bg-white border border-black/[0.06] overflow-hidden transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-1.5 hover:border-emerald-300 hover:shadow-xl'>
                         <div className='aspect-square bg-gray-50 overflow-hidden'>
                           {imgSrc ? (
                             <img src={imgSrc} alt={title} className='w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300' loading='lazy' />

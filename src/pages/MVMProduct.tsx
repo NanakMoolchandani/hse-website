@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
@@ -44,20 +44,8 @@ export default function MVMProduct() {
   // Descriptions run long enough to push the right column well past the bottom
   // of the photograph. Show a few lines, and let anyone who wants the rest ask.
   const [descExpanded, setDescExpanded] = useState(false)
-  const imageColRef = useRef<HTMLDivElement>(null)
-  const [imageColHeight, setImageColHeight] = useState<number | null>(null)
   // ID of the colour variant currently displayed — null = parent/default
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
-
-  useEffect(() => {
-    const el = imageColRef.current
-    if (!el) return
-    const observer = new ResizeObserver((entries) => {
-      setImageColHeight(entries[0].contentRect.height)
-    })
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [loading])
 
   const cat = collection ? getCategoryBySlug(collection) : undefined
   const product = productData
@@ -167,7 +155,7 @@ export default function MVMProduct() {
 
       <div className='min-h-screen bg-white'>
         {/* Header */}
-        <div className='pt-20 md:pt-[116px] pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+        <div className='pt-20 md:pt-32 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <div className='flex items-center gap-2 text-sm text-gray-500'>
             <Link to='/mvm' className='hover:text-gray-500 transition-colors'>MVM Aasanam</Link>
             <span>/</span>
@@ -181,11 +169,27 @@ export default function MVMProduct() {
           </div>
         </div>
 
+        {/* The name gets a band of its own at display scale, above the fold and
+            above both columns, the way a product page should open. */}
+        <header className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-10 sm:pb-14'>
+          <p className='text-eyebrow text-amber-600 mb-4'>
+            MVM Aasanam
+            {productCategory && <span className='text-gray-400'> &middot; {productCategory.series}</span>}
+          </p>
+          <h1 className='text-section text-gray-900 max-w-4xl'>
+            {product.name}
+          </h1>
+        </header>
+
         {/* Main Content */}
         <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16'>
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16 lg:items-start'>
-            {/* Left - Image Gallery — ref so we can measure its rendered height */}
-            <div className='flex-1 max-w-2xl' ref={imageColRef}>
+            {/* The photograph holds its place while the detail scrolls past it.
+                This replaces a right column whose height was locked to the image
+                with a ResizeObserver and scrolled inside its own box: a scrollbar
+                within a page that already scrolls, which hid the lower half of
+                the specs from anyone who did not think to scroll inside it. */}
+            <div className='flex-1 max-w-2xl lg:sticky lg:top-32 self-start'>
               <ProductImageZoom
                 images={images}
                 alt={product.name || 'Product'}
@@ -195,36 +199,23 @@ export default function MVMProduct() {
               />
             </div>
 
-            {/* Right - Product Info — height locked to image column, scrolls internally
-                NOTE: maxHeight is exposed as a CSS variable and only consumed at lg+ via
-                the lg:[max-height:var(--col-h)] utility. On mobile/tablet the column flows
-                naturally — applying the inline maxHeight unconditionally was making content
-                overflow into the section below. */}
-            <div
-              className='flex-1 lg:max-w-md lg:overflow-y-auto lg:pr-1 lg:[max-height:var(--col-h)]'
-              style={imageColHeight ? ({ '--col-h': `${imageColHeight}px` } as React.CSSProperties) : undefined}
-            >
+            <div className='flex-1 lg:max-w-md'>
               {/* Badges */}
-              <div className='flex flex-wrap items-center gap-2 mb-4'>
-                <span className='text-xs px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-medium'>
+              <div className='flex flex-wrap items-center gap-2 mb-6'>
+                <span className='text-xs px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 font-medium'>
                   MVM Aasanam
                 </span>
                 {productCategory && (
-                  <span className='text-xs px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200 text-gray-500 font-medium'>
+                  <span className='text-xs px-2.5 py-1 rounded-full bg-gray-100 border border-black/[0.06] text-gray-600 font-medium'>
                     {productCategory.series}
                   </span>
                 )}
                 {product.is_featured && (
-                  <span className='text-xs px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-medium'>
+                  <span className='text-xs px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 font-medium'>
                     Featured
                   </span>
                 )}
               </div>
-
-              {/* Title */}
-              <h1 className='text-display text-gray-900 mb-3'>
-                {product.name}
-              </h1>
 
               {/* Price and Add to bag, for the products that are sold online.
                   Keyed to the colour on screen: each variant is its own web

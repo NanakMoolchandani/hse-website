@@ -86,13 +86,22 @@ export default function ProductImageZoom({
     onActiveIndexChange((activeIndex + 1) % images.length)
   }, [activeIndex, images.length, onActiveIndexChange])
 
-  // Scroll active thumbnail into view
+  // Centre the active thumbnail in its strip.
+  //
+  // Deliberately drives the strip's own scrollLeft rather than calling
+  // scrollIntoView on the thumbnail. scrollIntoView scrolls every scrollable
+  // ancestor, including the page: because this effect also runs on mount, and
+  // the strip sits below the fold, landing on a product page scrolled it down
+  // by ~76px on its own and pushed the title under the fixed nav.
   useEffect(() => {
-    if (!thumbContainerRef.current) return
-    const thumb = thumbContainerRef.current.children[activeIndex] as HTMLElement
-    if (thumb) {
-      thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-    }
+    const strip = thumbContainerRef.current
+    if (!strip) return
+    const thumb = strip.children[activeIndex] as HTMLElement | undefined
+    if (!thumb) return
+    strip.scrollTo({
+      left: thumb.offsetLeft - strip.clientWidth / 2 + thumb.clientWidth / 2,
+      behavior: 'smooth',
+    })
   }, [activeIndex])
 
   // Keyboard navigation in lightbox

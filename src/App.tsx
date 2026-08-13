@@ -169,6 +169,11 @@ function Navbar() {
 
   return (
     <>
+      {/* Fixed, so every page has to reserve room for it: 4rem of main bar on
+          mobile, plus another 4rem of brand bar from `md` up. Pages express
+          that as `pt-20 md:pt-32` and sticky children as `top-16 md:top-32`.
+          If you change either bar's height, those change with it. The offsets
+          used to be hand-typed as 108/116/120px, none of which agreed. */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-spring ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-2'>
           <Link to='/mvm' className={`flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight font-sans min-w-0 ${textColor}`}>

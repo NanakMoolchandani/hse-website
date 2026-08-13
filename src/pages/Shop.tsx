@@ -116,16 +116,17 @@ export default function Shop() {
       />
 
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14'>
-        <header className='mb-8 sm:mb-10'>
-          <h1 className='text-display text-gray-900'>Shop</h1>
-          <p className='mt-2 text-gray-500 max-w-2xl'>
+        <header className='mb-12 sm:mb-16'>
+          <p className='text-eyebrow text-amber-600 mb-4'>In stock now</p>
+          <h1 className='text-section text-gray-900'>Shop</h1>
+          <p className='mt-5 text-base sm:text-lg text-gray-500 max-w-2xl leading-relaxed'>
             Chairs we make in Neemuch, in stock and ready to ship. Prices include GST,
             and delivery is free above {inr(15000)}.
           </p>
         </header>
 
         {loading && (
-          <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6'>
+          <div className='grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8'>
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className='rounded-xl border border-black/[0.06] overflow-hidden'>
                 <div className='aspect-square bg-gray-50 animate-pulse' />
@@ -166,11 +167,11 @@ export default function Shop() {
         )}
 
         {!loading && items.length > 0 && (
-          <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6'>
+          <div className='grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8'>
             {items.map((item) => (
               <article
                 key={item.id}
-                className='group rounded-xl border border-black/[0.06] bg-white overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-0.5 hover:border-black/[0.08] hover:shadow-lg'
+                className='group reveal rounded-2xl border border-black/[0.06] bg-white overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-1.5 hover:border-black/[0.08] hover:shadow-xl'
               >
                 <Link to={item.href} className='block aspect-square bg-gray-50 overflow-hidden'>
                   {item.image ? (
@@ -178,7 +179,7 @@ export default function Shop() {
                       src={item.image}
                       alt={item.name}
                       loading='lazy'
-                      className='w-full h-full object-contain p-3 transition-transform duration-400 ease-spring group-hover:scale-[1.04]'
+                      className='w-full h-full object-contain p-5 sm:p-7 transition-transform duration-400 ease-spring group-hover:scale-[1.06]'
                     />
                   ) : (
                     <div className='w-full h-full grid place-items-center text-gray-300 text-xs'>
@@ -187,29 +188,29 @@ export default function Shop() {
                   )}
                 </Link>
 
-                <div className='p-3 sm:p-4 flex flex-col flex-1'>
+                <div className='p-4 sm:p-5 flex flex-col flex-1'>
                   <Link to={item.href} className='block'>
-                    <h2 className='text-sm font-semibold text-gray-900 leading-snug line-clamp-2'>
+                    <h2 className='text-title text-gray-900 line-clamp-2'>
                       {item.name}
                     </h2>
                   </Link>
                   {item.colorName && (
-                    <p className='mt-0.5 text-xs text-gray-400'>{item.colorName}</p>
+                    <p className='mt-1 text-[13px] text-gray-400'>{item.colorName}</p>
                   )}
 
-                  <div className='mt-2 flex items-baseline gap-2'>
-                    <span className='text-base font-bold text-gray-900 tabular-nums'>
+                  <div className='mt-2.5 flex items-baseline gap-2'>
+                    <span className='text-xl font-semibold tracking-[-0.02em] text-gray-900 tabular-nums'>
                       {inr(item.price)}
                     </span>
                     {item.compareAtPrice && item.compareAtPrice > item.price && (
-                      <span className='text-xs text-gray-400 line-through tabular-nums'>
+                      <span className='text-sm text-gray-400 line-through tabular-nums'>
                         {inr(item.compareAtPrice)}
                       </span>
                     )}
                   </div>
 
                   {item.inStock && item.availableQty !== null && item.availableQty <= 5 && (
-                    <p className='mt-1 text-[11px] font-medium text-amber-600'>
+                    <p className='mt-1.5 text-xs font-medium text-amber-600'>
                       Only {item.availableQty} left
                     </p>
                   )}

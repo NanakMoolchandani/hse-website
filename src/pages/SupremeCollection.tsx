@@ -202,7 +202,7 @@ function ProductCard({ product, collection }: { product: SupremeProduct; collect
   return (
     <Link
       to={`/supreme/${collection}/${product.handle}`}
-      className='group rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden hover:border-gray-300 hover:shadow-md transition-all duration-300'
+      className='group reveal rounded-2xl bg-gray-50 border border-black/[0.06] overflow-hidden transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-1.5 hover:border-black/[0.08] hover:shadow-xl'
     >
       {/* Image */}
       <div className='aspect-square bg-white overflow-hidden relative'>
@@ -210,7 +210,7 @@ function ProductCard({ product, collection }: { product: SupremeProduct; collect
           <img
             src={imgSrc}
             alt={title}
-            className='w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500'
+            className='w-full h-full object-contain p-4 sm:p-6 group-hover:scale-[1.06] transition-transform duration-400 ease-spring'
             loading='lazy'
             onError={(e) => {
               const target = e.target as HTMLImageElement

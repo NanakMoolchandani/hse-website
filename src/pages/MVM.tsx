@@ -133,7 +133,7 @@ export default function MVM() {
           <div className='flex'>
 
             {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
+            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-32 self-start h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto pt-7 pb-6 px-5'>
                 <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 mb-4'>
                   Categories

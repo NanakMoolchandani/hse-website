@@ -77,7 +77,7 @@ export default function Nilkamal() {
           <div className='flex'>
 
             {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-16 md:top-[108px] self-start h-[calc(100vh-64px)] md:h-[calc(100vh-108px)] bg-white border-r border-gray-100'>
+            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-16 md:top-32 self-start h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto pt-2 pb-4 px-2'>
                 <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'>
                   Collections
@@ -138,7 +138,7 @@ export default function Nilkamal() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-[120px] pb-8'>
+            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-32 pb-8'>
 
               {/* Mobile: horizontal category strip */}
               <div className='md:hidden mb-4'>
@@ -221,7 +221,7 @@ export default function Nilkamal() {
                       <Link
                         key={product.id}
                         to={`/nilkamal/${activeHandle === ALL ? (Object.entries(collectionProducts).find(([, ps]) => ps.some(p => p.id === product.id))?.[0] ?? NILKAMAL_COLLECTIONS[0].handle) : activeHandle}/${product.handle}`}
-                        className='group rounded-xl bg-white border border-gray-100 overflow-hidden hover:border-blue-300 hover:shadow-md transition-all duration-200'
+                        className='group reveal rounded-2xl bg-white border border-black/[0.06] overflow-hidden transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-1.5 hover:border-blue-300 hover:shadow-xl'
                       >
                         <div className='aspect-square bg-gray-50 overflow-hidden'>
                           {imgSrc ? (
