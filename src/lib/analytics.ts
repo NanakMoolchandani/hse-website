@@ -16,7 +16,7 @@
  *      does not change because they clicked through to a second page.
  */
 
-const ENDPOINT = `${import.meta.env.VITE_ADMIN_API_ORIGIN ?? 'https://admin.mvm-furniture.com'}/api/storefront`
+export const ENDPOINT = `${import.meta.env.VITE_ADMIN_API_ORIGIN ?? 'https://admin.mvm-furniture.com'}/api/storefront`
 
 const VISITOR_KEY = 'mvm_vid'
 const SESSION_KEY = 'mvm_sid'
@@ -303,14 +303,45 @@ export function clearCartId(): void {
   try { localStorage.removeItem(CART_KEY) } catch { /* ignore */ }
 }
 
+/** Override the cart id, for a recovery link that arrives on a new device. */
+export function adoptCartId(id: string): void {
+  if (id.length < 8 || id.length > 64) return
+  safeSet(localStorage, CART_KEY, id)
+}
+
 export interface CartLine { webProductId: number; quantity: number }
+
+export interface ServerCartLine {
+  webProductId: number
+  name: string
+  slug?: string | null
+  variantLabel?: string | null
+  quantity: number
+  unitPrice: number
+  lineTotal: number
+  imageUrl: string | null
+  capped?: boolean
+  inStock?: boolean
+}
+
+export interface ServerCart {
+  cartId: string
+  items: ServerCartLine[]
+  subtotal: number
+  itemCount: number
+  shipping: number
+  total: number
+  freeShippingAbove: number
+  amountToFreeShipping: number
+  rejected?: { webProductId: number; reason: string }[]
+}
 
 /**
  * Push the cart server-side. Prices come back from the server — the caller must
  * render those and not its own, because the server's are the ones that will be
  * charged.
  */
-export async function syncCart(items: CartLine[], contact?: { email?: string; phone?: string }) {
+export async function syncCart(items: CartLine[], contact?: { email?: string; phone?: string }): Promise<ServerCart> {
   const res = await fetch(`${ENDPOINT}/cart`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -323,17 +354,40 @@ export async function syncCart(items: CartLine[], contact?: { email?: string; ph
     }),
   })
   if (!res.ok) throw new Error('Could not update cart')
-  return res.json() as Promise<{
-    cartId: string
-    items: { webProductId: number; name: string; quantity: number; unitPrice: number; lineTotal: number; imageUrl: string | null; capped: boolean }[]
-    subtotal: number
-    itemCount: number
-    rejected: { webProductId: number; reason: string }[]
-  }>
+  return res.json() as Promise<ServerCart>
+}
+
+/** Read a saved cart back, for a reload or a recovery link. */
+export async function fetchCart(): Promise<ServerCart> {
+  const res = await fetch(`${ENDPOINT}/cart?cartId=${encodeURIComponent(cartId())}`)
+  if (!res.ok) throw new Error('Could not load cart')
+  return res.json() as Promise<ServerCart>
+}
+
+export interface CheckoutDetails {
+  customer: { name: string; email: string; phone: string }
+  address: {
+    line1: string
+    line2?: string
+    landmark?: string
+    city: string
+    state: string
+    pincode: string
+  }
+}
+
+/** A 422 from the checkout: which field, and what is wrong with it. */
+export class CheckoutFieldError extends Error {
+  fields: Record<string, string>
+  constructor(fields: Record<string, string>) {
+    super('Check the details')
+    this.name = 'CheckoutFieldError'
+    this.fields = fields
+  }
 }
 
 /** Start payment and hand back the URL to redirect to. */
-export async function startCheckout(contact?: { email?: string; phone?: string }): Promise<string> {
+export async function startCheckout(details: CheckoutDetails): Promise<string> {
   track('BEGIN_CHECKOUT')
   const res = await fetch(`${ENDPOINT}/checkout`, {
     method: 'POST',
@@ -343,12 +397,66 @@ export async function startCheckout(contact?: { email?: string; phone?: string }
       sessionId: sid || safeGet(sessionStorage, SESSION_KEY),
       visitorId: vid || safeGet(localStorage, VISITOR_KEY),
       attribution: attribution(),
-      ...contact,
+      ...details,
     }),
   })
   const json = await res.json()
+  if (res.status === 422 && json.fields) throw new CheckoutFieldError(json.fields)
   if (!res.ok) throw new Error(json.error ?? 'Checkout failed')
   return json.url as string
+}
+
+// ── Order status ─────────────────────────────────────────────────────────────
+
+export interface OrderView {
+  orderNumber: string
+  placedOn: string | null
+  paidAt: string | null
+  paymentStatus: string
+  fulfilmentStatus: string
+  paymentMethod: string | null
+  subtotal: number
+  discountTotal: number
+  shippingTotal: number
+  taxTotal: number
+  grandTotal: number
+  customerName: string | null
+  email: string | null
+  phone: string | null
+  city: string | null
+  state: string | null
+  pincode: string | null
+  address: Record<string, string> | null
+  courierName: string | null
+  awbNumber: string | null
+  promisedBy: string | null
+  dispatchedAt: string | null
+  deliveredAt: string | null
+  items: { name: string; variantLabel: string | null; quantity: number; unitPrice: number }[]
+}
+
+/**
+ * PENDING is the normal first answer on the thank-you page: the buyer is
+ * redirected back the moment the payment clears, and the webhook that writes
+ * the order arrives seconds later on a different connection.
+ */
+export type OrderLookup =
+  | { status: 'FOUND'; order: OrderView }
+  | { status: 'PENDING' }
+  | { status: 'NOT_FOUND' }
+
+export async function fetchOrderByRef(ref: string): Promise<OrderLookup> {
+  const res = await fetch(`${ENDPOINT}/order?ref=${encodeURIComponent(ref)}`)
+  if (!res.ok) return { status: 'NOT_FOUND' }
+  return res.json() as Promise<OrderLookup>
+}
+
+export async function fetchOrderByNumber(orderNumber: string, phone: string): Promise<OrderLookup> {
+  const res = await fetch(
+    `${ENDPOINT}/order?number=${encodeURIComponent(orderNumber)}&phone=${encodeURIComponent(phone)}`,
+  )
+  if (!res.ok) return { status: 'NOT_FOUND' }
+  return res.json() as Promise<OrderLookup>
 }
 
 /** Live price and availability for the storefront. Copy and photos still come

@@ -4,6 +4,9 @@ import { Menu, X, MessageCircle, ChevronDown, FileDown, Palette } from 'lucide-r
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Navigate } from 'react-router-dom'
+import CartButton from '@/src/components/CartButton'
+import { initAnalytics, trackPageView, track } from '@/src/lib/analytics'
+import { loadCart } from '@/src/lib/cart'
 
 // MVM is the default landing route (/) — keep eager so first paint has no spinner.
 import MVM from '@/src/pages/MVM'
@@ -26,6 +29,15 @@ const Privacy = lazy(() => import('@/src/pages/Privacy'))
 const Terms = lazy(() => import('@/src/pages/Terms'))
 const CatalogueColors = lazy(() => import('@/src/pages/CatalogueColors'))
 
+// ── Store ────────────────────────────────────────────────────────────────────
+// Lazy like everything else: most visitors never reach these, and the checkout
+// pulls in form and cart code that has no business in the marketing bundle.
+const Shop = lazy(() => import('@/src/pages/Shop'))
+const CartPage = lazy(() => import('@/src/pages/Cart'))
+const Checkout = lazy(() => import('@/src/pages/Checkout'))
+const OrderSuccess = lazy(() => import('@/src/pages/OrderSuccess'))
+const OrderTrack = lazy(() => import('@/src/pages/OrderTrack'))
+
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
@@ -36,6 +48,10 @@ const NAV_LINKS = [
   { label: 'Home', href: '/home' },
   { label: 'About', href: '/about' },
   { label: 'Products', href: null }, // dropdown
+  // The catalogue is everything we make; the shop is the part you can buy
+  // right now without asking for a price. Both stay in the nav, because most
+  // of the range is still wholesale and quoted per deal.
+  { label: 'Shop', href: '/shop' },
   { label: 'Features', href: '/home#features' },
   { label: 'Contact', href: '/home#contact' },
 ]
@@ -265,22 +281,26 @@ function Navbar() {
               ),
             )}
           </div>
-          <a
-            href='https://wa.me/919981516171'
-            className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
-              isHome
-                ? 'bg-white text-black hover:bg-gray-200'
-                : 'bg-amber-500 text-white hover:bg-amber-600'
-            }`}
-          >
-            WhatsApp Us
-          </a>
-          <button
-            className={`md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center ${textColor}`}
-            onClick={() => setOpen((o) => !o)}
-          >
-            {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
-          </button>
+          <div className='flex items-center gap-1'>
+            <CartButton dark={isHome} />
+            <a
+              href='https://wa.me/919981516171'
+              onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'navbar' } })}
+              className={`hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full transition-all ${
+                isHome
+                  ? 'bg-white text-black hover:bg-gray-200'
+                  : 'bg-amber-500 text-white hover:bg-amber-600'
+              }`}
+            >
+              WhatsApp Us
+            </a>
+            <button
+              className={`md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center ${textColor}`}
+              onClick={() => setOpen((o) => !o)}
+            >
+              {open ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
+            </button>
+          </div>
         </div>
 
         {/* Brand quick-links bar - desktop only, centered */}
@@ -327,6 +347,13 @@ function Navbar() {
               onClick={() => setOpen(false)}
             >
               Home
+            </Link>
+            <Link
+              to='/shop'
+              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
+              onClick={() => setOpen(false)}
+            >
+              Shop
             </Link>
             <div>
               <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
@@ -400,8 +427,16 @@ function Navbar() {
                 Contact
               </Link>
             )}
+            <Link
+              to='/order/track'
+              className={`text-left text-sm font-medium py-1.5 ${isHome ? 'text-gray-400' : 'text-gray-500'}`}
+              onClick={() => setOpen(false)}
+            >
+              Track an order
+            </Link>
             <a
               href='https://wa.me/919981516171'
+              onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'mobile-menu' } })}
               className={`mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold w-full ${
                 isHome ? 'bg-white text-black' : 'bg-amber-500 text-white'
               }`}
@@ -455,6 +490,20 @@ export default function App() {
     }
   }, [location.pathname])
 
+  // Analytics and the saved bag, once per load. The tracker captures the
+  // campaign from the landing URL, so it has to start before any navigation
+  // rewrites the query string away.
+  useEffect(() => {
+    initAnalytics()
+    loadCart()
+  }, [])
+
+  // One page view per route. The site is a single-page app, so without this the
+  // whole visit reads as one view of whichever page they landed on.
+  useEffect(() => {
+    trackPageView(location.pathname)
+  }, [location.pathname])
+
   return (
     <div className={isDarkRoute ? 'bg-gray-950' : 'bg-white'}>
       <Navbar />
@@ -476,6 +525,17 @@ export default function App() {
           <Route path='/mvm/:collection' element={<Navigate to='/mvm' replace />} />
           <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
           <Route path='/catalogue-colors' element={<CatalogueColors />} />
+
+          {/* ── Store ─────────────────────────────────────────────────────
+              /order/success is the return URL the payment provider sends the
+              buyer back to, and /order/track is the whole of "my account".
+              Neither needs a login: see the note at the top of Checkout. */}
+          <Route path='/shop' element={<Shop />} />
+          <Route path='/cart' element={<CartPage />} />
+          <Route path='/checkout' element={<Checkout />} />
+          <Route path='/order/success' element={<OrderSuccess />} />
+          <Route path='/order/track' element={<OrderTrack />} />
+          <Route path='/order' element={<Navigate to='/order/track' replace />} />
           {/* Legacy /catalogue-colors/<line> URLs redirect to the consolidated page */}
           <Route path='/catalogue-colors/:slug' element={<Navigate to='/catalogue-colors' replace />} />
           <Route path='/privacy' element={<Privacy />} />

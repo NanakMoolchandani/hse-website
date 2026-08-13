@@ -6,6 +6,8 @@ import ProductImageZoom from '@/src/components/ProductImageZoom'
 import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum, isParticleBoardCategory } from '@/src/lib/categories'
 import ProductColourCatalogue from '@/src/components/ProductColourCatalogue'
+import BuyBox from '@/src/components/BuyBox'
+import { trackProductView } from '@/src/lib/analytics'
 import {
   fetchProductWithVariants,
   fetchProducts,
@@ -59,6 +61,13 @@ export default function MVMProduct() {
 
   // Must be before any early returns — Rules of Hooks
   useEffect(() => { setActiveImage(0) }, [selectedVariantId])
+
+  // The event the product-level funnel is built from. Fired on the product,
+  // not on the variant: switching swatch is browsing one chair, not viewing a
+  // second one, and counting it twice would inflate every view-to-cart rate.
+  useEffect(() => {
+    if (productData) trackProductView(undefined, productData.name ?? undefined)
+  }, [productData])
 
   const handleShare = async () => {
     const url = window.location.href
@@ -195,6 +204,14 @@ export default function MVMProduct() {
               <h1 className='text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight'>
                 {product.name}
               </h1>
+
+              {/* Price and Add to bag, for the products that are sold online.
+                  Keyed to the colour on screen: each variant is its own web
+                  product with its own price and its own stock, so switching
+                  swatch has to re-ask rather than sell the parent's stock under
+                  a different colour's photo. Renders nothing for the rest of
+                  the catalogue, which is quoted on WhatsApp as it always was. */}
+              {activeMember.slug && <BuyBox slug={activeMember.slug} />}
 
               {/* ── Colour variant selector ──────────────────────────────── */}
               {familyMembers.length > 1 && (

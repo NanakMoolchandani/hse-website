@@ -48,6 +48,11 @@ const STATIC_PAGES = [
   { path: '/nilkamal', priority: '0.9', changefreq: 'weekly' },
   { path: '/supreme', priority: '0.9', changefreq: 'weekly' },
   { path: '/seatex', priority: '0.9', changefreq: 'weekly' },
+  // The shop. /cart, /checkout and /order/success are deliberately absent:
+  // they are personal to one browser, carry no content worth ranking, and are
+  // marked noindex in the page itself.
+  { path: '/shop', priority: '0.9', changefreq: 'daily' },
+  { path: '/order/track', priority: '0.4', changefreq: 'monthly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
 ]

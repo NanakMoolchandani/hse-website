@@ -15,6 +15,13 @@ const PRERENDER_ROUTES = [
   '/privacy',
   '/terms',
 
+  // The shop. Its listing is rendered from live prices at runtime, so the
+  // snapshot is worth having for the copy and the shell, not the grid.
+  // /cart, /checkout and /order/success are personal to one browser and are
+  // never prerendered.
+  '/shop',
+  '/order/track',
+
   // MVM Aasanam — brand + 5 collections
   '/mvm',
   '/mvm/executive-chairs',
