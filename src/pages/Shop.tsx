@@ -29,6 +29,7 @@ import { MessageCircle, Search } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import AddToBag from '@/src/components/AddToBag'
+import { WishlistHeart } from '@/src/components/WishlistButton'
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
 import { fetchProducts, fetchVariantCounts, type CatalogProduct } from '@/src/lib/supabase'
 import { fetchLivePricing, track } from '@/src/lib/analytics'
@@ -364,31 +365,53 @@ function ProductCard({
   const catSlug = getCategoryByEnum(product.category ?? '')?.slug
   const href = catSlug ? `/mvm/${catSlug}/${product.slug}` : '/shop'
 
+  // Only from a real struck-through price, never computed from a guess. A
+  // discount badge is a commercial claim and has to match the invoice.
+  const discountPct =
+    entry?.compareAtPrice && entry.compareAtPrice > entry.price
+      ? Math.round(((entry.compareAtPrice - entry.price) / entry.compareAtPrice) * 100)
+      : 0
+
   return (
     <article className='group reveal rounded-2xl border border-black/[0.06] bg-white shadow-sm overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-1.5 hover:border-black/[0.08] hover:shadow-xl'>
-      <Link to={href} className='relative block aspect-square bg-gray-50 overflow-hidden'>
-        {imgSrc ? (
-          <img
-            src={imgSrc}
-            alt={product.name ?? 'Product'}
-            loading='lazy'
-            className='w-full h-full object-contain p-5 sm:p-7 transition-transform duration-400 ease-spring group-hover:scale-[1.06]'
+      <div className='relative'>
+        <Link to={href} className='relative block aspect-square bg-gray-50 overflow-hidden'>
+          {imgSrc ? (
+            <img
+              src={imgSrc}
+              alt={product.name ?? 'Product'}
+              loading='lazy'
+              className='w-full h-full object-contain p-5 sm:p-7 transition-transform duration-400 ease-spring group-hover:scale-[1.06]'
+            />
+          ) : (
+            <div className='w-full h-full grid place-items-center'>
+              <span className='text-5xl font-semibold text-gray-200'>{(product.name ?? 'P')[0]}</span>
+            </div>
+          )}
+          {variantCount > 0 && (
+            <span className='absolute bottom-3 right-3 text-[10px] font-medium tracking-wide rounded-full bg-black/60 text-white px-2.5 py-1 backdrop-blur-sm'>
+              +{variantCount} colours
+            </span>
+          )}
+          {discountPct >= 5 && (
+            <span className='absolute top-3 left-3 text-[11px] font-bold rounded-full bg-emerald-600 text-white px-2.5 py-1'>
+              {discountPct}% off
+            </span>
+          )}
+        </Link>
+
+        {/* Outside the anchor, so saving a chair does not navigate to it. */}
+        {product.slug && (
+          <WishlistHeart
+            className='absolute top-3 right-3'
+            entry={{ slug: product.slug, name: product.name ?? 'Chair', image: imgSrc, href }}
           />
-        ) : (
-          <div className='w-full h-full grid place-items-center'>
-            <span className='text-5xl font-semibold text-gray-200'>{(product.name ?? 'P')[0]}</span>
-          </div>
         )}
-        {variantCount > 0 && (
-          <span className='absolute bottom-3 right-3 text-[10px] font-medium tracking-wide rounded-full bg-black/60 text-white px-2.5 py-1 backdrop-blur-sm'>
-            +{variantCount} colours
-          </span>
-        )}
-      </Link>
+      </div>
 
       <div className='p-4 sm:p-5 flex flex-col flex-1'>
         <Link to={href} className='block'>
-          <h2 className='text-title text-gray-900 line-clamp-2 leading-snug'>{product.name}</h2>
+          <h2 className='text-title text-gray-900 line-clamp-2 leading-snug py-1'>{product.name}</h2>
         </Link>
 
         <div className='mt-2.5 min-h-[30px]'>

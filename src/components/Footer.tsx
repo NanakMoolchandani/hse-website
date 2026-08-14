@@ -1,55 +1,175 @@
+/**
+ * The footer.
+ *
+ * This is the one place the company name belongs. MVM Aasanam is the brand a
+ * customer buys and recognises; Hari Shewa Enterprises is the entity that
+ * manufactures it, holds the GSTIN and takes the payment. Putting the company
+ * name across the top of every page made the shop read as a supplier's
+ * letterhead, so it lives down here in the legal line instead, where anyone
+ * checking who they are actually paying can find it in one look.
+ *
+ * Columns collapse to a single stack on a phone rather than shrinking, because
+ * four columns of links at 390px are unreadable and untappable.
+ */
+
 import { Link } from 'react-router-dom'
-import { Phone } from 'lucide-react'
+import { Phone, MapPin, MessageCircle } from 'lucide-react'
+import { track } from '@/src/lib/analytics'
+
+const WHATSAPP = '919981516171'
+const PHONE_DISPLAY = '99815 16171'
+
+const SHOP_LINKS = [
+  { to: '/shop', label: 'All seating' },
+  { to: '/shop?category=EXECUTIVE_CHAIRS', label: 'Executive chairs' },
+  { to: '/shop?category=ERGONOMIC_TASK_CHAIRS', label: 'Ergonomic task chairs' },
+  { to: '/shop?category=VISITOR_RECEPTION', label: 'Visitor & reception' },
+  { to: '/catalogue-colors', label: 'Fabric & colours' },
+]
+
+const COMPANY_LINKS = [
+  { to: '/about', label: 'About us' },
+  { to: '/order/track', label: 'Track your order' },
+  { to: '/shipping', label: 'Shipping & delivery' },
+  { to: '/refunds', label: 'Refunds & cancellation' },
+  { to: '/privacy', label: 'Privacy policy' },
+  { to: '/terms', label: 'Terms of use' },
+]
+
+const DEALER_LINKS = [
+  { to: '/nilkamal', label: 'Nilkamal' },
+  { to: '/supreme', label: 'Supreme' },
+  { to: '/seatex', label: 'Seatex' },
+]
 
 export default function Footer({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const isDark = variant === 'dark'
-  const text = isDark ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'
-  const divider = isDark ? 'text-gray-700' : 'text-gray-200'
+
+  const shell = isDark
+    ? 'bg-gray-950 border-t border-white/10'
+    : 'bg-gray-50 border-t border-black/[0.06]'
+  const heading = isDark ? 'text-white' : 'text-gray-900'
+  const link = isDark
+    ? 'text-gray-400 hover:text-white'
+    : 'text-gray-500 hover:text-gray-900'
+  const muted = isDark ? 'text-gray-500' : 'text-gray-400'
+  const rule = isDark ? 'border-white/10' : 'border-black/[0.06]'
 
   return (
-    <footer className={isDark ? 'bg-gray-950 border-t border-white/10 py-5 md:py-3' : 'bg-white border-t border-gray-100 py-5 md:py-3'}>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
-        <div className='flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-between gap-y-3 gap-x-6 text-xs'>
-          {/* Brand links + phone */}
-          <div className='flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1.5 order-2 md:order-2'>
-            <Link to='/mvm' className={`transition-colors ${text}`}>MVM Aasanam</Link>
-            <span className={divider}>|</span>
-            <Link to='/nilkamal' className={`transition-colors ${text}`}>Nilkamal</Link>
-            <span className={divider}>|</span>
-            <Link to='/supreme' className={`transition-colors ${text}`}>Supreme</Link>
-            <span className={divider}>|</span>
-            <Link to='/seatex' className={`transition-colors ${text}`}>Seatex</Link>
+    <footer className={shell}>
+      <div className='max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-12 sm:py-16'>
+        <div className='grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10'>
+
+          {/* Brand */}
+          <div className='col-span-2 lg:col-span-1'>
+            <div className='flex items-center gap-2.5'>
+              <img src='/logos/mvm-logo.png' alt='' className='w-10 h-10 rounded-full' />
+              <span className={`text-lg font-semibold tracking-[-0.02em] ${heading}`}>
+                MVM Aasanam
+              </span>
+            </div>
+            <p className={`mt-4 text-sm leading-relaxed max-w-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              Office seating and furniture, manufactured in our own factory in
+              Neemuch and delivered across India.
+            </p>
+
+            <div className='mt-6 flex flex-wrap items-center gap-2'>
+              <a
+                href={`https://wa.me/${WHATSAPP}`}
+                onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'footer' } })}
+                className='pressable inline-flex items-center gap-2 h-10 px-4 rounded-full bg-amber-500 text-sm font-semibold text-white hover:bg-amber-600'
+              >
+                <MessageCircle className='w-4 h-4' />
+                WhatsApp us
+              </a>
+              <a
+                href={`tel:+91${WHATSAPP.slice(2)}`}
+                className={`pressable inline-flex items-center gap-2 h-10 px-4 rounded-full border text-sm font-medium ${
+                  isDark
+                    ? 'border-white/15 text-white hover:bg-white/10'
+                    : 'border-black/10 text-gray-700 hover:bg-black/[0.04]'
+                }`}
+              >
+                <Phone className='w-3.5 h-3.5' />
+                {PHONE_DISPLAY}
+              </a>
+            </div>
           </div>
 
-          {/* Phone (separate, prominent on mobile) */}
-          <a
-            href='tel:+919981516171'
-            className={`hidden md:inline-flex items-center gap-1 transition-colors order-3 ${text}`}
-          >
-            <Phone className='w-3 h-3' />
-            99815 16171
-          </a>
+          <FooterColumn title='Shop' links={SHOP_LINKS} heading={heading} link={link} />
+          <FooterColumn title='Company' links={COMPANY_LINKS} heading={heading} link={link} />
 
-          {/* Copyright */}
-          <p className={`text-center md:text-left order-4 md:order-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-            &copy; {new Date().getFullYear()} Hari Shewa Enterprises
-          </p>
-
-          {/* Legal links */}
-          <div className='flex items-center justify-center md:justify-end gap-4 order-1 md:order-4'>
-            <Link to='/about' className={`transition-colors ${text}`}>About</Link>
-            <Link to='/privacy' className={`transition-colors ${text}`}>Privacy</Link>
-            <Link to='/terms' className={`transition-colors ${text}`}>Terms</Link>
+          {/* Visit + dealer brands */}
+          <div>
+            <p className={`text-xs font-semibold uppercase tracking-[0.16em] mb-4 ${heading}`}>
+              Visit our factory
+            </p>
+            <p className={`flex items-start gap-2 text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              <MapPin className='w-4 h-4 mt-0.5 shrink-0 opacity-60' />
+              <span>
+                01, Ambedkar Road
+                <br />
+                Neemuch, Madhya Pradesh 458441
+              </span>
+            </p>
             <a
-              href='tel:+919981516171'
-              className={`md:hidden inline-flex items-center gap-1 transition-colors ${text}`}
+              href='https://www.google.com/maps?cid=16199908150674240164'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='mt-3 inline-block text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors'
             >
-              <Phone className='w-3 h-3' />
-              99815 16171
+              Get directions &rarr;
             </a>
+
+            <p className={`mt-7 text-xs font-semibold uppercase tracking-[0.16em] mb-3 ${heading}`}>
+              We also stock
+            </p>
+            <ul className='flex flex-wrap gap-x-4 gap-y-1.5'>
+              {DEALER_LINKS.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to} className={`text-sm transition-colors ${link}`}>{l.label}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
+
+        {/* The legal line. Small, factual, and the only place the company name
+            appears in the shop. */}
+        <div className={`mt-12 pt-6 border-t ${rule} flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3`}>
+          <p className={`text-xs leading-relaxed ${muted}`}>
+            MVM Aasanam is a brand of Hari Shewa Enterprises, Neemuch.
+            <span className='hidden sm:inline'> &middot; </span>
+            <br className='sm:hidden' />
+            GSTIN 23AJUPM2209E1ZD
+          </p>
+          <p className={`text-xs ${muted}`}>
+            &copy; {new Date().getFullYear()} Hari Shewa Enterprises. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
+  )
+}
+
+function FooterColumn({
+  title, links, heading, link,
+}: {
+  title: string
+  links: { to: string; label: string }[]
+  heading: string
+  link: string
+}) {
+  return (
+    <div>
+      <p className={`text-xs font-semibold uppercase tracking-[0.16em] mb-4 ${heading}`}>{title}</p>
+      <ul className='space-y-2.5'>
+        {links.map((l) => (
+          <li key={l.to}>
+            <Link to={l.to} className={`text-sm transition-colors ${link}`}>{l.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }

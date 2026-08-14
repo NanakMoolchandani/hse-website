@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Info } from 'lucide-react'
 import { COLOURS as CATALOGUE_COLOURS } from '@/src/lib/catalogue-colours'
+import { track } from '@/src/lib/analytics'
 
 // Categories that display the colour catalogue section
 export const COLOUR_CATALOGUE_CATEGORIES = new Set([
@@ -265,7 +266,7 @@ export default function ProductColourCatalogue({
           <p className='text-xs font-semibold tracking-widest uppercase text-amber-500 mb-1.5'>
             Customise Your Chair
           </p>
-          <h2 className='text-2xl font-bold text-gray-900 mb-3'>
+          <h2 className='text-title-lg text-gray-900 mb-3'>
             Upholstery Colour Options
           </h2>
           {isMeshBack ? (
@@ -278,11 +279,33 @@ export default function ProductColourCatalogue({
               </p>
             </div>
           ) : (
-            <p className='text-sm text-gray-400 max-w-xl'>
-              Choose from two premium upholstery catalogues — velvet/suede or leatherette
-              — available in a wide range of colours.
+            <p className='text-sm text-gray-500 max-w-xl leading-relaxed'>
+              Choose from two premium upholstery catalogues, velvet or suede and
+              leatherette, in a wide range of colours.
             </p>
           )}
+
+          {/* Said plainly and up front, because a shade shown here is a
+              possibility rather than a promise: it depends on what is on the
+              roll that week and on whether the model can take it. Better to be
+              honest before the order than to explain after it. */}
+          <div className='mt-5 flex items-start gap-2.5 max-w-2xl rounded-xl border border-black/[0.06] bg-gray-50 px-4 py-3'>
+            <Info className='w-4 h-4 shrink-0 mt-0.5 text-gray-400' />
+            <p className='text-sm text-gray-600 leading-relaxed'>
+              Any colour here can be applied to this chair subject to the fabric being
+              in stock and to the model allowing it. Tell us the shade you have in mind
+              and we will confirm what is possible before you order.{' '}
+              <a
+                href={`https://wa.me/919981516171?text=${encodeURIComponent(
+                  'Hi, I would like to check colour options for a chair.',
+                )}`}
+                onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'colour-availability' } })}
+                className='font-semibold text-amber-700 underline underline-offset-2 hover:text-amber-800'
+              >
+                Ask us on WhatsApp
+              </a>
+            </p>
+          </div>
         </div>
 
         {/* Two catalogue panels */}

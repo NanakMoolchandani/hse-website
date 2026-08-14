@@ -386,8 +386,34 @@ export class CheckoutFieldError extends Error {
   }
 }
 
-/** Start payment and hand back the URL to redirect to. */
-export async function startCheckout(details: CheckoutDetails): Promise<string> {
+/**
+ * What the server hands back when a payment is started.
+ *
+ * `url` is a page to send the browser to; `inline` opens the provider's own
+ * sheet on this page. Exactly one is set, decided by the provider configured on
+ * the server, so this file never has to know which one is live.
+ */
+export interface CheckoutHandle {
+  url: string | null
+  inline: InlineCheckout | null
+  provider: string
+  total: number
+}
+
+export interface InlineCheckout {
+  provider: string
+  keyId: string
+  orderId: string
+  amount: number
+  currency: string
+  name: string
+  description: string
+  prefill: { name?: string; email?: string; contact?: string }
+  themeColor: string
+}
+
+/** Start payment and hand back how to collect it. */
+export async function startCheckout(details: CheckoutDetails): Promise<CheckoutHandle> {
   track('BEGIN_CHECKOUT')
   const res = await fetch(`${ENDPOINT}/checkout`, {
     method: 'POST',
@@ -403,7 +429,28 @@ export async function startCheckout(details: CheckoutDetails): Promise<string> {
   const json = await res.json()
   if (res.status === 422 && json.fields) throw new CheckoutFieldError(json.fields)
   if (!res.ok) throw new Error(json.error ?? 'Checkout failed')
-  return json.url as string
+  return json as CheckoutHandle
+}
+
+/**
+ * Tell the server what the payment sheet reported.
+ *
+ * The order is created by the payment webhook regardless; this only lets the
+ * thank-you page show a number straight away instead of polling through the
+ * delivery lag. The server verifies the signature and asks the provider
+ * whether the money really moved, so nothing here is taken on trust.
+ */
+export async function verifyPayment(result: Record<string, string>): Promise<void> {
+  try {
+    await fetch(`${ENDPOINT}/payment/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(result),
+    })
+  } catch {
+    // The webhook is the source of truth. Losing this call costs a few seconds
+    // on the thank-you page and nothing else.
+  }
 }
 
 // ── Order status ─────────────────────────────────────────────────────────────

@@ -1,10 +1,11 @@
 import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Menu, X, MessageCircle, ChevronDown, FileDown, Palette } from 'lucide-react'
+import { Menu, X, MessageCircle, ChevronDown, Palette } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Navigate } from 'react-router-dom'
 import CartButton from '@/src/components/CartButton'
+import { WishlistButton } from '@/src/components/WishlistButton'
 import { initAnalytics, trackPageView, track } from '@/src/lib/analytics'
 import { loadCart } from '@/src/lib/cart'
 import { useReveal } from '@/src/hooks/use-reveal'
@@ -30,6 +31,8 @@ const SeatexProductPage = lazy(() => import('@/src/pages/SeatexProduct'))
 const MVMProductPage = lazy(() => import('@/src/pages/MVMProduct'))
 const Privacy = lazy(() => import('@/src/pages/Privacy'))
 const Terms = lazy(() => import('@/src/pages/Terms'))
+const Refunds = lazy(() => import('@/src/pages/Refunds'))
+const Shipping = lazy(() => import('@/src/pages/Shipping'))
 const CatalogueColors = lazy(() => import('@/src/pages/CatalogueColors'))
 
 // ── Store ────────────────────────────────────────────────────────────────────
@@ -39,6 +42,7 @@ const CartPage = lazy(() => import('@/src/pages/Cart'))
 const Checkout = lazy(() => import('@/src/pages/Checkout'))
 const OrderSuccess = lazy(() => import('@/src/pages/OrderSuccess'))
 const OrderTrack = lazy(() => import('@/src/pages/OrderTrack'))
+const WishlistPage = lazy(() => import('@/src/pages/Wishlist'))
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -55,49 +59,6 @@ const NAV_LINKS = [
   // of the range is still wholesale and quoted per deal.
   { label: 'Shop', href: '/shop' },
 ]
-
-/**
- * Downloadable catalogues.
- *
- * These are served from `/catalogs/*` — a same-origin rewrite onto the R2
- * asset host (see vercel.json). Same-origin matters: it is what lets `fetch`
- * read the file without a CORS grant and lets the `download` attribute save it
- * rather than opening the browser's PDF viewer.
- */
-const CATALOGS = [
-  {
-    label: 'MVM Aasanam — Seating',
-    href: '/catalogs/MVM-Aasanam-Seating-Collection.pdf',
-    file: 'MVM-Aasanam-Seating-Collection.pdf',
-  },
-  { label: 'MVM Aasanam', href: '/catalogs/HSE-Catalog.pdf', file: 'MVM-Aasanam-Catalog.pdf' },
-  { label: 'Nilkamal', href: '/catalogs/Nilkamal-Catalog.pdf', file: 'Nilkamal-Catalog.pdf' },
-  { label: 'Supreme', href: '/catalogs/Supreme-Catalog.pdf', file: 'Supreme-Catalog.pdf' },
-  { label: 'Seatex', href: '/catalogs/Seatex-Catalog.pdf', file: 'Seatex-Catalog.pdf' },
-]
-
-/** Save a catalogue to disk rather than opening it in the PDF viewer. */
-async function downloadPdf(url: string, filename: string) {
-  try {
-    const res = await fetch(url)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const blob = await res.blob()
-    if (blob.size === 0) throw new Error('empty file')
-
-    const objectUrl = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = objectUrl
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    // Safari aborts the save if the object URL is revoked too early.
-    setTimeout(() => URL.revokeObjectURL(objectUrl), 10000)
-  } catch {
-    // Last resort: let the browser handle the URL directly.
-    window.open(url, '_blank', 'noopener')
-  }
-}
 
 // ── Navbar ────────────────────────────────────────────────────────────────────
 
@@ -166,11 +127,25 @@ function Navbar() {
           used to be hand-typed as 108/116/120px, none of which agreed. */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-spring ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-2'>
-          <Link to='/shop' className={`flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight font-sans min-w-0 ${textColor}`}>
-            <img src='/logos/mvm-logo.png' alt='MVM Aasanam' className='w-8 h-8 sm:w-9 sm:h-9 rounded-full flex-shrink-0' />
-            <span className='text-[13px] sm:text-base truncate'>
-              <span className='sm:hidden'>Hari Shewa</span>
-              <span className='hidden sm:inline'>Hari Shewa Enterprises</span>
+          {/* The brand a customer buys is MVM Aasanam. Hari Shewa Enterprises
+              is the company that owns it: it belongs on the invoice, in the
+              footer and on the legal pages, not across the top of every screen
+              in the shop. */}
+          <Link
+            to='/shop'
+            aria-label='MVM Aasanam, home'
+            className={`flex items-center gap-2 sm:gap-2.5 min-w-0 ${textColor}`}
+          >
+            <img src='/logos/mvm-logo.png' alt='' className='w-9 h-9 sm:w-10 sm:h-10 rounded-full flex-shrink-0' />
+            <span className='flex flex-col leading-none min-w-0'>
+              <span className='text-[15px] sm:text-lg font-semibold tracking-[-0.02em] truncate'>
+                MVM Aasanam
+              </span>
+              <span className={`hidden sm:block mt-1 text-[9px] font-semibold uppercase tracking-[0.18em] ${
+                isHome ? 'text-white/45' : 'text-gray-400'
+              }`}>
+                Made in Neemuch
+              </span>
             </span>
           </Link>
           <div className='hidden md:flex items-center gap-8'>
@@ -222,34 +197,21 @@ function Navbar() {
                               </Link>
                             ))}
                           </div>
-                          {/* Catalogs */}
+                          {/* Fabrics and finishes. The downloadable PDF
+                              catalogues used to live here; the live grid is
+                              always current, which a PDF never is. */}
                           <div className={`py-2 w-52 border-l ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
                             <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-gray-500'>
-                              Catalogs
+                              Customise
                             </p>
-                            {CATALOGS.map((catalog) => (
-                              <button
-                                key={catalog.label}
-                                className={`flex items-center gap-2 px-4 py-1.5 text-sm w-full text-left ${dropdownItemClass}`}
-                                onClick={() => {
-                                  setProductsOpen(false)
-                                  downloadPdf(catalog.href, catalog.file)
-                                }}
-                              >
-                                <FileDown className='w-3 h-3 flex-shrink-0' />
-                                {catalog.label}
-                              </button>
-                            ))}
-                            <div className={`border-t mt-1 pt-1 ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
-                              <Link
-                                to='/catalogue-colors'
-                                className={`flex items-center gap-2 px-4 py-1.5 text-sm font-medium ${dropdownItemClass}`}
-                                onClick={() => setProductsOpen(false)}
-                              >
-                                <Palette className='w-3 h-3 flex-shrink-0' />
-                                Catalogue Colors
-                              </Link>
-                            </div>
+                            <Link
+                              to='/catalogue-colors'
+                              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              <Palette className='w-3 h-3 flex-shrink-0' />
+                              Fabrics &amp; colours
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -268,6 +230,7 @@ function Navbar() {
             )}
           </div>
           <div className='flex items-center gap-1'>
+            <WishlistButton dark={isHome} />
             <CartButton dark={isHome} />
             <a
               href='https://wa.me/919981516171'
@@ -398,27 +361,14 @@ function Navbar() {
               </div>
             </div>
             <div>
-              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Catalogs</p>
-              {CATALOGS.map((catalog) => (
-                <button
-                  key={catalog.label}
-                  className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 w-full text-left ${isHome ? 'text-gray-300' : 'text-gray-600'}`}
-                  onClick={() => {
-                    setOpen(false)
-                    downloadPdf(catalog.href, catalog.file)
-                  }}
-                >
-                  <FileDown className='w-3.5 h-3.5 flex-shrink-0' />
-                  {catalog.label}
-                </button>
-              ))}
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Customise</p>
               <Link
                 to='/catalogue-colors'
-                className={`flex items-center gap-2 text-sm font-medium py-1.5 pl-1 ${isHome ? 'text-purple-400' : 'text-purple-600'}`}
+                className={`flex items-center gap-2 text-base font-medium py-1.5 pl-1 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
                 onClick={() => setOpen(false)}
               >
-                <Palette className='w-3.5 h-3.5 flex-shrink-0' />
-                Catalogue Colors
+                <Palette className='w-4 h-4 flex-shrink-0' />
+                Fabrics &amp; colours
               </Link>
             </div>
             <Link
@@ -591,6 +541,7 @@ export default function App() {
               buyer back to, and /order/track is the whole of "my account".
               Neither needs a login: see the note at the top of Checkout. */}
           <Route path='/shop' element={<Shop />} />
+          <Route path='/wishlist' element={<WishlistPage />} />
           <Route path='/cart' element={<CartPage />} />
           <Route path='/checkout' element={<Checkout />} />
           <Route path='/order/success' element={<OrderSuccess />} />
@@ -600,6 +551,8 @@ export default function App() {
           <Route path='/catalogue-colors/:slug' element={<Navigate to='/catalogue-colors' replace />} />
           <Route path='/privacy' element={<Privacy />} />
           <Route path='/terms' element={<Terms />} />
+          <Route path='/refunds' element={<Refunds />} />
+          <Route path='/shipping' element={<Shipping />} />
           {/* Redirect old /products/ URLs to /mvm/ */}
           <Route path='/products/:category' element={<Navigate to='/shop' replace />} />
           <Route path='/products/:category/:slug' element={<Navigate to='/shop' replace />} />

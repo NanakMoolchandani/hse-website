@@ -25,7 +25,10 @@ import { Lock, ArrowRight, ShoppingBag, MessageCircle } from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO from '@/src/components/SEO'
 import { useCart, loadCart } from '@/src/lib/cart'
-import { startCheckout, track, CheckoutFieldError } from '@/src/lib/analytics'
+import {
+  startCheckout, verifyPayment, track, cartId, CheckoutFieldError,
+} from '@/src/lib/analytics'
+import { openRazorpay } from '@/src/lib/razorpay'
 import { INDIAN_STATES, HOME_STATE } from '@/src/lib/states'
 import ProtectionPicker, { PROTECTION_PLANS } from '@/src/components/ProtectionPicker'
 import { inr } from '@/src/lib/utils'
@@ -107,7 +110,7 @@ export default function Checkout() {
     setFailure(null)
 
     try {
-      const url = await startCheckout({
+      const handle = await startCheckout({
         customer: { name: form.name, email: form.email, phone: form.phone },
         address: {
           line1: form.line1,
@@ -126,8 +129,36 @@ export default function Checkout() {
         /* private mode — they will type it again next time */
       }
 
-      // Full navigation, not a route change: the payment page is another origin.
-      window.location.href = url
+      // Read before the sheet opens: the thank-you page empties the bag on
+      // arrival, and this id is how it finds the order that was just paid for.
+      const ref = cartId()
+
+      if (handle.inline) {
+        const outcome = await openRazorpay(handle.inline)
+
+        if (outcome.status === 'PAID') {
+          // Best effort, and awaited only so the thank-you page usually has a
+          // real order number on its first look. The webhook writes the order
+          // whether this call lands or not.
+          await verifyPayment(outcome.result as unknown as Record<string, string>)
+          navigate(`/order/success?ref=${encodeURIComponent(ref)}`)
+          return
+        }
+
+        // Closing the sheet is an ordinary thing to do. They come back to a
+        // filled-in form and a bag that still has their chairs in it.
+        if (outcome.status === 'FAILED') setFailure(outcome.reason)
+        setSubmitting(false)
+        return
+      }
+
+      if (handle.url) {
+        // Full navigation, not a route change: that page is another origin.
+        window.location.href = handle.url
+        return
+      }
+
+      throw new Error('Could not start the payment')
     } catch (err) {
       if (err instanceof CheckoutFieldError) {
         setErrors(err.fields)
@@ -321,12 +352,16 @@ export default function Checkout() {
               disabled={submitting}
               className='pressable mt-5 w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 disabled:opacity-60'
             >
-              {submitting ? 'Taking you to payment…' : <><Lock className='w-4 h-4' /> Pay {inr(payable)}</>}
+              {submitting ? 'Opening payment…' : <><Lock className='w-4 h-4' /> Pay {inr(payable)}</>}
             </button>
 
-            <p className='mt-3 text-[11px] leading-relaxed text-gray-400'>
-              You will be taken to our payment partner. We never see or store your card
-              details. By paying you accept our{' '}
+            <p className='mt-3 text-xs text-gray-500'>
+              UPI, cards, netbanking and wallets.
+            </p>
+
+            <p className='mt-2 text-[11px] leading-relaxed text-gray-400'>
+              Payment opens on this page and is handled by Razorpay. We never see or store
+              your card or UPI details. By paying you accept our{' '}
               <Link to='/terms' className='underline underline-offset-2'>terms</Link>.
             </p>
           </aside>

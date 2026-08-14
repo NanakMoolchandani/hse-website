@@ -54,6 +54,8 @@ const STATIC_PAGES = [
   { path: '/order/track', priority: '0.4', changefreq: 'monthly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
+  { path: '/shipping', priority: '0.3', changefreq: 'yearly' },
+  { path: '/refunds', priority: '0.3', changefreq: 'yearly' },
 ]
 
 function urlEntry(path: string, priority: string, changefreq: string, lastmod: string): string {
