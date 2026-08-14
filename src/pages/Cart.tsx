@@ -41,7 +41,7 @@ export default function Cart() {
   const empty = cart.status !== 'idle' && cart.lines.length === 0
 
   return (
-    <div className='min-h-screen bg-white pt-16 flex flex-col'>
+    <div className='min-h-screen bg-white pt-32 md:pt-40 flex flex-col'>
       <SEO
         title='Your Bag'
         description='Review your MVM Aasanam order before checkout.'

@@ -91,7 +91,7 @@ export default function MVMProduct() {
 
   if (loading) {
     return (
-      <div className='min-h-screen bg-white flex items-center justify-center pt-16'>
+      <div className='min-h-screen bg-white flex items-center justify-center pt-32 md:pt-40'>
         <div className='w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin' />
       </div>
     )
@@ -99,7 +99,7 @@ export default function MVMProduct() {
 
   if (!product) {
     return (
-      <div className='min-h-screen bg-white flex flex-col items-center justify-center pt-16 px-4'>
+      <div className='min-h-screen bg-white flex flex-col items-center justify-center pt-32 md:pt-40 px-4'>
         <p className='text-gray-500 text-lg mb-4'>Product not found</p>
         <Link
           to='/mvm'
@@ -155,7 +155,7 @@ export default function MVMProduct() {
 
       <div className='min-h-screen bg-white'>
         {/* Header */}
-        <div className='pt-20 md:pt-32 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+        <div className='pt-32 md:pt-40 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
           <div className='flex items-center gap-2 text-sm text-gray-500'>
             <Link to='/mvm' className='hover:text-gray-500 transition-colors'>MVM Aasanam</Link>
             <span>/</span>

@@ -1,10 +1,11 @@
 import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Menu, X, MessageCircle, ChevronDown, Palette } from 'lucide-react'
+import { Menu, X, MessageCircle, ChevronDown, Palette, MapPin } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Navigate } from 'react-router-dom'
 import CartButton from '@/src/components/CartButton'
+import HeaderSearch from '@/src/components/HeaderSearch'
 import { WishlistButton } from '@/src/components/WishlistButton'
 import { initAnalytics, trackPageView, track } from '@/src/lib/analytics'
 import { loadCart } from '@/src/lib/cart'
@@ -50,14 +51,31 @@ if (typeof window !== 'undefined') {
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
+const WHATSAPP_NUMBER = '919981516171'
+const GOOGLE_LISTING_URL = 'https://www.google.com/maps?cid=16199908150674240164'
+
 const NAV_LINKS = [
-  { label: 'Home', href: '/home' },
   { label: 'About', href: '/about' },
   { label: 'Products', href: null }, // dropdown
-  // The catalogue is everything we make; the shop is the part you can buy
-  // right now without asking for a price. Both stay in the nav, because most
-  // of the range is still wholesale and quoted per deal.
-  { label: 'Shop', href: '/shop' },
+]
+
+/**
+ * The category row under the search bar.
+ *
+ * Mirrors the eight seating categories the shop actually sells, plus a way
+ * into the made-to-order range. `enum` is empty for "All", which is the
+ * unfiltered shop.
+ */
+const HEADER_CATEGORIES = [
+  { label: 'All Seating', enum: '' },
+  { label: 'Executive', enum: 'EXECUTIVE_CHAIRS' },
+  { label: 'Ergonomic', enum: 'ERGONOMIC_TASK_CHAIRS' },
+  { label: 'Visitor & Reception', enum: 'VISITOR_RECEPTION' },
+  { label: 'Cafeteria', enum: 'CAFETERIA_FURNITURE' },
+  { label: 'Gaming', enum: 'GAMING_CHAIRS' },
+  { label: 'Recliners', enum: 'RECLINERS' },
+  { label: 'Salon', enum: 'SALON_CHAIRS' },
+  { label: 'Made to Order', enum: 'WARDROBES_ALMIRAHS' },
 ]
 
 // ── Navbar ────────────────────────────────────────────────────────────────────
@@ -126,6 +144,37 @@ function Navbar() {
           If you change either bar's height, those change with it. The offsets
           used to be hand-typed as 108/116/120px, none of which agreed. */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-spring ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
+        {/* Tier 1: the utility strip. Where you are, what is on, how to get
+            help. Desktop only, because on a phone this is noise above the
+            fold and the same links live in the menu. */}
+        <div className='hidden md:block bg-amber-500 text-white'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-between text-xs'>
+            <a
+              href={GOOGLE_LISTING_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-flex items-center gap-1.5 font-medium hover:underline underline-offset-2'
+            >
+              <MapPin className='w-3.5 h-3.5' />
+              Factory &amp; showroom: Neemuch, MP
+            </a>
+            <p className='hidden lg:block font-medium'>
+              Made in our own factory &middot; Delivered across India &middot; GST invoice on every order
+            </p>
+            <div className='flex items-center gap-4 font-medium'>
+              <Link to='/order/track' className='hover:underline underline-offset-2'>Track order</Link>
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'utility-strip' } })}
+                className='hover:underline underline-offset-2'
+              >
+                Help
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Tier 2: logo, search, actions. */}
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-2'>
           {/* The brand a customer buys is MVM Aasanam. Hari Shewa Enterprises
               is the company that owns it: it belongs on the invoice, in the
@@ -148,7 +197,15 @@ function Navbar() {
               </span>
             </span>
           </Link>
-          <div className='hidden md:flex items-center gap-8'>
+          {/* Search takes the width between the logo and the icons, the way a
+              shop's does. It used to be a thin underlined box tucked into the
+              corner of the product grid, which is where you put a filter, not
+              where you put the main way through a 400 piece catalogue. */}
+          <div className='hidden md:block flex-1 max-w-lg mx-5'>
+            <HeaderSearch dark={isHome} />
+          </div>
+
+          <div className='hidden md:flex items-center gap-5 shrink-0'>
             {NAV_LINKS.map((l) =>
               l.href === null ? (
                 <div key='products' className='relative'>
@@ -252,6 +309,13 @@ function Navbar() {
           </div>
         </div>
 
+        {/* Mobile: search gets a row of its own rather than being squeezed
+            into the bar beside four icons. At 390px there is no width to
+            share, and search is the thing people reach for. */}
+        <div className={`md:hidden px-4 pb-3 ${isHome ? '' : 'border-b border-black/[0.06]'}`}>
+          <HeaderSearch dark={isHome} onSubmitted={() => setOpen(false)} />
+        </div>
+
         {/* Brand quick-links bar - desktop only, centered */}
         {/* Part of the same pane of glass as the bar above it: a hairline
             divider, never a second translucent layer stacked on the first,
@@ -263,40 +327,53 @@ function Navbar() {
             ? scrolled ? 'border-t border-white/10' : 'material-chrome-dark'
             : 'border-t border-gray-200/60'
         }`}>
-          {/* Weighted 80/20. The four names were previously equal siblings,
-              which read as "we sell four brands". MVM Aasanam is the one we
-              manufacture, so it takes the width and the accent, and the three
-              dealer lines share the right edge. Both tags carry the same
-              weight; only their colour separates owning a brand from carrying
-              one. */}
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-stretch h-16'>
-            <BrandTab
-              to='/shop'
-              label='MVM Aasanam'
-              tag='Our Brand'
-              owned
-              dark={isHome}
-              // Product pages still live under /mvm/<collection>/<slug>, so the
-              // brand stays lit while a customer is looking at one of its chairs.
-              active={location.pathname.startsWith('/mvm') || location.pathname === '/shop'}
-              className='flex-[4]'
-            />
-            <span className={`my-3 w-px ${isHome ? 'bg-white/15' : 'bg-black/10'}`} />
-            <div className='flex-1 flex items-stretch'>
+          {/* Tier 3: the category row, which is how a furniture shop is
+              actually navigated. Our own range takes the row; the three dealer
+              brands we merely stock sit small at the right, because a customer
+              looking for a chair wants a category, not a supplier. */}
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-12 gap-6'>
+            <div className='flex items-center gap-6 overflow-x-auto thumbnail-scroll'>
+              {HEADER_CATEGORIES.map((cat) => {
+                const to = cat.enum ? `/shop?category=${cat.enum}` : '/shop'
+                const active = cat.enum
+                  ? location.search.includes(cat.enum)
+                  : location.pathname === '/shop' && !location.search.includes('category')
+                return (
+                  <Link
+                    key={cat.label}
+                    to={to}
+                    className={`relative whitespace-nowrap text-sm transition-colors py-3 ${
+                      active
+                        ? isHome ? 'text-white font-semibold' : 'text-gray-900 font-semibold'
+                        : linkColor
+                    }`}
+                  >
+                    {cat.label}
+                    <span
+                      aria-hidden
+                      className={`absolute bottom-0 left-0 right-0 h-[2px] origin-left transition-transform duration-250 ease-spring bg-amber-500 ${
+                        active ? 'scale-x-100' : 'scale-x-0'
+                      }`}
+                    />
+                  </Link>
+                )
+              })}
+            </div>
+
+            <div className={`hidden lg:flex items-center gap-3 shrink-0 text-xs ${isHome ? 'text-white/50' : 'text-gray-400'}`}>
+              <span className='uppercase tracking-[0.14em] font-semibold'>Also stocking</span>
               {[
                 { to: '/nilkamal', label: 'Nilkamal' },
                 { to: '/supreme', label: 'Supreme' },
                 { to: '/seatex', label: 'Seatex' },
-              ].map((brand) => (
-                <BrandTab
-                  key={brand.to}
-                  to={brand.to}
-                  label={brand.label}
-                  tag='Dealer'
-                  dark={isHome}
-                  active={location.pathname.startsWith(brand.to)}
-                  className='flex-1'
-                />
+              ].map((b) => (
+                <Link
+                  key={b.to}
+                  to={b.to}
+                  className={`transition-colors ${isHome ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                >
+                  {b.label}
+                </Link>
               ))}
             </div>
           </div>
@@ -392,65 +469,6 @@ function Navbar() {
         </div>
       )}
     </>
-  )
-}
-
-// ── Brand tab ─────────────────────────────────────────────────────────────────
-
-interface BrandTabProps {
-  to: string
-  label: string
-  tag: string
-  /** Our own line, which gets the accent and the larger type. */
-  owned?: boolean
-  dark: boolean
-  active: boolean
-  className?: string
-}
-
-/**
- * One name in the brand bar. Reads as a real tab: it lights on hover, presses
- * on tap, and the route you are on keeps a lit underline so the bar always
- * answers "which of these am I looking at".
- */
-function BrandTab({ to, label, tag, owned, dark, active, className = '' }: BrandTabProps) {
-  return (
-    <Link
-      to={to}
-      className={`group relative flex flex-col justify-center px-4 transition-colors duration-150 ${
-        dark ? 'hover:bg-white/[0.07]' : 'hover:bg-black/[0.035]'
-      } ${className}`}
-    >
-      <span
-        className={`font-semibold leading-tight transition-colors ${
-          owned ? 'text-[15px]' : 'text-[13px]'
-        } ${
-          dark
-            ? active || owned ? 'text-white' : 'text-white/80 group-hover:text-white'
-            : active || owned ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
-        }`}
-      >
-        {label}
-      </span>
-      <span
-        className={`mt-0.5 text-[9px] font-bold uppercase leading-tight tracking-[0.18em] ${
-          owned
-            ? 'text-amber-500'
-            : dark ? 'text-white/40' : 'text-gray-400'
-        }`}
-      >
-        {tag}
-      </span>
-
-      {/* Sits under the tab, grows from nothing on hover, stays lit on the
-          route you are actually on. */}
-      <span
-        aria-hidden
-        className={`absolute bottom-0 left-0 right-0 h-[2px] origin-left transition-transform duration-250 ease-spring ${
-          owned ? 'bg-amber-500' : dark ? 'bg-white/50' : 'bg-gray-900'
-        } ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-      />
-    </Link>
   )
 }
 

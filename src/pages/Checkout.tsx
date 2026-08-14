@@ -175,7 +175,7 @@ export default function Checkout() {
 
   if (cart.status !== 'idle' && cart.lines.length === 0) {
     return (
-      <div className='min-h-screen bg-white pt-16 flex flex-col'>
+      <div className='min-h-screen bg-white pt-32 md:pt-40 flex flex-col'>
         <SEO title='Checkout' description='Complete your MVM Aasanam order.' canonical='/checkout' noindex />
         <div className='flex-1 max-w-md w-full mx-auto px-4 py-24 text-center'>
           <ShoppingBag className='w-6 h-6 mx-auto text-gray-300' />
@@ -194,7 +194,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className='min-h-screen bg-white pt-16 flex flex-col'>
+    <div className='min-h-screen bg-white pt-32 md:pt-40 flex flex-col'>
       <SEO title='Checkout' description='Complete your MVM Aasanam order.' canonical='/checkout' noindex />
 
       <div className='flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14'>

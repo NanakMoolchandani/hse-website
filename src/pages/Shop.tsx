@@ -156,12 +156,12 @@ export default function Shop() {
 
       <Hero count={seating.length} />
 
-      <div id='catalogue' className='bg-white min-h-screen scroll-mt-32'>
+      <div id='catalogue' className='bg-white min-h-screen scroll-mt-32 md:scroll-mt-40'>
         <div className='max-w-7xl mx-auto'>
           <div className='flex'>
 
             {/* ── Sidebar ─────────────────────────────────────────────── */}
-            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-16 md:top-32 self-start h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)] bg-white border-r border-gray-100'>
+            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-32 md:top-40 self-start h-[calc(100vh-8rem)] md:h-[calc(100vh-10rem)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto pt-7 pb-6 px-5'>
                 <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 mb-4'>
                   Categories

@@ -16,7 +16,7 @@ export default function Wishlist() {
   const items = useWishlist()
 
   return (
-    <div className='min-h-screen bg-white pt-20 md:pt-32 flex flex-col'>
+    <div className='min-h-screen bg-white pt-32 md:pt-40 flex flex-col'>
       <SEO
         title='Saved chairs'
         description='The chairs you have saved from the MVM Aasanam range.'

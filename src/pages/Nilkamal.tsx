@@ -77,7 +77,7 @@ export default function Nilkamal() {
           <div className='flex'>
 
             {/* Desktop Sidebar */}
-            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-16 md:top-32 self-start h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)] bg-white border-r border-gray-100'>
+            <aside className='hidden md:block w-60 flex-shrink-0 sticky top-32 md:top-40 self-start h-[calc(100vh-8rem)] md:h-[calc(100vh-10rem)] bg-white border-r border-gray-100'>
               <div className='h-full overflow-y-auto pt-2 pb-4 px-2'>
                 <p className='text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-1.5'>
                   Collections
@@ -138,7 +138,7 @@ export default function Nilkamal() {
             </aside>
 
             {/* Main Content */}
-            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-20 md:pt-32 pb-8'>
+            <main className='flex-1 min-w-0 bg-gray-50 px-4 sm:px-6 pt-32 md:pt-40 pb-8'>
 
               {/* Mobile: horizontal category strip */}
               <div className='md:hidden mb-4'>
