@@ -62,7 +62,7 @@ export const CATEGORIES: CategoryInfo[] = [
     enum: 'SALON_CHAIRS',
     label: 'Salon Chairs',
     series: 'Salon Series',
-    description: 'Salon and barber chairs — wash units, styling chairs, and grooming seating for professional salons',
+    description: 'Salon and barber chairs: wash units, styling chairs, and grooming seating for professional salons',
     image: 'https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=600&q=80',
   },
   {
@@ -70,7 +70,7 @@ export const CATEGORIES: CategoryInfo[] = [
     enum: 'VINTAGE_REVOLVING',
     label: 'Vintage Revolving',
     series: 'Vintage Series',
-    description: 'Classic revolving office chairs with timeless proportions — mid-back and high-back options for everyday professional use',
+    description: 'Classic revolving office chairs with timeless proportions, in mid-back and high-back options for everyday professional use',
     image: 'https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?w=600&q=80',
   },
 
@@ -80,7 +80,7 @@ export const CATEGORIES: CategoryInfo[] = [
     enum: 'WARDROBES_ALMIRAHS',
     label: 'Wardrobes & Almirahs',
     series: 'Storage Pro',
-    description: 'Pre-laminated particle board wardrobes — single door, double door, sliding and mirrored options for every bedroom',
+    description: 'Pre-laminated particle board wardrobes in single door, double door, sliding and mirrored options for every bedroom',
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80',
   },
   {
@@ -136,7 +136,7 @@ export const CATEGORIES: CategoryInfo[] = [
     enum: 'DRESSING_TABLES',
     label: 'Dressing Tables',
     series: 'Vanity Series',
-    description: 'Elegant dressing tables with mirrors, drawers and storage — wall-mounted and freestanding options',
+    description: 'Elegant dressing tables with mirrors, drawers and storage, wall-mounted and freestanding options',
     image: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=600&q=80',
   },
   {

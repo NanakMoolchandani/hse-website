@@ -86,7 +86,7 @@ export async function fetchProducts(category?: string): Promise<CatalogProduct[]
 
 /**
  * Fetch a single product by slug. Works for both top-level products AND
- * color variants — variant slugs (e.g. "aerocom-hb-charcoal") resolve too.
+ * color variants: variant slugs (e.g. "aerocom-hb-charcoal") resolve too.
  */
 export async function fetchProduct(slug: string): Promise<CatalogProduct | null> {
   const { data, error } = await supabase
@@ -105,7 +105,7 @@ export async function fetchProduct(slug: string): Promise<CatalogProduct | null>
 }
 
 /**
- * Fetch a product along with its full variant family — siblings if it's a
+ * Fetch a product along with its full variant family: siblings if it's a
  * variant, children if it's a parent. Used by the product detail page to
  * render a color selector.
  */
@@ -157,7 +157,7 @@ export function getOptimizedImageUrl(url: string, width: number = 600, quality: 
 }
 
 export async function fetchProductCounts(): Promise<Record<string, number>> {
-  // Count parent products only — variants don't get their own listing card.
+  // Count parent products only: variants don't get their own listing card.
   const { data, error } = await supabase
     .from('catalog_products')
     .select('category')
@@ -179,8 +179,8 @@ export async function fetchProductCounts(): Promise<Record<string, number>> {
 }
 
 /**
- * Fetch variant counts per parent — used to show "+N colours" badges in
- * the listing grid. Returns a map of parent ID → number of variants.
+ * Fetch variant counts per parent, used to show "+N colours" badges in
+ * the listing grid. Returns a map of parent ID to number of variants.
  */
 export async function fetchVariantCounts(): Promise<Record<number, number>> {
   const { data, error } = await supabase
@@ -201,4 +201,47 @@ export async function fetchVariantCounts(): Promise<Record<number, number>> {
     }
   }
   return counts
+}
+
+/** One colour a product family is made in. */
+export interface VariantSwatch {
+  hex: string
+  name: string
+  slug: string | null
+}
+
+/**
+ * The actual colours behind each "+N colours" badge.
+ *
+ * A row of real swatch dots on a card does something the count never did: it
+ * tells a buyer scanning the grid that the chair they like also comes in the
+ * shade their office is done in, without opening the product page. Only
+ * variants carrying a real hex are returned, because a dot we have to invent a
+ * colour for is worse than no dot.
+ */
+export async function fetchVariantSwatches(): Promise<Record<number, VariantSwatch[]>> {
+  const { data, error } = await supabase
+    .from('catalog_products')
+    .select('parent_product_id, color_hex, color_name, slug')
+    .eq('status', 'PUBLISHED')
+    .not('parent_product_id', 'is', null)
+    .not('color_hex', 'is', null)
+    .order('created_at', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching variant swatches:', error)
+    return {}
+  }
+
+  const byParent: Record<number, VariantSwatch[]> = {}
+  for (const item of data || []) {
+    const parent = item.parent_product_id
+    if (parent === null || !item.color_hex) continue
+    ;(byParent[parent] ||= []).push({
+      hex: item.color_hex,
+      name: item.color_name ?? 'Colour option',
+      slug: item.slug,
+    })
+  }
+  return byParent
 }

@@ -259,6 +259,27 @@
   animation: popIn 420ms var(--ease-spring-bounce) both;
 }
 
+/* A scrim arriving behind a drawer or a sheet. Opacity only: a dimming layer
+   that also moves draws the eye to itself instead of to what it is framing. */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn var(--duration-base) var(--ease-spring) both;
+}
+
+/* A panel sliding in from the left edge. Percentage, not pixels, so it starts
+   exactly off-screen at every width: the drawer is full width on a phone and
+   22rem on a laptop, and a hardcoded distance would be wrong on one of them. */
+@keyframes drawerIn {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+.animate-drawer-in {
+  animation: drawerIn 320ms var(--ease-spring) both;
+}
+
 /* Leaving, rather than blinking out of existence. Paired with a matching delay
    in JS before the row is actually dropped from state. */
 @keyframes rowOut {

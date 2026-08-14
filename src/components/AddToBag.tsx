@@ -96,11 +96,16 @@ export default function AddToBag({
 
   return (
     <div className='w-full'>
-      {/* Side by side, not stacked. These are alternatives, not a sequence:
-          stacked, the lower one reads as a consequence of the upper, and the
-          pair takes twice the vertical space on a card whose height every
-          other card in the row has to match. */}
-      <div className='grid grid-cols-2 gap-2'>
+      {/* Side by side wherever there is width for it. These are alternatives,
+          not a sequence: stacked, the lower one reads as a consequence of the
+          upper, and the pair takes twice the vertical space on a card whose
+          height every other card in the row has to match.
+
+          On a phone there is no width to share. Two cards to a row at 390px
+          leaves each button about 73px, and "Add to bag" needs 82px, so side
+          by side it wrapped onto two lines and the buttons grew to fit. One
+          per row is the lesser cost. */}
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
         {/* These two are one control in the buyer's head, so the swap gets a
             bridge. React remounts on the branch flip, which is what runs the
             entrance; without it the button is simply replaced by a stepper
@@ -109,7 +114,7 @@ export default function AddToBag({
           <button
             type='button'
             onClick={add}
-            className={`pressable animate-swap-in w-full ${h} inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 ${text} font-semibold text-white hover:bg-gray-800`}
+            className={`pressable animate-swap-in w-full ${h} inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 ${text} font-semibold text-white whitespace-nowrap hover:bg-gray-800`}
           >
             <ShoppingBag className='w-3.5 h-3.5' />
             Add to bag
@@ -146,7 +151,7 @@ export default function AddToBag({
         <button
           type='button'
           onClick={buyNow}
-          className={`pressable w-full ${h} inline-flex items-center justify-center rounded-lg bg-amber-500 ${text} font-semibold text-white shadow-sm hover:bg-amber-600`}
+          className={`pressable w-full ${h} inline-flex items-center justify-center rounded-lg bg-amber-500 ${text} font-semibold text-white whitespace-nowrap shadow-sm hover:bg-amber-600`}
         >
           Buy now
         </button>

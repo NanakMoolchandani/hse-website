@@ -21,21 +21,38 @@
  * that exact slug; everything else says so plainly rather than guessing,
  * because a wrong price is either a sale we must honour or an argument we must
  * have.
+ *
+ * The page is laid out the way the big Indian furniture sites lay theirs out,
+ * top to bottom: banner, what we promise, shop by category, then the grid
+ * behind a filter and sort bar. That order is not decoration. It answers, in
+ * turn, who we are, why buy here, what kind of thing do you want, and finally
+ * which one, and a visitor can drop out at any of those points having got what
+ * they came for.
  */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { MessageCircle, Search } from 'lucide-react'
+import {
+  MessageCircle, Truck, Factory, ShieldCheck, IndianRupee, ArrowRight,
+} from 'lucide-react'
 import Footer from '@/src/components/Footer'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import AddToBag from '@/src/components/AddToBag'
 import { WishlistHeart } from '@/src/components/WishlistButton'
+import CategoryCircles, { useCategoryTiles } from '@/src/components/CategoryCircles'
+import ShopToolbar, {
+  EMPTY_FILTERS, priceInBands, countActiveFilters,
+  type ShopFilters, type SortKey,
+} from '@/src/components/ShopToolbar'
 import { CATEGORIES, getCategoryByEnum } from '@/src/lib/categories'
-import { fetchProducts, fetchVariantCounts, type CatalogProduct } from '@/src/lib/supabase'
+import {
+  fetchProducts, fetchVariantSwatches,
+  type CatalogProduct, type VariantSwatch,
+} from '@/src/lib/supabase'
 import { fetchLivePricing, track } from '@/src/lib/analytics'
 import { inr } from '@/src/lib/utils'
 
-const ALL = '__all__'
+const ALL = ''
 const WHATSAPP = '919981516171'
 
 /** The eight categories sold online. Mirrors ONLINE_STORE_CATEGORIES server-side. */
@@ -67,13 +84,16 @@ export default function Shop() {
 
   const [byCategory, setByCategory] = useState<Record<string, CatalogProduct[]>>({})
   const [loading, setLoading] = useState(true)
-  const [variantCounts, setVariantCounts] = useState<Record<number, number>>({})
+  const [swatches, setSwatches] = useState<Record<number, VariantSwatch[]>>({})
   const [live, setLive] = useState<Record<string, LiveEntry>>({})
-  const [query, setQuery] = useState('')
+  const [filters, setFilters] = useState<ShopFilters>(EMPTY_FILTERS)
+  const [sort, setSort] = useState<SortKey>('featured')
 
-  // The category lives in the URL, so a filtered shop can be linked, shared,
-  // and returned to with the back button instead of resetting to All.
+  // Category and search both live in the URL, so a filtered shop can be linked,
+  // shared, and returned to with the back button instead of resetting to All.
+  // The header's search box writes `q` here from anywhere on the site.
   const activeEnum = params.get('category') ?? ALL
+  const query = params.get('q') ?? ''
 
   useEffect(() => {
     let alive = true
@@ -92,7 +112,7 @@ export default function Shop() {
     return () => { alive = false }
   }, [])
 
-  useEffect(() => { fetchVariantCounts().then(setVariantCounts) }, [])
+  useEffect(() => { fetchVariantSwatches().then(setSwatches) }, [])
 
   useEffect(() => {
     let alive = true
@@ -117,9 +137,17 @@ export default function Shop() {
   }, [])
 
   function selectCategory(enumVal: string) {
-    setQuery('')
+    // Choosing a category drops the search: the two together almost always
+    // produce nothing, and an empty grid reads as a broken shop rather than as
+    // two filters that happen not to overlap.
     setParams(enumVal === ALL ? {} : { category: enumVal })
     document.getElementById('catalogue')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function clearSearch() {
+    const next = new URLSearchParams(params)
+    next.delete('q')
+    setParams(next)
   }
 
   const activeCat = CATEGORIES.find((c) => c.enum === activeEnum)
@@ -134,11 +162,100 @@ export default function Shop() {
   )
   const products = activeEnum === ALL ? seating : (byCategory[activeEnum] ?? [])
 
-  const filtered = useMemo(() => {
-    if (!query.trim()) return products
-    const q = query.toLowerCase()
-    return products.filter((p) => (p.name ?? '').toLowerCase().includes(q))
-  }, [products, query])
+  const counts = useMemo(() => {
+    const out: Record<string, number> = {}
+    for (const cat of CATEGORIES) out[cat.enum] = byCategory[cat.enum]?.length ?? 0
+    return out
+  }, [byCategory])
+
+  const seatingTiles = useCategoryTiles(SEATING_CATEGORIES, byCategory)
+  const madeToOrderTiles = useCategoryTiles(MADE_TO_ORDER_CATEGORIES, byCategory)
+
+  /**
+   * Search, then filter, then sort.
+   *
+   * Filters that depend on a price only apply to products that have one. A
+   * made-to-order wardrobe has no price until it is quoted, so a price band
+   * cannot include or exclude it honestly: it stays out of a price-filtered
+   * result rather than being ranked at zero.
+   */
+  const visible = useMemo(() => {
+    let out = products
+
+    if (query.trim()) {
+      const q = query.toLowerCase()
+      out = out.filter((p) => (p.name ?? '').toLowerCase().includes(q))
+    }
+
+    if (filters.inStockOnly) {
+      out = out.filter((p) => (p.slug ? live[p.slug]?.inStock : false))
+    }
+
+    if (filters.priceBands.length > 0) {
+      out = out.filter((p) => {
+        const entry = p.slug ? live[p.slug] : undefined
+        return entry ? priceInBands(entry.price, filters.priceBands) : false
+      })
+    }
+
+    if (filters.hasColours) {
+      out = out.filter((p) => (swatches[p.id]?.length ?? 0) > 0)
+    }
+
+    if (sort === 'featured') return out
+
+    const sorted = [...out]
+    if (sort === 'name-asc') {
+      sorted.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
+      return sorted
+    }
+
+    // Unpriced pieces sink to the bottom of a price sort in both directions.
+    // Sorting them as free would put every made-to-order wardrobe above every
+    // chair on "low to high", which is the opposite of what was asked for.
+    const priceOf = (p: CatalogProduct) => (p.slug ? live[p.slug]?.price : undefined)
+    sorted.sort((a, b) => {
+      const pa = priceOf(a)
+      const pb = priceOf(b)
+      if (pa === undefined && pb === undefined) return 0
+      if (pa === undefined) return 1
+      if (pb === undefined) return -1
+      return sort === 'price-asc' ? pa - pb : pb - pa
+    })
+    return sorted
+  }, [products, query, filters, sort, live, swatches])
+
+  /**
+   * A short rail above the grid, shown only on the unfiltered shop. Once
+   * someone has picked a category or typed a search they have told us what
+   * they want, and a rail of something else on top of the answer is an
+   * interruption.
+   *
+   * What the rail contains, and therefore what it is called, depends on what
+   * the data can actually support. `is_featured` is the owner's own shelf and
+   * wins whenever anything is on it; today nothing is, so the fallback is the
+   * pieces genuinely marked down, which the price feed knows for certain. If
+   * neither exists there is no rail: a row headed "Best sellers" filled with
+   * whatever sorted first would be a claim we cannot stand behind.
+   */
+  const rail = useMemo(() => {
+    if (activeEnum !== ALL || query.trim() || !seating.length) return null
+
+    const picked = seating.filter((p) => p.is_featured && p.slug && live[p.slug])
+    if (picked.length >= 4) {
+      return { eyebrow: 'Our pick', title: 'Featured chairs', products: picked.slice(0, 12) }
+    }
+
+    const discounted = seating.filter((p) => {
+      const e = p.slug ? live[p.slug] : undefined
+      return e && e.compareAtPrice !== null && e.compareAtPrice > e.price
+    })
+    if (discounted.length >= 4) {
+      return { eyebrow: 'Reduced right now', title: 'On offer', products: discounted.slice(0, 12) }
+    }
+
+    return null
+  }, [activeEnum, query, seating, live])
 
   return (
     <>
@@ -154,185 +271,159 @@ export default function Shop() {
         ])}
       />
 
-      <Hero count={seating.length} />
+      <div className='bg-white pt-32 md:pt-40'>
+        <HeroBanner count={seating.length} />
+        <PromiseStrip />
 
-      <div id='catalogue' className='bg-white min-h-screen scroll-mt-32 md:scroll-mt-40'>
-        <div className='max-w-7xl mx-auto'>
-          <div className='flex'>
+        {/* ── Shop by category ────────────────────────────────────────────── */}
+        <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-14 sm:pt-20'>
+          <div className='text-center mb-8 sm:mb-10'>
+            <p className='text-eyebrow text-amber-600 mb-3'>Browse the range</p>
+            <h2 className='text-section text-gray-900'>Shop by category</h2>
+          </div>
 
-            {/* ── Sidebar ─────────────────────────────────────────────── */}
-            <aside className='hidden md:block w-64 flex-shrink-0 sticky top-32 md:top-40 self-start h-[calc(100vh-8rem)] md:h-[calc(100vh-10rem)] bg-white border-r border-gray-100'>
-              <div className='h-full overflow-y-auto pt-7 pb-6 px-5'>
-                <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-gray-400 mb-4'>
-                  Categories
-                </p>
+          <CategoryCircles
+            tiles={seatingTiles}
+            activeKey={activeEnum}
+            onSelect={selectCategory}
+            loading={loading}
+          />
 
-                <SidebarRow
-                  label='All Seating'
-                  count={seating.length}
-                  active={activeEnum === ALL}
-                  onClick={() => selectCategory(ALL)}
-                  emphasis
-                />
+          <div className='mt-14 sm:mt-16 text-center mb-8 sm:mb-10'>
+            <p className='text-eyebrow text-amber-600 mb-3'>Built to your sizes</p>
+            <h2 className='text-section text-gray-900'>Made to order</h2>
+            <p className='mt-4 text-base text-gray-500 max-w-lg mx-auto leading-relaxed'>
+              Wardrobes, desks and storage cut to the dimensions of your room and
+              finished the way you want it. Send us the sizes and we will quote it.
+            </p>
+          </div>
 
-                <SidebarGroup label='Shop by category' />
-                {SEATING_CATEGORIES.map((cat) => (
-                  <SidebarRow
-                    key={cat.enum}
-                    label={cat.label}
-                    count={byCategory[cat.enum]?.length}
-                    active={cat.enum === activeEnum}
-                    onClick={() => selectCategory(cat.enum)}
-                  />
-                ))}
+          <CategoryCircles
+            tiles={madeToOrderTiles}
+            activeKey={activeEnum}
+            onSelect={selectCategory}
+            loading={loading}
+          />
+        </section>
 
-                <SidebarGroup label='Made to order' />
-                <p className='-mt-1 mb-3 pl-3 pr-2 text-[11px] leading-relaxed text-gray-400'>
-                  Built to your sizes and finish. Quoted per order.
-                </p>
-                {MADE_TO_ORDER_CATEGORIES.map((cat) => (
-                  <SidebarRow
-                    key={cat.enum}
-                    label={cat.label}
-                    count={byCategory[cat.enum]?.length}
-                    active={cat.enum === activeEnum}
-                    onClick={() => selectCategory(cat.enum)}
-                  />
-                ))}
+        {rail && (
+          <FeaturedRail
+            eyebrow={rail.eyebrow}
+            title={rail.title}
+            products={rail.products}
+            live={live}
+            swatches={swatches}
+          />
+        )}
 
-                <div className='mt-10 relative bg-gray-950 rounded-xl px-5 py-6 overflow-hidden'>
-                  <span className='absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent' />
-                  <p className='text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-400 mb-2'>
-                    Bulk enquiry
-                  </p>
-                  <p className='font-display text-lg text-white leading-tight mb-1.5'>
-                    Buying for an office?
-                  </p>
-                  <p className='text-[11px] text-gray-400 leading-relaxed mb-4'>
-                    Share your requirements: we respond within 24 hours.
-                  </p>
-                  <a
-                    href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hi, I need a bulk quote for MVM Aasanam furniture.')}`}
-                    onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-bulk' } })}
-                    className='inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-400 hover:text-amber-300 transition-colors'
-                  >
-                    WhatsApp us
-                    <span aria-hidden>→</span>
-                  </a>
-                </div>
-              </div>
-            </aside>
+        {/* ── The grid ────────────────────────────────────────────────────── */}
+        <div id='catalogue' className='scroll-mt-32 md:scroll-mt-40 pt-14 sm:pt-20 pb-20'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+            <header className='pb-7'>
+              <p className='text-eyebrow text-amber-600 mb-3'>
+                {showingMadeToOrder ? 'Made to order' : 'MVM Aasanam'}
+                {activeCat && <span className='text-gray-400'> &middot; {activeCat.series}</span>}
+              </p>
+              <h1 className='text-section text-gray-900'>
+                {query.trim() ? `“${query}”` : (activeCat?.label ?? 'All seating')}
+              </h1>
+              <p className='text-base text-gray-500 mt-4 max-w-xl leading-relaxed'>
+                {query.trim()
+                  ? 'Everything in the range matching what you searched for.'
+                  : showingMadeToOrder
+                    ? 'Built to your sizes and finish. Send us the dimensions and we will quote it.'
+                    : (activeCat?.description ?? 'Chairs we make in Neemuch, in stock and ready to ship. All prices include GST.')}
+              </p>
+              {query.trim() && (
+                <button
+                  type='button'
+                  onClick={clearSearch}
+                  className='mt-4 text-xs font-semibold text-amber-600 hover:text-amber-700'
+                >
+                  Clear search and show everything
+                </button>
+              )}
+            </header>
+          </div>
 
-            {/* ── Grid ────────────────────────────────────────────────── */}
-            <main className='flex-1 min-w-0 bg-white px-4 sm:px-8 pt-12 md:pt-20 pb-20'>
+          {/* Outside the content column on purpose: the bar is chrome, and
+              chrome runs the full width of the window. */}
+          <ShopToolbar
+            total={visible.length}
+            filters={filters}
+            onFiltersChange={setFilters}
+            sort={sort}
+            onSortChange={setSort}
+            categories={SEATING_CATEGORIES}
+            madeToOrderCategories={MADE_TO_ORDER_CATEGORIES}
+            activeCategory={activeEnum}
+            onCategoryChange={selectCategory}
+            counts={counts}
+            allLabel='All seating'
+            allCount={seating.length}
+          />
 
-              <div className='md:hidden mb-6 -mx-4 px-4 border-b border-gray-100'>
-                <div className='flex gap-1 overflow-x-auto -mb-px'>
-                  <MobileTab label='All' active={activeEnum === ALL} onClick={() => selectCategory(ALL)} />
-                  {SEATING_CATEGORIES.map((cat) => (
-                    <MobileTab
-                      key={cat.enum}
-                      label={cat.label}
-                      active={cat.enum === activeEnum}
-                      onClick={() => selectCategory(cat.enum)}
-                    />
-                  ))}
-                  {MADE_TO_ORDER_CATEGORIES.map((cat) => (
-                    <MobileTab
-                      key={cat.enum}
-                      label={cat.label}
-                      active={cat.enum === activeEnum}
-                      onClick={() => selectCategory(cat.enum)}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <header className='border-b border-black/[0.06] pb-8 mb-12'>
-                <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4'>
-                  <div className='flex-1 min-w-0'>
-                    <p className='text-eyebrow text-amber-600 mb-3'>
-                      {showingMadeToOrder ? 'Made to order' : 'MVM Aasanam'}
-                      {activeCat && <span className='text-gray-400'> &middot; {activeCat.series}</span>}
-                    </p>
-                    <h1 className='text-section text-gray-900'>{activeCat?.label ?? 'Shop'}</h1>
-                    <p className='text-base text-gray-500 mt-4 max-w-xl leading-relaxed'>
-                      {showingMadeToOrder
-                        ? 'Built to your sizes and finish. Send us the dimensions and we will quote it.'
-                        : (activeCat?.description ?? 'Chairs we make in Neemuch, in stock and ready to ship. All prices include GST.')}
-                    </p>
-                    {!loading && (
-                      <p className='text-[10px] uppercase tracking-[0.25em] text-gray-400 mt-3'>
-                        {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
-                        {query.trim() ? ` matching “${query}”` : ''}
-                      </p>
-                    )}
-                  </div>
-                  <div className='relative w-full sm:w-56 flex-shrink-0'>
-                    <Search className='absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400' />
-                    <input
-                      type='text'
-                      placeholder='Search'
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      className='w-full pl-6 pr-2 py-2 bg-transparent border-0 border-b border-gray-200 text-sm placeholder:text-gray-400 focus:outline-none focus:border-amber-500 transition-colors'
-                    />
-                  </div>
-                </div>
-              </header>
-
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+            <div className='pt-8'>
               {loading ? (
-                <div className='grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8'>
-                  {Array.from({ length: 9 }).map((_, i) => (
-                    <div key={i} className='rounded-2xl border border-black/[0.06] overflow-hidden'>
-                      <div className='aspect-square bg-gray-50 animate-pulse' />
-                      <div className='p-4 space-y-2'>
+                <ProductGrid>
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className='bg-white p-3 sm:p-4'>
+                      <div className='aspect-square rounded-xl bg-gray-50 animate-pulse' />
+                      <div className='pt-4 space-y-2'>
+                        <div className='h-2 w-1/3 bg-gray-50 rounded animate-pulse' />
                         <div className='h-3.5 w-3/4 bg-gray-50 rounded animate-pulse' />
                         <div className='h-4 w-1/3 bg-gray-50 rounded animate-pulse' />
                       </div>
                     </div>
                   ))}
-                </div>
-              ) : filtered.length > 0 ? (
-                <div className='grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8'>
-                  {filtered.map((product) => (
+                </ProductGrid>
+              ) : visible.length > 0 ? (
+                <ProductGrid>
+                  {visible.map((product) => (
                     <ProductCard
                       key={product.id}
                       product={product}
                       entry={product.slug ? live[product.slug] : undefined}
-                      variantCount={variantCounts[product.id] ?? 0}
+                      swatches={swatches[product.id] ?? []}
                       madeToOrder={!SEATING_ENUMS.has(product.category ?? '')}
                     />
                   ))}
-                </div>
+                </ProductGrid>
               ) : (
-                <div className='rounded-2xl border border-dashed border-gray-200 p-16 text-center'>
-                  <p className='text-gray-500 text-sm mb-4'>
-                    {query.trim() ? `No products match “${query}”.` : 'Nothing in this category yet.'}
-                  </p>
-                  {query.trim() ? (
-                    <button onClick={() => setQuery('')} className='text-xs font-medium text-amber-600 hover:text-amber-700'>
-                      Clear search
-                    </button>
-                  ) : (
-                    <a
-                      href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi, I'm interested in MVM Aasanam ${activeCat?.label ?? 'furniture'}. Please share what's available.`)}`}
-                      onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-empty-category' } })}
-                      className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700'
-                    >
-                      <MessageCircle className='w-3.5 h-3.5' />
-                      Ask about availability
-                    </a>
-                  )}
-                </div>
+                <EmptyState
+                  query={query}
+                  onClearSearch={clearSearch}
+                  filtersOn={countActiveFilters(filters) > 0}
+                  onClearFilters={() => setFilters(EMPTY_FILTERS)}
+                  categoryLabel={activeCat?.label}
+                />
               )}
-            </main>
+            </div>
           </div>
         </div>
       </div>
 
       <Footer variant='light' />
     </>
+  )
+}
+
+// ── Grid ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Cards separated by hairlines rather than each sitting in its own box.
+ *
+ * `gap-px` over a light background paints a one-pixel rule between every cell
+ * and nothing around the outside of any of them, so the grid reads as one
+ * ruled sheet. Ten bordered, shadowed cards floating on white all compete for
+ * the same attention; ruled cells let the photographs do it instead.
+ */
+function ProductGrid({ children }: { children: ReactNode }) {
+  return (
+    <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-px bg-black/[0.07] rounded-2xl overflow-hidden ring-1 ring-black/[0.07]'>
+      {children}
+    </div>
   )
 }
 
@@ -353,12 +444,12 @@ export default function Shop() {
 function ProductCard({
   product,
   entry,
-  variantCount,
+  swatches,
   madeToOrder,
 }: {
   product: CatalogProduct
   entry: LiveEntry | undefined
-  variantCount: number
+  swatches: VariantSwatch[]
   madeToOrder: boolean
 }) {
   const imgSrc = product.processed_photo_urls?.[0] || product.raw_photo_urls?.[0] || null
@@ -373,28 +464,38 @@ function ProductCard({
       : 0
 
   return (
-    <article className='group reveal rounded-2xl border border-black/[0.06] bg-white shadow-sm overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-250 ease-spring hover:-translate-y-1.5 hover:border-black/[0.08] hover:shadow-xl'>
+    // No `reveal` here, deliberately. The grid paints its hairlines by showing
+    // a grey background through one-pixel gaps, so a card faded to `opacity: 0`
+    // does not merely stay invisible: it turns into a grey slab, and a hundred
+    // of them below the fold read as a broken page rather than as content
+    // waiting to animate. Fading in a grid the buyer is scanning is the wrong
+    // motion anyway; the photographs arriving is enough.
+    <article className='group relative bg-white p-3 sm:p-4 flex flex-col transition-[box-shadow,z-index] duration-250 ease-spring hover:z-10 hover:shadow-xl'>
       <div className='relative'>
-        <Link to={href} className='relative block aspect-square bg-gray-50 overflow-hidden'>
+        <Link
+          to={href}
+          className='relative block aspect-square rounded-xl bg-[#f7f6f4] overflow-hidden'
+        >
           {imgSrc ? (
+            // Filled, not padded. The catalogue photographs are lifestyle
+            // renders: the chair is already sitting in a room, and floating
+            // that whole picture inside a tinted panel puts a hard square
+            // edge in the middle of every card. Letting it reach the corners
+            // is what makes the grid read as photography rather than as
+            // thumbnails.
             <img
               src={imgSrc}
               alt={product.name ?? 'Product'}
               loading='lazy'
-              className='w-full h-full object-contain p-5 sm:p-7 transition-transform duration-400 ease-spring group-hover:scale-[1.06]'
+              className='w-full h-full object-cover transition-transform duration-400 ease-spring group-hover:scale-[1.06]'
             />
           ) : (
             <div className='w-full h-full grid place-items-center'>
               <span className='text-5xl font-semibold text-gray-200'>{(product.name ?? 'P')[0]}</span>
             </div>
           )}
-          {variantCount > 0 && (
-            <span className='absolute bottom-3 right-3 text-[10px] font-medium tracking-wide rounded-full bg-black/60 text-white px-2.5 py-1 backdrop-blur-sm'>
-              +{variantCount} colours
-            </span>
-          )}
           {discountPct >= 5 && (
-            <span className='absolute top-3 left-3 text-[11px] font-bold rounded-full bg-emerald-600 text-white px-2.5 py-1'>
+            <span className='absolute top-2.5 left-2.5 text-[11px] font-bold rounded-md bg-emerald-600 text-white px-2 py-1'>
               {discountPct}% off
             </span>
           )}
@@ -403,27 +504,35 @@ function ProductCard({
         {/* Outside the anchor, so saving a chair does not navigate to it. */}
         {product.slug && (
           <WishlistHeart
-            className='absolute top-3 right-3'
+            className='absolute top-2 right-2'
             entry={{ slug: product.slug, name: product.name ?? 'Chair', image: imgSrc, href }}
           />
         )}
       </div>
 
-      <div className='p-4 sm:p-5 flex flex-col flex-1'>
+      <div className='pt-3.5 flex flex-col flex-1'>
+        <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-gray-400'>
+          {madeToOrder ? 'Made to order' : 'MVM Aasanam'}
+        </p>
+
         <Link to={href} className='block'>
-          <h2 className='text-title text-gray-900 line-clamp-2 leading-snug py-1'>{product.name}</h2>
+          <h2 className='mt-1.5 text-[13px] sm:text-sm font-medium leading-snug text-gray-900 line-clamp-2 group-hover:text-amber-700 transition-colors'>
+            {product.name}
+          </h2>
         </Link>
 
-        <div className='mt-2.5 min-h-[30px]'>
+        {swatches.length > 0 && <Swatches swatches={swatches} />}
+
+        <div className='mt-2.5 min-h-[28px]'>
           {madeToOrder ? (
             <p className='text-[13px] text-gray-400'>Made to your size</p>
           ) : entry ? (
-            <div className='flex items-baseline gap-2'>
-              <span className='text-xl font-semibold tracking-[-0.02em] text-gray-900 tabular-nums'>
+            <div className='flex items-baseline gap-2 flex-wrap'>
+              <span className='text-lg sm:text-xl font-semibold tracking-[-0.02em] text-gray-900 tabular-nums'>
                 {inr(entry.price)}
               </span>
               {entry.compareAtPrice && entry.compareAtPrice > entry.price && (
-                <span className='text-sm text-gray-400 line-through tabular-nums'>
+                <span className='text-xs sm:text-sm text-gray-400 line-through tabular-nums'>
                   {inr(entry.compareAtPrice)}
                 </span>
               )}
@@ -434,7 +543,7 @@ function ProductCard({
         </div>
 
         {entry?.inStock && entry.availableQty !== null && entry.availableQty <= 5 && (
-          <p className='mt-1.5 text-xs font-medium text-amber-600'>
+          <p className='mt-1 text-xs font-medium text-amber-600'>
             Only {entry.availableQty} left
           </p>
         )}
@@ -444,7 +553,7 @@ function ProductCard({
             <a
               href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi, I'd like a quote for the ${product.name} (made to order).`)}`}
               onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-made-to-order', product: product.name } })}
-              className='pressable h-10 w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-black/[0.08] bg-white text-xs font-semibold text-gray-800 hover:bg-black/[0.03]'
+              className='pressable h-10 w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-black/[0.12] bg-white text-xs font-semibold text-gray-800 hover:bg-black/[0.03]'
             >
               <MessageCircle className='w-3.5 h-3.5' />
               Get a quote
@@ -461,7 +570,7 @@ function ProductCard({
             <a
               href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi, could you send me the price for the ${product.name}?`)}`}
               onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-price-request', product: product.name } })}
-              className='pressable h-10 w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-black/[0.08] bg-white text-xs font-semibold text-gray-800 hover:bg-black/[0.03]'
+              className='pressable h-10 w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-black/[0.12] bg-white text-xs font-semibold text-gray-800 hover:bg-black/[0.03]'
             >
               <MessageCircle className='w-3.5 h-3.5' />
               Ask for price
@@ -473,119 +582,258 @@ function ProductCard({
   )
 }
 
-// ── Sidebar pieces ───────────────────────────────────────────────────────────
-
-function SidebarGroup({ label }: { label: string }) {
+/**
+ * The colours this chair is also made in.
+ *
+ * Real hexes off the variant rows, capped at five with a count for the rest.
+ * A buyer scanning the grid learns the chair comes in their office's shade
+ * without opening anything, which is the whole reason the row is on the card
+ * and not only on the product page.
+ */
+function Swatches({ swatches }: { swatches: VariantSwatch[] }) {
+  const shown = swatches.slice(0, 5)
+  const extra = swatches.length - shown.length
   return (
-    <p className='mt-7 mb-2 pl-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-gray-400'>
-      {label}
-    </p>
+    <div className='mt-2.5 flex items-center gap-1.5'>
+      {shown.map((s, i) => (
+        <span
+          key={`${s.hex}-${i}`}
+          title={s.name}
+          className='w-3.5 h-3.5 rounded-full ring-1 ring-black/[0.12] ring-inset'
+          style={{ backgroundColor: s.hex }}
+        />
+      ))}
+      {extra > 0 && (
+        <span className='text-[10px] font-medium text-gray-400 tabular-nums'>+{extra}</span>
+      )}
+    </div>
   )
 }
 
-function SidebarRow({
-  label, count, active, onClick, emphasis,
+// ── Featured rail ────────────────────────────────────────────────────────────
+
+/**
+ * A horizontal row of pieces the owner marked featured.
+ *
+ * Deliberately a scroller and not a second grid. A grid says "here is
+ * everything, work through it"; a rail says "here are a few, have a look", and
+ * the difference is what stops the page from being one long wall of chairs.
+ */
+function FeaturedRail({
+  eyebrow, title, products, live, swatches,
 }: {
-  label: string
-  count?: number
-  active: boolean
-  onClick: () => void
-  emphasis?: boolean
+  eyebrow: string
+  title: string
+  products: CatalogProduct[]
+  live: Record<string, LiveEntry>
+  swatches: Record<number, VariantSwatch[]>
 }) {
   return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center justify-between gap-2 pl-3 pr-2 py-2 rounded-md text-left transition-colors ${
-        active ? 'bg-amber-50' : 'hover:bg-black/[0.03]'
-      }`}
-    >
-      <span
-        className={`text-sm truncate ${
-          active
-            ? 'font-semibold text-gray-900'
-            : emphasis
-              ? 'font-medium text-gray-800'
-              : 'text-gray-600'
-        }`}
-      >
-        {label}
-      </span>
-      {count !== undefined && count > 0 && (
-        <span className={`text-[11px] tabular-nums shrink-0 ${active ? 'text-amber-600' : 'text-gray-300'}`}>
-          {count}
-        </span>
-      )}
-    </button>
+    <section className='pt-14 sm:pt-20'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10'>
+        <div className='flex items-end justify-between gap-4 mb-7'>
+          <div>
+            <p className='text-eyebrow text-amber-600 mb-3'>{eyebrow}</p>
+            <h2 className='text-section text-gray-900'>{title}</h2>
+          </div>
+          <a
+            href='#catalogue'
+            className='shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-gray-900 hover:text-amber-600 transition-colors pb-1'
+          >
+            View all
+            <ArrowRight className='w-3.5 h-3.5' />
+          </a>
+        </div>
+
+        {/* The scroller sits inside the content column and pushes its own
+            padding back out, so the first card starts on the same line as the
+            heading above it and the last one runs off the edge. Centring a
+            wider scroller instead put the row a margin to the left of its own
+            title, which reads as a layout fault however good the photographs
+            are. */}
+        <div className='-mx-4 sm:-mx-6 lg:-mx-10 px-4 sm:px-6 lg:px-10 scroll-pl-4 sm:scroll-pl-6 lg:scroll-pl-10 overflow-x-auto thumbnail-scroll snap-x snap-mandatory'>
+          <div className='flex gap-4 sm:gap-5 w-max pr-4 sm:pr-6 lg:pr-10'>
+          {products.map((p) => {
+            const entry = p.slug ? live[p.slug] : undefined
+            const imgSrc = p.processed_photo_urls?.[0] || p.raw_photo_urls?.[0] || null
+            const catSlug = getCategoryByEnum(p.category ?? '')?.slug
+            const href = catSlug ? `/mvm/${catSlug}/${p.slug}` : '/shop'
+            const cols = swatches[p.id] ?? []
+            return (
+              <Link
+                key={p.id}
+                to={href}
+                className='group snap-start shrink-0 w-[10.5rem] sm:w-56'
+              >
+                <div className='aspect-square rounded-xl bg-[#f7f6f4] overflow-hidden ring-1 ring-black/[0.05]'>
+                  {imgSrc ? (
+                    <img
+                      src={imgSrc}
+                      alt={p.name ?? 'Chair'}
+                      loading='lazy'
+                      className='w-full h-full object-cover transition-transform duration-400 ease-spring group-hover:scale-[1.07]'
+                    />
+                  ) : (
+                    <div className='w-full h-full grid place-items-center text-4xl font-semibold text-gray-200'>
+                      {(p.name ?? 'P')[0]}
+                    </div>
+                  )}
+                </div>
+                <h3 className='mt-3 text-[13px] font-medium leading-snug text-gray-900 line-clamp-2 group-hover:text-amber-700 transition-colors'>
+                  {p.name}
+                </h3>
+                {entry && (
+                  <p className='mt-1 text-sm font-semibold text-gray-900 tabular-nums'>
+                    {inr(entry.price)}
+                  </p>
+                )}
+                {cols.length > 0 && <Swatches swatches={cols} />}
+              </Link>
+            )
+          })}
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 
-function MobileTab({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+// ── Empty state ──────────────────────────────────────────────────────────────
+
+function EmptyState({
+  query, onClearSearch, filtersOn, onClearFilters, categoryLabel,
+}: {
+  query: string
+  onClearSearch: () => void
+  filtersOn: boolean
+  onClearFilters: () => void
+  categoryLabel?: string
+}) {
   return (
-    <button
-      onClick={onClick}
-      className={`shrink-0 px-3 py-2.5 text-[13px] whitespace-nowrap border-b-2 transition-colors ${
-        active ? 'border-amber-500 font-semibold text-gray-900' : 'border-transparent text-gray-500'
-      }`}
-    >
-      {label}
-    </button>
+    <div className='rounded-2xl border border-dashed border-gray-200 p-12 sm:p-16 text-center'>
+      <p className='text-gray-500 text-sm mb-5'>
+        {query.trim()
+          ? `Nothing matches “${query}”.`
+          : filtersOn
+            ? 'Nothing here matches those filters.'
+            : 'Nothing in this category yet.'}
+      </p>
+      <div className='flex flex-wrap items-center justify-center gap-4'>
+        {query.trim() && (
+          <button onClick={onClearSearch} className='text-xs font-semibold text-amber-600 hover:text-amber-700'>
+            Clear search
+          </button>
+        )}
+        {filtersOn && (
+          <button onClick={onClearFilters} className='text-xs font-semibold text-amber-600 hover:text-amber-700'>
+            Clear filters
+          </button>
+        )}
+        <a
+          href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi, I'm interested in MVM Aasanam ${categoryLabel ?? 'furniture'}. Please share what's available.`)}`}
+          onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-empty' } })}
+          className='inline-flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700'
+        >
+          <MessageCircle className='w-3.5 h-3.5' />
+          Ask about availability
+        </a>
+      </div>
+    </div>
   )
 }
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
 /**
- * The first screen of the site: `/` lands here.
+ * The banner. `/` lands here.
  *
- * Full bleed and full height, running under the fixed nav rather than starting
- * below it, so the translucent chrome floats over the photograph instead of
- * sitting in a white strip above it. The photograph is the real Neemuch
- * showroom, and it is the argument: a manufacturer with a room like that is
- * worth buying from. `fetchpriority=high` and no lazy attribute, because it is
- * the LCP element.
+ * Inset and rounded rather than full bleed. A photograph that runs to all four
+ * edges of a shop's first screen is a magazine cover: handsome, and it delays
+ * the shop by a scroll. Held inside the page margins with corners on it, it
+ * reads as the first card in a catalogue, and the category circles under it
+ * are on screen at the same time.
+ *
+ * The photograph is the real Neemuch showroom, and it is the argument: a
+ * manufacturer with a room like that is worth buying from. `fetchpriority=high`
+ * and no lazy attribute, because it is the LCP element.
  */
-function Hero({ count }: { count: number }) {
+function HeroBanner({ count }: { count: number }) {
   return (
-    <section className='relative min-h-[92svh] flex items-end overflow-hidden bg-gray-950'>
-      <picture>
-        <source srcSet='/hero-showroom.webp' type='image/webp' />
-        <img
-          src='/hero-showroom.jpg'
-          alt='The MVM Aasanam showroom in Neemuch, with chairs and fabric samples laid out'
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          {...({ fetchpriority: 'high' } as any)}
-          decoding='async'
-          className='absolute inset-0 w-full h-full object-cover'
-        />
-      </picture>
+    <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6'>
+      <div className='relative overflow-hidden rounded-2xl sm:rounded-[1.75rem] bg-gray-950 min-h-[26rem] sm:min-h-[30rem] lg:min-h-[34rem] flex items-end'>
+        <picture>
+          <source srcSet='/hero-showroom.webp' type='image/webp' />
+          <img
+            src='/hero-showroom.jpg'
+            alt='The MVM Aasanam showroom in Neemuch, with chairs and fabric samples laid out'
+            fetchPriority='high'
+            decoding='async'
+            className='absolute inset-0 w-full h-full object-cover'
+          />
+        </picture>
 
-      <div className='absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/55 to-gray-950/15' />
+        <div className='absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/55 to-gray-950/10' />
 
-      <div className='relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-16 sm:pb-20'>
-        <p className='text-eyebrow text-amber-400 mb-4'>MVM Aasanam</p>
-        <h2 className='text-display text-white max-w-3xl'>
-          Chairs made in Neemuch,<br className='hidden sm:block' /> delivered across India.
-        </h2>
-        <p className='mt-5 text-base sm:text-lg text-gray-300 max-w-xl leading-relaxed'>
-          Our own factory line, held in stock, priced with GST included.
-          {count > 0 && ` ${count} pieces to choose from.`}
-        </p>
-        <div className='mt-8 flex flex-wrap items-center gap-3'>
-          <a
-            href='#catalogue'
-            className='pressable inline-flex items-center justify-center h-12 px-7 rounded-lg bg-white text-sm font-semibold text-gray-900 hover:bg-gray-100'
-          >
-            Browse the shop
-          </a>
-          <a
-            href={`https://wa.me/${WHATSAPP}`}
-            onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-hero' } })}
-            className='pressable inline-flex items-center justify-center gap-2 h-12 px-7 rounded-lg border border-white/20 text-sm font-semibold text-white hover:bg-white/10'
-          >
-            <MessageCircle className='w-4 h-4' />
-            WhatsApp us
-          </a>
+        <div className='relative w-full p-6 sm:p-10 lg:p-14'>
+          <p className='text-eyebrow text-amber-400 mb-4'>Our own factory, Neemuch</p>
+          <h2 className='text-display text-white max-w-2xl'>
+            Chairs made by us,<br className='hidden sm:block' /> delivered across India.
+          </h2>
+          <p className='mt-5 text-base sm:text-lg text-gray-300 max-w-xl leading-relaxed'>
+            No middleman, no showroom markup. Held in stock and priced with GST included.
+            {count > 0 && ` ${count} pieces to choose from.`}
+          </p>
+          <div className='mt-8 flex flex-wrap items-center gap-3'>
+            <a
+              href='#catalogue'
+              className='pressable inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full bg-white text-sm font-semibold text-gray-900 hover:bg-gray-100'
+            >
+              Shop the range
+              <ArrowRight className='w-4 h-4' />
+            </a>
+            <a
+              href={`https://wa.me/${WHATSAPP}`}
+              onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'shop-hero' } })}
+              className='pressable inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full border border-white/25 text-sm font-semibold text-white hover:bg-white/10'
+            >
+              <MessageCircle className='w-4 h-4' />
+              WhatsApp us
+            </a>
+          </div>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * Four promises, directly under the banner.
+ *
+ * Every one of them is a reason a first-time buyer hesitates: will it actually
+ * arrive, who made it, what if it breaks, is this price the price. Answering
+ * them in one strip is worth more than any amount of adjective further down
+ * the page.
+ */
+const PROMISES = [
+  { icon: Factory, title: 'Made in our factory', detail: 'Neemuch, Madhya Pradesh' },
+  { icon: Truck, title: 'Delivered across India', detail: 'Packed and freighted by us' },
+  { icon: IndianRupee, title: 'GST invoice on every order', detail: 'Price shown includes tax' },
+  { icon: ShieldCheck, title: 'One year on the mechanism', detail: 'Repaired or replaced' },
+]
+
+function PromiseStrip() {
+  return (
+    <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6'>
+      <div className='grid grid-cols-2 lg:grid-cols-4 gap-px bg-black/[0.07] rounded-2xl overflow-hidden ring-1 ring-black/[0.07]'>
+        {PROMISES.map(({ icon: Icon, title, detail }) => (
+          <div key={title} className='bg-white px-4 py-5 sm:px-6 sm:py-6 flex items-start gap-3'>
+            <Icon className='w-5 h-5 shrink-0 text-amber-600 mt-0.5' strokeWidth={1.75} />
+            <div className='min-w-0'>
+              <p className='text-[13px] font-semibold text-gray-900 leading-snug'>{title}</p>
+              <p className='mt-0.5 text-[11px] text-gray-500 leading-relaxed'>{detail}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   )
