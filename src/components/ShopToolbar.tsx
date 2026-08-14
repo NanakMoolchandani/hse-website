@@ -154,15 +154,20 @@ export default function ShopToolbar({
 
   return (
     <>
-      {/* Sticky under the header, not under the top of the window: the two are
-          one piece of chrome and a gap between them shows the grid sliding
-          through it. Full width, because a bar that stops at the content
-          margin reads as a floating box rather than as chrome.
+      {/* Deliberately NOT sticky.
 
-          Opaque, not frosted. Glass works over a photograph you are meant to
-          see through it; over a scrolling grid of chairs it just looks like
-          the bar and the products are printed on top of each other. */}
-      <div className='sticky top-32 md:top-40 z-30 px-4 sm:px-6 lg:px-10 bg-white border-y border-black/[0.06] shadow-[0_4px_16px_-8px_rgba(0,0,0,0.15)]'>
+          It was, pinned below the header. Two things went wrong. The header
+          hides itself on a downward scroll, so the bar was left pinned 160px
+          down an otherwise empty screen, floating in the middle of the grid
+          with nothing above it. And even parked correctly it sat across the
+          chairs, which is the one thing a shop's photographs should never
+          have over them.
+
+          The cost is that filters scroll out of reach deep in a long grid.
+          That is the right trade: someone who wants to filter has not started
+          scrolling yet, and the category row in the header stays available
+          the whole way down. */}
+      <div className='px-4 sm:px-6 lg:px-10 bg-white border-y border-black/[0.06]'>
         <div className='max-w-7xl mx-auto flex items-center justify-between gap-3 h-14'>
           <button
             type='button'
