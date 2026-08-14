@@ -783,7 +783,10 @@ function HeroBanner({ count }: { count: number }) {
             No middleman, no showroom markup. Held in stock and priced with GST included.
             {count > 0 && ` ${count} pieces to choose from.`}
           </p>
-          <div className='mt-8 flex flex-wrap items-center gap-3'>
+          {/* Full width each on a phone, where they stack: two pills of
+              different lengths sitting one above the other under a left-aligned
+              headline reads as a ragged edge rather than as a pair. */}
+          <div className='mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 max-w-sm sm:max-w-none'>
             <a
               href='#catalogue'
               className='pressable inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full bg-white text-sm font-semibold text-gray-900 hover:bg-gray-100'
