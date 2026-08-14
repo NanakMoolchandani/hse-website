@@ -70,6 +70,20 @@ const SEATING_ENUMS = new Set([
 const SEATING_CATEGORIES = CATEGORIES.filter((c) => SEATING_ENUMS.has(c.enum))
 const MADE_TO_ORDER_CATEGORIES = CATEGORIES.filter((c) => !SEATING_ENUMS.has(c.enum))
 
+/**
+ * Kept out of the circle rows so the rest hold one line.
+ *
+ * Ten made-to-order categories wrapped onto a second line with a single
+ * orphaned tile under it. Nine fit. This hides the tile only: the category is
+ * still in the filter drawer, its products still appear when it is chosen, and
+ * every dressing table product page still resolves. Delete the enum from
+ * `lib/categories.ts` instead if the range itself is going away.
+ */
+const HIDDEN_FROM_TILES = new Set(['DRESSING_TABLES'])
+const MADE_TO_ORDER_TILE_CATEGORIES = MADE_TO_ORDER_CATEGORIES.filter(
+  (c) => !HIDDEN_FROM_TILES.has(c.enum),
+)
+
 /** Price and availability for one slug, from the live feed. */
 interface LiveEntry {
   webProductId: number
@@ -169,7 +183,7 @@ export default function Shop() {
   }, [byCategory])
 
   const seatingTiles = useCategoryTiles(SEATING_CATEGORIES, byCategory)
-  const madeToOrderTiles = useCategoryTiles(MADE_TO_ORDER_CATEGORIES, byCategory)
+  const madeToOrderTiles = useCategoryTiles(MADE_TO_ORDER_TILE_CATEGORIES, byCategory)
 
   /**
    * Search, then filter, then sort.

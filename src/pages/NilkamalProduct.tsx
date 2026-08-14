@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import ProductImageZoom from '@/src/components/ProductImageZoom'
+import ProductGallery from '@/src/components/ProductGallery'
 import SEO, { createBreadcrumbSchema } from '@/src/components/SEO'
 import {
   fetchNilkamalCollection,
@@ -118,7 +118,7 @@ export default function NilkamalProduct() {
           <div className='flex flex-col lg:flex-row gap-10 lg:gap-16'>
             {/* Left - Image Gallery */}
             <div className='flex-1 max-w-2xl'>
-              <ProductImageZoom
+              <ProductGallery
                 images={images.map((img) => nilkamalImageUrl(img.src, 1000))}
                 alt={title}
                 activeIndex={activeImage}

@@ -45,7 +45,12 @@ export function WishlistHeart({
         e.stopPropagation()
         toggleWishlist(entry)
       }}
-      className={`pressable ${box} grid place-items-center rounded-full material-chrome border border-black/[0.06] shadow-sm hover:scale-105 ${className}`}
+      // A consistent white disc, not frosted glass. Sitting on a photograph,
+      // `material-chrome` tinted itself from whatever was behind it, so a row
+      // of cards showed a row of slightly different coloured blobs: warm over
+      // a wooden floor, grey over a wall. The same control has to look the
+      // same on every card.
+      className={`pressable ${box} grid place-items-center rounded-full bg-white/90 border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.12)] hover:bg-white hover:scale-105 ${className}`}
     >
       <Heart
         className={`${icon} transition-[fill,color,transform] duration-250 ease-spring ${

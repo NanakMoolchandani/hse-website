@@ -204,7 +204,7 @@ function CataloguePanel({
         </div>
       </div>
 
-      {/* Grouped swatch columns — equal-height bordered cards */}
+      {/* Grouped swatch columns: equal-height bordered cards */}
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch'>
         {groups.map((group) => {
           const groupColours = group.slugs

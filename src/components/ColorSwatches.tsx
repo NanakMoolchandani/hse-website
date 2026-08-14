@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ProductColor, CatalogProduct } from '@/src/lib/supabase'
 
-// Luxury catalogue — Premium Velvet / Suede (17 colors)
+// Luxury catalogue: Premium Velvet / Suede (17 colors)
 const CLOTH_COLORS = [
   { name: 'Greige',         hex: '#98927C' },
   { name: 'Taupe',          hex: '#676057' },
@@ -22,7 +22,7 @@ const CLOTH_COLORS = [
   { name: 'Charcoal Black', hex: '#1E2625' },
 ]
 
-// Renult catalogue — Premium Leatherette (29 colors)
+// Renult catalogue: Premium Leatherette (29 colors)
 const LEATHERETTE_COLORS = [
   { name: 'Cherry Red',      hex: '#C41A1B' },
   { name: 'Dark Brown',      hex: '#181614' },
@@ -74,7 +74,7 @@ function SwatchCircle({
       className={`group relative flex flex-col items-center gap-1.5 transition-all duration-200 ${
         isActive ? 'scale-110' : 'hover:scale-105'
       }`}
-      title={hasVariant ? `${color.name} — view chair` : color.name}
+      title={hasVariant ? `${color.name}: view chair` : color.name}
     >
       <div
         className={`relative w-9 h-9 rounded-full overflow-hidden transition-all duration-200 ${
@@ -138,7 +138,7 @@ interface ColorSwatchesProps {
   colors?: ProductColor[]
   materials?: string[]
   isExecutiveChair?: boolean
-  /** Color variants with actual chair photos — matched by colorHex */
+  /** Color variants with actual chair photos, matched by colorHex */
   variants?: CatalogProduct[]
   /** Called when user selects a variant color (null = revert to base product) */
   onVariantSelect?: (variant: CatalogProduct | null) => void
@@ -294,7 +294,7 @@ export default function ColorSwatches({
         {variants.length > 0 && (
           <p className='mt-4 text-xs text-gray-400 text-center'>
             <span className='inline-block w-2 h-2 rounded-full bg-white ring-1 ring-gray-300 mr-1.5 align-middle' />
-            Colours with a dot have real chair photos — click to preview
+            Colours with a dot have real chair photos: click to preview
           </p>
         )}
         <p className='mt-2 text-sm text-gray-400 text-center'>

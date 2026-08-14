@@ -156,9 +156,13 @@ export default function ShopToolbar({
     <>
       {/* Sticky under the header, not under the top of the window: the two are
           one piece of chrome and a gap between them shows the grid sliding
-          through it. Full width, because a frosted bar that stops at the
-          content margin reads as a floating box rather than as chrome. */}
-      <div className='sticky top-32 md:top-40 z-30 px-4 sm:px-6 lg:px-10 material-chrome border-y border-black/[0.06]'>
+          through it. Full width, because a bar that stops at the content
+          margin reads as a floating box rather than as chrome.
+
+          Opaque, not frosted. Glass works over a photograph you are meant to
+          see through it; over a scrolling grid of chairs it just looks like
+          the bar and the products are printed on top of each other. */}
+      <div className='sticky top-32 md:top-40 z-30 px-4 sm:px-6 lg:px-10 bg-white border-y border-black/[0.06] shadow-[0_4px_16px_-8px_rgba(0,0,0,0.15)]'>
         <div className='max-w-7xl mx-auto flex items-center justify-between gap-3 h-14'>
           <button
             type='button'
@@ -195,7 +199,7 @@ export default function ShopToolbar({
             {sortOpen && (
               // Grows from the button that opened it, so the menu and the
               // control read as the same object.
-              <div className='animate-menu-in absolute right-0 top-full mt-2 w-60 origin-top-right rounded-xl material-chrome border border-black/[0.08] shadow-xl py-1.5 z-50'>
+              <div className='animate-menu-in absolute right-0 top-full mt-2 w-60 origin-top-right rounded-xl bg-white border border-black/[0.08] shadow-xl py-1.5 z-50'>
                 {SORT_OPTIONS.map((opt) => (
                   <button
                     key={opt.key}

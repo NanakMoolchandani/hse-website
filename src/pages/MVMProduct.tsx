@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MessageCircle, Phone, ChevronRight, Share2, Check } from 'lucide-react'
 import Footer from '@/src/components/Footer'
-import ProductImageZoom from '@/src/components/ProductImageZoom'
+import ProductGallery from '@/src/components/ProductGallery'
 import SEO, { createBreadcrumbSchema, createProductSchema } from '@/src/components/SEO'
 import { getCategoryBySlug, getCategoryByEnum, isParticleBoardCategory } from '@/src/lib/categories'
 import ProductColourCatalogue from '@/src/components/ProductColourCatalogue'
@@ -15,22 +15,54 @@ import {
   type ProductWithVariants,
 } from '@/src/lib/supabase'
 
-/** The show more / show less control under a clamped description. */
-function DescToggle({
-  open, onToggle, moreLabel,
-}: { open: boolean; onToggle: () => void; moreLabel: string }) {
-  return (
-    <button
-      type='button'
-      onClick={onToggle}
-      className='mt-2 inline-flex items-center gap-1 text-xs font-semibold text-amber-700 hover:text-amber-800 transition-colors'
-    >
-      {open ? 'Show less' : moreLabel}
-      <span aria-hidden className={`transition-transform duration-250 ease-spring ${open ? 'rotate-180' : ''}`}>
-        &#8964;
-      </span>
-    </button>
-  )
+/**
+ * One line about the chair, and nothing more.
+ *
+ * The catalogue descriptions run 1,200 to 1,400 characters of dense bullets
+ * about channel stitching and lumbar bridge contours. Nobody buying a chair
+ * reads that, and printed in full it pushed the price and the buy button off
+ * the bottom of the screen. So: take the opening bullet, cut it at a natural
+ * break, and stop. The specs that matter are already listed underneath as
+ * materials and key features, where they can be scanned rather than read.
+ */
+/**
+ * A material named, not described.
+ *
+ * The catalogue writes these as "Thing with qualities": "Soft-Touch Padded
+ * Upholstery Fabric with Diamond-Stitch Pattern". Everything after "with" is
+ * the same information the photograph already gives, and eight of these turned
+ * a row of chips into a paragraph. The full string stays on the `title`, so
+ * nothing is lost, it is just not shouted.
+ */
+function shortMaterial(text: string): string {
+  const cut = text.split(/\s+with\s+/i)[0].trim()
+  return cut.length >= 8 ? cut : text
+}
+
+function shortDescription(text: string | null | undefined, limit = 150): string {
+  if (!text) return ''
+  const first = text
+    .split(/[\n•]/)
+    .map((s) => s.trim())
+    .find((s) => s.length > 20)
+  if (!first) return ''
+
+  const clean = first.replace(/\s+/g, ' ').trim()
+  if (clean.length <= limit) return end(clean)
+
+  // Prefer a comma to a bare word break: cutting a list at one of its own
+  // separators sounds finished, cutting it mid-clause sounds truncated.
+  const cut = clean.slice(0, limit)
+  const comma = cut.lastIndexOf(', ')
+  const space = cut.lastIndexOf(' ')
+  const at = comma > limit * 0.5 ? comma : space
+  return end(cut.slice(0, at > 0 ? at : limit))
+}
+
+/** Close the sentence. A line that simply stops reads as a loading failure. */
+function end(text: string): string {
+  const trimmed = text.replace(/[\s,;:]+$/, '')
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`
 }
 
 export default function MVMProduct() {
@@ -41,10 +73,7 @@ export default function MVMProduct() {
   const [activeImage, setActiveImage] = useState(0)
   const [copied, setCopied] = useState(false)
   const [showHindi, setShowHindi] = useState(false)
-  // Descriptions run long enough to push the right column well past the bottom
-  // of the photograph. Show a few lines, and let anyone who wants the rest ask.
-  const [descExpanded, setDescExpanded] = useState(false)
-  // ID of the colour variant currently displayed — null = parent/default
+  // ID of the colour variant currently displayed. null = parent/default.
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
 
   const cat = collection ? getCategoryBySlug(collection) : undefined
@@ -68,7 +97,7 @@ export default function MVMProduct() {
     })
   }, [slug])
 
-  // Must be before any early returns — Rules of Hooks
+  // Must be before any early returns: Rules of Hooks
   useEffect(() => { setActiveImage(0) }, [selectedVariantId])
 
   // The event the product-level funnel is built from. Fired on the product,
@@ -125,7 +154,7 @@ export default function MVMProduct() {
     ? (familyMembers.find((m) => m.id === selectedVariantId) ?? product)
     : product
 
-  // Images come from whichever variant is selected — swaps instantly on click
+  // Images come from whichever variant is selected, and swap instantly on click
   const images = activeMember.processed_photo_urls?.length > 0
     ? activeMember.processed_photo_urls
     : activeMember.raw_photo_urls?.length > 0
@@ -190,7 +219,7 @@ export default function MVMProduct() {
                 within a page that already scrolls, which hid the lower half of
                 the specs from anyone who did not think to scroll inside it. */}
             <div className='flex-1 max-w-2xl lg:sticky lg:top-32 self-start'>
-              <ProductImageZoom
+              <ProductGallery
                 images={images}
                 alt={product.name || 'Product'}
                 activeIndex={activeImage}
@@ -241,7 +270,7 @@ export default function MVMProduct() {
                     </p>
                   </div>
 
-                  {/* Thumbnail swatches — clicking swaps images instantly */}
+                  {/* Thumbnail swatches: clicking swaps images instantly */}
                   <div className='flex flex-wrap gap-2'>
                     {familyMembers.map((member) => {
                       const isActive = member.id === (selectedVariantId ?? product.id)
@@ -308,8 +337,12 @@ export default function MVMProduct() {
                   </p>
                   <div className='flex flex-wrap gap-1.5'>
                     {materials.map((m) => (
-                      <span key={m} className='text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500'>
-                        {m}
+                      <span
+                        key={m}
+                        title={m}
+                        className='text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-600'
+                      >
+                        {shortMaterial(m)}
                       </span>
                     ))}
                   </div>
@@ -322,13 +355,20 @@ export default function MVMProduct() {
                   <p className='text-xs font-semibold tracking-wider uppercase text-gray-500 mb-3'>
                     Key Features
                   </p>
-                  <ul className='space-y-2'>
+                  {/* Labels only. Each feature carries a two-sentence "detail"
+                      about pressure distribution and pelvic support, and six of
+                      those is three screens of prose on a page whose job is to
+                      sell a chair. The label alone is the fact; the detail is
+                      the copywriting around it. */}
+                  <ul className='grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2'>
                     {features.map((f) => (
                       <li key={f.label} className='flex items-start gap-2'>
-                        <span className='text-amber-500 shrink-0 mt-1 leading-none'>•</span>
-                        <span className='text-sm text-gray-500 leading-snug'>
-                          <span className='font-medium text-gray-900'>{f.label}</span>
-                          {f.detail && <span className='text-gray-500'> — {f.detail}</span>}
+                        <Check className='w-3.5 h-3.5 mt-0.5 shrink-0 text-amber-500' strokeWidth={2.5} />
+                        <span
+                          title={f.detail || undefined}
+                          className='text-sm font-medium text-gray-800 leading-snug'
+                        >
+                          {f.label}
                         </span>
                       </li>
                     ))}
@@ -336,44 +376,28 @@ export default function MVMProduct() {
                 </div>
               )}
 
-              {/* Description - for particle board: combine features into bullet points */}
+              {/* One line about the chair. No Read more, no accordion: a
+                  control that offers to show you 1,200 more characters is
+                  still 1,200 characters of page weight, and the specs below
+                  already carry everything worth knowing. */}
               {(() => {
-                const isBoard = isParticleBoardCategory(product.category || '')
-                const descText = showHindi ? product.description_hindi : product.description
-                const hasDesc = descText || product.description_hindi
-
-                // Build bullet points for particle board: description lines + features
-                const bullets: string[] = []
-                if (isBoard) {
-                  if (descText) {
-                    // Split description by sentences or bullet markers
-                    descText.split(/[.•\n]/).forEach((s) => {
-                      const trimmed = s.trim()
-                      if (trimmed.length > 5) bullets.push(trimmed)
-                    })
-                  }
-                  features.forEach((f) => {
-                    const text = f.detail ? `${f.label} — ${f.detail}` : f.label
-                    if (!bullets.some((b) => b.toLowerCase().includes(f.label.toLowerCase()))) {
-                      bullets.push(text)
-                    }
-                  })
-                }
-
-                if (!hasDesc && bullets.length === 0) return null
+                const summary = shortDescription(
+                  showHindi ? product.description_hindi : product.description,
+                )
+                if (!summary) return null
 
                 return (
-                  <div className='mb-8 hidden md:block'>
+                  <div className='mb-8'>
                     <div className='flex items-center gap-2 mb-2'>
                       <p className='text-xs font-semibold tracking-wider uppercase text-gray-500'>
                         Description
                       </p>
-                      {!isBoard && product.description_hindi && (
+                      {product.description_hindi && (
                         <div className='flex gap-1'>
                           <button
                             onClick={() => setShowHindi(false)}
                             className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
-                              !showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-gray-100 text-gray-500'
+                              !showHindi ? 'bg-amber-100 text-amber-700 font-semibold' : 'bg-gray-100 text-gray-500'
                             }`}
                           >
                             EN
@@ -381,7 +405,7 @@ export default function MVMProduct() {
                           <button
                             onClick={() => setShowHindi(true)}
                             className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
-                              showHindi ? 'bg-amber-500/20 text-amber-400' : 'bg-gray-100 text-gray-500'
+                              showHindi ? 'bg-amber-100 text-amber-700 font-semibold' : 'bg-gray-100 text-gray-500'
                             }`}
                           >
                             HI
@@ -389,42 +413,7 @@ export default function MVMProduct() {
                         </div>
                       )}
                     </div>
-                    {isBoard && bullets.length > 0 ? (
-                      <>
-                        <ul className='space-y-1.5'>
-                          {(descExpanded ? bullets : bullets.slice(0, 4)).map((b, i) => (
-                            <li key={i} className='flex items-start gap-2 text-sm text-gray-500 leading-relaxed'>
-                              <span className='text-amber-500 mt-1 shrink-0'>&#8226;</span>
-                              <span>{b}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        {bullets.length > 4 && (
-                          <DescToggle
-                            open={descExpanded}
-                            onToggle={() => setDescExpanded((o) => !o)}
-                            moreLabel={`Show all ${bullets.length} details`}
-                          />
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <p
-                          className={`text-sm text-gray-500 leading-relaxed ${
-                            descExpanded ? '' : 'line-clamp-4'
-                          }`}
-                        >
-                          {descText}
-                        </p>
-                        {(descText?.length ?? 0) > 240 && (
-                          <DescToggle
-                            open={descExpanded}
-                            onToggle={() => setDescExpanded((o) => !o)}
-                            moreLabel='Read more'
-                          />
-                        )}
-                      </>
-                    )}
+                    <p className='text-sm text-gray-500 leading-relaxed'>{summary}</p>
                   </div>
                 )
               })()}
@@ -463,7 +452,7 @@ export default function MVMProduct() {
                   <span className='text-sm font-medium text-gray-900'>Manufactured by Hari Shewa Enterprises</span>
                 </div>
                 <p className='text-xs text-gray-500 leading-relaxed'>
-                  MVM Aasanam — Premium furniture made in Neemuch, Madhya Pradesh.
+                  MVM Aasanam. Premium furniture made in Neemuch, Madhya Pradesh.
                   Factory-direct pricing with ISO certified quality. Bulk orders and institutional supply available.
                 </p>
               </div>
@@ -471,7 +460,7 @@ export default function MVMProduct() {
           </div>
         </section>
 
-        {/* Colour catalogue — shown for seating categories that support upholstery customisation */}
+        {/* Colour catalogue: shown for seating categories that support upholstery customisation */}
         <ProductColourCatalogue category={product.category || ''} isMeshBack={isMeshBack} />
 
         {/* Related Products */}

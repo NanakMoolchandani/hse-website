@@ -129,8 +129,14 @@ export default function AddToBag({
             >
               <Minus className='w-3.5 h-3.5' />
             </button>
-            <span className={`flex-1 grid place-items-center ${text} font-semibold tabular-nums text-gray-900`}>
-              {quantity} in bag
+            {/* The number alone. "3 in bag" needed two lines in a two-up phone
+                grid, and the words were never the information: the stepper it
+                sits between already says what the number counts. */}
+            <span
+              aria-label={`${quantity} in bag`}
+              className={`flex-1 grid place-items-center ${text} font-semibold tabular-nums text-gray-900`}
+            >
+              {quantity}
             </span>
             {/* Deliberately NOT disabled at the cap. A dead plus button gives
                 the buyer no idea why the number stopped moving; pressing it is
