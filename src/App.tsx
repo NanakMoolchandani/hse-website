@@ -54,8 +54,6 @@ const NAV_LINKS = [
   // right now without asking for a price. Both stay in the nav, because most
   // of the range is still wholesale and quoted per deal.
   { label: 'Shop', href: '/shop' },
-  { label: 'Features', href: '/home#features' },
-  { label: 'Contact', href: '/home#contact' },
 ]
 
 /**
@@ -137,15 +135,6 @@ function Navbar() {
     setOpen(false)
     setProductsOpen(false)
   }, [location])
-
-  const handleNavClick = (href: string) => {
-    setOpen(false)
-    if (href.includes('#') && isHome) {
-      const hash = href.substring(href.indexOf('#'))
-      const target = document.querySelector(hash)
-      if (target) target.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
 
   // The chrome is a floating translucent layer, not an opaque strip: content
   // travels under it as you scroll. It carries no permanent divider either;
@@ -267,28 +256,10 @@ function Navbar() {
                     </>
                   )}
                 </div>
-              ) : l.href.includes('#') ? (
-                isHome ? (
-                  <button
-                    key={l.href}
-                    onClick={() => handleNavClick(l.href!)}
-                    className={`text-sm font-medium transition-colors ${linkColor}`}
-                  >
-                    {l.label}
-                  </button>
-                ) : (
-                  <Link
-                    key={l.href}
-                    to={l.href}
-                    className={`text-sm font-medium transition-colors ${linkColor}`}
-                  >
-                    {l.label}
-                  </Link>
-                )
               ) : (
                 <Link
                   key={l.href}
-                  to={l.href!}
+                  to={l.href}
                   className={`text-sm font-medium transition-colors ${linkColor}`}
                 >
                   {l.label}
@@ -381,6 +352,13 @@ function Navbar() {
               Home
             </Link>
             <Link
+              to='/about'
+              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
+              onClick={() => setOpen(false)}
+            >
+              About
+            </Link>
+            <Link
               to='/shop'
               className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
               onClick={() => setOpen(false)}
@@ -443,22 +421,6 @@ function Navbar() {
                 Catalogue Colors
               </Link>
             </div>
-            {isHome ? (
-              <button
-                onClick={() => handleNavClick('/home#contact')}
-                className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
-              >
-                Contact
-              </button>
-            ) : (
-              <Link
-                to='/home#contact'
-                className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
-                onClick={() => setOpen(false)}
-              >
-                Contact
-              </Link>
-            )}
             <Link
               to='/order/track'
               className={`text-left text-sm font-medium py-1.5 ${isHome ? 'text-gray-400' : 'text-gray-500'}`}
