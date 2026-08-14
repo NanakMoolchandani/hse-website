@@ -179,7 +179,7 @@ export default function BuyBox({ slug }: BuyBoxProps) {
       <div className='mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-gray-500'>
         <span className='inline-flex items-center gap-1.5'>
           <Truck className='w-3.5 h-3.5 text-gray-400' />
-          Free delivery above {inr(15000)}
+          Delivery included
         </span>
         <span className='inline-flex items-center gap-1.5'>
           <ShieldCheck className='w-3.5 h-3.5 text-gray-400' />

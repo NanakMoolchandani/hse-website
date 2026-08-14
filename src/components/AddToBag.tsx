@@ -96,7 +96,11 @@ export default function AddToBag({
 
   return (
     <div className='w-full'>
-      <div className='flex flex-col gap-2'>
+      {/* Side by side, not stacked. These are alternatives, not a sequence:
+          stacked, the lower one reads as a consequence of the upper, and the
+          pair takes twice the vertical space on a card whose height every
+          other card in the row has to match. */}
+      <div className='grid grid-cols-2 gap-2'>
         {/* These two are one control in the buyer's head, so the swap gets a
             bridge. React remounts on the branch flip, which is what runs the
             entrance; without it the button is simply replaced by a stepper

@@ -55,8 +55,6 @@ export interface CartState {
   subtotal: number
   shipping: number
   total: number
-  freeShippingAbove: number
-  amountToFreeShipping: number
   /** Set when a line was dropped or trimmed, for the page to explain. */
   notice: string | null
   error: string | null
@@ -70,8 +68,6 @@ const EMPTY: CartState = {
   subtotal: 0,
   shipping: 0,
   total: 0,
-  freeShippingAbove: 15000,
-  amountToFreeShipping: 15000,
   notice: null,
   error: null,
 }
@@ -175,8 +171,6 @@ function absorb(cart: ServerCart, intent: Intent): void {
     subtotal: cart.subtotal,
     shipping: cart.shipping,
     total: cart.total,
-    freeShippingAbove: cart.freeShippingAbove,
-    amountToFreeShipping: cart.amountToFreeShipping,
     notice: noticeFor(dropped, trimmed),
     error: null,
   })

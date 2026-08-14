@@ -9,8 +9,10 @@ import { initAnalytics, trackPageView, track } from '@/src/lib/analytics'
 import { loadCart } from '@/src/lib/cart'
 import { useReveal } from '@/src/hooks/use-reveal'
 
-// MVM is the default landing route (/) — keep eager so first paint has no spinner.
-import MVM from '@/src/pages/MVM'
+// Shop is the default landing route (/) and carries the hero, so it stays
+// eager: lazy-loading the first paint would put a spinner where the showroom
+// photograph should be.
+import Shop from '@/src/pages/Shop'
 
 // All other routes lazy — drops ~60% off initial JS. Prerender plugin uses
 // renderAfterTime:6000 so lazy chunks resolve before HTML snapshot for SEO.
@@ -33,7 +35,6 @@ const CatalogueColors = lazy(() => import('@/src/pages/CatalogueColors'))
 // ── Store ────────────────────────────────────────────────────────────────────
 // Lazy like everything else: most visitors never reach these, and the checkout
 // pulls in form and cart code that has no business in the marketing bundle.
-const Shop = lazy(() => import('@/src/pages/Shop'))
 const CartPage = lazy(() => import('@/src/pages/Cart'))
 const Checkout = lazy(() => import('@/src/pages/Checkout'))
 const OrderSuccess = lazy(() => import('@/src/pages/OrderSuccess'))
@@ -176,7 +177,7 @@ function Navbar() {
           used to be hand-typed as 108/116/120px, none of which agreed. */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-spring ${navBg} ${hidden && !open ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-2'>
-          <Link to='/mvm' className={`flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight font-sans min-w-0 ${textColor}`}>
+          <Link to='/shop' className={`flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight font-sans min-w-0 ${textColor}`}>
             <img src='/logos/mvm-logo.png' alt='MVM Aasanam' className='w-8 h-8 sm:w-9 sm:h-9 rounded-full flex-shrink-0' />
             <span className='text-[13px] sm:text-base truncate'>
               <span className='sm:hidden'>Hari Shewa</span>
@@ -205,7 +206,7 @@ function Navbar() {
                           {/* Brands */}
                           <div className='py-2 w-52'>
                             <Link
-                              to='/mvm'
+                              to='/shop'
                               className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
                               onClick={() => setProductsOpen(false)}
                             >
@@ -336,12 +337,14 @@ function Navbar() {
               one. */}
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-stretch h-16'>
             <BrandTab
-              to='/mvm'
+              to='/shop'
               label='MVM Aasanam'
               tag='Our Brand'
               owned
               dark={isHome}
-              active={location.pathname.startsWith('/mvm')}
+              // Product pages still live under /mvm/<collection>/<slug>, so the
+              // brand stays lit while a customer is looking at one of its chairs.
+              active={location.pathname.startsWith('/mvm') || location.pathname === '/shop'}
               className='flex-[4]'
             />
             <span className={`my-3 w-px ${isHome ? 'bg-white/15' : 'bg-black/10'}`} />
@@ -388,7 +391,7 @@ function Navbar() {
               <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
               <div className='space-y-0.5 pl-1'>
                 <Link
-                  to='/mvm'
+                  to='/shop'
                   className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
                   onClick={() => setOpen(false)}
                 >
@@ -601,7 +604,7 @@ export default function App() {
       <Navbar />
       <Suspense fallback={<div className='min-h-screen' />}>
         <Routes>
-          <Route path='/' element={<Navigate to='/mvm' replace />} />
+          <Route path='/' element={<Navigate to='/shop' replace />} />
           <Route path='/home' element={<Home />} />
           <Route path='/about' element={<About />} />
           <Route path='/nilkamal' element={<Nilkamal />} />
@@ -613,8 +616,11 @@ export default function App() {
           <Route path='/seatex' element={<Seatex />} />
           <Route path='/seatex/:collection' element={<SeatexCollection />} />
           <Route path='/seatex/:collection/:handle' element={<SeatexProductPage />} />
-          <Route path='/mvm' element={<MVM />} />
-          <Route path='/mvm/:collection' element={<Navigate to='/mvm' replace />} />
+          {/* The catalogue index and the shop were the same grid of the same
+              chairs under two URLs. /shop is the survivor; these keep old links,
+              bookmarks and indexed results working. */}
+          <Route path='/mvm' element={<Navigate to='/shop' replace />} />
+          <Route path='/mvm/:collection' element={<Navigate to='/shop' replace />} />
           <Route path='/mvm/:collection/:slug' element={<MVMProductPage />} />
           <Route path='/catalogue-colors' element={<CatalogueColors />} />
 
@@ -633,8 +639,8 @@ export default function App() {
           <Route path='/privacy' element={<Privacy />} />
           <Route path='/terms' element={<Terms />} />
           {/* Redirect old /products/ URLs to /mvm/ */}
-          <Route path='/products/:category' element={<Navigate to='/mvm' replace />} />
-          <Route path='/products/:category/:slug' element={<Navigate to='/mvm' replace />} />
+          <Route path='/products/:category' element={<Navigate to='/shop' replace />} />
+          <Route path='/products/:category/:slug' element={<Navigate to='/shop' replace />} />
         </Routes>
       </Suspense>
     </div>

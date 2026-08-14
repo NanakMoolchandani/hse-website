@@ -186,7 +186,7 @@ export default function Cart() {
                 <div className='flex justify-between'>
                   <dt className='text-gray-500'>Delivery</dt>
                   <dd className='font-medium text-gray-900 tabular-nums'>
-                    {cart.shipping === 0 ? 'Free' : inr(cart.shipping)}
+                    {cart.shipping === 0 ? 'Included' : inr(cart.shipping)}
                   </dd>
                 </div>
                 <div className='pt-3 border-t border-gray-100 flex justify-between text-base'>
@@ -197,12 +197,10 @@ export default function Cart() {
 
               <p className='mt-1.5 text-[11px] text-gray-400'>GST included</p>
 
-              {cart.amountToFreeShipping > 0 && (
-                <p className='mt-3 inline-flex items-start gap-1.5 text-xs text-gray-600'>
-                  <Truck className='w-3.5 h-3.5 mt-px shrink-0 text-gray-400' />
-                  Add {inr(cart.amountToFreeShipping)} more for free delivery.
-                </p>
-              )}
+              <p className='mt-3 inline-flex items-start gap-1.5 text-xs text-gray-600'>
+                <Truck className='w-3.5 h-3.5 mt-px shrink-0 text-gray-400' />
+                Delivery anywhere in India is included in the price.
+              </p>
 
               <Link
                 to='/checkout'

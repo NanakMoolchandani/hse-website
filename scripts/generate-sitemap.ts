@@ -44,7 +44,6 @@ const SEATEX_COLLECTIONS = [
 const STATIC_PAGES = [
   { path: '/home', priority: '1.0', changefreq: 'weekly' },
   { path: '/about', priority: '0.8', changefreq: 'monthly' },
-  { path: '/mvm', priority: '0.9', changefreq: 'weekly' },
   { path: '/nilkamal', priority: '0.9', changefreq: 'weekly' },
   { path: '/supreme', priority: '0.9', changefreq: 'weekly' },
   { path: '/seatex', priority: '0.9', changefreq: 'weekly' },

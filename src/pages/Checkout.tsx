@@ -27,6 +27,7 @@ import SEO from '@/src/components/SEO'
 import { useCart, loadCart } from '@/src/lib/cart'
 import { startCheckout, track, CheckoutFieldError } from '@/src/lib/analytics'
 import { INDIAN_STATES, HOME_STATE } from '@/src/lib/states'
+import ProtectionPicker, { PROTECTION_PLANS } from '@/src/components/ProtectionPicker'
 import { inr } from '@/src/lib/utils'
 
 const BUYER_KEY = 'mvm_buyer'
@@ -66,6 +67,7 @@ export default function Checkout() {
 
   const [form, setForm] = useState<BuyerForm>(BLANK)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [protectionPlan, setProtectionPlan] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [failure, setFailure] = useState<string | null>(null)
   const shippingTracked = useRef(false)
@@ -85,6 +87,9 @@ export default function Checkout() {
       track('ADD_SHIPPING_INFO')
     }
   }, [form.pincode, form.city, form.line1])
+
+  const chosenPlan = PROTECTION_PLANS.find((p) => p.id === protectionPlan) ?? null
+  const payable = cart.total + (chosenPlan?.price ?? 0)
 
   const set = (field: keyof BuyerForm) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -112,6 +117,7 @@ export default function Checkout() {
           state: form.state,
           pincode: form.pincode,
         },
+        protectionPlan,
       })
 
       try {
@@ -245,6 +251,8 @@ export default function Checkout() {
               </div>
             </section>
 
+            <ProtectionPicker value={protectionPlan} onChange={setProtectionPlan} />
+
             {failure && (
               <div className='animate-notice-in rounded-lg bg-red-50 border border-red-100 px-4 py-3'>
                 <p className='text-sm text-red-800'>{failure}</p>
@@ -289,12 +297,21 @@ export default function Checkout() {
               <div className='flex justify-between'>
                 <dt className='text-gray-500'>Delivery</dt>
                 <dd className='font-medium text-gray-900 tabular-nums'>
-                  {cart.shipping === 0 ? 'Free' : inr(cart.shipping)}
+                  {cart.shipping === 0 ? 'Included' : inr(cart.shipping)}
                 </dd>
               </div>
+              {chosenPlan && (
+                <div className='flex justify-between'>
+                  <dt className='text-gray-500'>
+                    {chosenPlan.label} cover
+                    <span className='text-gray-400'> &middot; {chosenPlan.months} months</span>
+                  </dt>
+                  <dd className='font-medium text-gray-900 tabular-nums'>{inr(chosenPlan.price)}</dd>
+                </div>
+              )}
               <div className='pt-3 border-t border-gray-100 flex justify-between text-base'>
                 <dt className='font-semibold text-gray-900'>Total</dt>
-                <dd className='font-semibold tracking-[-0.01em] text-gray-900 tabular-nums'>{inr(cart.total)}</dd>
+                <dd className='font-semibold tracking-[-0.01em] text-gray-900 tabular-nums'>{inr(payable)}</dd>
               </div>
             </dl>
             <p className='mt-1.5 text-[11px] text-gray-400'>GST included</p>
@@ -304,7 +321,7 @@ export default function Checkout() {
               disabled={submitting}
               className='pressable mt-5 w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white shadow-sm hover:bg-amber-600 disabled:opacity-60'
             >
-              {submitting ? 'Taking you to payment…' : <><Lock className='w-4 h-4' /> Pay {inr(cart.total)}</>}
+              {submitting ? 'Taking you to payment…' : <><Lock className='w-4 h-4' /> Pay {inr(payable)}</>}
             </button>
 
             <p className='mt-3 text-[11px] leading-relaxed text-gray-400'>

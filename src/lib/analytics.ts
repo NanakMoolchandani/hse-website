@@ -331,8 +331,6 @@ export interface ServerCart {
   itemCount: number
   shipping: number
   total: number
-  freeShippingAbove: number
-  amountToFreeShipping: number
   rejected?: { webProductId: number; reason: string }[]
 }
 
@@ -366,6 +364,8 @@ export async function fetchCart(): Promise<ServerCart> {
 
 export interface CheckoutDetails {
   customer: { name: string; email: string; phone: string }
+  /** Optional replacement cover; the server re-resolves the price by id. */
+  protectionPlan?: string | null
   address: {
     line1: string
     line2?: string

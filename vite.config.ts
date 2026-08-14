@@ -22,13 +22,8 @@ const PRERENDER_ROUTES = [
   '/shop',
   '/order/track',
 
-  // MVM Aasanam — brand + 5 collections
-  '/mvm',
-  '/mvm/executive-chairs',
-  '/mvm/ergonomic-task-chairs',
-  '/mvm/cafeteria-furniture',
-  '/mvm/visitor-and-reception',
-  '/mvm/salon-chairs',
+  // MVM Aasanam collection URLs now redirect to /shop, so there is nothing
+  // worth snapshotting at them.
 
   // Nilkamal — brand + 19 collections
   '/nilkamal',
