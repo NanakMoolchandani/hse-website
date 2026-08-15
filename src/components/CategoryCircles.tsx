@@ -12,10 +12,9 @@
  * get. Categories we have no photograph for fall back to a tinted circle with
  * the initial, which is honest, rather than borrowing someone else's chair.
  *
- * On a phone the row scrolls sideways with snap points, which is the native
- * gesture there. From `sm` up it becomes a centred row that wraps if it has
- * to, rather than a scroller with a scrollbar nobody would find. Tile and gap
- * sizes below are chosen so nine of them hold a single line on a laptop.
+ * On a phone the tiles wrap four to a row, so the whole range is on the page
+ * the buyer is already scrolling through. From `sm` up it becomes a centred
+ * row sized so nine of them hold a single line on a laptop.
  */
 
 import { useMemo } from 'react'
@@ -120,28 +119,25 @@ export default function CategoryCircles({
   return (
     <div
       className={
-        // Bleeds to the screen edge on a phone so the last tile is visibly cut
-        // off, which is the only honest way to say "this scrolls". Padding is
-        // put back inside so the first tile still lines up with the page.
+        // A wrapping grid on a phone, four across, not a sideways scroller.
+        // The scroller was the native gesture but it hid two thirds of the
+        // range behind a swipe nobody was told about: a cut-off circle at the
+        // right edge is a hint, and a hint is not navigation. Four to a row
+        // wrapping downward puts every category on the screen the buyer is
+        // already scrolling through.
         //
-        // `scroll-pl-4` is load-bearing, not decoration. Mandatory snapping
-        // aligns a `snap-start` child to the container's *padding* edge, so
-        // without a matching scroll-padding the browser silently scrolls the
-        // row by 16px on load and the first tile ends up flush against the
-        // screen edge, half a circle out of line with the heading above it.
-        //
-        // The gap is sized so nine tiles hold one line on a laptop: 9 x 112
-        // plus 8 x 20 of gap is 1168, inside the 1200 the content column
-        // gives at 1440. Any wider and the ninth wraps onto a line of its own.
-        'flex gap-4 sm:gap-5 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center ' +
-        'snap-x snap-mandatory sm:snap-none thumbnail-scroll ' +
-        '-mx-4 px-4 scroll-pl-4 sm:mx-0 sm:px-0 sm:scroll-pl-0 pb-2 sm:pb-0'
+        // From `sm` up it is a centred flex row instead, with fixed tile
+        // widths, because nine tiles across a laptop should sit on one line
+        // rather than be forced into a four-column grid: 9 x 112 plus 8 x 20
+        // of gap is 1168, inside the 1200 the content column gives at 1440.
+        'grid grid-cols-4 gap-x-3 gap-y-5 ' +
+        'sm:flex sm:flex-wrap sm:justify-center sm:gap-5'
       }
     >
       {loading
         ? Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className='shrink-0 w-20 sm:w-24 xl:w-28 flex flex-col items-center gap-3'>
-              <div className='w-20 h-20 sm:w-24 sm:h-24 xl:w-28 xl:h-28 rounded-full bg-gray-100 animate-pulse' />
+            <div key={i} className='w-full sm:w-24 xl:w-28 sm:shrink-0 flex flex-col items-center gap-3'>
+              <div className='w-full aspect-square sm:w-24 sm:h-24 sm:aspect-auto xl:w-28 xl:h-28 rounded-full bg-gray-100 animate-pulse' />
               <div className='h-2.5 w-14 rounded bg-gray-100 animate-pulse' />
             </div>
           ))
@@ -154,7 +150,7 @@ export default function CategoryCircles({
                 type='button'
                 onClick={() => onSelect(tile.key)}
                 aria-pressed={active}
-                className='group shrink-0 snap-start w-20 sm:w-24 xl:w-28 flex flex-col items-center gap-2.5 sm:gap-3'
+                className='group w-full sm:w-24 xl:w-28 sm:shrink-0 flex flex-col items-center gap-2.5 sm:gap-3'
               >
                 {/* Two rings, one object. The outer span is the coloured
                     circle and its padding is the white gap; the inner one
@@ -163,7 +159,7 @@ export default function CategoryCircles({
                     background happens to be, and this row sits on white
                     today and may not tomorrow. */}
                 <span
-                  className={`block w-20 h-20 sm:w-24 sm:h-24 xl:w-28 xl:h-28 rounded-full bg-white p-[5px] transition-[transform,border-color] duration-250 ease-spring group-hover:scale-105 group-active:scale-[0.97] ${
+                  className={`block w-full aspect-square sm:w-24 sm:h-24 sm:aspect-auto xl:w-28 xl:h-28 rounded-full bg-white p-[5px] transition-[transform,border-color] duration-250 ease-spring group-hover:scale-105 group-active:scale-[0.97] ${
                     active ? 'border-[3px] border-gray-900' : `border-2 ${ring}`
                   }`}
                 >

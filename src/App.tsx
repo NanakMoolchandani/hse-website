@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Menu, X, MessageCircle, ChevronDown, Palette, MapPin } from 'lucide-react'
+import { Menu, X, MessageCircle, Palette, MapPin } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Navigate } from 'react-router-dom'
@@ -16,7 +16,7 @@ import { useReveal } from '@/src/hooks/use-reveal'
 // photograph should be.
 import Shop from '@/src/pages/Shop'
 
-// All other routes lazy — drops ~60% off initial JS. Prerender plugin uses
+// All other routes lazy: drops ~60% off initial JS. Prerender plugin uses
 // renderAfterTime:6000 so lazy chunks resolve before HTML snapshot for SEO.
 const Home = lazy(() => import('@/src/pages/Home'))
 const About = lazy(() => import('@/src/pages/About'))
@@ -54,9 +54,20 @@ if (typeof window !== 'undefined') {
 const WHATSAPP_NUMBER = '919981516171'
 const GOOGLE_LISTING_URL = 'https://www.google.com/maps?cid=16199908150674240164'
 
+/**
+ * Three destinations, no dropdown.
+ *
+ * There used to be a "Products" menu listing MVM Aasanam and the three dealer
+ * brands, plus fabrics. Every one of those already had a home: our range is the
+ * category row, the dealers are "Also stocking" at the end of it, and fabrics
+ * were one click further away than they needed to be. A menu that only repeats
+ * what is already on screen costs a click and teaches people the header is
+ * noise.
+ */
 const NAV_LINKS = [
+  { label: 'Our story', href: '/home' },
   { label: 'About', href: '/about' },
-  { label: 'Products', href: null }, // dropdown
+  { label: 'Fabrics & colours', href: '/catalogue-colors' },
 ]
 
 /**
@@ -83,11 +94,9 @@ const HEADER_CATEGORIES = [
 function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [productsOpen, setProductsOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
   const lastScrollY = useRef(0)
   const location = useLocation()
-  const isHome = location.pathname === '/home' || location.pathname === '/'
 
   useEffect(() => {
     const onScroll = () => {
@@ -112,29 +121,20 @@ function Navbar() {
 
   useEffect(() => {
     setOpen(false)
-    setProductsOpen(false)
   }, [location])
 
   // The chrome is a floating translucent layer, not an opaque strip: content
   // travels under it as you scroll. It carries no permanent divider either;
   // the shadow appears only once there is something beneath it to separate
   // from, which is what makes the bar read as glass rather than as a border.
-  const navBg = isHome
-    ? scrolled
-      ? 'material-chrome-dark border-b border-white/5'
-      : 'bg-transparent'
-    : scrolled
-      ? 'material-chrome shadow-sm'
-      : 'material-chrome'
-
-  const textColor = isHome ? 'text-white' : 'text-gray-900'
-  const linkColor = isHome ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-  const dropdownBg = isHome
-    ? 'material-chrome-dark border-white/10'
-    : 'material-chrome border border-black/[0.06] shadow-xl'
-  const dropdownItemClass = isHome
-    ? 'text-gray-300 hover:bg-white/10 hover:text-white'
-    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+  //
+  // One treatment, not two. The header used to render dark and transparent on
+  // /home and light everywhere else, which meant every element in it carried a
+  // pair of colour branches. /home is a light page now like the rest of the
+  // site, so the branches went with it.
+  const navBg = scrolled ? 'material-chrome shadow-sm' : 'material-chrome'
+  const textColor = 'text-gray-900'
+  const linkColor = 'text-gray-600 hover:text-gray-900'
 
   return (
     <>
@@ -186,15 +186,12 @@ function Navbar() {
             className={`flex items-center gap-2 sm:gap-2.5 min-w-0 ${textColor}`}
           >
             <img src='/logos/mvm-logo.png' alt='' className='w-9 h-9 sm:w-10 sm:h-10 rounded-full flex-shrink-0' />
-            <span className='flex flex-col leading-none min-w-0'>
-              <span className='text-[15px] sm:text-lg font-semibold tracking-[-0.02em] truncate'>
-                MVM Aasanam
-              </span>
-              <span className={`hidden sm:block mt-1 text-[9px] font-semibold uppercase tracking-[0.18em] ${
-                isHome ? 'text-white/45' : 'text-gray-400'
-              }`}>
-                Made in Neemuch
-              </span>
+            {/* The brand, and only the brand. "Made in Neemuch" sat under it as
+                a strapline; where we make things belongs on the About page, in
+                the footer and on the invoice, not stapled to the logo on every
+                screen. */}
+            <span className='text-[15px] sm:text-lg font-semibold tracking-[-0.02em] truncate'>
+              MVM Aasanam
             </span>
           </Link>
           {/* Search takes the width between the logo and the icons, the way a
@@ -202,100 +199,28 @@ function Navbar() {
               corner of the product grid, which is where you put a filter, not
               where you put the main way through a 400 piece catalogue. */}
           <div className='hidden md:block flex-1 max-w-lg mx-5'>
-            <HeaderSearch dark={isHome} />
+            <HeaderSearch />
           </div>
 
-          <div className='hidden md:flex items-center gap-5 shrink-0'>
-            {NAV_LINKS.map((l) =>
-              l.href === null ? (
-                <div key='products' className='relative'>
-                  <button
-                    onClick={() => setProductsOpen((o) => !o)}
-                    className={`text-sm font-medium transition-colors inline-flex items-center gap-1 ${linkColor}`}
-                  >
-                    Products
-                    <ChevronDown className={`w-3 h-3 transition-transform ${productsOpen ? 'rotate-180' : ''}`} />
-                  </button>
-                  {productsOpen && (
-                    <>
-                      <div className='fixed inset-0 z-40' onClick={() => setProductsOpen(false)} />
-                      {/* Grows from the trigger rather than appearing beside
-                          it, so the menu and the word that opened it read as
-                          the same object. */}
-                      <div className={`animate-menu-in absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl shadow-lg border z-50 ${dropdownBg}`}>
-                        <div className='flex'>
-                          {/* Brands */}
-                          <div className='py-2 w-52'>
-                            <Link
-                              to='/shop'
-                              className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
-                              onClick={() => setProductsOpen(false)}
-                            >
-                              MVM Aasanam
-                              <span className='ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
-                                Our Brand
-                              </span>
-                            </Link>
-                            {[
-                              { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
-                              { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
-                              { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400', bgLight: 'bg-emerald-50 text-emerald-600' },
-                            ].map((brand) => (
-                              <Link
-                                key={brand.to}
-                                to={brand.to}
-                                className={`block px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
-                                onClick={() => setProductsOpen(false)}
-                              >
-                                {brand.label}
-                                <span className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
-                                  Dealer
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
-                          {/* Fabrics and finishes. The downloadable PDF
-                              catalogues used to live here; the live grid is
-                              always current, which a PDF never is. */}
-                          <div className={`py-2 w-52 border-l ${isHome ? 'border-white/10' : 'border-gray-100'}`}>
-                            <p className='px-4 py-1 text-[10px] font-semibold tracking-widest uppercase text-gray-500'>
-                              Customise
-                            </p>
-                            <Link
-                              to='/catalogue-colors'
-                              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium ${dropdownItemClass}`}
-                              onClick={() => setProductsOpen(false)}
-                            >
-                              <Palette className='w-3 h-3 flex-shrink-0' />
-                              Fabrics &amp; colours
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  key={l.href}
-                  to={l.href}
-                  className={`text-sm font-medium transition-colors ${linkColor}`}
-                >
-                  {l.label}
-                </Link>
-              ),
-            )}
+          <div className='hidden lg:flex items-center gap-5 shrink-0'>
+            {NAV_LINKS.map((l) => (
+              <Link
+                key={l.href}
+                to={l.href}
+                className={`whitespace-nowrap text-sm font-medium transition-colors ${linkColor}`}
+              >
+                {l.label}
+              </Link>
+            ))}
           </div>
           <div className='flex items-center gap-1'>
-            <WishlistButton dark={isHome} />
-            <CartButton dark={isHome} />
+            <WishlistButton />
+            <CartButton />
             <a
               href='https://wa.me/919981516171'
               onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'navbar' } })}
               className={`pressable hidden md:inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full ${
-                isHome
-                  ? 'bg-white text-black hover:bg-gray-200'
-                  : 'bg-amber-500 text-white hover:bg-amber-600'
+                'bg-amber-500 text-white hover:bg-amber-600'
               }`}
             >
               WhatsApp Us
@@ -312,8 +237,8 @@ function Navbar() {
         {/* Mobile: search gets a row of its own rather than being squeezed
             into the bar beside four icons. At 390px there is no width to
             share, and search is the thing people reach for. */}
-        <div className={`md:hidden px-4 pb-3 ${isHome ? '' : 'border-b border-black/[0.06]'}`}>
-          <HeaderSearch dark={isHome} onSubmitted={() => setOpen(false)} />
+        <div className={`md:hidden px-4 pb-3 border-b border-black/[0.06]`}>
+          <HeaderSearch onSubmitted={() => setOpen(false)} />
         </div>
 
         {/* Brand quick-links bar - desktop only, centered */}
@@ -322,11 +247,7 @@ function Navbar() {
             which is what turns frosted chrome muddy. The unscrolled dark case
             is the exception, because there the parent is transparent and this
             strip needs its own material to stay legible over the hero. */}
-        <div className={`hidden md:block ${
-          isHome
-            ? scrolled ? 'border-t border-white/10' : 'material-chrome-dark'
-            : 'border-t border-gray-200/60'
-        }`}>
+        <div className='hidden md:block border-t border-gray-200/60'>
           {/* Tier 3: the category row, which is how a furniture shop is
               actually navigated. Our own range takes the row; the three dealer
               brands we merely stock sit small at the right, because a customer
@@ -344,7 +265,7 @@ function Navbar() {
                     to={to}
                     className={`relative whitespace-nowrap text-sm transition-colors py-3 ${
                       active
-                        ? isHome ? 'text-white font-semibold' : 'text-gray-900 font-semibold'
+                        ? 'text-gray-900 font-semibold'
                         : linkColor
                     }`}
                   >
@@ -360,7 +281,7 @@ function Navbar() {
               })}
             </div>
 
-            <div className={`hidden lg:flex items-center gap-3 shrink-0 text-xs ${isHome ? 'text-white/50' : 'text-gray-400'}`}>
+            <div className={`hidden lg:flex items-center gap-3 shrink-0 text-xs text-gray-400`}>
               <span className='uppercase tracking-[0.14em] font-semibold'>Also stocking</span>
               {[
                 { to: '/nilkamal', label: 'Nilkamal' },
@@ -370,7 +291,7 @@ function Navbar() {
                 <Link
                   key={b.to}
                   to={b.to}
-                  className={`transition-colors ${isHome ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                  className={`transition-colors hover:text-gray-900`}
                 >
                   {b.label}
                 </Link>
@@ -382,66 +303,56 @@ function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className={`animate-sheet-in fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto ${isHome ? 'bg-black' : 'bg-white'}`}>
+        <div className={`animate-sheet-in fixed inset-0 z-40 flex flex-col pt-16 overflow-y-auto bg-white`}>
           <div className='flex flex-col px-5 py-6 gap-5'>
             <Link
-              to='/home'
-              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
-              onClick={() => setOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to='/about'
-              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
-              onClick={() => setOpen(false)}
-            >
-              About
-            </Link>
-            <Link
               to='/shop'
-              className={`text-left text-xl font-semibold py-1.5 ${isHome ? 'text-white' : 'text-gray-900'}`}
+              className={`text-left text-xl font-semibold py-1.5 text-gray-900`}
               onClick={() => setOpen(false)}
             >
               Shop
             </Link>
+            <Link
+              to='/home'
+              className={`text-left text-xl font-semibold py-1.5 text-gray-900`}
+              onClick={() => setOpen(false)}
+            >
+              Our story
+            </Link>
+            <Link
+              to='/about'
+              className={`text-left text-xl font-semibold py-1.5 text-gray-900`}
+              onClick={() => setOpen(false)}
+            >
+              About
+            </Link>
+            {/* The dealer brands, small and last. They are stock we carry, not
+                what this shop is for, and listing them as a peer of our own
+                range under a "Products" heading said the opposite. */}
             <div>
-              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Products</p>
-              <div className='space-y-0.5 pl-1'>
-                <Link
-                  to='/shop'
-                  className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
-                  onClick={() => setOpen(false)}
-                >
-                  MVM Aasanam
-                  <span className='text-[9px] px-1.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-400'>
-                    Our Brand
-                  </span>
-                </Link>
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 text-gray-400`}>Also stocking</p>
+              <div className='flex flex-wrap gap-x-5 gap-y-1.5 pl-1'>
                 {[
-                  { to: '/nilkamal', label: 'Nilkamal', bg: 'bg-blue-500/20 text-blue-400', bgLight: 'bg-blue-50 text-blue-600' },
-                  { to: '/supreme', label: 'Supreme', bg: 'bg-orange-500/20 text-orange-400', bgLight: 'bg-orange-50 text-orange-600' },
-                  { to: '/seatex', label: 'Seatex', bg: 'bg-emerald-500/20 text-emerald-400', bgLight: 'bg-emerald-50 text-emerald-600' },
+                  { to: '/nilkamal', label: 'Nilkamal' },
+                  { to: '/supreme', label: 'Supreme' },
+                  { to: '/seatex', label: 'Seatex' },
                 ].map((brand) => (
                   <Link
                     key={brand.to}
                     to={brand.to}
-                    className={`flex items-center gap-2 text-base font-medium py-1.5 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
+                    className={`text-base font-medium py-1.5 text-gray-700`}
                     onClick={() => setOpen(false)}
                   >
                     {brand.label}
-                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${isHome ? brand.bg : brand.bgLight}`}>
-                      Dealer
-                    </span>
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 ${isHome ? 'text-gray-500' : 'text-gray-400'}`}>Customise</p>
+              <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] mb-2.5 text-gray-400`}>Customise</p>
               <Link
                 to='/catalogue-colors'
-                className={`flex items-center gap-2 text-base font-medium py-1.5 pl-1 ${isHome ? 'text-gray-300' : 'text-gray-700'}`}
+                className={`flex items-center gap-2 text-base font-medium py-1.5 pl-1 text-gray-700`}
                 onClick={() => setOpen(false)}
               >
                 <Palette className='w-4 h-4 flex-shrink-0' />
@@ -450,7 +361,7 @@ function Navbar() {
             </div>
             <Link
               to='/order/track'
-              className={`text-left text-sm font-medium py-1.5 ${isHome ? 'text-gray-400' : 'text-gray-500'}`}
+              className={`text-left text-sm font-medium py-1.5 text-gray-500`}
               onClick={() => setOpen(false)}
             >
               Track an order
@@ -459,7 +370,7 @@ function Navbar() {
               href='https://wa.me/919981516171'
               onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'mobile-menu' } })}
               className={`mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold w-full ${
-                isHome ? 'bg-white text-black' : 'bg-amber-500 text-white'
+                'bg-amber-500 text-white'
               }`}
             >
               <MessageCircle className='w-4 h-4' />
@@ -481,18 +392,13 @@ export default function App() {
   // rather than each wiring up its own observer.
   useReveal()
 
-  // Only home routes use dark background
-  const isDarkRoute =
-    location.pathname === '/home' ||
-    location.pathname === '/'
-
-  // Set body background SYNCHRONOUSLY before paint to prevent white flash
-  // during route transitions (e.g., white Home → dark product page)
+  // Every route is light now, so the background is set once rather than
+  // swapped per navigation. It is still written before paint, because leaving
+  // it to the stylesheet showed a flash of the browser default on a cold load.
   useLayoutEffect(() => {
-    const bg = isDarkRoute ? '#030712' : '#ffffff'
-    document.documentElement.style.backgroundColor = bg
-    document.body.style.backgroundColor = bg
-  }, [isDarkRoute])
+    document.documentElement.style.backgroundColor = '#ffffff'
+    document.body.style.backgroundColor = '#ffffff'
+  }, [])
 
   // Clean up GSAP ScrollTriggers AFTER React has finished unmounting.
   // CRITICAL: This must use useEffect (not useLayoutEffect) + setTimeout
@@ -530,7 +436,7 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <div className={isDarkRoute ? 'bg-gray-950' : 'bg-white'}>
+    <div className='bg-white'>
       <Navbar />
       <Suspense fallback={<div className='min-h-screen' />}>
         <Routes>

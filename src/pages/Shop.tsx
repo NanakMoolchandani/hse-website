@@ -286,7 +286,7 @@ export default function Shop() {
       />
 
       <div className='bg-white pt-32 md:pt-40'>
-        <HeroBanner count={seating.length} />
+        <HeroBanner />
         <PromiseStrip />
 
         {/* ── Shop by category ────────────────────────────────────────────── */}
@@ -298,22 +298,6 @@ export default function Shop() {
 
           <CategoryCircles
             tiles={seatingTiles}
-            activeKey={activeEnum}
-            onSelect={selectCategory}
-            loading={loading}
-          />
-
-          <div className='mt-14 sm:mt-16 text-center mb-8 sm:mb-10'>
-            <p className='text-eyebrow text-amber-600 mb-3'>Built to your sizes</p>
-            <h2 className='text-section text-gray-900'>Made to order</h2>
-            <p className='mt-4 text-base text-gray-500 max-w-lg mx-auto leading-relaxed'>
-              Wardrobes, desks and storage cut to the dimensions of your room and
-              finished the way you want it. Send us the sizes and we will quote it.
-            </p>
-          </div>
-
-          <CategoryCircles
-            tiles={madeToOrderTiles}
             activeKey={activeEnum}
             onSelect={selectCategory}
             loading={loading}
@@ -416,6 +400,43 @@ export default function Shop() {
             </div>
           </div>
         </div>
+
+        {/* ── Made to order ───────────────────────────────────────────────────
+            Below the grid, deliberately. It used to sit directly under "Shop
+            by category", which put ten categories of unpriced wardrobes
+            between a buyer and the chairs they came for, and made the two
+            ranges look like one long list. Down here it reads as what it is:
+            what else we can do, once you have seen what we sell. */}
+        <section className='border-t border-black/[0.07] bg-[#faf9f7]'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-14 sm:py-20'>
+            <div className='text-center mb-8 sm:mb-10'>
+              <p className='text-eyebrow text-amber-600 mb-3'>Built to your sizes</p>
+              <h2 className='text-section text-gray-900'>Made to order</h2>
+              <p className='mt-4 text-base text-gray-500 max-w-lg mx-auto leading-relaxed'>
+                Wardrobes, desks and storage cut to the dimensions of your room and
+                finished the way you want it. Send us the sizes and we will quote it.
+              </p>
+            </div>
+
+            <CategoryCircles
+              tiles={madeToOrderTiles}
+              activeKey={activeEnum}
+              onSelect={selectCategory}
+              loading={loading}
+            />
+
+            <div className='mt-10 text-center'>
+              <a
+                href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hi, I would like a quote for made to order furniture. Here are my sizes:')}`}
+                onClick={() => track('WHATSAPP_CLICK', { meta: { context: 'made-to-order-section' } })}
+                className='pressable inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full bg-gray-900 text-sm font-semibold text-white hover:bg-gray-800'
+              >
+                <MessageCircle className='w-4 h-4' />
+                Send us your sizes
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
 
       <Footer variant='light' />
@@ -771,7 +792,7 @@ function EmptyState({
  * manufacturer with a room like that is worth buying from. `fetchpriority=high`
  * and no lazy attribute, because it is the LCP element.
  */
-function HeroBanner({ count }: { count: number }) {
+function HeroBanner() {
   return (
     <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6'>
       <div className='relative overflow-hidden rounded-2xl sm:rounded-[1.75rem] bg-gray-950 min-h-[26rem] sm:min-h-[30rem] lg:min-h-[34rem] flex items-end'>
@@ -794,8 +815,7 @@ function HeroBanner({ count }: { count: number }) {
             Chairs made by us,<br className='hidden sm:block' /> delivered across India.
           </h2>
           <p className='mt-5 text-base sm:text-lg text-gray-300 max-w-xl leading-relaxed'>
-            No middleman, no showroom markup. Held in stock and priced with GST included.
-            {count > 0 && ` ${count} pieces to choose from.`}
+            No middleman, no showroom markup.
           </p>
           {/* Full width each on a phone, where they stack: two pills of
               different lengths sitting one above the other under a left-aligned

@@ -17,7 +17,16 @@ import { Phone, MapPin, MessageCircle } from 'lucide-react'
 import { track } from '@/src/lib/analytics'
 
 const WHATSAPP = '919981516171'
-const PHONE_DISPLAY = '99815 16171'
+
+/**
+ * Both numbers reach the office. Written without spaces, because that is how
+ * they are read out and dialled here; grouping them turns a number people
+ * recognise at a glance into something they have to reassemble.
+ */
+const PHONES = [
+  { display: '9981516171', dial: '+919981516171' },
+  { display: '9425106894', dial: '+919425106894' },
+]
 
 const SHOP_LINKS = [
   { to: '/shop', label: 'All seating' },
@@ -82,17 +91,20 @@ export default function Footer({ variant = 'light' }: { variant?: 'light' | 'dar
                 <MessageCircle className='w-4 h-4' />
                 WhatsApp us
               </a>
-              <a
-                href={`tel:+91${WHATSAPP.slice(2)}`}
-                className={`pressable inline-flex items-center gap-2 h-10 px-4 rounded-full border text-sm font-medium ${
-                  isDark
-                    ? 'border-white/15 text-white hover:bg-white/10'
-                    : 'border-black/10 text-gray-700 hover:bg-black/[0.04]'
-                }`}
-              >
-                <Phone className='w-3.5 h-3.5' />
-                {PHONE_DISPLAY}
-              </a>
+              {PHONES.map((p) => (
+                <a
+                  key={p.dial}
+                  href={`tel:${p.dial}`}
+                  className={`pressable inline-flex items-center gap-2 h-10 px-4 rounded-full border text-sm font-medium ${
+                    isDark
+                      ? 'border-white/15 text-white hover:bg-white/10'
+                      : 'border-black/10 text-gray-700 hover:bg-black/[0.04]'
+                  }`}
+                >
+                  <Phone className='w-3.5 h-3.5' />
+                  {p.display}
+                </a>
+              ))}
             </div>
           </div>
 
