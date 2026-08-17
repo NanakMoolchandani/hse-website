@@ -130,6 +130,8 @@ export const LOCAL_BUSINESS_SCHEMA = {
   sameAs: [
     'https://wa.me/919981516171',
     'https://www.google.com/maps/place/Hari+Shewa+Enterprises/@24.4656196,74.8740545,17z',
+    'https://facebook.com/profile.php?id=61581382924728',
+    'https://instagram.com/mvm_aasanam',
   ],
   openingHoursSpecification: [
     {
@@ -173,6 +175,8 @@ export const ORGANIZATION_SCHEMA = {
   sameAs: [
     'https://wa.me/919981516171',
     'https://www.google.com/maps/place/Hari+Shewa+Enterprises/@24.4656196,74.8740545,17z',
+    'https://facebook.com/profile.php?id=61581382924728',
+    'https://instagram.com/mvm_aasanam',
   ],
   hasCredential: [
     { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 9001:2015' },

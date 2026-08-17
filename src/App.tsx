@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom'
 import CartButton from '@/src/components/CartButton'
 import HeaderSearch from '@/src/components/HeaderSearch'
 import { WishlistButton } from '@/src/components/WishlistButton'
+import WhatsAppFloat from '@/src/components/WhatsAppFloat'
 import { initAnalytics, trackPageView, track } from '@/src/lib/analytics'
 import { loadCart } from '@/src/lib/cart'
 import { useReveal } from '@/src/hooks/use-reveal'
@@ -438,6 +439,7 @@ export default function App() {
   return (
     <div className='bg-white'>
       <Navbar />
+      <WhatsAppFloat />
       <Suspense fallback={<div className='min-h-screen' />}>
         <Routes>
           <Route path='/' element={<Navigate to='/shop' replace />} />

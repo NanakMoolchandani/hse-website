@@ -13,10 +13,15 @@
  */
 
 import { Link } from 'react-router-dom'
-import { Phone, MapPin, MessageCircle } from 'lucide-react'
+import { Phone, MapPin, MessageCircle, Facebook, Instagram } from 'lucide-react'
 import { track } from '@/src/lib/analytics'
 
 const WHATSAPP = '919981516171'
+
+const SOCIAL_LINKS = [
+  { label: 'Facebook', href: 'https://facebook.com/profile.php?id=61581382924728', Icon: Facebook },
+  { label: 'Instagram', href: 'https://instagram.com/mvm_aasanam', Icon: Instagram },
+]
 
 /**
  * Both numbers reach the office. Written without spaces, because that is how
@@ -103,6 +108,25 @@ export default function Footer({ variant = 'light' }: { variant?: 'light' | 'dar
                 >
                   <Phone className='w-3.5 h-3.5' />
                   {p.display}
+                </a>
+              ))}
+            </div>
+
+            <div className='mt-4 flex items-center gap-2'>
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label={label}
+                  className={`pressable inline-flex items-center justify-center w-10 h-10 rounded-full border ${
+                    isDark
+                      ? 'border-white/15 text-white hover:bg-white/10'
+                      : 'border-black/10 text-gray-700 hover:bg-black/[0.04]'
+                  }`}
+                >
+                  <Icon className='w-4 h-4' />
                 </a>
               ))}
             </div>
